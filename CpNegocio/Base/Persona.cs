@@ -15,19 +15,32 @@ namespace CpNegocio.Base
         private string _id;
         private string _telefono;
         private string _correo;
+        private string _direccion;
 
-        public string Nombre 
+        public override string Nombre 
         {
             get { return _nombre; }
             set { _nombre = value; } 
         }
-        public string Id 
+        public override string Id 
         { 
             get { return _id; }
             set { _id = value; }
         }
-        public string Telefono { get; set; }
-        public string Correo { get; set; }
+        public override string Telefono 
+        {
+            get { return _telefono; } 
+            set { _telefono = value; } 
+        }
+        public override string Correo 
+        { 
+            get { return _correo; }
+            set { _correo = value; }
+        }
 
+        public override void GuardarRegistro()
+        {
+
+        }
     }
 }
