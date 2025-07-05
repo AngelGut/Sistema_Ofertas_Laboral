@@ -1,24 +1,50 @@
-using MaterialSkin;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using MaterialSkin.Controls;
 
 namespace CpPresentacion
 {
-    public partial class cpMenu : MaterialForm
+    public partial class Menu : MaterialForm // <<== ¡Cambiado a MaterialForm!
     {
-        public cpMenu()
+        public Menu()
         {
             InitializeComponent();
-
-            // Inicializa el MaterialSkinManager
-            var materialSkinManager = MaterialSkinManager.Instance;
-            materialSkinManager.AddFormToManage(this);
-            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT; // O DARK o LIGHT
-            materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
         }
 
-        private void LbMenu_Click(object sender, EventArgs e)
+        private void tabPage3_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (materialTabControl1.SelectedIndex)
+            {
+                case 0: // Ofertas
+                    new cpOfertas().Show();
+                    this.Hide(); // Opcional: oculta el menú actual
+                    break;
+                case 1: // Empresas
+                    new cpEmpresa().Show();
+                    this.Hide();
+                    break;
+                case 2: // Postulantes
+                    new cpPostulante().Show();
+                    this.Hide();
+                    break;
+            }
         }
     }
 }

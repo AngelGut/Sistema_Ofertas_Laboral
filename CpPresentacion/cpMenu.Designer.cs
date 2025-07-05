@@ -1,7 +1,6 @@
-
-namespace Sistema_Ofertas_Laboral
+﻿namespace CpPresentacion
 {
-    partial class cpMenu
+    partial class Menu
     {
         /// <summary>
         /// Required designer variable.
@@ -29,98 +28,79 @@ namespace Sistema_Ofertas_Laboral
         /// </summary>
         private void InitializeComponent()
         {
-            this.materialDrawer1 = new MaterialSkin.Controls.MaterialDrawer();
-            this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-
-            this.materialTabControl1.SuspendLayout();
-            this.SuspendLayout();
-
-            // 
-            // materialDrawer1
-            // 
-            this.materialDrawer1.AutoHide = false;
-            this.materialDrawer1.BackgroundWithAccent = false;
-            this.materialDrawer1.BaseTabControl = this.materialTabControl1;
-            this.materialDrawer1.Depth = 0;
-            this.materialDrawer1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.materialDrawer1.IndicatorWidth = 0;
-            this.materialDrawer1.IsOpen = true;
-            this.materialDrawer1.Location = new System.Drawing.Point(0, 0);
-            this.materialDrawer1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialDrawer1.Name = "materialDrawer1";
-            this.materialDrawer1.ShowIconsWhenHidden = false;
-            this.materialDrawer1.Size = new System.Drawing.Size(240, 500);
-            this.materialDrawer1.TabIndex = 0;
-            this.materialDrawer1.UseColors = true;
-
+            materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
+            tabPage1 = new TabPage();
+            tabPage2 = new TabPage();
+            tabPage3 = new TabPage();
+            materialTabControl1.SuspendLayout();
+            SuspendLayout();
             // 
             // materialTabControl1
             // 
-            this.materialTabControl1.Controls.Add(this.tabPage1);
-            this.materialTabControl1.Controls.Add(this.tabPage2);
-            this.materialTabControl1.Controls.Add(this.tabPage3);
-            this.materialTabControl1.Depth = 0;
-            this.materialTabControl1.Location = new System.Drawing.Point(240, 64);
-            this.materialTabControl1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialTabControl1.Multiline = true;
-            this.materialTabControl1.Name = "materialTabControl1";
-            this.materialTabControl1.SelectedIndex = 0;
-            this.materialTabControl1.Size = new System.Drawing.Size(600, 400);
-            this.materialTabControl1.TabIndex = 1;
-            this.materialTabControl1.SelectedIndexChanged += new System.EventHandler(this.materialTabControl1_SelectedIndexChanged);
-
+            materialTabControl1.Controls.Add(tabPage1);
+            materialTabControl1.Controls.Add(tabPage2);
+            materialTabControl1.Controls.Add(tabPage3);
+            materialTabControl1.Depth = 0;
+            materialTabControl1.Dock = DockStyle.Fill;
+            materialTabControl1.Location = new Point(3, 64);
+            materialTabControl1.MouseState = MaterialSkin.MouseState.HOVER;
+            materialTabControl1.Multiline = true;
+            materialTabControl1.Name = "materialTabControl1";
+            materialTabControl1.SelectedIndex = 0;
+            materialTabControl1.Size = new Size(794, 383);
+            materialTabControl1.TabIndex = 0;
+            materialTabControl1.SelectedIndexChanged += materialTabControl1_SelectedIndexChanged;
             // 
             // tabPage1
             // 
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(592, 374);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Empresas";
-            this.tabPage1.UseVisualStyleBackColor = true;
-
+            tabPage1.Location = new Point(4, 34);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new Padding(3);
+            tabPage1.Size = new Size(786, 345);
+            tabPage1.TabIndex = 0;
+            tabPage1.Text = "Ofertas";
+            tabPage1.UseVisualStyleBackColor = true;
+            tabPage1.Click += tabPage1_Click;
             // 
             // tabPage2
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(592, 374);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Postulantes";
-            this.tabPage2.UseVisualStyleBackColor = true;
-
+            tabPage2.Location = new Point(4, 34);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new Padding(3);
+            tabPage2.Size = new Size(786, 345);
+            tabPage2.TabIndex = 1;
+            tabPage2.Text = "Empresas";
+            tabPage2.UseVisualStyleBackColor = true;
             // 
             // tabPage3
             // 
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(592, 374);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Ofertas";
-            this.tabPage3.UseVisualStyleBackColor = true;
-
+            tabPage3.Location = new Point(4, 34);
+            tabPage3.Name = "tabPage3";
+            tabPage3.Padding = new Padding(3);
+            tabPage3.Size = new Size(786, 345);
+            tabPage3.TabIndex = 2;
+            tabPage3.Text = "Postulantes";
+            tabPage3.UseVisualStyleBackColor = true;
+            tabPage3.Click += tabPage3_Click;
             // 
-            // cpMenu
+            // Menu
             // 
-            this.ClientSize = new System.Drawing.Size(850, 500);
-            this.Controls.Add(this.materialTabControl1);
-            this.Controls.Add(this.materialDrawer1);
-            this.Name = "cpMenu";
-            this.Text = "Menú Principal";
-            this.Load += new System.EventHandler(this.cpMenu_Load);
-            this.materialTabControl1.ResumeLayout(false);
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(materialTabControl1);
+            DrawerTabControl = materialTabControl1;
+            Name = "Menu";
+            Text = "cpMenu";
+            materialTabControl1.ResumeLayout(false);
+            ResumeLayout(false);
         }
 
         #endregion
 
-        private MaterialSkin.Controls.MaterialDrawer materialDrawer1;
         private MaterialSkin.Controls.MaterialTabControl materialTabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TabPage tabPage3;
+        private TabPage tabPage1;
+        private TabPage tabPage2;
+        private TabPage tabPage3;
     }
 }
