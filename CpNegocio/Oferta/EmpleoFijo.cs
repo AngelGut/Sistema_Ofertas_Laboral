@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace CpNegocio.Oferta
 {
-    public class Pasantia : Oferta
+    public class EmpleoFijo : Oferta
     {
-        public int? Creditos { get; set; }
+        public int? Salario { get; set; }
 
-        public Pasantia()
+        public EmpleoFijo()
         {
-            Tipo = "Pasantia";
+            Tipo = "EmpleoFijo";
         }
     }
 }

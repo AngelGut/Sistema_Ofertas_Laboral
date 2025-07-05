@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Oferta.Oferta
+namespace CpNegocio.Oferta
 {
     public abstract class Oferta
     {
@@ -16,8 +16,7 @@ namespace Oferta.Oferta
 
         protected Oferta()
         {
-            Tipo = "Oferta"; // valor base
+            Tipo = "Oferta";
         }
     }
-
 }
