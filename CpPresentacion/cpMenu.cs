@@ -30,21 +30,29 @@ namespace CpPresentacion
 
         private void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (materialTabControl1.SelectedIndex)
+            int selectedIndex = materialTabControl1.SelectedIndex;
+
+            // Si estamos en la pestaña de inicio (menú principal), no hacemos nada
+            if (selectedIndex == 0)
+                return;
+
+            // Cambia de formulario según la pestaña seleccionada
+            if (selectedIndex == 1) // Ofertas
             {
-                case 0: // Ofertas
-                    new cpOfertas().Show();
-                    this.Hide(); // Opcional: oculta el menú actual
-                    break;
-                case 1: // Empresas
-                    new cpEmpresa().Show();
-                    this.Hide();
-                    break;
-                case 2: // Postulantes
-                    new cpPostulante().Show();
-                    this.Hide();
-                    break;
+                new cpOfertas().Show();
             }
+            else if (selectedIndex == 2) // Empresas
+            {
+                new cpEmpresa().Show();
+            }
+            else if (selectedIndex == 3) // Postulantes
+            {
+                new cpPostulante().Show();
+            }
+
+
+            // Opcional: ocultar el formulario actual para que solo quede uno visible
+            this.Hide();
         }
     }
 }

@@ -32,6 +32,7 @@
             tabPage1 = new TabPage();
             tabPage2 = new TabPage();
             tabPage3 = new TabPage();
+            tabPage4 = new TabPage();
             materialTabControl1.SuspendLayout();
             SuspendLayout();
             // 
@@ -40,6 +41,7 @@
             materialTabControl1.Controls.Add(tabPage1);
             materialTabControl1.Controls.Add(tabPage2);
             materialTabControl1.Controls.Add(tabPage3);
+            materialTabControl1.Controls.Add(tabPage4);
             materialTabControl1.Depth = 0;
             materialTabControl1.Dock = DockStyle.Fill;
             materialTabControl1.Location = new Point(3, 64);
@@ -58,7 +60,7 @@
             tabPage1.Padding = new Padding(3);
             tabPage1.Size = new Size(786, 345);
             tabPage1.TabIndex = 0;
-            tabPage1.Text = "Ofertas";
+            tabPage1.Text = "Menu";
             tabPage1.UseVisualStyleBackColor = true;
             tabPage1.Click += tabPage1_Click;
             // 
@@ -69,7 +71,7 @@
             tabPage2.Padding = new Padding(3);
             tabPage2.Size = new Size(786, 345);
             tabPage2.TabIndex = 1;
-            tabPage2.Text = "Empresas";
+            tabPage2.Text = "Ofertas Laborales";
             tabPage2.UseVisualStyleBackColor = true;
             // 
             // tabPage3
@@ -79,9 +81,18 @@
             tabPage3.Padding = new Padding(3);
             tabPage3.Size = new Size(786, 345);
             tabPage3.TabIndex = 2;
-            tabPage3.Text = "Postulantes";
+            tabPage3.Text = "Empresas";
             tabPage3.UseVisualStyleBackColor = true;
             tabPage3.Click += tabPage3_Click;
+            // 
+            // tabPage4
+            // 
+            tabPage4.Location = new Point(4, 34);
+            tabPage4.Name = "tabPage4";
+            tabPage4.Size = new Size(786, 345);
+            tabPage4.TabIndex = 3;
+            tabPage4.Text = "Postulantes";
+            tabPage4.UseVisualStyleBackColor = true;
             // 
             // Menu
             // 
@@ -91,7 +102,8 @@
             Controls.Add(materialTabControl1);
             DrawerTabControl = materialTabControl1;
             Name = "Menu";
-            Text = "cpMenu";
+            Text = "Menu";
+            WindowState = FormWindowState.Maximized;
             materialTabControl1.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -102,5 +114,6 @@
         private TabPage tabPage1;
         private TabPage tabPage2;
         private TabPage tabPage3;
+        private TabPage tabPage4;
     }
 }

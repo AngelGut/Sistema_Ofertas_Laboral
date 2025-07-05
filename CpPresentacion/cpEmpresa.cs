@@ -18,5 +18,34 @@ namespace CpPresentacion
         {
             InitializeComponent();
         }
+
+        private void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int selectedIndex = materialTabControl1.SelectedIndex;
+
+            
+            if (selectedIndex == 0)
+            {
+                new Menu().Show(); //Menu
+            }
+
+            // Cambia de formulario según la pestaña seleccionada
+            if (selectedIndex == 1) // Ofertas
+            {
+                new cpOfertas().Show();
+            }
+            //mues
+            else if (selectedIndex == 2) // Empresas
+                return;
+
+            else if (selectedIndex == 3) // Postulantes
+            {
+                new cpPostulante().Show();
+            }
+
+
+            // Opcional: ocultar el formulario actual para que solo quede uno visible
+            this.Hide();
+        }
     }
 }
