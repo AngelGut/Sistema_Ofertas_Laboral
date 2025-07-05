@@ -1,11 +1,11 @@
-﻿using cn_abs_Base.Base;
+﻿using cn_abs_Base.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CpNegocio.Base
+namespace CpNegocio.Entidades
 {
     public class Empresa : BaseUser
     {
@@ -47,5 +47,16 @@ namespace CpNegocio.Base
         {
             // Implementación específica para validar disponibilidad de la empresa
         }
+
+        //constructor 
+        public Empresa(string nombre, string telefono, string correo, string direccion, int rnc)
+        {
+            Nombre = nombre;
+            Telefono = telefono;
+            Correo = correo;
+            Direccion = direccion;
+            Rnc = rnc;
+        }
+
     }
 }

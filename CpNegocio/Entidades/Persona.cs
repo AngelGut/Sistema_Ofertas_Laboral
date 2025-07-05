@@ -1,4 +1,4 @@
-﻿using cn_abs_Base.Base;
+﻿using cn_abs_Base.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Capa_Datos;
 
 
-namespace CpNegocio.Base
+namespace CpNegocio.Entidades
 {
     public class Persona : BaseUser
     {
@@ -48,5 +48,16 @@ namespace CpNegocio.Base
         {
 
         }
+
+        //constructor
+        public Persona(string nombre, string telefono, string correo, string direccion, string dni)
+        {
+            Nombre = nombre;
+            Telefono = telefono;
+            Correo = correo;
+            Direccion = direccion;
+            Dni = dni;
+        }
+
     }
 }

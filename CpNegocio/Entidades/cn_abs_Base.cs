@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cn_abs_Base.Base
+namespace cn_abs_Base.Entidades
 {
     public abstract class BaseUser
     {

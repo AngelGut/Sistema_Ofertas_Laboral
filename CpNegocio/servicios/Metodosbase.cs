@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CpNegocio.Base
+namespace CpNegocio.servicios
 {
-    public class EntidadBase
+    public class MetodosBase
     {
         public virtual void Registrar()
         {
