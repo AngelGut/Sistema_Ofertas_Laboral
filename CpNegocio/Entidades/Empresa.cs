@@ -43,6 +43,9 @@ namespace CpNegocio.Entidades
             get { return _rnc; }
             set { _rnc = value; }
         }
+        public int Id { get; set; }       // Solo propiedad, sin campo privado
+
+
         public override void ValidarDisponibilidad()
         {
             // Implementación específica para validar disponibilidad de la empresa

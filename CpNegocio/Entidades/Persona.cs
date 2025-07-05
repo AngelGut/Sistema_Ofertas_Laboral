@@ -38,11 +38,10 @@ namespace CpNegocio.Entidades
             get { return _direccion; }
             set { _direccion = value; }
         }
-        public string Dni
-        {
-            get { return _dni; }
-            set { _dni = value; }
-        }
+        public int Id { get; set; }          // ID único generado por la BD
+        public string Dni { get; set; }
+
+
 
         public override void ValidarDisponibilidad()
         {

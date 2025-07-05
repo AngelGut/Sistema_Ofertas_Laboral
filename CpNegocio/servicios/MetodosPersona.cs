@@ -76,7 +76,7 @@ namespace CpNegocio.servicios
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@Cedula", persona.Dni);
+                        cmd.Parameters.AddWithValue("@Id", persona.Dni);
                         int filas = cmd.ExecuteNonQuery();
 
                         // Si no se afectó ninguna fila, informamos

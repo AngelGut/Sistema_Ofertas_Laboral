@@ -8,7 +8,13 @@ namespace CpNegocio.Oferta
 {
     public abstract class Oferta
     {
-        public string NombreCompania { get; set; }
+        // ID de la oferta (clave primaria en la base de datos)
+        public int Id { get; set; }
+
+        // ID de la empresa que publica la oferta (clave foránea)
+        public int EmpresaId { get; set; }
+
+        // Datos comunes a toda oferta
         public string Puesto { get; set; }
         public string Tipo { get; protected set; }
         public string Descripcion { get; set; }
@@ -16,7 +22,8 @@ namespace CpNegocio.Oferta
 
         protected Oferta()
         {
-            Tipo = "Oferta";
+            Tipo = "Oferta"; // valor por defecto
         }
     }
 }
+
