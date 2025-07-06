@@ -20,6 +20,10 @@ namespace CpPresentacion
 
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 0;
+
+            // Mejora visual: habilitar doble búfer para reducir parpadeos
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
+            this.UpdateStyles();
         }
 
         private void tabPage3_Click(object sender, EventArgs e)
