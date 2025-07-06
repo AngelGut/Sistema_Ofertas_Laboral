@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MaterialSkin.Controls;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CpPresentacion
 {
@@ -17,35 +18,55 @@ namespace CpPresentacion
         public cpEmpresa()
         {
             InitializeComponent();
+
+            // Establece el tab activo que corresponde a este formulario
+            materialTabControl1.SelectedIndex = 2;
         }
 
-        private void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Obtener el índice de la pestaña actualmente seleccionada
             int selectedIndex = materialTabControl1.SelectedIndex;
 
-            
-            if (selectedIndex == 0)
+            // Si se selecciona la pestaña 0 (que representa el formulario Menu)
+            if (selectedIndex == 0 && !(this is Menu))
             {
-                new Menu().Show(); //Menu
+                var f = new Menu();  // Crear nueva instancia del formulario Menu
+                f.Show();            // Mostrar el formulario Menu
+
+                await Task.Delay(500); // Esperar brevemente para asegurar transición fluida
+                this.Dispose();        // Liberar recursos del formulario actual (cpOfertas, etc.)
             }
 
-            // Cambia de formulario según la pestaña seleccionada
-            if (selectedIndex == 1) // Ofertas
+            // Si se selecciona la pestaña 1 (cpOfertas)
+            else if (selectedIndex == 1 && !(this is cpOfertas))
             {
-                new cpOfertas().Show();
-            }
-            //mues
-            else if (selectedIndex == 2) // Empresas
-                return;
+                var f = new cpOfertas();  // Crear instancia de cpOfertas
+                f.Show();                 // Mostrar el formulario
 
-            else if (selectedIndex == 3) // Postulantes
-            {
-                new cpPostulante().Show();
+                await Task.Delay(500);    // Esperar brevemente
+                this.Dispose();           // Liberar este formulario actual
             }
 
+            // Si se selecciona la pestaña 2 (cpEmpresa)
+            else if (selectedIndex == 2 && !(this is cpEmpresa))
+            {
+                var f = new cpEmpresa();  // Crear instancia de cpEmpresa
+                f.Show();                 // Mostrar el formulario
 
-            // Opcional: ocultar el formulario actual para que solo quede uno visible
-            this.Hide();
+                await Task.Delay(500);    // Esperar
+                this.Dispose();           // Liberar este formulario
+            }
+
+            // Si se selecciona la pestaña 3 (cpPostulante)
+            else if (selectedIndex == 3 && !(this is cpPostulante))
+            {
+                var f = new cpPostulante();  // Crear instancia de cpPostulante
+                f.Show();                    // Mostrar el formulario
+
+                await Task.Delay(500);       // Esperar
+                this.Dispose();              // Liberar este formulario
+            }
         }
     }
 }
