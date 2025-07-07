@@ -21,8 +21,6 @@ namespace cn_abs_Base.Entidades
         public abstract string Correo { get; set; }
         public abstract string Direccion { get; set; }
 
-        public abstract void ValidarDisponibilidad();
-
     }
 
 }

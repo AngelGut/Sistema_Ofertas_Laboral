@@ -43,7 +43,7 @@ namespace CpNegocio.Entidades
 
 
 
-        public override void ValidarDisponibilidad()
+        public void ValidarDisponibilidad()
         {
             // Implementación específica para validar si la persona no ha sido creada previamente
         }

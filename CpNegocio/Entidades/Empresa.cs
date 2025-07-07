@@ -1,4 +1,8 @@
-﻿using cn_abs_Base.Entidades;
+﻿using Capa_Datos;
+using cn_abs_Base.Entidades;
+using CpNegocio.servicios;
+using Microsoft.Data.SqlClient;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CpNegocio.Entidades
 {
-    public class Empresa : BaseUser
+    public class CnEmpresa : BaseUser
     {
         //Campos privados para la clase Empresa
         private string _nombre;
@@ -45,20 +49,26 @@ namespace CpNegocio.Entidades
         }
         public int Id { get; set; }       // Solo propiedad, sin campo privado
 
-
-        public override void ValidarDisponibilidad()
-        {
-            // Implementación específica para validar disponibilidad de la empresa
-        }
-
         //constructor 
-        public Empresa(string nombre, string telefono, string correo, string direccion, int rnc)
+        public CnEmpresa(string nombre, string telefono, string correo, string direccion, int rnc)
         {
             Nombre = nombre;
             Telefono = telefono;
             Correo = correo;
             Direccion = direccion;
             Rnc = rnc;
+        }
+
+        /// <summary>
+
+        // C# permite sobrecarga de constructores (varios constructores con distinta firma).
+        //Esto no rompe nada en otras partes, porque donde necesitas pasar parámetros puedes seguir usando el constructor original.
+        //El nuevo constructor vacío te sirve solo para métodos como Buscar(), que no necesitan una empresa específica.
+
+        /// </summary>
+        public CnEmpresa()
+        {
+            // Este se usa solo cuando no necesitas inicializar valores (como en Buscar)
         }
 
     }

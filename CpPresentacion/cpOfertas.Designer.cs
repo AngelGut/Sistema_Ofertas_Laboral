@@ -50,14 +50,14 @@
             LblTIpoOferta = new MaterialSkin.Controls.MaterialLabel();
             TxtNombreCompania = new MaterialSkin.Controls.MaterialMaskedTextBox();
             LblNombreCompania = new MaterialSkin.Controls.MaterialLabel();
-            dataGridView2 = new DataGridView();
+            DGridOferta = new DataGridView();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
             materialTabControl1.SuspendLayout();
             tabPage2.SuspendLayout();
             materialCard3.SuspendLayout();
             materialCard4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DGridOferta).BeginInit();
             SuspendLayout();
             // 
             // materialTabControl1
@@ -91,7 +91,7 @@
             // 
             tabPage2.Controls.Add(materialCard3);
             tabPage2.Controls.Add(materialCard4);
-            tabPage2.Controls.Add(dataGridView2);
+            tabPage2.Controls.Add(DGridOferta);
             tabPage2.Location = new Point(4, 34);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
@@ -546,14 +546,14 @@
             LblNombreCompania.TabIndex = 0;
             LblNombreCompania.Text = "Nombre de Compañia";
             // 
-            // dataGridView2
+            // DGridOferta
             // 
-            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Location = new Point(725, 27);
-            dataGridView2.Name = "dataGridView2";
-            dataGridView2.RowHeadersWidth = 62;
-            dataGridView2.Size = new Size(1137, 521);
-            dataGridView2.TabIndex = 3;
+            DGridOferta.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            DGridOferta.Location = new Point(725, 27);
+            DGridOferta.Name = "DGridOferta";
+            DGridOferta.RowHeadersWidth = 62;
+            DGridOferta.Size = new Size(1137, 521);
+            DGridOferta.TabIndex = 3;
             // 
             // tabPage3
             // 
@@ -587,7 +587,7 @@
             materialCard3.ResumeLayout(false);
             materialCard4.ResumeLayout(false);
             materialCard4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DGridOferta).EndInit();
             ResumeLayout(false);
         }
 
@@ -613,7 +613,7 @@
         private MaterialSkin.Controls.MaterialLabel LblTIpoOferta;
         private MaterialSkin.Controls.MaterialMaskedTextBox TxtNombreCompania;
         private MaterialSkin.Controls.MaterialLabel LblNombreCompania;
-        private DataGridView dataGridView2;
+        private DataGridView DGridOferta;
         private MaterialSkin.Controls.MaterialButton BtnEliminar;
         private MaterialSkin.Controls.MaterialButton BtnMostrar;
         private MaterialSkin.Controls.MaterialButton BtnRegistrar;

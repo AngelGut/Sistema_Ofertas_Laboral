@@ -32,12 +32,28 @@
             tabPage1 = new TabPage();
             tabPage2 = new TabPage();
             tabPage3 = new TabPage();
-            tabPage4 = new TabPage();
+            materialCard2 = new MaterialSkin.Controls.MaterialCard();
+            BtnActualizar = new MaterialSkin.Controls.MaterialButton();
+            BtnRegistrar = new MaterialSkin.Controls.MaterialButton();
+            DgvEmpresas = new DataGridView();
             materialCard1 = new MaterialSkin.Controls.MaterialCard();
-            lblNombreCompania = new MaterialSkin.Controls.MaterialLabel();
+            materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
+            BtnValidar = new MaterialSkin.Controls.MaterialButton();
+            TxtCorreo = new MaterialSkin.Controls.MaterialMaskedTextBox();
+            LblCorreo = new MaterialSkin.Controls.MaterialLabel();
+            TxtDireccion = new MaterialSkin.Controls.MaterialMaskedTextBox();
+            LblDireccion = new MaterialSkin.Controls.MaterialLabel();
+            TxtTelefono = new MaterialSkin.Controls.MaterialMaskedTextBox();
+            LblTelefono = new MaterialSkin.Controls.MaterialLabel();
+            TxtRnc = new MaterialSkin.Controls.MaterialMaskedTextBox();
+            LblRnc = new MaterialSkin.Controls.MaterialLabel();
             TxtNombreCompania = new MaterialSkin.Controls.MaterialMaskedTextBox();
+            lblNombreCompania = new MaterialSkin.Controls.MaterialLabel();
+            tabPage4 = new TabPage();
             materialTabControl1.SuspendLayout();
             tabPage3.SuspendLayout();
+            materialCard2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)DgvEmpresas).BeginInit();
             materialCard1.SuspendLayout();
             SuspendLayout();
             // 
@@ -80,6 +96,8 @@
             // 
             // tabPage3
             // 
+            tabPage3.Controls.Add(materialCard2);
+            tabPage3.Controls.Add(DgvEmpresas);
             tabPage3.Controls.Add(materialCard1);
             tabPage3.Location = new Point(4, 34);
             tabPage3.Name = "tabPage3";
@@ -88,18 +106,85 @@
             tabPage3.Text = "Empresas";
             tabPage3.UseVisualStyleBackColor = true;
             // 
-            // tabPage4
+            // materialCard2
             // 
-            tabPage4.Location = new Point(4, 34);
-            tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(1886, 975);
-            tabPage4.TabIndex = 3;
-            tabPage4.Text = "Postulantes";
-            tabPage4.UseVisualStyleBackColor = true;
+            materialCard2.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard2.Controls.Add(BtnActualizar);
+            materialCard2.Controls.Add(BtnRegistrar);
+            materialCard2.Depth = 0;
+            materialCard2.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            materialCard2.Location = new Point(540, 660);
+            materialCard2.Margin = new Padding(14);
+            materialCard2.MouseState = MaterialSkin.MouseState.HOVER;
+            materialCard2.Name = "materialCard2";
+            materialCard2.Padding = new Padding(14);
+            materialCard2.Size = new Size(585, 150);
+            materialCard2.TabIndex = 2;
+            // 
+            // BtnActualizar
+            // 
+            BtnActualizar.AutoSize = false;
+            BtnActualizar.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnActualizar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            BtnActualizar.Depth = 0;
+            BtnActualizar.HighEmphasis = true;
+            BtnActualizar.Icon = null;
+            BtnActualizar.Location = new Point(330, 52);
+            BtnActualizar.Margin = new Padding(4, 6, 4, 6);
+            BtnActualizar.MouseState = MaterialSkin.MouseState.HOVER;
+            BtnActualizar.Name = "BtnActualizar";
+            BtnActualizar.NoAccentTextColor = Color.Empty;
+            BtnActualizar.Size = new Size(237, 54);
+            BtnActualizar.TabIndex = 1;
+            BtnActualizar.Text = "Actualizar";
+            BtnActualizar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            BtnActualizar.UseAccentColor = false;
+            BtnActualizar.UseVisualStyleBackColor = true;
+            BtnActualizar.Click += BtnActualizar_Click;
+            // 
+            // BtnRegistrar
+            // 
+            BtnRegistrar.AutoSize = false;
+            BtnRegistrar.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnRegistrar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            BtnRegistrar.Depth = 0;
+            BtnRegistrar.HighEmphasis = true;
+            BtnRegistrar.Icon = null;
+            BtnRegistrar.Location = new Point(18, 52);
+            BtnRegistrar.Margin = new Padding(4, 6, 4, 6);
+            BtnRegistrar.MouseState = MaterialSkin.MouseState.HOVER;
+            BtnRegistrar.Name = "BtnRegistrar";
+            BtnRegistrar.NoAccentTextColor = Color.Empty;
+            BtnRegistrar.Size = new Size(237, 54);
+            BtnRegistrar.TabIndex = 0;
+            BtnRegistrar.Text = "Registrar";
+            BtnRegistrar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            BtnRegistrar.UseAccentColor = false;
+            BtnRegistrar.UseVisualStyleBackColor = true;
+            BtnRegistrar.Click += BtnRegistrar_Click;
+            // 
+            // DgvEmpresas
+            // 
+            DgvEmpresas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            DgvEmpresas.Location = new Point(540, 14);
+            DgvEmpresas.Name = "DgvEmpresas";
+            DgvEmpresas.RowHeadersWidth = 62;
+            DgvEmpresas.Size = new Size(1300, 547);
+            DgvEmpresas.TabIndex = 1;
             // 
             // materialCard1
             // 
             materialCard1.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard1.Controls.Add(materialLabel1);
+            materialCard1.Controls.Add(BtnValidar);
+            materialCard1.Controls.Add(TxtCorreo);
+            materialCard1.Controls.Add(LblCorreo);
+            materialCard1.Controls.Add(TxtDireccion);
+            materialCard1.Controls.Add(LblDireccion);
+            materialCard1.Controls.Add(TxtTelefono);
+            materialCard1.Controls.Add(LblTelefono);
+            materialCard1.Controls.Add(TxtRnc);
+            materialCard1.Controls.Add(LblRnc);
             materialCard1.Controls.Add(TxtNombreCompania);
             materialCard1.Controls.Add(lblNombreCompania);
             materialCard1.Depth = 0;
@@ -112,17 +197,250 @@
             materialCard1.Size = new Size(488, 947);
             materialCard1.TabIndex = 0;
             // 
-            // lblNombreCompania
+            // materialLabel1
             // 
-            lblNombreCompania.AutoSize = true;
-            lblNombreCompania.Depth = 0;
-            lblNombreCompania.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            lblNombreCompania.Location = new Point(17, 14);
-            lblNombreCompania.MouseState = MaterialSkin.MouseState.HOVER;
-            lblNombreCompania.Name = "lblNombreCompania";
-            lblNombreCompania.Size = new Size(161, 19);
-            lblNombreCompania.TabIndex = 0;
-            lblNombreCompania.Text = "Nombre de la Empresa";
+            materialLabel1.AutoSize = true;
+            materialLabel1.Depth = 0;
+            materialLabel1.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialLabel1.Location = new Point(34, 706);
+            materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
+            materialLabel1.Name = "materialLabel1";
+            materialLabel1.Size = new Size(376, 19);
+            materialLabel1.TabIndex = 11;
+            materialLabel1.Text = "Consultar si el Rnc no ha sido registrado previamente";
+            // 
+            // BtnValidar
+            // 
+            BtnValidar.AutoSize = false;
+            BtnValidar.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnValidar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            BtnValidar.Depth = 0;
+            BtnValidar.HighEmphasis = true;
+            BtnValidar.Icon = null;
+            BtnValidar.Location = new Point(355, 150);
+            BtnValidar.Margin = new Padding(4, 6, 4, 6);
+            BtnValidar.MouseState = MaterialSkin.MouseState.HOVER;
+            BtnValidar.Name = "BtnValidar";
+            BtnValidar.NoAccentTextColor = Color.Empty;
+            BtnValidar.Size = new Size(124, 54);
+            BtnValidar.TabIndex = 10;
+            BtnValidar.Text = "Validar";
+            BtnValidar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            BtnValidar.UseAccentColor = false;
+            BtnValidar.UseVisualStyleBackColor = true;
+            BtnValidar.Click += BtnValidar_Click;
+            // 
+            // TxtCorreo
+            // 
+            TxtCorreo.AllowPromptAsInput = true;
+            TxtCorreo.AnimateReadOnly = false;
+            TxtCorreo.AsciiOnly = false;
+            TxtCorreo.BackgroundImageLayout = ImageLayout.None;
+            TxtCorreo.BeepOnError = false;
+            TxtCorreo.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
+            TxtCorreo.Depth = 0;
+            TxtCorreo.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            TxtCorreo.HidePromptOnLeave = false;
+            TxtCorreo.HideSelection = true;
+            TxtCorreo.InsertKeyMode = InsertKeyMode.Default;
+            TxtCorreo.LeadingIcon = null;
+            TxtCorreo.Location = new Point(17, 548);
+            TxtCorreo.Mask = "";
+            TxtCorreo.MaxLength = 32767;
+            TxtCorreo.MouseState = MaterialSkin.MouseState.OUT;
+            TxtCorreo.Name = "TxtCorreo";
+            TxtCorreo.PasswordChar = '\0';
+            TxtCorreo.PrefixSuffixText = null;
+            TxtCorreo.PromptChar = '_';
+            TxtCorreo.ReadOnly = false;
+            TxtCorreo.RejectInputOnFirstFailure = false;
+            TxtCorreo.ResetOnPrompt = true;
+            TxtCorreo.ResetOnSpace = true;
+            TxtCorreo.RightToLeft = RightToLeft.No;
+            TxtCorreo.SelectedText = "";
+            TxtCorreo.SelectionLength = 0;
+            TxtCorreo.SelectionStart = 0;
+            TxtCorreo.ShortcutsEnabled = true;
+            TxtCorreo.Size = new Size(375, 48);
+            TxtCorreo.SkipLiterals = true;
+            TxtCorreo.TabIndex = 9;
+            TxtCorreo.TabStop = false;
+            TxtCorreo.TextAlign = HorizontalAlignment.Left;
+            TxtCorreo.TextMaskFormat = MaskFormat.IncludeLiterals;
+            TxtCorreo.TrailingIcon = null;
+            TxtCorreo.UseSystemPasswordChar = false;
+            TxtCorreo.ValidatingType = null;
+            // 
+            // LblCorreo
+            // 
+            LblCorreo.AutoSize = true;
+            LblCorreo.Depth = 0;
+            LblCorreo.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            LblCorreo.Location = new Point(17, 507);
+            LblCorreo.MouseState = MaterialSkin.MouseState.HOVER;
+            LblCorreo.Name = "LblCorreo";
+            LblCorreo.Size = new Size(129, 19);
+            LblCorreo.TabIndex = 8;
+            LblCorreo.Text = "Correo Electronico";
+            // 
+            // TxtDireccion
+            // 
+            TxtDireccion.AllowPromptAsInput = true;
+            TxtDireccion.AnimateReadOnly = false;
+            TxtDireccion.AsciiOnly = false;
+            TxtDireccion.BackgroundImageLayout = ImageLayout.None;
+            TxtDireccion.BeepOnError = false;
+            TxtDireccion.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
+            TxtDireccion.Depth = 0;
+            TxtDireccion.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            TxtDireccion.HidePromptOnLeave = false;
+            TxtDireccion.HideSelection = true;
+            TxtDireccion.InsertKeyMode = InsertKeyMode.Default;
+            TxtDireccion.LeadingIcon = null;
+            TxtDireccion.Location = new Point(17, 409);
+            TxtDireccion.Mask = "";
+            TxtDireccion.MaxLength = 32767;
+            TxtDireccion.MouseState = MaterialSkin.MouseState.OUT;
+            TxtDireccion.Name = "TxtDireccion";
+            TxtDireccion.PasswordChar = '\0';
+            TxtDireccion.PrefixSuffixText = null;
+            TxtDireccion.PromptChar = '_';
+            TxtDireccion.ReadOnly = false;
+            TxtDireccion.RejectInputOnFirstFailure = false;
+            TxtDireccion.ResetOnPrompt = true;
+            TxtDireccion.ResetOnSpace = true;
+            TxtDireccion.RightToLeft = RightToLeft.No;
+            TxtDireccion.SelectedText = "";
+            TxtDireccion.SelectionLength = 0;
+            TxtDireccion.SelectionStart = 0;
+            TxtDireccion.ShortcutsEnabled = true;
+            TxtDireccion.Size = new Size(375, 48);
+            TxtDireccion.SkipLiterals = true;
+            TxtDireccion.TabIndex = 7;
+            TxtDireccion.TabStop = false;
+            TxtDireccion.TextAlign = HorizontalAlignment.Left;
+            TxtDireccion.TextMaskFormat = MaskFormat.IncludeLiterals;
+            TxtDireccion.TrailingIcon = null;
+            TxtDireccion.UseSystemPasswordChar = false;
+            TxtDireccion.ValidatingType = null;
+            // 
+            // LblDireccion
+            // 
+            LblDireccion.AutoSize = true;
+            LblDireccion.Depth = 0;
+            LblDireccion.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            LblDireccion.Location = new Point(17, 387);
+            LblDireccion.MouseState = MaterialSkin.MouseState.HOVER;
+            LblDireccion.Name = "LblDireccion";
+            LblDireccion.Size = new Size(67, 19);
+            LblDireccion.TabIndex = 6;
+            LblDireccion.Text = "Direccion";
+            // 
+            // TxtTelefono
+            // 
+            TxtTelefono.AllowPromptAsInput = true;
+            TxtTelefono.AnimateReadOnly = false;
+            TxtTelefono.AsciiOnly = false;
+            TxtTelefono.BackgroundImageLayout = ImageLayout.None;
+            TxtTelefono.BeepOnError = false;
+            TxtTelefono.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
+            TxtTelefono.Depth = 0;
+            TxtTelefono.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            TxtTelefono.HidePromptOnLeave = false;
+            TxtTelefono.HideSelection = true;
+            TxtTelefono.InsertKeyMode = InsertKeyMode.Default;
+            TxtTelefono.LeadingIcon = null;
+            TxtTelefono.Location = new Point(17, 285);
+            TxtTelefono.Mask = "";
+            TxtTelefono.MaxLength = 32767;
+            TxtTelefono.MouseState = MaterialSkin.MouseState.OUT;
+            TxtTelefono.Name = "TxtTelefono";
+            TxtTelefono.PasswordChar = '\0';
+            TxtTelefono.PrefixSuffixText = null;
+            TxtTelefono.PromptChar = '_';
+            TxtTelefono.ReadOnly = false;
+            TxtTelefono.RejectInputOnFirstFailure = false;
+            TxtTelefono.ResetOnPrompt = true;
+            TxtTelefono.ResetOnSpace = true;
+            TxtTelefono.RightToLeft = RightToLeft.No;
+            TxtTelefono.SelectedText = "";
+            TxtTelefono.SelectionLength = 0;
+            TxtTelefono.SelectionStart = 0;
+            TxtTelefono.ShortcutsEnabled = true;
+            TxtTelefono.Size = new Size(375, 48);
+            TxtTelefono.SkipLiterals = true;
+            TxtTelefono.TabIndex = 5;
+            TxtTelefono.TabStop = false;
+            TxtTelefono.TextAlign = HorizontalAlignment.Left;
+            TxtTelefono.TextMaskFormat = MaskFormat.IncludeLiterals;
+            TxtTelefono.TrailingIcon = null;
+            TxtTelefono.UseSystemPasswordChar = false;
+            TxtTelefono.ValidatingType = null;
+            // 
+            // LblTelefono
+            // 
+            LblTelefono.AutoSize = true;
+            LblTelefono.Depth = 0;
+            LblTelefono.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            LblTelefono.Location = new Point(17, 263);
+            LblTelefono.MouseState = MaterialSkin.MouseState.HOVER;
+            LblTelefono.Name = "LblTelefono";
+            LblTelefono.Size = new Size(64, 19);
+            LblTelefono.TabIndex = 4;
+            LblTelefono.Text = "Telefono";
+            // 
+            // TxtRnc
+            // 
+            TxtRnc.AllowPromptAsInput = true;
+            TxtRnc.AnimateReadOnly = false;
+            TxtRnc.AsciiOnly = false;
+            TxtRnc.BackgroundImageLayout = ImageLayout.None;
+            TxtRnc.BeepOnError = false;
+            TxtRnc.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
+            TxtRnc.Depth = 0;
+            TxtRnc.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            TxtRnc.HidePromptOnLeave = false;
+            TxtRnc.HideSelection = true;
+            TxtRnc.InsertKeyMode = InsertKeyMode.Default;
+            TxtRnc.LeadingIcon = null;
+            TxtRnc.Location = new Point(17, 156);
+            TxtRnc.Mask = "";
+            TxtRnc.MaxLength = 32767;
+            TxtRnc.MouseState = MaterialSkin.MouseState.OUT;
+            TxtRnc.Name = "TxtRnc";
+            TxtRnc.PasswordChar = '\0';
+            TxtRnc.PrefixSuffixText = null;
+            TxtRnc.PromptChar = '_';
+            TxtRnc.ReadOnly = false;
+            TxtRnc.RejectInputOnFirstFailure = false;
+            TxtRnc.ResetOnPrompt = true;
+            TxtRnc.ResetOnSpace = true;
+            TxtRnc.RightToLeft = RightToLeft.No;
+            TxtRnc.SelectedText = "";
+            TxtRnc.SelectionLength = 0;
+            TxtRnc.SelectionStart = 0;
+            TxtRnc.ShortcutsEnabled = true;
+            TxtRnc.Size = new Size(320, 48);
+            TxtRnc.SkipLiterals = true;
+            TxtRnc.TabIndex = 3;
+            TxtRnc.TabStop = false;
+            TxtRnc.TextAlign = HorizontalAlignment.Left;
+            TxtRnc.TextMaskFormat = MaskFormat.IncludeLiterals;
+            TxtRnc.TrailingIcon = null;
+            TxtRnc.UseSystemPasswordChar = false;
+            TxtRnc.ValidatingType = null;
+            // 
+            // LblRnc
+            // 
+            LblRnc.AutoSize = true;
+            LblRnc.Depth = 0;
+            LblRnc.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            LblRnc.Location = new Point(17, 134);
+            LblRnc.MouseState = MaterialSkin.MouseState.HOVER;
+            LblRnc.Name = "LblRnc";
+            LblRnc.Size = new Size(28, 19);
+            LblRnc.TabIndex = 2;
+            LblRnc.Text = "Rnc";
             // 
             // TxtNombreCompania
             // 
@@ -133,12 +451,12 @@
             TxtNombreCompania.BeepOnError = false;
             TxtNombreCompania.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
             TxtNombreCompania.Depth = 0;
-            TxtNombreCompania.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            TxtNombreCompania.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
             TxtNombreCompania.HidePromptOnLeave = false;
             TxtNombreCompania.HideSelection = true;
             TxtNombreCompania.InsertKeyMode = InsertKeyMode.Default;
             TxtNombreCompania.LeadingIcon = null;
-            TxtNombreCompania.Location = new Point(17, 50);
+            TxtNombreCompania.Location = new Point(17, 36);
             TxtNombreCompania.Mask = "";
             TxtNombreCompania.MaxLength = 32767;
             TxtNombreCompania.MouseState = MaterialSkin.MouseState.OUT;
@@ -165,6 +483,27 @@
             TxtNombreCompania.UseSystemPasswordChar = false;
             TxtNombreCompania.ValidatingType = null;
             // 
+            // lblNombreCompania
+            // 
+            lblNombreCompania.AutoSize = true;
+            lblNombreCompania.Depth = 0;
+            lblNombreCompania.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            lblNombreCompania.Location = new Point(17, 14);
+            lblNombreCompania.MouseState = MaterialSkin.MouseState.HOVER;
+            lblNombreCompania.Name = "lblNombreCompania";
+            lblNombreCompania.Size = new Size(161, 19);
+            lblNombreCompania.TabIndex = 0;
+            lblNombreCompania.Text = "Nombre de la Empresa";
+            // 
+            // tabPage4
+            // 
+            tabPage4.Location = new Point(4, 34);
+            tabPage4.Name = "tabPage4";
+            tabPage4.Size = new Size(1886, 975);
+            tabPage4.TabIndex = 3;
+            tabPage4.Text = "Postulantes";
+            tabPage4.UseVisualStyleBackColor = true;
+            // 
             // cpEmpresa
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -176,6 +515,8 @@
             Text = "Empresas";
             materialTabControl1.ResumeLayout(false);
             tabPage3.ResumeLayout(false);
+            materialCard2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)DgvEmpresas).EndInit();
             materialCard1.ResumeLayout(false);
             materialCard1.PerformLayout();
             ResumeLayout(false);
@@ -191,5 +532,19 @@
         private MaterialSkin.Controls.MaterialCard materialCard1;
         private MaterialSkin.Controls.MaterialLabel lblNombreCompania;
         private MaterialSkin.Controls.MaterialMaskedTextBox TxtNombreCompania;
+        private MaterialSkin.Controls.MaterialLabel LblRnc;
+        private MaterialSkin.Controls.MaterialMaskedTextBox TxtRnc;
+        private MaterialSkin.Controls.MaterialLabel LblTelefono;
+        private MaterialSkin.Controls.MaterialLabel LblCorreo;
+        private MaterialSkin.Controls.MaterialMaskedTextBox TxtDireccion;
+        private MaterialSkin.Controls.MaterialLabel LblDireccion;
+        private MaterialSkin.Controls.MaterialMaskedTextBox TxtTelefono;
+        private MaterialSkin.Controls.MaterialButton BtnValidar;
+        private MaterialSkin.Controls.MaterialMaskedTextBox TxtCorreo;
+        private DataGridView DgvEmpresas;
+        private MaterialSkin.Controls.MaterialLabel materialLabel1;
+        private MaterialSkin.Controls.MaterialCard materialCard2;
+        private MaterialSkin.Controls.MaterialButton BtnActualizar;
+        private MaterialSkin.Controls.MaterialButton BtnRegistrar;
     }
 }

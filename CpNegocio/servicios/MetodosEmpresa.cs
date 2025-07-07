@@ -10,16 +10,34 @@ using Microsoft.Data.SqlClient; // Usamos SqlConnection y SqlCommand para maneja
 
 namespace CpNegocio.servicios
 {
-    public class MetodosEmpresa : MetodosBase
+    public class CnMetodosEmpresa : MetodosBase
     {
         // Empresa que se va a gestionar (registrar, eliminar, buscar)
-        private Empresa empresa;
+        private CnEmpresa empresa;
 
         // Constructor que recibe una empresa al momento de instanciar la clase
-        public MetodosEmpresa(Empresa emp)
+        public CnMetodosEmpresa(CnEmpresa emp)
         {
             empresa = emp;
         }
+
+        // Método que verifica si una empresa ya existe en la base de datos por su RNC
+        public static bool EmpresaYaExiste(int rnc)
+        {
+            using (SqlConnection conn = OfertaDatos.ObtenerConexion())
+            {
+                conn.Open();
+
+                string query = "SELECT COUNT(*) FROM Empresa WHERE Rnc = @Rnc";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Rnc", rnc);
+                    int count = (int)cmd.ExecuteScalar();
+                    return count > 0;
+                }
+            }
+        }
+
 
         // Método que registra una nueva empresa en la base de datos
         public override void Registrar()
@@ -32,7 +50,7 @@ namespace CpNegocio.servicios
                     conn.Open();
 
                     // Validamos si la empresa ya existe por su RNC
-                    if (EmpresaYaExiste(conn, empresa.Rnc))
+                    if (EmpresaYaExiste(empresa.Rnc))
                     {
                         throw new Exception("Esta empresa ya está registrada.");
                     }
@@ -119,19 +137,6 @@ namespace CpNegocio.servicios
             catch (Exception ex)
             {
                 throw new Exception("Error al buscar empresas: " + ex.Message);
-            }
-        }
-
-        // Método privado auxiliar que verifica si una empresa ya existe en la base de datos por su RNC
-        private bool EmpresaYaExiste(SqlConnection conn, int rnc)
-        {
-            string query = "SELECT COUNT(*) FROM Empresa WHERE Rnc = @Rnc";
-
-            using (SqlCommand cmd = new SqlCommand(query, conn))
-            {
-                cmd.Parameters.AddWithValue("@Rnc", rnc);
-                int count = (int)cmd.ExecuteScalar(); // Devuelve cantidad de registros
-                return count > 0;
             }
         }
     }

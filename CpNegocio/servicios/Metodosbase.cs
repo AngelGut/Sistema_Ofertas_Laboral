@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using System.Runtime.CompilerServices;
 
 namespace CpNegocio.servicios
 {
@@ -26,5 +27,4 @@ namespace CpNegocio.servicios
             return new DataTable();
         }
     }
-
 }
