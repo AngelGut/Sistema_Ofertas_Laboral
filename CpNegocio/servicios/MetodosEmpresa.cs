@@ -22,7 +22,7 @@ namespace CpNegocio.servicios
         }
 
         // Método que verifica si una empresa ya existe en la base de datos por su RNC
-        public static bool EmpresaYaExiste(int rnc)
+        public static bool EmpresaYaExiste(string rnc)
         {
             using (SqlConnection conn = OfertaDatos.ObtenerConexion())
             {

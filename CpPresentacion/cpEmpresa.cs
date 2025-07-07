@@ -28,6 +28,11 @@ namespace CpPresentacion
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
 
+            // Asociar evento KeyPress para bloquear letras y espacios en los campos numéricos
+            TxtTelefono.KeyPress += SoloNumeros_KeyPress;
+            TxtRnc.KeyPress += SoloNumeros_KeyPress;
+
+
             CargarEmpresas();
         }
 
@@ -75,7 +80,7 @@ namespace CpPresentacion
         {
             try
             {
-                // 1. Leer y validar campos vacíos
+                // 1. Validar que ningún campo esté vacío
                 if (string.IsNullOrWhiteSpace(TxtNombreCompania.Text) ||
                     string.IsNullOrWhiteSpace(TxtTelefono.Text) ||
                     string.IsNullOrWhiteSpace(TxtCorreo.Text) ||
@@ -88,15 +93,15 @@ namespace CpPresentacion
 
                 // 2. Leer datos desde los TextBox
                 string nombre = TxtNombreCompania.Text.Trim();
-                string telefono = TxtTelefono.Text.Trim();
+                string telefono = TxtTelefono.Text.Trim().Replace(" ", ""); // ❌ quitar espacios
                 string correo = TxtCorreo.Text.Trim();
                 string direccion = TxtDireccion.Text.Trim();
+                string rncTexto = TxtRnc.Text.Trim().Replace(" ", ""); // ❌ quitar espacios
 
-                // 3. Validar que el RNC contenga solo dígitos (no letras, guiones ni símbolos)
-                string rncTexto = TxtRnc.Text.Trim();
+                // 3. Validar que el RNC contenga solo dígitos (sin espacios ni símbolos)
                 if (!rncTexto.All(char.IsDigit))
                 {
-                    MessageBox.Show("Favor ingresar solo números en el RNC, sin guiones ni otros símbolos.", "Formato inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("El RNC debe contener solo números, sin espacios ni símbolos.", "Formato inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -104,11 +109,11 @@ namespace CpPresentacion
                 if (!telefono.All(char.IsDigit))
                 {
                     TxtTelefono.BackColor = Color.MistyRose;
-                    MessageBox.Show("El teléfono debe contener solo números, sin guiones ni letras.", "Formato inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("El teléfono debe contener solo números, sin espacios ni letras.", "Formato inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // 5. Validar correo con expresión regular
+                // 5. Validar que el correo tenga un formato correcto con expresión regular
                 if (!Regex.IsMatch(correo, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                 {
                     TxtCorreo.BackColor = Color.MistyRose;
@@ -116,28 +121,29 @@ namespace CpPresentacion
                     return;
                 }
 
-                // 6. Si pasa la validación, conviértelo a int
-                int rnc = int.Parse(rncTexto);
+                // 6. Crear el objeto empresa usando el constructor con RNC tipo string
+                CnEmpresa empresa = new CnEmpresa(nombre, telefono, correo, direccion, rncTexto);
 
-                // 7. Crear la empresa usando el constructor
-                CnEmpresa empresa = new CnEmpresa(nombre, telefono, correo, direccion, rnc);
-
-                // 8. Instanciar el servicio y registrar
+                // 7. Instanciar el servicio y registrar la empresa
                 CpNegocio.servicios.CnMetodosEmpresa servicio = new CpNegocio.servicios.CnMetodosEmpresa(empresa);
                 servicio.Registrar();
 
-                // 9. Mostrar éxito
+                // 8. Mostrar mensaje de éxito
                 MessageBox.Show("Empresa registrada correctamente.", "Registro Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // 10. Limpiar campos
+                // 9. Limpiar los campos del formulario
                 TxtNombreCompania.Clear();
                 TxtTelefono.Clear();
                 TxtCorreo.Clear();
                 TxtDireccion.Clear();
                 TxtRnc.Clear();
+
+                // 10. (Opcional) Refrescar el DataGridView si lo deseas
+                CargarEmpresas();
             }
             catch (Exception ex)
             {
+                // 11. Mostrar cualquier error durante el proceso
                 MessageBox.Show("Error al registrar la empresa: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -155,11 +161,8 @@ namespace CpPresentacion
 
             try
             {
-                // Convertimos a entero
-                int rnc = int.Parse(rncTexto);
-
                 // Llamamos al método que verifica existencia por RNC
-                bool existe = CpNegocio.servicios.CnMetodosEmpresa.EmpresaYaExiste(rnc);
+                bool existe = CpNegocio.servicios.CnMetodosEmpresa.EmpresaYaExiste(rncTexto);
 
                 if (existe)
                 {
@@ -198,6 +201,28 @@ namespace CpPresentacion
         private void BtnActualizar_Click(object sender, EventArgs e)
         {
             CargarEmpresas(); // Recarga los datos desde la base de datos
+        }
+
+        private void TxtRnc_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Permitir dígitos, teclas de control (como Backspace) y bloquear todo lo demás
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true; // Bloquear letras, símbolos y espacio
+            }
+
+            // Bloquear espacio explícitamente (aunque ya está cubierto arriba)
+            if (e.KeyChar == ' ')
+            {
+                e.Handled = true;
+            }
+        }
+        private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true; // Bloquea la tecla
+            }
         }
     }
 }

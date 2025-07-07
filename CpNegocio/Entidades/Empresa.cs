@@ -18,7 +18,7 @@ namespace CpNegocio.Entidades
         private string _telefono;
         private string _correo;
         private string _direccion;
-        private int _rnc;
+        private string _rnc;
  
 
         // propiedades públicas para acceder a los campos privados
@@ -42,7 +42,7 @@ namespace CpNegocio.Entidades
             get { return _direccion; }
             set { _direccion = value; }
         }
-        public int Rnc
+        public string Rnc
         {
             get { return _rnc; }
             set { _rnc = value; }
@@ -50,7 +50,7 @@ namespace CpNegocio.Entidades
         public int Id { get; set; }       // Solo propiedad, sin campo privado
 
         //constructor 
-        public CnEmpresa(string nombre, string telefono, string correo, string direccion, int rnc)
+        public CnEmpresa(string nombre, string telefono, string correo, string direccion, string rnc)
         {
             Nombre = nombre;
             Telefono = telefono;

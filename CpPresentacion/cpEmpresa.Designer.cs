@@ -37,7 +37,6 @@
             BtnRegistrar = new MaterialSkin.Controls.MaterialButton();
             DgvEmpresas = new DataGridView();
             materialCard1 = new MaterialSkin.Controls.MaterialCard();
-            materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             BtnValidar = new MaterialSkin.Controls.MaterialButton();
             TxtCorreo = new MaterialSkin.Controls.MaterialMaskedTextBox();
             LblCorreo = new MaterialSkin.Controls.MaterialLabel();
@@ -175,7 +174,6 @@
             // materialCard1
             // 
             materialCard1.BackColor = Color.FromArgb(255, 255, 255);
-            materialCard1.Controls.Add(materialLabel1);
             materialCard1.Controls.Add(BtnValidar);
             materialCard1.Controls.Add(TxtCorreo);
             materialCard1.Controls.Add(LblCorreo);
@@ -196,18 +194,6 @@
             materialCard1.Padding = new Padding(14);
             materialCard1.Size = new Size(488, 947);
             materialCard1.TabIndex = 0;
-            // 
-            // materialLabel1
-            // 
-            materialLabel1.AutoSize = true;
-            materialLabel1.Depth = 0;
-            materialLabel1.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            materialLabel1.Location = new Point(34, 706);
-            materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
-            materialLabel1.Name = "materialLabel1";
-            materialLabel1.Size = new Size(376, 19);
-            materialLabel1.TabIndex = 11;
-            materialLabel1.Text = "Consultar si el Rnc no ha sido registrado previamente";
             // 
             // BtnValidar
             // 
@@ -429,6 +415,7 @@
             TxtRnc.TrailingIcon = null;
             TxtRnc.UseSystemPasswordChar = false;
             TxtRnc.ValidatingType = null;
+            TxtRnc.KeyPress += TxtRnc_KeyPress;
             // 
             // LblRnc
             // 
@@ -542,7 +529,6 @@
         private MaterialSkin.Controls.MaterialButton BtnValidar;
         private MaterialSkin.Controls.MaterialMaskedTextBox TxtCorreo;
         private DataGridView DgvEmpresas;
-        private MaterialSkin.Controls.MaterialLabel materialLabel1;
         private MaterialSkin.Controls.MaterialCard materialCard2;
         private MaterialSkin.Controls.MaterialButton BtnActualizar;
         private MaterialSkin.Controls.MaterialButton BtnRegistrar;
