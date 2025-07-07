@@ -14,6 +14,7 @@ namespace CpPresentacion
 {
     public partial class Menu : MaterialForm // <<== ¡Cambiado a MaterialForm!
     {
+
         public Menu()
         {
             InitializeComponent();
@@ -39,40 +40,50 @@ namespace CpPresentacion
         //Este método debe marcarse como async para poder usar 'await Task.Delay(...)'
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Obtener el índice de la pestaña actualmente seleccionada
             int selectedIndex = materialTabControl1.SelectedIndex;
 
-            // Si se selecciona la pestaña con índice 1 (que corresponde a cpOfertas)
-            // y el formulario actual NO es cpOfertas, entonces procedemos a abrirlo
+            // Si se selecciona cpOfertas (índice 1) y no estamos ya en cpOfertas
             if (selectedIndex == 1 && !(this is cpOfertas))
             {
-                var f = new cpOfertas(); // Crear una nueva instancia del formulario cpOfertas
-                f.Show();                // Mostrar ese formulario
+                var f = new cpOfertas();    // Crear formulario cpOfertas
+                this.Hide();                // Ocultar Menu (NO se cierra)
+                f.Show();                   // Mostrar cpOfertas
 
-                this.Hide();             // Ocultar el formulario actual (Menu), sin cerrarlo
-
-                await Task.Delay(1000);  // Esperar 1 segundo (opcional, puede omitirse)
+                await Task.Delay(300);      // Espera breve para transición fluida
             }
-            // Si se selecciona la pestaña 2 (cpEmpresa) y no estamos ya en ese formulario
+
+            // Si se selecciona cpEmpresa (índice 2)
             else if (selectedIndex == 2 && !(this is cpEmpresa))
             {
-                var f = new cpEmpresa(); // Crear instancia del formulario cpEmpresa
-                f.Show();                // Mostrar el formulario
+                var f = new cpEmpresa();    // Crear cpEmpresa
+                this.Hide();                // Ocultar Menu
+                f.Show();                   // Mostrar cpEmpresa
 
-                this.Hide();             // Ocultar el formulario Menu
-                await Task.Delay(1000);  // Espera opcional
+                await Task.Delay(300);
             }
-            // Si se selecciona la pestaña 3 (cpPostulante) y no estamos ya en ese formulario
+
+            // Si se selecciona cpPostulante (índice 3)
             else if (selectedIndex == 3 && !(this is cpPostulante))
             {
-                var f = new cpPostulante(); // Crear instancia del formulario cpPostulante
-                f.Show();                   // Mostrar el formulario
+                var f = new cpPostulante(); // Crear cpPostulante
+                this.Hide();                // Ocultar Menu
+                f.Show();                   // Mostrar cpPostulante
 
-                this.Hide();                // Ocultar el formulario Menu
-                await Task.Delay(1000);     // Espera opcional
+                await Task.Delay(300);
             }
 
-            // Nota: No se hace nada si se selecciona el índice 0 (Menu) ya que ya estamos en Menu.
+            // Si se selecciona el índice 0 (Menu), no se hace nada, ya estamos aquí
+        }
+
+        private void BtnSalir_Click(object sender, EventArgs e)
+        {
+            var confirm = MessageBox.Show("¿Estás seguro de que quieres salir?", "Confirmar salida",
+                              MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirm == DialogResult.Yes)
+            {
+
+                Application.Exit();
+            }
         }
     }
 }

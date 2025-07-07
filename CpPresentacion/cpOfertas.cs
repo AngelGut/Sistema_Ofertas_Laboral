@@ -24,48 +24,53 @@ namespace CpPresentacion
             // Mejora visual: habilitar doble búfer para reducir parpadeos
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
+
+
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Obtener el índice de la pestaña actualmente seleccionada
+            // Obtener el índice de la pestaña seleccionada por el usuario
             int selectedIndex = materialTabControl1.SelectedIndex;
 
             // Si se selecciona la pestaña 0 (Menu) y no estamos ya en Menu
             if (selectedIndex == 0 && !(this is Menu))
             {
-                var f = new Menu();   // Crear nueva instancia del formulario Menu
-                this.Hide();          // Ocultar cpOfertas
-                f.Show();             // Mostrar Menu
-                await Task.Delay(300);
-                this.Dispose();       // Liberar cpOfertas
+                var f = new Menu();   // Crear una nueva instancia del formulario Menu
+                f.Show();             // Mostrar el formulario Menu
+
+                await Task.Delay(300); // Espera breve para suavizar
+                this.Dispose();        // Liberar el formulario secundario actual
+
             }
 
-            // Si se selecciona la pestaña 1 (cpOfertas) y ya estamos aquí
-            else if (selectedIndex == 1 && this is cpOfertas)
-            {
-                return; // No hacer nada, ya estás en cpOfertas
-            }
 
             // Si se selecciona la pestaña 2 (cpEmpresa) y no estamos ya en cpEmpresa
             else if (selectedIndex == 2 && !(this is cpEmpresa))
             {
-                var f = new cpEmpresa();  // Crear instancia de cpEmpresa
-                this.Hide();              // Ocultar cpOfertas
-                f.Show();                 // Mostrar cpEmpresa
-                await Task.Delay(300);
-                this.Dispose();           // Liberar cpOfertas
+                var f = new cpEmpresa();  // Crear nueva instancia del formulario cpEmpresa
+                f.Show();                 // Mostrar el formulario cpEmpresa
+
+                await Task.Delay(300);    // Espera para suavizar la transición
+                this.Dispose();           // Liberar el formulario cpOfertas
             }
 
             // Si se selecciona la pestaña 3 (cpPostulante) y no estamos ya en cpPostulante
             else if (selectedIndex == 3 && !(this is cpPostulante))
             {
-                var f = new cpPostulante();  // Crear instancia de cpPostulante
-                this.Hide();                 // Ocultar cpOfertas
-                f.Show();                    // Mostrar cpPostulante
-                await Task.Delay(300);
+                var f = new cpPostulante();  // Crear nueva instancia del formulario cpPostulante
+                f.Show();                    // Mostrar el formulario
+
+                await Task.Delay(300);       // Espera breve
                 this.Dispose();              // Liberar cpOfertas
             }
+
+            // Si se selecciona la pestaña 1 (cpOfertas), no se hace nada porque ya estamos aquí
+        }
+
+        private void materialLabel4_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

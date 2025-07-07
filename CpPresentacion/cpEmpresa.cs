@@ -29,44 +29,42 @@ namespace CpPresentacion
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Obtener el índice de la pestaña actualmente seleccionada
+            // Obtener el índice de la pestaña seleccionada
             int selectedIndex = materialTabControl1.SelectedIndex;
 
             // Si se selecciona la pestaña 0 (Menu) y no estamos ya en Menu
             if (selectedIndex == 0 && !(this is Menu))
             {
-                var f = new Menu();   // Crear nueva instancia del formulario Menu
-                this.Hide();          // Ocultar el formulario actual (cpEmpresa)
+                var f = new Menu();   // Crear una nueva instancia del formulario Menu
                 f.Show();             // Mostrar el formulario Menu
-                await Task.Delay(300);
-                this.Dispose();       // Liberar memoria del formulario actual
+
+                await Task.Delay(300); // Espera breve para suavizar
+                this.Dispose();        // Liberar el formulario secundario actual
+
             }
+
 
             // Si se selecciona la pestaña 1 (cpOfertas) y no estamos ya en cpOfertas
             else if (selectedIndex == 1 && !(this is cpOfertas))
             {
                 var f = new cpOfertas();  // Crear nueva instancia del formulario cpOfertas
-                this.Hide();              // Ocultar este formulario
                 f.Show();                 // Mostrar cpOfertas
-                await Task.Delay(300);
-                this.Dispose();           // Liberar cpEmpresa
-            }
 
-            // Si se selecciona la pestaña 2 (cpEmpresa) y ya estamos en cpEmpresa
-            else if (selectedIndex == 2 && this is cpEmpresa)
-            {
-                return; // No hacer nada, ya estamos aquí
+                await Task.Delay(300);    // Espera para suavizar
+                this.Dispose();           // Liberar cpEmpresa
             }
 
             // Si se selecciona la pestaña 3 (cpPostulante) y no estamos ya en cpPostulante
             else if (selectedIndex == 3 && !(this is cpPostulante))
             {
-                var f = new cpPostulante();  // Crear instancia de cpPostulante
-                this.Hide();                 // Ocultar cpEmpresa
-                f.Show();                    // Mostrar cpPostulante
-                await Task.Delay(300);
+                var f = new cpPostulante();  // Crear nueva instancia del formulario cpPostulante
+                f.Show();                    // Mostrar el formulario
+
+                await Task.Delay(300);       // Espera breve
                 this.Dispose();              // Liberar cpEmpresa
             }
+
+            // Si se selecciona la pestaña 2 (cpEmpresa), no se hace nada porque ya estamos aquí
         }
     }
 }

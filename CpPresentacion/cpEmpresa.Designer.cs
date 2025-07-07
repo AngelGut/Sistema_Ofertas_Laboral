@@ -49,7 +49,7 @@
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(794, 383);
+            materialTabControl1.Size = new Size(1894, 1013);
             materialTabControl1.TabIndex = 0;
             materialTabControl1.SelectedIndexChanged += materialTabControl1_SelectedIndexChanged;
             // 
@@ -58,7 +58,7 @@
             tabPage1.Location = new Point(4, 34);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(786, 345);
+            tabPage1.Size = new Size(1886, 975);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Menu";
             tabPage1.UseVisualStyleBackColor = true;
@@ -95,12 +95,11 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1900, 1080);
             Controls.Add(materialTabControl1);
             DrawerTabControl = materialTabControl1;
             Name = "cpEmpresa";
             Text = "Empresas";
-            WindowState = FormWindowState.Maximized;
             materialTabControl1.ResumeLayout(false);
             ResumeLayout(false);
         }
