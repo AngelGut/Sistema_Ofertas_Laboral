@@ -19,6 +19,8 @@ namespace CpPresentacion
         {
             InitializeComponent();
 
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Bloquea redimensionamiento
+
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 0;
 

@@ -152,6 +152,9 @@
             ClientSize = new Size(1900, 1080);
             Controls.Add(materialTabControl1);
             DrawerTabControl = materialTabControl1;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "Menu";
             Text = "Menu";
             materialTabControl1.ResumeLayout(false);

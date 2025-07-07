@@ -25,7 +25,14 @@ namespace CpPresentacion
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
 
+            // Lógica para ocultar los campos de Salario y Créditos al inicio
+            TxtSalario.Visible = false; // Ocultar TextBox de Salario
+            TxtCreditos.Visible = false; // Ocultar TextBox de Créditos
 
+            if (CboxTipoOferta.Items.Count > 0)
+            {
+                CboxTipoOferta.SelectedIndex = 0; // Seleccionar el primer elemento por defecto
+            }
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -69,6 +76,35 @@ namespace CpPresentacion
         }
 
         private void materialLabel4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CboxTipoOferta_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string tipoSeleccionado = CboxTipoOferta.SelectedItem.ToString();
+
+            // Oculta todos los campos específicos primero, para resetear la visibilidad
+            TxtSalario.Visible = false; // Ocultar TextBox de Salario
+            TxtCreditos.Visible = false; // Ocultar TextBox de Créditos
+
+            // Muestra los campos específicos según el tipo de oferta seleccionado
+            if (tipoSeleccionado == "Empleo Fijo")
+            {
+                TxtSalario.Visible = true; // Mostrar TextBox de Salario
+            }
+            else if (tipoSeleccionado == "Pasantia")
+            {
+                TxtCreditos.Visible = true; // Mostrar TextBox de Créditos
+            }
+        }
+
+        private void BtnRegistrar_Click(object sender, EventArgs e)
         {
 
         }

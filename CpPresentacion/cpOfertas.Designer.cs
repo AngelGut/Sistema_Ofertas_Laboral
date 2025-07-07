@@ -32,10 +32,13 @@
             tabPage1 = new TabPage();
             tabPage2 = new TabPage();
             materialCard3 = new MaterialSkin.Controls.MaterialCard();
+            BtnEliminar = new MaterialSkin.Controls.MaterialButton();
+            BtnMostrar = new MaterialSkin.Controls.MaterialButton();
+            BtnRegistrar = new MaterialSkin.Controls.MaterialButton();
             materialCard4 = new MaterialSkin.Controls.MaterialCard();
+            CboxTipoOferta = new ComboBox();
             TxtRequisitos = new MaterialSkin.Controls.MaterialMaskedTextBox();
             lblRequisitos = new MaterialSkin.Controls.MaterialLabel();
-            CboxTipoOferta = new MaterialSkin.Controls.MaterialComboBox();
             TxtCreditos = new MaterialSkin.Controls.MaterialMaskedTextBox();
             TxtSalario = new MaterialSkin.Controls.MaterialMaskedTextBox();
             TxtDescripcion = new MaterialSkin.Controls.MaterialMaskedTextBox();
@@ -50,9 +53,6 @@
             dataGridView2 = new DataGridView();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
-            BtnRegistrar = new MaterialSkin.Controls.MaterialButton();
-            BtnMostrar = new MaterialSkin.Controls.MaterialButton();
-            BtnEliminar = new MaterialSkin.Controls.MaterialButton();
             materialTabControl1.SuspendLayout();
             tabPage2.SuspendLayout();
             materialCard3.SuspendLayout();
@@ -99,6 +99,7 @@
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Ofertas Laborales";
             tabPage2.UseVisualStyleBackColor = true;
+            tabPage2.Click += tabPage2_Click;
             // 
             // materialCard3
             // 
@@ -116,12 +117,73 @@
             materialCard3.Size = new Size(1137, 171);
             materialCard3.TabIndex = 5;
             // 
+            // BtnEliminar
+            // 
+            BtnEliminar.AutoSize = false;
+            BtnEliminar.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnEliminar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            BtnEliminar.Depth = 0;
+            BtnEliminar.HighEmphasis = true;
+            BtnEliminar.Icon = null;
+            BtnEliminar.Location = new Point(869, 67);
+            BtnEliminar.Margin = new Padding(4, 6, 4, 6);
+            BtnEliminar.MouseState = MaterialSkin.MouseState.HOVER;
+            BtnEliminar.Name = "BtnEliminar";
+            BtnEliminar.NoAccentTextColor = Color.Empty;
+            BtnEliminar.Size = new Size(237, 54);
+            BtnEliminar.TabIndex = 2;
+            BtnEliminar.Text = "Eliminar";
+            BtnEliminar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            BtnEliminar.UseAccentColor = false;
+            BtnEliminar.UseVisualStyleBackColor = true;
+            // 
+            // BtnMostrar
+            // 
+            BtnMostrar.AutoSize = false;
+            BtnMostrar.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnMostrar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            BtnMostrar.Depth = 0;
+            BtnMostrar.HighEmphasis = true;
+            BtnMostrar.Icon = null;
+            BtnMostrar.Location = new Point(467, 67);
+            BtnMostrar.Margin = new Padding(4, 6, 4, 6);
+            BtnMostrar.MouseState = MaterialSkin.MouseState.HOVER;
+            BtnMostrar.Name = "BtnMostrar";
+            BtnMostrar.NoAccentTextColor = Color.Empty;
+            BtnMostrar.Size = new Size(237, 54);
+            BtnMostrar.TabIndex = 1;
+            BtnMostrar.Text = "Mostrar";
+            BtnMostrar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            BtnMostrar.UseAccentColor = false;
+            BtnMostrar.UseVisualStyleBackColor = true;
+            // 
+            // BtnRegistrar
+            // 
+            BtnRegistrar.AutoSize = false;
+            BtnRegistrar.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnRegistrar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            BtnRegistrar.Depth = 0;
+            BtnRegistrar.HighEmphasis = true;
+            BtnRegistrar.Icon = null;
+            BtnRegistrar.Location = new Point(45, 67);
+            BtnRegistrar.Margin = new Padding(4, 6, 4, 6);
+            BtnRegistrar.MouseState = MaterialSkin.MouseState.HOVER;
+            BtnRegistrar.Name = "BtnRegistrar";
+            BtnRegistrar.NoAccentTextColor = Color.Empty;
+            BtnRegistrar.Size = new Size(237, 54);
+            BtnRegistrar.TabIndex = 0;
+            BtnRegistrar.Text = "Registrar";
+            BtnRegistrar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            BtnRegistrar.UseAccentColor = false;
+            BtnRegistrar.UseVisualStyleBackColor = true;
+            BtnRegistrar.Click += BtnRegistrar_Click;
+            // 
             // materialCard4
             // 
             materialCard4.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard4.Controls.Add(CboxTipoOferta);
             materialCard4.Controls.Add(TxtRequisitos);
             materialCard4.Controls.Add(lblRequisitos);
-            materialCard4.Controls.Add(CboxTipoOferta);
             materialCard4.Controls.Add(TxtCreditos);
             materialCard4.Controls.Add(TxtSalario);
             materialCard4.Controls.Add(TxtDescripcion);
@@ -142,6 +204,17 @@
             materialCard4.Padding = new Padding(14);
             materialCard4.Size = new Size(669, 921);
             materialCard4.TabIndex = 4;
+            // 
+            // CboxTipoOferta
+            // 
+            CboxTipoOferta.DropDownStyle = ComboBoxStyle.DropDownList;
+            CboxTipoOferta.FormattingEnabled = true;
+            CboxTipoOferta.Items.AddRange(new object[] { "Oferta", "Empleo Fijo", "Pasantia" });
+            CboxTipoOferta.Location = new Point(17, 243);
+            CboxTipoOferta.Name = "CboxTipoOferta";
+            CboxTipoOferta.Size = new Size(182, 33);
+            CboxTipoOferta.TabIndex = 14;
+            CboxTipoOferta.SelectedIndexChanged += CboxTipoOferta_SelectedIndexChanged;
             // 
             // TxtRequisitos
             // 
@@ -196,28 +269,6 @@
             lblRequisitos.TabIndex = 12;
             lblRequisitos.Text = "Requisitos";
             // 
-            // CboxTipoOferta
-            // 
-            CboxTipoOferta.AutoResize = false;
-            CboxTipoOferta.BackColor = Color.FromArgb(255, 255, 255);
-            CboxTipoOferta.Depth = 0;
-            CboxTipoOferta.DrawMode = DrawMode.OwnerDrawVariable;
-            CboxTipoOferta.DropDownHeight = 174;
-            CboxTipoOferta.DropDownStyle = ComboBoxStyle.DropDownList;
-            CboxTipoOferta.DropDownWidth = 121;
-            CboxTipoOferta.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
-            CboxTipoOferta.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            CboxTipoOferta.FormattingEnabled = true;
-            CboxTipoOferta.IntegralHeight = false;
-            CboxTipoOferta.ItemHeight = 43;
-            CboxTipoOferta.Location = new Point(17, 225);
-            CboxTipoOferta.MaxDropDownItems = 4;
-            CboxTipoOferta.MouseState = MaterialSkin.MouseState.OUT;
-            CboxTipoOferta.Name = "CboxTipoOferta";
-            CboxTipoOferta.Size = new Size(182, 49);
-            CboxTipoOferta.StartIndex = 0;
-            CboxTipoOferta.TabIndex = 11;
-            // 
             // TxtCreditos
             // 
             TxtCreditos.AllowPromptAsInput = true;
@@ -253,7 +304,6 @@
             TxtCreditos.SkipLiterals = true;
             TxtCreditos.TabIndex = 10;
             TxtCreditos.TabStop = false;
-            TxtCreditos.Text = "materialMaskedTextBox5";
             TxtCreditos.TextAlign = HorizontalAlignment.Left;
             TxtCreditos.TextMaskFormat = MaskFormat.IncludeLiterals;
             TxtCreditos.TrailingIcon = null;
@@ -523,66 +573,6 @@
             tabPage4.Text = "Postulantes";
             tabPage4.UseVisualStyleBackColor = true;
             // 
-            // BtnRegistrar
-            // 
-            BtnRegistrar.AutoSize = false;
-            BtnRegistrar.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            BtnRegistrar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            BtnRegistrar.Depth = 0;
-            BtnRegistrar.HighEmphasis = true;
-            BtnRegistrar.Icon = null;
-            BtnRegistrar.Location = new Point(45, 67);
-            BtnRegistrar.Margin = new Padding(4, 6, 4, 6);
-            BtnRegistrar.MouseState = MaterialSkin.MouseState.HOVER;
-            BtnRegistrar.Name = "BtnRegistrar";
-            BtnRegistrar.NoAccentTextColor = Color.Empty;
-            BtnRegistrar.Size = new Size(237, 54);
-            BtnRegistrar.TabIndex = 0;
-            BtnRegistrar.Text = "Registrar";
-            BtnRegistrar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            BtnRegistrar.UseAccentColor = false;
-            BtnRegistrar.UseVisualStyleBackColor = true;
-            // 
-            // BtnMostrar
-            // 
-            BtnMostrar.AutoSize = false;
-            BtnMostrar.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            BtnMostrar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            BtnMostrar.Depth = 0;
-            BtnMostrar.HighEmphasis = true;
-            BtnMostrar.Icon = null;
-            BtnMostrar.Location = new Point(467, 67);
-            BtnMostrar.Margin = new Padding(4, 6, 4, 6);
-            BtnMostrar.MouseState = MaterialSkin.MouseState.HOVER;
-            BtnMostrar.Name = "BtnMostrar";
-            BtnMostrar.NoAccentTextColor = Color.Empty;
-            BtnMostrar.Size = new Size(237, 54);
-            BtnMostrar.TabIndex = 1;
-            BtnMostrar.Text = "Mostrar";
-            BtnMostrar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            BtnMostrar.UseAccentColor = false;
-            BtnMostrar.UseVisualStyleBackColor = true;
-            // 
-            // BtnEliminar
-            // 
-            BtnEliminar.AutoSize = false;
-            BtnEliminar.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            BtnEliminar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            BtnEliminar.Depth = 0;
-            BtnEliminar.HighEmphasis = true;
-            BtnEliminar.Icon = null;
-            BtnEliminar.Location = new Point(869, 67);
-            BtnEliminar.Margin = new Padding(4, 6, 4, 6);
-            BtnEliminar.MouseState = MaterialSkin.MouseState.HOVER;
-            BtnEliminar.Name = "BtnEliminar";
-            BtnEliminar.NoAccentTextColor = Color.Empty;
-            BtnEliminar.Size = new Size(237, 54);
-            BtnEliminar.TabIndex = 2;
-            BtnEliminar.Text = "Eliminar";
-            BtnEliminar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            BtnEliminar.UseAccentColor = false;
-            BtnEliminar.UseVisualStyleBackColor = true;
-            // 
             // cpOfertas
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -612,7 +602,6 @@
         private MaterialSkin.Controls.MaterialCard materialCard4;
         private MaterialSkin.Controls.MaterialMaskedTextBox TxtRequisitos;
         private MaterialSkin.Controls.MaterialLabel lblRequisitos;
-        private MaterialSkin.Controls.MaterialComboBox CboxTipoOferta;
         private MaterialSkin.Controls.MaterialMaskedTextBox TxtCreditos;
         private MaterialSkin.Controls.MaterialMaskedTextBox TxtSalario;
         private MaterialSkin.Controls.MaterialMaskedTextBox TxtDescripcion;
@@ -628,5 +617,6 @@
         private MaterialSkin.Controls.MaterialButton BtnEliminar;
         private MaterialSkin.Controls.MaterialButton BtnMostrar;
         private MaterialSkin.Controls.MaterialButton BtnRegistrar;
+        private ComboBox CboxTipoOferta;
     }
 }
