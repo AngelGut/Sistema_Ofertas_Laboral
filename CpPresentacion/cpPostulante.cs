@@ -136,7 +136,8 @@ namespace CpPresentacion
                 }
 
                 // 6. Crear objeto Persona (ajusta esto a tu clase real si se llama CnPersona o similar)
-                var persona = new Persona(nombre, telefono, correo, direccion, dni);
+                int ofertaId = (int)CboxOfertas.SelectedValue;
+                var persona = new Persona(nombre, telefono, correo, direccion, dni, ofertaId);
 
                 // 7. Guardar usando tu capa de negocio
                 var servicio = new CpNegocio.servicios.MetodosPersona(persona);

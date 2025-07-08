@@ -41,6 +41,8 @@ namespace CpNegocio.Entidades
         public int Id { get; set; }          // ID único generado por la BD
         public string Dni { get; set; }
 
+        public int OfertaId { get; set; }
+
 
 
         public void ValidarDisponibilidad()
@@ -49,13 +51,14 @@ namespace CpNegocio.Entidades
         }
 
         //constructor
-        public Persona(string nombre, string telefono, string correo, string direccion, string dni)
+        public Persona(string nombre, string telefono, string correo, string direccion, string dni, int ofertaId)
         {
             Nombre = nombre;
             Telefono = telefono;
             Correo = correo;
             Direccion = direccion;
             Dni = dni;
+            OfertaId = ofertaId;
         }
 
         /// <summary>

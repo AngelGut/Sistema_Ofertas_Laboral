@@ -55,10 +55,9 @@ namespace CpNegocio.servicios
                     }
 
                     // Sentencia SQL para insertar una nueva persona
-                    string query = @"INSERT INTO Persona (Nombre, Telefono, Correo, Direccion, Cedula)
-                                     VALUES (@Nombre, @Telefono, @Correo, @Direccion, @Cedula)";
+                    string query = @"INSERT INTO Persona (Nombre, Telefono, Correo, Direccion, Cedula, OfertaId)
+                 VALUES (@Nombre, @Telefono, @Correo, @Direccion, @Cedula, @OfertaId)";
 
-                    // Se crea el comando SQL y se asignan los parámetros con los datos del objeto persona
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@Nombre", persona.Nombre);
@@ -66,8 +65,8 @@ namespace CpNegocio.servicios
                         cmd.Parameters.AddWithValue("@Correo", persona.Correo);
                         cmd.Parameters.AddWithValue("@Direccion", persona.Direccion);
                         cmd.Parameters.AddWithValue("@Cedula", persona.Dni);
+                        cmd.Parameters.AddWithValue("@OfertaId", persona.OfertaId); // 👉 ESTA LÍNEA ES LA QUE AGREGAS
 
-                        // Se ejecuta la consulta
                         cmd.ExecuteNonQuery();
                     }
                 }
