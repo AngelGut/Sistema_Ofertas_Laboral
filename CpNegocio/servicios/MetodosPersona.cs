@@ -119,18 +119,24 @@ namespace CpNegocio.servicios
                 {
                     conn.Open();
 
-                    // Consulta SQL para seleccionar todas las personas
-                    string query = "SELECT * FROM Persona";
-
+                    // Consulta con LEFT JOIN para mostrar el nombre del puesto
+                    string query = @"
+                    SELECT 
+                        p.Id,
+                        p.Nombre,
+                        p.Cedula,
+                        p.Telefono,
+                        p.Correo,
+                        p.Direccion,
+                        o.Puesto AS NombreOferta
+                    FROM Persona p
+                    LEFT JOIN Oferta o ON p.OfertaId = o.Id";
                     using (SqlCommand cmd = new SqlCommand(query, conn))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            // Se crea y llena un DataTable con los datos
-                            DataTable tabla = new DataTable();
-                            tabla.Load(reader);
-                            return tabla;
-                        }
+                        DataTable tabla = new DataTable();
+                        tabla.Load(reader);
+                        return tabla;
                     }
                 }
             }

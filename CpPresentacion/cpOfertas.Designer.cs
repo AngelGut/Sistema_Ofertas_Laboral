@@ -36,6 +36,7 @@
             BtnMostrar = new MaterialSkin.Controls.MaterialButton();
             BtnRegistrar = new MaterialSkin.Controls.MaterialButton();
             materialCard4 = new MaterialSkin.Controls.MaterialCard();
+            CboxEmpresas = new ComboBox();
             CboxTipoOferta = new ComboBox();
             TxtRequisitos = new MaterialSkin.Controls.MaterialMaskedTextBox();
             lblRequisitos = new MaterialSkin.Controls.MaterialLabel();
@@ -52,7 +53,6 @@
             DGridOferta = new DataGridView();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
-            comboBox1 = new ComboBox();
             materialTabControl1.SuspendLayout();
             tabPage2.SuspendLayout();
             materialCard3.SuspendLayout();
@@ -109,7 +109,7 @@
             materialCard3.Controls.Add(BtnRegistrar);
             materialCard3.Depth = 0;
             materialCard3.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard3.Location = new Point(725, 629);
+            materialCard3.Location = new Point(677, 629);
             materialCard3.Margin = new Padding(14);
             materialCard3.MouseState = MaterialSkin.MouseState.HOVER;
             materialCard3.Name = "materialCard3";
@@ -136,6 +136,7 @@
             BtnEliminar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             BtnEliminar.UseAccentColor = false;
             BtnEliminar.UseVisualStyleBackColor = true;
+            BtnEliminar.Click += BtnEliminar_Click;
             // 
             // BtnMostrar
             // 
@@ -156,6 +157,7 @@
             BtnMostrar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             BtnMostrar.UseAccentColor = false;
             BtnMostrar.UseVisualStyleBackColor = true;
+            BtnMostrar.Click += BtnMostrar_Click;
             // 
             // BtnRegistrar
             // 
@@ -181,7 +183,7 @@
             // materialCard4
             // 
             materialCard4.BackColor = Color.FromArgb(255, 255, 255);
-            materialCard4.Controls.Add(comboBox1);
+            materialCard4.Controls.Add(CboxEmpresas);
             materialCard4.Controls.Add(CboxTipoOferta);
             materialCard4.Controls.Add(TxtRequisitos);
             materialCard4.Controls.Add(lblRequisitos);
@@ -202,8 +204,17 @@
             materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
             materialCard4.Name = "materialCard4";
             materialCard4.Padding = new Padding(14);
-            materialCard4.Size = new Size(669, 921);
+            materialCard4.Size = new Size(535, 921);
             materialCard4.TabIndex = 4;
+            // 
+            // CboxEmpresas
+            // 
+            CboxEmpresas.DropDownStyle = ComboBoxStyle.DropDownList;
+            CboxEmpresas.FormattingEnabled = true;
+            CboxEmpresas.Location = new Point(17, 105);
+            CboxEmpresas.Name = "CboxEmpresas";
+            CboxEmpresas.Size = new Size(182, 33);
+            CboxEmpresas.TabIndex = 15;
             // 
             // CboxTipoOferta
             // 
@@ -309,6 +320,7 @@
             TxtCreditos.TrailingIcon = null;
             TxtCreditos.UseSystemPasswordChar = false;
             TxtCreditos.ValidatingType = null;
+            TxtCreditos.KeyPress += TxtCreditos_KeyPress;
             // 
             // TxtSalario
             // 
@@ -350,6 +362,7 @@
             TxtSalario.TrailingIcon = null;
             TxtSalario.UseSystemPasswordChar = false;
             TxtSalario.ValidatingType = null;
+            TxtSalario.KeyPress += TxtSalario_KeyPress;
             // 
             // TxtDescripcion
             // 
@@ -507,11 +520,16 @@
             // 
             // DGridOferta
             // 
+            DGridOferta.AllowUserToAddRows = false;
+            DGridOferta.AllowUserToDeleteRows = false;
             DGridOferta.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            DGridOferta.Location = new Point(725, 27);
+            DGridOferta.Location = new Point(586, 27);
+            DGridOferta.MultiSelect = false;
             DGridOferta.Name = "DGridOferta";
+            DGridOferta.ReadOnly = true;
             DGridOferta.RowHeadersWidth = 62;
-            DGridOferta.Size = new Size(1137, 521);
+            DGridOferta.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            DGridOferta.Size = new Size(1276, 521);
             DGridOferta.TabIndex = 3;
             // 
             // tabPage3
@@ -531,14 +549,6 @@
             tabPage4.TabIndex = 3;
             tabPage4.Text = "Postulantes";
             tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // comboBox1
-            // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(17, 105);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(182, 33);
-            comboBox1.TabIndex = 15;
             // 
             // cpOfertas
             // 
@@ -584,6 +594,6 @@
         private MaterialSkin.Controls.MaterialButton BtnMostrar;
         private MaterialSkin.Controls.MaterialButton BtnRegistrar;
         private ComboBox CboxTipoOferta;
-        private ComboBox comboBox1;
+        private ComboBox CboxEmpresas;
     }
 }

@@ -33,6 +33,8 @@ namespace CpPresentacion
             TxtDni.KeyPress += SoloLetrasYNumeros_KeyPress;
 
             CargarPersonas(); // <-- aquí lo puedes invocar también
+            CargarOfertas(); // Llama al método que llenará el ComboBox con las ofertas
+
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -95,6 +97,13 @@ namespace CpPresentacion
                     return;
                 }
 
+                // ✅ Validar que se haya seleccionado una oferta
+                if (CboxOfertas.SelectedItem == null)
+                {
+                    MessageBox.Show("Debe seleccionar una oferta para el postulante.", "Falta oferta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 // 2. Leer valores
                 string nombre = TxtNombre.Text.Trim();
                 string telefono = TxtTelefono.Text.Trim();
@@ -147,6 +156,8 @@ namespace CpPresentacion
             {
                 MessageBox.Show("Error al registrar al postulante: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            CargarPersonas(); // Refrescar el DataGridView con los nuevos datos
         }
 
         private void BtnActualizar_Click(object sender, EventArgs e)
@@ -206,17 +217,71 @@ namespace CpPresentacion
         {
             try
             {
-                // Ajusta la inicialización de MetodosPersona para incluir el parámetro requerido.
-                var persona = new Persona(); // Crea una instancia de Persona con valores predeterminados o ajustados.
-                var servicio = new CpNegocio.servicios.MetodosPersona(persona); // Pasa la instancia de Persona como argumento.
+                var persona = new Persona();
+                var servicio = new CpNegocio.servicios.MetodosPersona(persona);
+                DataTable tabla = servicio.Buscar();
 
-                DataTable tabla = servicio.Buscar(); // método que devuelve todas las personas
-                DgvPersonas.DataSource = tabla;      // tu DataGridView
+                DgvPersonas.DataSource = tabla;
+
+                // Ocultar columnas no necesarias
+                if (DgvPersonas.Columns.Contains("Id"))
+                    DgvPersonas.Columns["Id"].Visible = false;
+
+                if (DgvPersonas.Columns.Contains("OfertaId"))
+                    DgvPersonas.Columns["OfertaId"].Visible = false;
+
+                // Cambiar encabezados para hacerlo más claro
+                if (DgvPersonas.Columns.Contains("NombreOferta"))
+                    DgvPersonas.Columns["NombreOferta"].HeaderText = "Oferta asignada";
+
+                if (DgvPersonas.Columns.Contains("Nombre"))
+                    DgvPersonas.Columns["Nombre"].HeaderText = "Nombre";
+
+                if (DgvPersonas.Columns.Contains("Cedula"))
+                    DgvPersonas.Columns["Cedula"].HeaderText = "Cédula";
+
+                if (DgvPersonas.Columns.Contains("Telefono"))
+                    DgvPersonas.Columns["Telefono"].HeaderText = "Teléfono";
+
+                if (DgvPersonas.Columns.Contains("Correo"))
+                    DgvPersonas.Columns["Correo"].HeaderText = "Correo";
+
+                if (DgvPersonas.Columns.Contains("Direccion"))
+                    DgvPersonas.Columns["Direccion"].HeaderText = "Dirección";
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error al cargar personas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void TxtNombre_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Permitir letras, teclas de control (como backspace) y espacio
+            if (!char.IsControl(e.KeyChar) && !char.IsLetter(e.KeyChar) && e.KeyChar != ' ')
+            {
+                e.Handled = true; // Bloquea la tecla
+                MessageBox.Show("Solo se permiten letras en este campo.", "Entrada inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void CargarOfertas()
+        {
+            try
+            {
+                var servicio = new CpNegocio.servicios.MetodosOferta();
+                var lista = servicio.ObtenerTodas();
+
+                CboxOfertas.DataSource = lista;
+                CboxOfertas.DisplayMember = "Puesto";  // Muestra el nombre del puesto
+                CboxOfertas.ValueMember = "Id";        // Guarda el ID de la oferta internamente
+                CboxOfertas.SelectedIndex = -1;        // No seleccionar nada por defecto
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar las ofertas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 }

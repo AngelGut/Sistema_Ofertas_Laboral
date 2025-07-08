@@ -49,6 +49,8 @@
             LblDni = new MaterialSkin.Controls.MaterialLabel();
             TxtNombre = new MaterialSkin.Controls.MaterialMaskedTextBox();
             LblNombrePersona = new MaterialSkin.Controls.MaterialLabel();
+            LblSelecOferta = new MaterialSkin.Controls.MaterialLabel();
+            CboxOfertas = new ComboBox();
             materialTabControl1.SuspendLayout();
             tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DgvPersonas).BeginInit();
@@ -116,10 +118,15 @@
             // 
             // DgvPersonas
             // 
+            DgvPersonas.AllowUserToAddRows = false;
+            DgvPersonas.AllowUserToDeleteRows = false;
             DgvPersonas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DgvPersonas.Location = new Point(587, 14);
+            DgvPersonas.MultiSelect = false;
             DgvPersonas.Name = "DgvPersonas";
+            DgvPersonas.ReadOnly = true;
             DgvPersonas.RowHeadersWidth = 62;
+            DgvPersonas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DgvPersonas.Size = new Size(1249, 509);
             DgvPersonas.TabIndex = 11;
             // 
@@ -183,6 +190,8 @@
             // materialCard1
             // 
             materialCard1.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard1.Controls.Add(CboxOfertas);
+            materialCard1.Controls.Add(LblSelecOferta);
             materialCard1.Controls.Add(LblDireccion);
             materialCard1.Controls.Add(TxtDireccion);
             materialCard1.Controls.Add(TxtCorreo);
@@ -473,6 +482,7 @@
             TxtNombre.TrailingIcon = null;
             TxtNombre.UseSystemPasswordChar = false;
             TxtNombre.ValidatingType = null;
+            TxtNombre.KeyPress += TxtNombre_KeyPress;
             // 
             // LblNombrePersona
             // 
@@ -485,6 +495,27 @@
             LblNombrePersona.Size = new Size(57, 19);
             LblNombrePersona.TabIndex = 0;
             LblNombrePersona.Text = "Nombre";
+            // 
+            // LblSelecOferta
+            // 
+            LblSelecOferta.AutoSize = true;
+            LblSelecOferta.Depth = 0;
+            LblSelecOferta.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            LblSelecOferta.Location = new Point(17, 582);
+            LblSelecOferta.MouseState = MaterialSkin.MouseState.HOVER;
+            LblSelecOferta.Name = "LblSelecOferta";
+            LblSelecOferta.Size = new Size(201, 19);
+            LblSelecOferta.TabIndex = 10;
+            LblSelecOferta.Text = "Selecciona la Oferta Laboral";
+            // 
+            // CboxOfertas
+            // 
+            CboxOfertas.DropDownStyle = ComboBoxStyle.DropDownList;
+            CboxOfertas.FormattingEnabled = true;
+            CboxOfertas.Location = new Point(17, 609);
+            CboxOfertas.Name = "CboxOfertas";
+            CboxOfertas.Size = new Size(182, 33);
+            CboxOfertas.TabIndex = 11;
             // 
             // cpPostulante
             // 
@@ -528,5 +559,7 @@
         private MaterialSkin.Controls.MaterialButton BtnValidar;
         private MaterialSkin.Controls.MaterialCard materialCard2;
         private DataGridView DgvPersonas;
+        private ComboBox CboxOfertas;
+        private MaterialSkin.Controls.MaterialLabel LblSelecOferta;
     }
 }

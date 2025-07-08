@@ -46,9 +46,9 @@
             LblTelefono = new MaterialSkin.Controls.MaterialLabel();
             TxtRnc = new MaterialSkin.Controls.MaterialMaskedTextBox();
             LblRnc = new MaterialSkin.Controls.MaterialLabel();
+            TxtNombreCompania = new MaterialSkin.Controls.MaterialMaskedTextBox();
             lblNombreCompania = new MaterialSkin.Controls.MaterialLabel();
             tabPage4 = new TabPage();
-            TxtNombreCompania = new MaterialSkin.Controls.MaterialMaskedTextBox();
             materialTabControl1.SuspendLayout();
             tabPage3.SuspendLayout();
             materialCard2.SuspendLayout();
@@ -164,10 +164,15 @@
             // 
             // DgvEmpresas
             // 
+            DgvEmpresas.AllowUserToAddRows = false;
+            DgvEmpresas.AllowUserToDeleteRows = false;
             DgvEmpresas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DgvEmpresas.Location = new Point(540, 14);
+            DgvEmpresas.MultiSelect = false;
             DgvEmpresas.Name = "DgvEmpresas";
+            DgvEmpresas.ReadOnly = true;
             DgvEmpresas.RowHeadersWidth = 62;
+            DgvEmpresas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DgvEmpresas.Size = new Size(1300, 547);
             DgvEmpresas.TabIndex = 1;
             // 
@@ -429,27 +434,6 @@
             LblRnc.TabIndex = 2;
             LblRnc.Text = "Rnc";
             // 
-            // lblNombreCompania
-            // 
-            lblNombreCompania.AutoSize = true;
-            lblNombreCompania.Depth = 0;
-            lblNombreCompania.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            lblNombreCompania.Location = new Point(17, 14);
-            lblNombreCompania.MouseState = MaterialSkin.MouseState.HOVER;
-            lblNombreCompania.Name = "lblNombreCompania";
-            lblNombreCompania.Size = new Size(161, 19);
-            lblNombreCompania.TabIndex = 0;
-            lblNombreCompania.Text = "Nombre de la Empresa";
-            // 
-            // tabPage4
-            // 
-            tabPage4.Location = new Point(4, 34);
-            tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(1886, 975);
-            tabPage4.TabIndex = 3;
-            tabPage4.Text = "Postulantes";
-            tabPage4.UseVisualStyleBackColor = true;
-            // 
             // TxtNombreCompania
             // 
             TxtNombreCompania.AllowPromptAsInput = true;
@@ -490,6 +474,27 @@
             TxtNombreCompania.TrailingIcon = null;
             TxtNombreCompania.UseSystemPasswordChar = false;
             TxtNombreCompania.ValidatingType = null;
+            // 
+            // lblNombreCompania
+            // 
+            lblNombreCompania.AutoSize = true;
+            lblNombreCompania.Depth = 0;
+            lblNombreCompania.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            lblNombreCompania.Location = new Point(17, 14);
+            lblNombreCompania.MouseState = MaterialSkin.MouseState.HOVER;
+            lblNombreCompania.Name = "lblNombreCompania";
+            lblNombreCompania.Size = new Size(161, 19);
+            lblNombreCompania.TabIndex = 0;
+            lblNombreCompania.Text = "Nombre de la Empresa";
+            // 
+            // tabPage4
+            // 
+            tabPage4.Location = new Point(4, 34);
+            tabPage4.Name = "tabPage4";
+            tabPage4.Size = new Size(1886, 975);
+            tabPage4.TabIndex = 3;
+            tabPage4.Text = "Postulantes";
+            tabPage4.UseVisualStyleBackColor = true;
             // 
             // cpEmpresa
             // 

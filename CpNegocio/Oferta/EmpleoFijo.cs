@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace CpNegocio.Oferta
 {
-    public class EmpleoFijo : Oferta
+    public class EmpleoFijo : CnOferta
     {
+        // Propiedad específica para empleo fijo
         public int? Salario { get; set; }
 
         public EmpleoFijo()
         {
-            Tipo = "EmpleoFijo";
+            Tipo = "Empleo Fijo"; // Debe coincidir con el valor del ComboBox
         }
     }
 }

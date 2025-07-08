@@ -7,7 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CpNegocio.Oferta;
+using CpNegocio.servicios;
 using MaterialSkin.Controls;
+using Microsoft.Data.SqlClient;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CpPresentacion
@@ -25,14 +28,24 @@ namespace CpPresentacion
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
 
+            //Esto hará que se muestren los nombres de las empresas en el ComboBox
+            var empresas = new MetodosCargarEmpresa().ObtenerEmpresas();
+            CboxEmpresas.DataSource = empresas;
+
             // Lógica para ocultar los campos de Salario y Créditos al inicio
             TxtSalario.Visible = false; // Ocultar TextBox de Salario
             TxtCreditos.Visible = false; // Ocultar TextBox de Créditos
 
+            // Si el ComboBox de tipo de oferta tiene al menos un elemento,
+            // seleccionamos el primero por defecto para que no quede en blanco
             if (CboxTipoOferta.Items.Count > 0)
             {
                 CboxTipoOferta.SelectedIndex = 0; // Seleccionar el primer elemento por defecto
             }
+
+            CargarOfertas(); // Cargar ofertas al iniciar el formulario
+
+            CargarEmpresas(); // Cargar empresas aquí
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -106,7 +119,172 @@ namespace CpPresentacion
 
         private void BtnRegistrar_Click(object sender, EventArgs e)
         {
+            // Obtener el tipo de oferta seleccionado del ComboBox
+            string tipo = CboxTipoOferta.SelectedItem?.ToString();
 
+            // Obtener el ID de la empresa seleccionada del ComboBox
+            int empresaId = ((CpNegocio.Entidades.EmpresaComboItem)CboxEmpresas.SelectedItem).Id;
+
+            // Si el tipo de oferta es EmpleoFijo
+            if (tipo == "Empleo Fijo")
+            {
+                // Crear una nueva instancia de EmpleoFijo con los datos ingresados
+                var empleo = new EmpleoFijo
+                {
+                    EmpresaId = empresaId,
+                    Puesto = TxtPuesto.Text,
+                    Descripcion = TxtDescripcion.Text,
+                    Requisitos = TxtRequisitos.Text,
+                    Salario = int.TryParse(TxtSalario.Text, out int salario) ? salario : null
+                };
+
+                // Llamar al método que registra la oferta de empleo fijo
+                new MetodosEmpleoFijo().Registrar(empleo);
+
+                // Mostrar mensaje de confirmación
+                MessageBox.Show("Oferta de Empleo registrada con éxito.");
+            }
+            // Si el tipo de oferta es Pasantía
+            else if (tipo == "Pasantia")
+            {
+                // Crear una nueva instancia de Pasantía con los datos ingresados
+                var pasantia = new Pasantia
+                {
+                    EmpresaId = empresaId,
+                    Puesto = TxtPuesto.Text,
+                    Descripcion = TxtDescripcion.Text,
+                    Requisitos = TxtRequisitos.Text,
+                    Creditos = int.TryParse(TxtCreditos.Text, out int creditos) ? creditos : 0
+                };
+
+                // Llamar al método que registra la pasantía
+                new MetodosPasantia().Registrar(pasantia);
+
+                // Mostrar mensaje de confirmación
+                MessageBox.Show("Pasantía registrada con éxito.");
+            }
+            else
+            {
+                // Si no se seleccionó un tipo válido
+                MessageBox.Show("Debe seleccionar un tipo de oferta.", "Tipo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            // Actualizar el DataGridView con las nuevas ofertas
+            CargarOfertas();
+
+            LimpiarCampos(); // Limpiar campos después de registrar
+        }
+
+        //clase auxiliar para mostrar nombre pero guardar el ID:
+        public class EmpresaComboItem
+        {
+            public int Id { get; set; }
+            public string Nombre { get; set; }
+
+            public override string ToString()
+            {
+                return Nombre;
+            }
+        }
+
+        //Método para cargar empresas desde la base
+        private void CargarEmpresas()
+        {
+            var metodoEmpresa = new MetodosCargarEmpresa();
+            var lista = metodoEmpresa.ObtenerEmpresas();
+
+            // Usar DataSource directamente
+            CboxEmpresas.DataSource = lista;
+            CboxEmpresas.DisplayMember = "Nombre"; // qué se ve en el ComboBox
+            CboxEmpresas.ValueMember = "Id";       // qué valor representa internamente
+
+            if (CboxEmpresas.Items.Count > 0)
+                CboxEmpresas.SelectedIndex = 0;
+        }
+
+        // Método para cargar ofertas en el DataGridView
+        private void CargarOfertas()
+        {
+            var metodo = new MetodosOferta();
+            var lista = metodo.ObtenerOfertas();
+
+            DGridOferta.DataSource = lista;
+        }
+
+        private void BtnMostrar_Click(object sender, EventArgs e)
+        {
+            CargarOfertas();
+        }
+
+        private void BtnEliminar_Click(object sender, EventArgs e)
+        {
+            // Validar que haya al menos una fila seleccionada
+            if (DGridOferta.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Seleccione una oferta para eliminar.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Confirmar con el usuario
+            var confirm = MessageBox.Show("¿Está seguro que desea eliminar esta oferta?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirm != DialogResult.Yes)
+                return;
+
+            // Obtener el ID de la oferta seleccionada
+            int ofertaId = Convert.ToInt32(DGridOferta.SelectedRows[0].Cells["Id"].Value);
+
+            try
+            {
+                // Ejecutar la eliminación desde la base de datos
+                using (SqlConnection conn = Capa_Datos.OfertaDatos.ObtenerConexion())
+                {
+                    conn.Open();
+                    string query = "DELETE FROM Oferta WHERE Id = @Id";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Id", ofertaId);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                MessageBox.Show("Oferta eliminada correctamente.", "Eliminado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Refrescar el DataGrid
+                CargarOfertas();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar la oferta: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TxtSalario_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true; // Bloquear la tecla si no es número ni tecla de control (como Backspace)
+            }
+        }
+
+        private void TxtCreditos_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true; // Bloquear la tecla si no es número ni tecla de control (como Backspace)
+            }
+        }
+
+        private void LimpiarCampos()
+        {
+            CboxEmpresas.SelectedIndex = 0; // o -1 si quieres que quede en blanco
+            CboxTipoOferta.SelectedIndex = 0;
+
+            TxtPuesto.Text = string.Empty;
+            TxtDescripcion.Text = string.Empty;
+            TxtRequisitos.Text = string.Empty;
+            TxtSalario.Text = string.Empty;
+            TxtCreditos.Text = string.Empty;
         }
     }
 }

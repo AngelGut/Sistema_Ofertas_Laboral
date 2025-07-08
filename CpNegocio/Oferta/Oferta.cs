@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CpNegocio.Oferta
 {
-    public abstract class Oferta
+    public abstract class CnOferta
     {
         // ID de la oferta (clave primaria en la base de datos)
         public int Id { get; set; }
@@ -20,7 +20,7 @@ namespace CpNegocio.Oferta
         public string Descripcion { get; set; }
         public string Requisitos { get; set; }
 
-        protected Oferta()
+        protected CnOferta()
         {
             Tipo = "Oferta"; // valor por defecto
         }
