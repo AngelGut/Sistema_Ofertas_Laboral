@@ -12,6 +12,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using CpNegocio.Entidades;
 using System.Text.RegularExpressions;
 using CpNegocio;
+using CpNegocio.servicios;
 
 namespace CpPresentacion
 {
@@ -150,18 +151,18 @@ namespace CpPresentacion
 
         private void BtnValidar_Click(object sender, EventArgs e)
         {
-            string rncTexto = TxtRnc.Text.Trim(); // Obtenemos el texto del TextBox
+            string rncTexto = TxtRnc.Text.Trim(); // El TextBox del RNC
 
-            // Validar que solo contenga dígitos
-            if (!rncTexto.All(char.IsDigit))
+            // Validar que no esté vacío
+            if (string.IsNullOrWhiteSpace(rncTexto))
             {
-                MessageBox.Show("Favor ingresar solo números en el RNC, sin guiones ni símbolos.", "Formato inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Por favor, ingrese un RNC.", "Campo vacío", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             try
             {
-                // Llamamos al método que verifica existencia por RNC
+                // Llamar al método que recibe string directamente
                 bool existe = CpNegocio.servicios.CnMetodosEmpresa.EmpresaYaExiste(rncTexto);
 
                 if (existe)

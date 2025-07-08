@@ -46,9 +46,9 @@
             LblTelefono = new MaterialSkin.Controls.MaterialLabel();
             TxtRnc = new MaterialSkin.Controls.MaterialMaskedTextBox();
             LblRnc = new MaterialSkin.Controls.MaterialLabel();
-            TxtNombreCompania = new MaterialSkin.Controls.MaterialMaskedTextBox();
             lblNombreCompania = new MaterialSkin.Controls.MaterialLabel();
             tabPage4 = new TabPage();
+            TxtNombreCompania = new MaterialSkin.Controls.MaterialMaskedTextBox();
             materialTabControl1.SuspendLayout();
             tabPage3.SuspendLayout();
             materialCard2.SuspendLayout();
@@ -429,6 +429,27 @@
             LblRnc.TabIndex = 2;
             LblRnc.Text = "Rnc";
             // 
+            // lblNombreCompania
+            // 
+            lblNombreCompania.AutoSize = true;
+            lblNombreCompania.Depth = 0;
+            lblNombreCompania.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            lblNombreCompania.Location = new Point(17, 14);
+            lblNombreCompania.MouseState = MaterialSkin.MouseState.HOVER;
+            lblNombreCompania.Name = "lblNombreCompania";
+            lblNombreCompania.Size = new Size(161, 19);
+            lblNombreCompania.TabIndex = 0;
+            lblNombreCompania.Text = "Nombre de la Empresa";
+            // 
+            // tabPage4
+            // 
+            tabPage4.Location = new Point(4, 34);
+            tabPage4.Name = "tabPage4";
+            tabPage4.Size = new Size(1886, 975);
+            tabPage4.TabIndex = 3;
+            tabPage4.Text = "Postulantes";
+            tabPage4.UseVisualStyleBackColor = true;
+            // 
             // TxtNombreCompania
             // 
             TxtNombreCompania.AllowPromptAsInput = true;
@@ -470,27 +491,6 @@
             TxtNombreCompania.UseSystemPasswordChar = false;
             TxtNombreCompania.ValidatingType = null;
             // 
-            // lblNombreCompania
-            // 
-            lblNombreCompania.AutoSize = true;
-            lblNombreCompania.Depth = 0;
-            lblNombreCompania.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            lblNombreCompania.Location = new Point(17, 14);
-            lblNombreCompania.MouseState = MaterialSkin.MouseState.HOVER;
-            lblNombreCompania.Name = "lblNombreCompania";
-            lblNombreCompania.Size = new Size(161, 19);
-            lblNombreCompania.TabIndex = 0;
-            lblNombreCompania.Text = "Nombre de la Empresa";
-            // 
-            // tabPage4
-            // 
-            tabPage4.Location = new Point(4, 34);
-            tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(1886, 975);
-            tabPage4.TabIndex = 3;
-            tabPage4.Text = "Postulantes";
-            tabPage4.UseVisualStyleBackColor = true;
-            // 
             // cpEmpresa
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -518,7 +518,6 @@
         private TabPage tabPage4;
         private MaterialSkin.Controls.MaterialCard materialCard1;
         private MaterialSkin.Controls.MaterialLabel lblNombreCompania;
-        private MaterialSkin.Controls.MaterialMaskedTextBox TxtNombreCompania;
         private MaterialSkin.Controls.MaterialLabel LblRnc;
         private MaterialSkin.Controls.MaterialMaskedTextBox TxtRnc;
         private MaterialSkin.Controls.MaterialLabel LblTelefono;
@@ -532,5 +531,6 @@
         private MaterialSkin.Controls.MaterialCard materialCard2;
         private MaterialSkin.Controls.MaterialButton BtnActualizar;
         private MaterialSkin.Controls.MaterialButton BtnRegistrar;
+        private MaterialSkin.Controls.MaterialMaskedTextBox TxtNombreCompania;
     }
 }

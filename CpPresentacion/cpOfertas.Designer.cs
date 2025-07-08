@@ -48,11 +48,11 @@
             LblDescripcion = new MaterialSkin.Controls.MaterialLabel();
             LblPuesto = new MaterialSkin.Controls.MaterialLabel();
             LblTIpoOferta = new MaterialSkin.Controls.MaterialLabel();
-            TxtNombreCompania = new MaterialSkin.Controls.MaterialMaskedTextBox();
             LblNombreCompania = new MaterialSkin.Controls.MaterialLabel();
             DGridOferta = new DataGridView();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
+            comboBox1 = new ComboBox();
             materialTabControl1.SuspendLayout();
             tabPage2.SuspendLayout();
             materialCard3.SuspendLayout();
@@ -181,6 +181,7 @@
             // materialCard4
             // 
             materialCard4.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard4.Controls.Add(comboBox1);
             materialCard4.Controls.Add(CboxTipoOferta);
             materialCard4.Controls.Add(TxtRequisitos);
             materialCard4.Controls.Add(lblRequisitos);
@@ -193,7 +194,6 @@
             materialCard4.Controls.Add(LblDescripcion);
             materialCard4.Controls.Add(LblPuesto);
             materialCard4.Controls.Add(LblTIpoOferta);
-            materialCard4.Controls.Add(TxtNombreCompania);
             materialCard4.Controls.Add(LblNombreCompania);
             materialCard4.Depth = 0;
             materialCard4.ForeColor = Color.FromArgb(222, 0, 0, 0);
@@ -493,47 +493,6 @@
             LblTIpoOferta.TabIndex = 2;
             LblTIpoOferta.Text = "Tipo de Oferta";
             // 
-            // TxtNombreCompania
-            // 
-            TxtNombreCompania.AllowPromptAsInput = true;
-            TxtNombreCompania.AnimateReadOnly = false;
-            TxtNombreCompania.AsciiOnly = false;
-            TxtNombreCompania.BackgroundImageLayout = ImageLayout.None;
-            TxtNombreCompania.BeepOnError = false;
-            TxtNombreCompania.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
-            TxtNombreCompania.Depth = 0;
-            TxtNombreCompania.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
-            TxtNombreCompania.HidePromptOnLeave = false;
-            TxtNombreCompania.HideSelection = true;
-            TxtNombreCompania.InsertKeyMode = InsertKeyMode.Default;
-            TxtNombreCompania.LeadingIcon = null;
-            TxtNombreCompania.Location = new Point(17, 92);
-            TxtNombreCompania.Mask = "";
-            TxtNombreCompania.MaxLength = 32767;
-            TxtNombreCompania.MouseState = MaterialSkin.MouseState.OUT;
-            TxtNombreCompania.Name = "TxtNombreCompania";
-            TxtNombreCompania.PasswordChar = '\0';
-            TxtNombreCompania.PrefixSuffixText = null;
-            TxtNombreCompania.PromptChar = '_';
-            TxtNombreCompania.ReadOnly = false;
-            TxtNombreCompania.RejectInputOnFirstFailure = false;
-            TxtNombreCompania.ResetOnPrompt = true;
-            TxtNombreCompania.ResetOnSpace = true;
-            TxtNombreCompania.RightToLeft = RightToLeft.No;
-            TxtNombreCompania.SelectedText = "";
-            TxtNombreCompania.SelectionLength = 0;
-            TxtNombreCompania.SelectionStart = 0;
-            TxtNombreCompania.ShortcutsEnabled = true;
-            TxtNombreCompania.Size = new Size(375, 48);
-            TxtNombreCompania.SkipLiterals = true;
-            TxtNombreCompania.TabIndex = 1;
-            TxtNombreCompania.TabStop = false;
-            TxtNombreCompania.TextAlign = HorizontalAlignment.Left;
-            TxtNombreCompania.TextMaskFormat = MaskFormat.IncludeLiterals;
-            TxtNombreCompania.TrailingIcon = null;
-            TxtNombreCompania.UseSystemPasswordChar = false;
-            TxtNombreCompania.ValidatingType = null;
-            // 
             // LblNombreCompania
             // 
             LblNombreCompania.AutoSize = true;
@@ -573,6 +532,14 @@
             tabPage4.Text = "Postulantes";
             tabPage4.UseVisualStyleBackColor = true;
             // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new Point(17, 105);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(182, 33);
+            comboBox1.TabIndex = 15;
+            // 
             // cpOfertas
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -611,12 +578,12 @@
         private MaterialSkin.Controls.MaterialLabel LblDescripcion;
         private MaterialSkin.Controls.MaterialLabel LblPuesto;
         private MaterialSkin.Controls.MaterialLabel LblTIpoOferta;
-        private MaterialSkin.Controls.MaterialMaskedTextBox TxtNombreCompania;
         private MaterialSkin.Controls.MaterialLabel LblNombreCompania;
         private DataGridView DGridOferta;
         private MaterialSkin.Controls.MaterialButton BtnEliminar;
         private MaterialSkin.Controls.MaterialButton BtnMostrar;
         private MaterialSkin.Controls.MaterialButton BtnRegistrar;
         private ComboBox CboxTipoOferta;
+        private ComboBox comboBox1;
     }
 }

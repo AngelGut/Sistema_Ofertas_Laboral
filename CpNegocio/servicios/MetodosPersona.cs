@@ -21,6 +21,23 @@ namespace CpNegocio.servicios
             persona = p;
         }
 
+        public static bool PersonaYaExiste(string dni)
+        {
+            using (SqlConnection conn = OfertaDatos.ObtenerConexion())
+            {
+                conn.Open();
+
+                string query = "SELECT COUNT(*) FROM Persona WHERE Cedula = @Dni";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Dni", dni);
+                    int count = (int)cmd.ExecuteScalar();
+                    return count > 0;
+                }
+            }
+        }
+
+
         // Método que guarda una nueva persona en la tabla Persona
         public override void Registrar()
         {

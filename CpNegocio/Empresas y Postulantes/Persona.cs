@@ -58,5 +58,17 @@ namespace CpNegocio.Entidades
             Dni = dni;
         }
 
+        /// <summary>
+
+        // C# permite sobrecarga de constructores (varios constructores con distinta firma).
+        //Esto no rompe nada en otras partes, porque donde necesitas pasar parámetros puedes seguir usando el constructor original.
+        //El nuevo constructor vacío te sirve solo para métodos como Buscar(), que no necesitan una empresa específica.
+
+        /// </summary>
+        // Constructor vacío
+        public Persona()
+        {
+        }
+
     }
 }

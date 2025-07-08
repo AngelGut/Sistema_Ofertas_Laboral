@@ -55,7 +55,7 @@
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1894, 1013);
+            materialTabControl1.Size = new Size(1938, 1125);
             materialTabControl1.TabIndex = 0;
             materialTabControl1.SelectedIndexChanged += materialTabControl1_SelectedIndexChanged;
             // 
@@ -67,7 +67,7 @@
             tabPage1.Location = new Point(4, 34);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1886, 975);
+            tabPage1.Size = new Size(1930, 1087);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Menu";
             tabPage1.UseVisualStyleBackColor = true;
@@ -76,7 +76,7 @@
             // pictureBox2
             // 
             pictureBox2.Image = Properties.Resources.ChatGPT_Image_6_jul_2025__19_27_041;
-            pictureBox2.Location = new Point(889, 127);
+            pictureBox2.Location = new Point(959, 219);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(623, 613);
             pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
@@ -86,7 +86,7 @@
             // pictureBox1
             // 
             pictureBox1.Image = Properties.Resources.Gemini_Generated_Image_eufcczeufcczeufc1;
-            pictureBox1.Location = new Point(222, 100);
+            pictureBox1.Location = new Point(331, 219);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(622, 613);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
@@ -101,7 +101,7 @@
             BtnSalir.Depth = 0;
             BtnSalir.HighEmphasis = true;
             BtnSalir.Icon = null;
-            BtnSalir.Location = new Point(1599, 861);
+            BtnSalir.Location = new Point(1693, 987);
             BtnSalir.Margin = new Padding(4, 6, 4, 6);
             BtnSalir.MouseState = MaterialSkin.MouseState.HOVER;
             BtnSalir.Name = "BtnSalir";
@@ -149,7 +149,7 @@
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(1900, 1080);
+            ClientSize = new Size(1944, 1192);
             Controls.Add(materialTabControl1);
             DrawerTabControl = materialTabControl1;
             FormBorderStyle = FormBorderStyle.FixedSingle;
