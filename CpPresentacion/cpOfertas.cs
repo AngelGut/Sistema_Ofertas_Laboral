@@ -319,5 +319,7 @@ namespace CpPresentacion
                 MessageBox.Show("Selecciona una oferta primero.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+        //ya esta terminado
     }
 }
