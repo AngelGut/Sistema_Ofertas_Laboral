@@ -32,6 +32,7 @@
             tabPage1 = new TabPage();
             tabPage2 = new TabPage();
             materialCard3 = new MaterialSkin.Controls.MaterialCard();
+            BtnOcupada = new MaterialSkin.Controls.MaterialButton();
             BtnEliminar = new MaterialSkin.Controls.MaterialButton();
             BtnMostrar = new MaterialSkin.Controls.MaterialButton();
             BtnRegistrar = new MaterialSkin.Controls.MaterialButton();
@@ -104,18 +105,40 @@
             // materialCard3
             // 
             materialCard3.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard3.Controls.Add(BtnOcupada);
             materialCard3.Controls.Add(BtnEliminar);
             materialCard3.Controls.Add(BtnMostrar);
             materialCard3.Controls.Add(BtnRegistrar);
             materialCard3.Depth = 0;
             materialCard3.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard3.Location = new Point(677, 629);
+            materialCard3.Location = new Point(588, 629);
             materialCard3.Margin = new Padding(14);
             materialCard3.MouseState = MaterialSkin.MouseState.HOVER;
             materialCard3.Name = "materialCard3";
             materialCard3.Padding = new Padding(14);
-            materialCard3.Size = new Size(1137, 171);
+            materialCard3.Size = new Size(1226, 171);
             materialCard3.TabIndex = 5;
+            // 
+            // BtnOcupada
+            // 
+            BtnOcupada.AutoSize = false;
+            BtnOcupada.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnOcupada.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            BtnOcupada.Depth = 0;
+            BtnOcupada.HighEmphasis = true;
+            BtnOcupada.Icon = null;
+            BtnOcupada.Location = new Point(933, 58);
+            BtnOcupada.Margin = new Padding(4, 6, 4, 6);
+            BtnOcupada.MouseState = MaterialSkin.MouseState.HOVER;
+            BtnOcupada.Name = "BtnOcupada";
+            BtnOcupada.NoAccentTextColor = Color.Empty;
+            BtnOcupada.Size = new Size(237, 54);
+            BtnOcupada.TabIndex = 3;
+            BtnOcupada.Text = "Marcar como Ocupada";
+            BtnOcupada.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            BtnOcupada.UseAccentColor = false;
+            BtnOcupada.UseVisualStyleBackColor = true;
+            BtnOcupada.Click += BtnOcupada_Click;
             // 
             // BtnEliminar
             // 
@@ -125,7 +148,7 @@
             BtnEliminar.Depth = 0;
             BtnEliminar.HighEmphasis = true;
             BtnEliminar.Icon = null;
-            BtnEliminar.Location = new Point(869, 67);
+            BtnEliminar.Location = new Point(639, 58);
             BtnEliminar.Margin = new Padding(4, 6, 4, 6);
             BtnEliminar.MouseState = MaterialSkin.MouseState.HOVER;
             BtnEliminar.Name = "BtnEliminar";
@@ -146,7 +169,7 @@
             BtnMostrar.Depth = 0;
             BtnMostrar.HighEmphasis = true;
             BtnMostrar.Icon = null;
-            BtnMostrar.Location = new Point(467, 67);
+            BtnMostrar.Location = new Point(323, 58);
             BtnMostrar.Margin = new Padding(4, 6, 4, 6);
             BtnMostrar.MouseState = MaterialSkin.MouseState.HOVER;
             BtnMostrar.Name = "BtnMostrar";
@@ -167,7 +190,7 @@
             BtnRegistrar.Depth = 0;
             BtnRegistrar.HighEmphasis = true;
             BtnRegistrar.Icon = null;
-            BtnRegistrar.Location = new Point(45, 67);
+            BtnRegistrar.Location = new Point(18, 58);
             BtnRegistrar.Margin = new Padding(4, 6, 4, 6);
             BtnRegistrar.MouseState = MaterialSkin.MouseState.HOVER;
             BtnRegistrar.Name = "BtnRegistrar";
@@ -204,7 +227,7 @@
             materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
             materialCard4.Name = "materialCard4";
             materialCard4.Padding = new Padding(14);
-            materialCard4.Size = new Size(535, 921);
+            materialCard4.Size = new Size(420, 921);
             materialCard4.TabIndex = 4;
             // 
             // CboxEmpresas
@@ -523,13 +546,13 @@
             DGridOferta.AllowUserToAddRows = false;
             DGridOferta.AllowUserToDeleteRows = false;
             DGridOferta.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            DGridOferta.Location = new Point(586, 27);
+            DGridOferta.Location = new Point(462, 27);
             DGridOferta.MultiSelect = false;
             DGridOferta.Name = "DGridOferta";
             DGridOferta.ReadOnly = true;
             DGridOferta.RowHeadersWidth = 62;
             DGridOferta.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DGridOferta.Size = new Size(1276, 521);
+            DGridOferta.Size = new Size(1400, 521);
             DGridOferta.TabIndex = 3;
             // 
             // tabPage3
@@ -557,7 +580,10 @@
             ClientSize = new Size(1900, 1080);
             Controls.Add(materialTabControl1);
             DrawerTabControl = materialTabControl1;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "cpOfertas";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Ofertas Laborales";
             materialTabControl1.ResumeLayout(false);
             tabPage2.ResumeLayout(false);
@@ -595,5 +621,6 @@
         private MaterialSkin.Controls.MaterialButton BtnRegistrar;
         private ComboBox CboxTipoOferta;
         private ComboBox CboxEmpresas;
+        private MaterialSkin.Controls.MaterialButton BtnOcupada;
     }
 }

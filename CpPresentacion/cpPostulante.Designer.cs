@@ -38,6 +38,8 @@
             BtnActualizar = new MaterialSkin.Controls.MaterialButton();
             BtnRegistrar = new MaterialSkin.Controls.MaterialButton();
             materialCard1 = new MaterialSkin.Controls.MaterialCard();
+            CboxOfertas = new ComboBox();
+            LblSelecOferta = new MaterialSkin.Controls.MaterialLabel();
             LblDireccion = new Label();
             TxtDireccion = new MaterialSkin.Controls.MaterialMaskedTextBox();
             TxtCorreo = new MaterialSkin.Controls.MaterialMaskedTextBox();
@@ -49,8 +51,6 @@
             LblDni = new MaterialSkin.Controls.MaterialLabel();
             TxtNombre = new MaterialSkin.Controls.MaterialMaskedTextBox();
             LblNombrePersona = new MaterialSkin.Controls.MaterialLabel();
-            LblSelecOferta = new MaterialSkin.Controls.MaterialLabel();
-            CboxOfertas = new ComboBox();
             materialTabControl1.SuspendLayout();
             tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DgvPersonas).BeginInit();
@@ -212,6 +212,27 @@
             materialCard1.Padding = new Padding(14);
             materialCard1.Size = new Size(529, 871);
             materialCard1.TabIndex = 1;
+            // 
+            // CboxOfertas
+            // 
+            CboxOfertas.DropDownStyle = ComboBoxStyle.DropDownList;
+            CboxOfertas.FormattingEnabled = true;
+            CboxOfertas.Location = new Point(17, 609);
+            CboxOfertas.Name = "CboxOfertas";
+            CboxOfertas.Size = new Size(182, 33);
+            CboxOfertas.TabIndex = 11;
+            // 
+            // LblSelecOferta
+            // 
+            LblSelecOferta.AutoSize = true;
+            LblSelecOferta.Depth = 0;
+            LblSelecOferta.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            LblSelecOferta.Location = new Point(17, 582);
+            LblSelecOferta.MouseState = MaterialSkin.MouseState.HOVER;
+            LblSelecOferta.Name = "LblSelecOferta";
+            LblSelecOferta.Size = new Size(201, 19);
+            LblSelecOferta.TabIndex = 10;
+            LblSelecOferta.Text = "Selecciona la Oferta Laboral";
             // 
             // LblDireccion
             // 
@@ -496,27 +517,6 @@
             LblNombrePersona.TabIndex = 0;
             LblNombrePersona.Text = "Nombre";
             // 
-            // LblSelecOferta
-            // 
-            LblSelecOferta.AutoSize = true;
-            LblSelecOferta.Depth = 0;
-            LblSelecOferta.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblSelecOferta.Location = new Point(17, 582);
-            LblSelecOferta.MouseState = MaterialSkin.MouseState.HOVER;
-            LblSelecOferta.Name = "LblSelecOferta";
-            LblSelecOferta.Size = new Size(201, 19);
-            LblSelecOferta.TabIndex = 10;
-            LblSelecOferta.Text = "Selecciona la Oferta Laboral";
-            // 
-            // CboxOfertas
-            // 
-            CboxOfertas.DropDownStyle = ComboBoxStyle.DropDownList;
-            CboxOfertas.FormattingEnabled = true;
-            CboxOfertas.Location = new Point(17, 609);
-            CboxOfertas.Name = "CboxOfertas";
-            CboxOfertas.Size = new Size(182, 33);
-            CboxOfertas.TabIndex = 11;
-            // 
             // cpPostulante
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -524,7 +524,10 @@
             ClientSize = new Size(1900, 1080);
             Controls.Add(materialTabControl1);
             DrawerTabControl = materialTabControl1;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "cpPostulante";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Postulante";
             Load += cpPostulante_Load;
             materialTabControl1.ResumeLayout(false);

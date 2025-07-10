@@ -21,9 +21,10 @@ namespace CpNegocio.servicios
                 conn.Open();
                 string query = @"
             SELECT o.Id, e.Nombre AS Empresa, o.Puesto, o.Tipo, o.Descripcion,
-                   o.Requisitos, o.Salario, o.Creditos
-            FROM Oferta o
-            INNER JOIN Empresa e ON o.EmpresaId = e.Id";
+                o.Requisitos, o.Salario, o.Creditos,
+                CASE WHEN o.Ocupada = 1 THEN 'Ocupada' ELSE 'Disponible' END AS Estado
+                FROM Oferta o
+                INNER JOIN Empresa e ON o.EmpresaId = e.Id";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 using (SqlDataReader reader = cmd.ExecuteReader())
@@ -39,7 +40,8 @@ namespace CpNegocio.servicios
                             Descripcion = reader.GetString(4),
                             Requisitos = reader.GetString(5),
                             Salario = reader.IsDBNull(6) ? null : reader.GetInt32(6),
-                            Creditos = reader.IsDBNull(7) ? null : reader.GetInt32(7)
+                            Creditos = reader.IsDBNull(7) ? null : reader.GetInt32(7),
+                            Estado = reader.GetString(8)
                         });
                     }
                 }

@@ -503,7 +503,10 @@
             ClientSize = new Size(1900, 1080);
             Controls.Add(materialTabControl1);
             DrawerTabControl = materialTabControl1;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "cpEmpresa";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Empresas";
             materialTabControl1.ResumeLayout(false);
             tabPage3.ResumeLayout(false);

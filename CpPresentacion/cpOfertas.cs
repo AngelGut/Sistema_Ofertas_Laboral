@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Capa_Datos;
 using CpNegocio.Oferta;
 using CpNegocio.servicios;
 using MaterialSkin.Controls;
@@ -285,6 +286,38 @@ namespace CpPresentacion
             TxtRequisitos.Text = string.Empty;
             TxtSalario.Text = string.Empty;
             TxtCreditos.Text = string.Empty;
+        }
+
+        private void BtnOcupada_Click(object sender, EventArgs e)
+        {
+            // Asegurarse de que hay una fila seleccionada
+            if (DGridOferta.SelectedRows.Count > 0)
+            {
+                // Obtener el ID de la oferta seleccionada
+                int ofertaId = Convert.ToInt32(DGridOferta.SelectedRows[0].Cells["Id"].Value);
+
+                // Ejecutar actualización en la base de datos
+                using (SqlConnection conn = OfertaDatos.ObtenerConexion())
+                {
+                    conn.Open();
+                    string query = "UPDATE Oferta SET Ocupada = 1 WHERE Id = @Id";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Id", ofertaId);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                MessageBox.Show("Oferta marcada como ocupada.", "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Recargar la tabla con las ofertas actualizadas
+                CargarOfertas();
+            }
+            else
+            {
+                MessageBox.Show("Selecciona una oferta primero.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }
