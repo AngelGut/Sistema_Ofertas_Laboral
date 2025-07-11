@@ -75,6 +75,11 @@ namespace CpNegocio.servicios
 
             return tabla;
         }
+
+        public override void Eliminar()
+        {
+            //en esta parte no es necesario por el momento
+        }
     }
 }
 
