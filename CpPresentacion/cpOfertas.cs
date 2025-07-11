@@ -120,60 +120,68 @@ namespace CpPresentacion
 
         private void BtnRegistrar_Click(object sender, EventArgs e)
         {
-            // Obtener el tipo de oferta seleccionado del ComboBox
-            string tipo = CboxTipoOferta.SelectedItem?.ToString();
-
-            // Obtener el ID de la empresa seleccionada del ComboBox
-            int empresaId = ((CpNegocio.Entidades.EmpresaComboItem)CboxEmpresas.SelectedItem).Id;
-
-            // Si el tipo de oferta es EmpleoFijo
-            if (tipo == "Empleo Fijo")
+            try
             {
-                // Crear una nueva instancia de EmpleoFijo con los datos ingresados
-                var empleo = new EmpleoFijo
+                // Validar que se haya seleccionado una empresa
+                if (CboxEmpresas.SelectedItem == null)
                 {
-                    EmpresaId = empresaId,
-                    Puesto = TxtPuesto.Text,
-                    Descripcion = TxtDescripcion.Text,
-                    Requisitos = TxtRequisitos.Text,
-                    Salario = int.TryParse(TxtSalario.Text, out int salario) ? salario : null
-                };
+                    MessageBox.Show("Debe seleccionar una empresa antes de registrar la oferta.", "Empresa requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-                // Llamar al método que registra la oferta de empleo fijo
-                new MetodosEmpleoFijo().Registrar(empleo);
-
-                // Mostrar mensaje de confirmación
-                MessageBox.Show("Oferta de Empleo registrada con éxito.");
-            }
-            // Si el tipo de oferta es Pasantía
-            else if (tipo == "Pasantia")
-            {
-                // Crear una nueva instancia de Pasantía con los datos ingresados
-                var pasantia = new Pasantia
+                // Validar que se haya seleccionado un tipo de oferta
+                if (CboxTipoOferta.SelectedItem == null)
                 {
-                    EmpresaId = empresaId,
-                    Puesto = TxtPuesto.Text,
-                    Descripcion = TxtDescripcion.Text,
-                    Requisitos = TxtRequisitos.Text,
-                    Creditos = int.TryParse(TxtCreditos.Text, out int creditos) ? creditos : 0
-                };
+                    MessageBox.Show("Debe seleccionar un tipo de oferta.", "Tipo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-                // Llamar al método que registra la pasantía
-                new MetodosPasantia().Registrar(pasantia);
+                // Obtener valores seleccionados
+                string tipo = CboxTipoOferta.SelectedItem.ToString();
+                int empresaId = ((CpNegocio.Entidades.EmpresaComboItem)CboxEmpresas.SelectedItem).Id;
 
-                // Mostrar mensaje de confirmación
-                MessageBox.Show("Pasantía registrada con éxito.");
+                if (tipo == "Empleo Fijo")
+                {
+                    var empleo = new EmpleoFijo
+                    {
+                        EmpresaId = empresaId,
+                        Puesto = TxtPuesto.Text,
+                        Descripcion = TxtDescripcion.Text,
+                        Requisitos = TxtRequisitos.Text,
+                        Salario = int.TryParse(TxtSalario.Text, out int salario) ? salario : null
+                    };
+
+                    new MetodosEmpleoFijo().Registrar(empleo);
+                    MessageBox.Show("Oferta de Empleo registrada con éxito.");
+                }
+                else if (tipo == "Pasantia")
+                {
+                    var pasantia = new Pasantia
+                    {
+                        EmpresaId = empresaId,
+                        Puesto = TxtPuesto.Text,
+                        Descripcion = TxtDescripcion.Text,
+                        Requisitos = TxtRequisitos.Text,
+                        Creditos = int.TryParse(TxtCreditos.Text, out int creditos) ? creditos : 0
+                    };
+
+                    new MetodosPasantia().Registrar(pasantia);
+                    MessageBox.Show("Pasantía registrada con éxito.");
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un tipo de oferta válido.", "Tipo inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Recargar tabla y limpiar
+                CargarOfertas();
+                LimpiarCampos();
             }
-            else
+            catch (Exception ex)
             {
-                // Si no se seleccionó un tipo válido
-                MessageBox.Show("Debe seleccionar un tipo de oferta.", "Tipo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Ocurrió un error al registrar la oferta:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            // Actualizar el DataGridView con las nuevas ofertas
-            CargarOfertas();
-
-            LimpiarCampos(); // Limpiar campos después de registrar
         }
 
         //clase auxiliar para mostrar nombre pero guardar el ID:
