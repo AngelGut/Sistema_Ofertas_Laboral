@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace CpNegocio.Oferta
 {
+    //TODO: Clase que herada de CnOferta abstrata y representa una oferta de empleo fijo
     public class EmpleoFijo : CnOferta
     {
         // Propiedad específica para empleo fijo

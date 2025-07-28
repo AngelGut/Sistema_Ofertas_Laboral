@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-//esta clase sirve como una estructura simple para representar una empresa dentro de un ComboBox en la interfaz gráfica.
+//TODO: esta clase sirve como una estructura simple para representar una empresa dentro de un ComboBox en la interfaz gráfica.
 namespace CpNegocio.Entidades
 {
+    //TODO: Clase que representa un elemento de combo para mostrar empresas
     public class EmpresaComboItem
     {
         public int Id { get; set; }

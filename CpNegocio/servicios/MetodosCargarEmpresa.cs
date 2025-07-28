@@ -11,7 +11,7 @@ namespace CpNegocio.servicios
 {
     public class MetodosCargarEmpresa
     {
-        // Método que obtiene la lista de empresas desde la base de datos
+        //TODO: Método que obtiene la lista de empresas desde la base de datos
         public List<EmpresaComboItem> ObtenerEmpresas()
         {
             var empresas = new List<EmpresaComboItem>();

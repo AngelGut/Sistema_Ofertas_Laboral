@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace CpNegocio.servicios
 {
+    //clase Abstracta
     public abstract class MetodosBase
     {
         public virtual void Registrar()

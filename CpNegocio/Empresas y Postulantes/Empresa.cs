@@ -11,9 +11,10 @@ using System.Threading.Tasks;
 
 namespace CpNegocio.Entidades
 {
+    //TODO: Clase Empresa que hereda de BaseUser
     public class CnEmpresa : BaseUser
     {
-        //Campos privados para la clase Empresa
+        //TODO: Campos privados para la clase Empresa
         private string _nombre;
         private string _telefono;
         private string _correo;
@@ -21,7 +22,7 @@ namespace CpNegocio.Entidades
         private string _rnc;
  
 
-        // propiedades públicas para acceder a los campos privados
+        //TODO: propiedades públicas para acceder a los campos privados
         public override string Nombre
         {
             get { return _nombre; }
@@ -47,9 +48,9 @@ namespace CpNegocio.Entidades
             get { return _rnc; }
             set { _rnc = value; }
         }
-        public int Id { get; set; }       // Solo propiedad, sin campo privado
+        public int Id { get; set; }       //TODO: Solo propiedad, sin campo privado
 
-        //constructor 
+        //TODO: constructor 
         public CnEmpresa(string nombre, string telefono, string correo, string direccion, string rnc)
         {
             Nombre = nombre;
@@ -59,16 +60,12 @@ namespace CpNegocio.Entidades
             Rnc = rnc;
         }
 
-        /// <summary>
-
-        // C# permite sobrecarga de constructores (varios constructores con distinta firma).
+        //TODO: C# permite sobrecarga de constructores (varios constructores con distinta firma).
         //Esto no rompe nada en otras partes, porque donde necesitas pasar parámetros puedes seguir usando el constructor original.
         //El nuevo constructor vacío te sirve solo para métodos como Buscar(), que no necesitan una empresa específica.
-
-        /// </summary>
         public CnEmpresa()
         {
-            // Este se usa solo cuando no necesitas inicializar valores (como en Buscar)
+            //TODO: Este se usa solo cuando no necesitas inicializar valores (como en Buscar)
         }
 
     }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CpNegocio.Oferta
 {
+    //TODO: Clase que representa un item de oferta para el ComboBox
     public class OfertaComboItem
     {
         public int Id { get; set; }

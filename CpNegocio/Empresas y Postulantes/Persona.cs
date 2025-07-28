@@ -9,6 +9,7 @@ using Capa_Datos;
 
 namespace CpNegocio.Entidades
 {
+    //TODO: Herencia de BaseUser para la clase Persona
     public class Persona : BaseUser
     {
         //Campos privados para la clase Person

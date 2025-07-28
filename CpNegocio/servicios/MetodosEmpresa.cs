@@ -40,6 +40,7 @@ namespace CpNegocio.servicios
 
 
         // Método que registra una nueva empresa en la base de datos
+        //TODO: Implementacion del metodo virtual
         public override void Registrar()
         {
             try
@@ -81,6 +82,7 @@ namespace CpNegocio.servicios
         }
 
         // Método que elimina una empresa de la base de datos según su RNC
+        //TODO: Implementacion del metodo abstracto
         public override void Eliminar()
         {
             try

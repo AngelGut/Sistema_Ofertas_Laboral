@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CpNegocio.Empresas_y_Postulantes
 {
+    //TODO: Clase que representa un elemento de combo para mostrar ofertas de empleo
     public class OfertaListadoDto
     {
         public int Id { get; set; }

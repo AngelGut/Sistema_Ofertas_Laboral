@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CpNegocio.Oferta
 {
+    //TODO: Clase que hereda de CnOferta abstracta y representa una oferta de pasantía
     public class Pasantia : CnOferta
     {
         // Propiedad específica para pasantía

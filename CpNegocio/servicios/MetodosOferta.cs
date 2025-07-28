@@ -12,6 +12,7 @@ namespace CpNegocio.servicios
 {
     public class MetodosOferta
     {
+        //TODO: lista de ofertas para el listado de ofertas
         public List<OfertaListadoDto> ObtenerOfertas()
         {
             var lista = new List<OfertaListadoDto>();

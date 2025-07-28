@@ -77,6 +77,7 @@ namespace CpNegocio.servicios
         }
 
         // Método para obtener todas las pasantías registradas
+        //TODO: Implementacion del metodo Virtual
         public override DataTable Buscar()
         {
             DataTable tabla = new DataTable();

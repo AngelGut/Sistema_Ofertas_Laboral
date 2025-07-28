@@ -75,7 +75,7 @@ namespace CpNegocio.servicios
 
             return tabla;
         }
-
+        //TODO: implementacion del metodo abstracto
         public override void Eliminar()
         {
             //en esta parte no es necesario por el momento

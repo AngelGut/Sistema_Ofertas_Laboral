@@ -10,6 +10,7 @@ using Microsoft.Data.SqlClient; // Usamos SqlConnection y SqlCommand para maneja
 
 namespace CpNegocio.servicios
 {
+    //TODO: Herencia de MetodosBase para implementar los métodos de registrar, eliminar y buscar
     public class MetodosPersona : MetodosBase
     {
         // Variable privada que contiene la persona actual que se va a manejar

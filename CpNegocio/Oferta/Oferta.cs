@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CpNegocio.Oferta
 {
+    //TODO: Classe abstracta
     public abstract class CnOferta
     {
         // ID de la oferta (clave primaria en la base de datos)
