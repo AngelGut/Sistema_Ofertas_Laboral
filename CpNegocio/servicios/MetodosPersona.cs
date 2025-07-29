@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading.Tasks; //para metodos asincronos
 using Capa_Datos; // Aquí está la clase OfertaDatos con la conexión
 using CpNegocio.Entidades; // Aquí está la clase Persona
 using Microsoft.Data.SqlClient; // Usamos SqlConnection y SqlCommand para manejar la base de datos
