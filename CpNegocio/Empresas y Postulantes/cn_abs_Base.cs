@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace cn_abs_Base.Entidades
 {
     //TODO: clase abstracta que define la estructura básica de un usuario
-    public abstract class BaseUser
+    public abstract class BaseUser //TODO: Clase abstracta BaseUser
     {
 
         //TODO: campos para la clase Registro
