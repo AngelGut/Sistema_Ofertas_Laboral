@@ -18,11 +18,11 @@ namespace CpPresentacion
 {
     public partial class cpOfertas : MaterialForm // <<== ¡Cambiado a MaterialForm!
     {
-        private string rolUsuario;
-        public cpOfertas(string rol)
+      
+        public cpOfertas()
         {
             InitializeComponent();
-            rolUsuario = rol;
+            
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 1;
 
@@ -49,7 +49,7 @@ namespace CpPresentacion
 
             CargarEmpresas(); // Cargar empresas aquí
 
-            ConfigurarAccesoPorRol();
+            
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -57,80 +57,63 @@ namespace CpPresentacion
             // Obtener el índice de la pestaña seleccionada por el usuario
             int selectedIndex = materialTabControl1.SelectedIndex;
 
-            // Si se selecciona la pestaña 0 (Menu) y no estamos ya en Menu
-            if (selectedIndex == 0 && !(this is Menu))
-            {
-                // Verificar si el rol del usuario tiene acceso al Menu
-                if (rolUsuario == "Admin" || rolUsuario == "Usuario")
-                {
-                    var f = new Menu(rolUsuario);   // Crear una nueva instancia del formulario Menu con rol
-                    f.Show();                       // Mostrar el formulario Menu
-                    await Task.Delay(300);          // Espera breve para suavizar la transición
-                    this.Dispose();                 // Liberar el formulario actual
-                }
-                else
-                {
-                    MessageBox.Show("Acceso denegado a esta sección.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-
-            // Si se selecciona la pestaña 2 (cpEmpresa) y no estamos ya en cpEmpresa
-            else if (selectedIndex == 2 && !(this is cpEmpresa))
-            {
-                // Verificar si el rol del usuario tiene acceso a cpEmpresa
-                if (rolUsuario == "Admin")
-                {
-                    var f = new cpEmpresa(rolUsuario);  // Crear nueva instancia del formulario cpEmpresa con rol
-                    f.Show();                            // Mostrar el formulario cpEmpresa
-                    await Task.Delay(300);               // Espera breve para suavizar la transición
-                    this.Dispose();                      // Liberar el formulario cpOfertas
-                }
-                else
-                {
-                    MessageBox.Show("No tienes permisos para acceder a esta sección.", "Acceso denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    materialTabControl1.SelectedIndex = 0;  // Regresar a la pestaña de inicio (Menu)
-                }
-            }
-
-            // Si se selecciona la pestaña 3 (cpPostulante) y no estamos ya en cpPostulante
-            else if (selectedIndex == 3 && !(this is cpPostulante))
-            {
-                // Verificar si el rol del usuario tiene acceso a cpPostulante
-                if (rolUsuario == "Admin" || rolUsuario == "Usuario")
-                {
-                    var f = new cpPostulante(rolUsuario);  // Crear nueva instancia del formulario cpPostulante con rol
-                    f.Show();                              // Mostrar el formulario cpPostulante
-                    await Task.Delay(300);                 // Espera breve
-                    this.Dispose();                        // Liberar el formulario cpOfertas
-                }
-                else
-                {
-                    MessageBox.Show("Acceso denegado a esta sección.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    materialTabControl1.SelectedIndex = 0;  // Regresar a la pestaña de inicio (Menu)
-                }
-            }
-
-            // Si se selecciona la pestaña 1 (cpOfertas), no se hace nada porque ya estamos aquí
+            // Llamar a la función común para abrir formularios
+            await AbrirFormulario(selectedIndex);
         }
 
-
-        private void ConfigurarAccesoPorRol()
+        private async Task AbrirFormulario(int selectedIndex)
         {
-            if (rolUsuario == "Admin")
+            Form formulario = null;
+
+            // Seleccionar el formulario correspondiente según el índice de la pestaña
+            switch (selectedIndex)
             {
-                // Habilitar todas las opciones para Admin
-                BtnRegistrar.Enabled = true;  // Habilitar botón de registrar oferta
-                BtnEliminar.Enabled = true;   // Habilitar botón de eliminar oferta
-                BtnOcupada.Enabled = true;   // Habilitar botón de marcar como ocupada
+                case 0:  // Menu
+                    if (!(this is Menu))
+                    {
+                        formulario = new Menu();  // Crear nueva instancia de Menu
+                    }
+                    break;
+
+                case 1:  // cpOfertas
+                    if (!(this is cpOfertas))
+                    {
+                        formulario = new cpOfertas();  // Crear nueva instancia de cpOfertas
+                    }
+                    break;
+
+                case 2:  // cpEmpresa
+                    if (!(this is cpEmpresa))
+                    {
+                        formulario = new cpEmpresa();  // Crear nueva instancia de cpEmpresa
+                    }
+                    break;
+
+                case 3:  // cpPostulante
+                    if (!(this is cpPostulante))
+                    {
+                        formulario = new cpPostulante();  // Crear nueva instancia de cpPostulante
+                    }
+                    break;
             }
-            else if (rolUsuario == "Usuario")
+
+            // Si se ha seleccionado un formulario válido, mostrarlo
+            if (formulario != null)
             {
-                // Para el usuario, deshabilitar algunas opciones
-                BtnRegistrar.Enabled = false;  // Deshabilitar botón de registrar oferta
-                BtnEliminar.Enabled = false;   // Deshabilitar botón de eliminar oferta
-                BtnOcupada.Enabled = false;   // Deshabilitar botón de marcar como ocupada
+                this.Hide();        // Ocultar el formulario actual
+                formulario.Show();  // Mostrar el formulario seleccionado
+                await Task.Delay(300); // Pausa breve, si es necesario
+            }
+            else
+            {
+                MessageBox.Show("Este formulario ya está abierto o no se puede acceder.", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                materialTabControl1.SelectedIndex = 0;  // Regresar a la pestaña de inicio (Menu)
             }
         }
+
+
+
+
 
         private void materialLabel4_Click(object sender, EventArgs e)
         {

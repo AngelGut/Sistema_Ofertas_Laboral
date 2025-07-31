@@ -32,7 +32,7 @@ namespace CpPresentacion
 
         private void cpLogin_Load(object sender, EventArgs e)
         {
-            txtUsuario.MaxLength = 20; // Establece el máximo de caracteres para el campo de usuario
+            txtUsuario.MaxLength = 20; 
             txtClave.MaxLength = 20;
         }
 
@@ -98,14 +98,22 @@ namespace CpPresentacion
 
         private void btnIngresar_Click(object sender, EventArgs e)
         {
-            string rol = "";
-
             try
             {
-                if (negocio.Login(txtUsuario.Text.Trim(), txtClave.Text.Trim(), ref rol))
+                // Validar que los campos no estén vacíos
+                if (string.IsNullOrWhiteSpace(txtUsuario.Text) || string.IsNullOrWhiteSpace(txtClave.Text))
+                {
+                    MessageBox.Show("Por favor, ingrese tanto el usuario como la clave.", "Campos vacíos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Llamar al método de login
+                if (negocio.Login(txtUsuario.Text.Trim(), txtClave.Text.Trim()))
                 {
                     MessageBox.Show("Bienvenido al sistema");
-                    Menu menuForm = new Menu(rol);
+
+                    // Crear una nueva instancia del formulario Menu sin pasar el rol
+                    Menu menuForm = new Menu();
                     menuForm.Show();
                     this.Hide();
                 }
@@ -116,10 +124,12 @@ namespace CpPresentacion
             }
             catch (Exception ex)
             {
+                // Manejo de errores en caso de excepciones durante el login
                 MessageBox.Show("Error al realizar login: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
+
+
 
 
 

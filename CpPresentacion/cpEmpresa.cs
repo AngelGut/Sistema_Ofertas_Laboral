@@ -18,11 +18,11 @@ namespace CpPresentacion
 {
     public partial class cpEmpresa : MaterialForm // <<== ¡Cambiado a MaterialForm!
     {
-        private string rolUsuario;
-        public cpEmpresa(string rol)
+        
+        public cpEmpresa()
         {
             InitializeComponent();
-            rolUsuario = rol;
+            
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 2;
 
@@ -34,53 +34,60 @@ namespace CpPresentacion
             TxtTelefono.KeyPress += SoloNumeros_KeyPress;
             TxtRnc.KeyPress += SoloNumeros_KeyPress;
 
-            ConfigurarAccesoPorRol();
+            
             CargarEmpresas();
         }
 
-        private void ConfigurarAccesoPorRol()
-        {
-            if (rolUsuario != "Admin")
-            {
-                BtnRegistrar.Enabled = false;  // Deshabilitar botón de registro si no es Admin
-                MessageBox.Show("Acceso denegado. Solo los administradores pueden agregar empresas.", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
+
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Obtener el índice de la pestaña seleccionada
             int selectedIndex = materialTabControl1.SelectedIndex;
 
-            // Si se selecciona la pestaña 0 (Menu) y no estamos ya en Menu
-            if (selectedIndex == 0 && !(this is Menu))
+            if (selectedIndex == 1)  // Si seleccionamos la pestaña 1 (cpOfertas)
             {
-                var f = new Menu(rolUsuario);   // Crear una nueva instancia del formulario Menu con rol
-                f.Show();                       // Mostrar el formulario Menu
-
-                await Task.Delay(300); // Espera breve para suavizar
-                this.Dispose();        // Liberar el formulario secundario actual
+                // Verificar si el formulario ya está abierto
+                if (Application.OpenForms["cpOfertas"] == null)
+                {
+                    var f = new cpOfertas();  // Crear nueva instancia de cpOfertas sin necesidad de rol
+                    f.Show();
+                    this.Hide();  // Ocultar el formulario actual
+                    await Task.Delay(300);
+                }
+                else
+                {
+                    MessageBox.Show("Ya está abierto el formulario de Ofertas", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
-
-            // Si se selecciona la pestaña 1 (cpOfertas) y no estamos ya en cpOfertas
-            else if (selectedIndex == 1 && !(this is cpOfertas))
+            else if (selectedIndex == 2)  // Si seleccionamos la pestaña 2 (cpEmpresa)
             {
-                var f = new cpOfertas(rolUsuario);  // Crear nueva instancia del formulario cpOfertas con rol
-                f.Show();                            // Mostrar el formulario
-                await Task.Delay(300);               // Espera para transición
-                this.Dispose();                      // Liberar cpEmpresa
+                // Verificar si el formulario ya está abierto
+                if (Application.OpenForms["cpEmpresa"] == null)
+                {
+                    var f = new cpEmpresa();  // Crear nueva instancia de cpEmpresa sin necesidad de rol
+                    f.Show();
+                    this.Hide();  // Ocultar el formulario actual
+                    await Task.Delay(300);
+                }
+                else
+                {
+                    MessageBox.Show("Ya está abierto el formulario de Empresas", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
-
-            // Si se selecciona la pestaña 2 (cpEmpresa), no se hace nada porque ya estamos aquí
-            // Si se selecciona la pestaña 3 (cpPostulante) y no estamos ya en cpPostulante
-            else if (selectedIndex == 3 && !(this is cpPostulante))
+            else if (selectedIndex == 3)  // Si seleccionamos la pestaña 3 (cpPostulante)
             {
-                var f = new cpPostulante(rolUsuario);  // Crear nueva instancia del formulario cpPostulante con rol
-                f.Show();                              // Mostrar el formulario
-                await Task.Delay(300);                 // Espera breve
-                this.Dispose();                        // Liberar cpEmpresa
+                // Verificar si el formulario ya está abierto
+                if (Application.OpenForms["cpPostulante"] == null)
+                {
+                    var f = new cpPostulante();  // Crear nueva instancia de cpPostulante sin necesidad de rol
+                    f.Show();
+                    this.Hide();  // Ocultar el formulario actual
+                    await Task.Delay(300);
+                }
             }
         }
+
+
 
         private void BtnRegistrar_Click(object sender, EventArgs e)
         {
