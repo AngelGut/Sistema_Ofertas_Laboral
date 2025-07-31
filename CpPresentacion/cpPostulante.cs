@@ -17,10 +17,11 @@ namespace CpPresentacion
 {
     public partial class cpPostulante : MaterialForm
     {
-        public cpPostulante()
+        private string rolUsuario;
+        public cpPostulante(string rol)
         {
             InitializeComponent();
-
+            rolUsuario = rol;
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 3;
 
@@ -34,8 +35,27 @@ namespace CpPresentacion
 
             CargarPersonas(); // <-- aquí lo puedes invocar también
             CargarOfertas(); // Llama al método que llenará el ComboBox con las ofertas
-
+            ConfigurarAccesoPorRol();
         }
+
+        private void ConfigurarAccesoPorRol()
+        {
+            if (rolUsuario == "Admin")
+            {
+                // Habilitar todas las opciones para el Admin
+                BtnRegistrar.Enabled = true;
+                BtnActualizar.Enabled = true;
+                BtnValidar.Enabled = true;
+            }
+            else if (rolUsuario == "Usuario")
+            {
+                // Deshabilitar algunas opciones para el Usuario
+                BtnRegistrar.Enabled = false; // No pueden registrar
+                BtnActualizar.Enabled = false; // No pueden actualizar
+                BtnValidar.Enabled = true; // Pueden validar
+            }
+        }
+
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -45,35 +65,44 @@ namespace CpPresentacion
             // Si se selecciona la pestaña 0 (Menu) y no estamos ya en Menu
             if (selectedIndex == 0 && !(this is Menu))
             {
-                var f = new Menu();   // Crear una nueva instancia del formulario Menu
-                f.Show();             // Mostrar el formulario Menu
+                var f = new Menu(rolUsuario);  // Crear una nueva instancia del formulario Menu con rol
+                f.Show();                      // Mostrar el formulario Menu
 
-                await Task.Delay(300); // Espera breve para suavizar
-                this.Dispose();        // Liberar el formulario secundario actual
-
+                await Task.Delay(300);         // Espera breve para suavizar
+                this.Dispose();                // Liberar el formulario secundario actual
             }
-
-
             // Si se selecciona la pestaña 1 (cpOfertas) y no estamos ya en cpOfertas
             else if (selectedIndex == 1 && !(this is cpOfertas))
             {
-                var f = new cpOfertas();  // Crear nueva instancia del formulario cpOfertas
-                f.Show();                 // Mostrar el formulario
-
-                await Task.Delay(300);    // Espera para transición
-                this.Dispose();           // Liberar cpPostulante
+                if (rolUsuario == "Admin")   // Solo el Admin puede acceder a cpOfertas
+                {
+                    var f = new cpOfertas(rolUsuario);  // Crear nueva instancia del formulario cpOfertas con rol
+                    f.Show();                              // Mostrar el formulario
+                    await Task.Delay(300);                // Espera para transición
+                    this.Dispose();                       // Liberar cpPostulante
+                }
+                else
+                {
+                    MessageBox.Show("Acceso denegado. Solo los administradores pueden acceder a esta sección.", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    materialTabControl1.SelectedIndex = 0;  // Regresar a la pestaña de inicio (Menu)
+                }
             }
-
             // Si se selecciona la pestaña 2 (cpEmpresa) y no estamos ya en cpEmpresa
             else if (selectedIndex == 2 && !(this is cpEmpresa))
             {
-                var f = new cpEmpresa();  // Crear nueva instancia del formulario cpEmpresa
-                f.Show();                 // Mostrar el formulario
-
-                await Task.Delay(300);    // Espera breve
-                this.Dispose();           // Liberar cpPostulante
+                if (rolUsuario == "Admin")  // Solo el Admin puede acceder a cpEmpresa
+                {
+                    var f = new cpEmpresa(rolUsuario);  // Crear nueva instancia del formulario cpEmpresa con rol
+                    f.Show();                             // Mostrar el formulario
+                    await Task.Delay(300);               // Espera breve
+                    this.Dispose();                      // Liberar cpPostulante
+                }
+                else
+                {
+                    MessageBox.Show("Acceso denegado. Solo los administradores pueden acceder a esta sección.", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    materialTabControl1.SelectedIndex = 0;  // Regresar a la pestaña de inicio (Menu)
+                }
             }
-
             // Si se selecciona la pestaña 3 (cpPostulante), no se hace nada porque ya estamos aquí
         }
 
@@ -179,12 +208,15 @@ namespace CpPresentacion
 
             try
             {
+                // Llamada al método que verifica si el DNI ya está registrado en la base de datos
                 bool existe = CpNegocio.servicios.MetodosPersona.PersonaYaExiste(dniTexto);
 
+                // Si el DNI ya está registrado, mostramos un mensaje de advertencia
                 if (existe)
                 {
                     MessageBox.Show("Este DNI ya está registrado.", "DNI Ocupado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
+                // Si el DNI no está registrado, mostramos un mensaje de éxito
                 else
                 {
                     MessageBox.Show("El DNI está disponible.", "DNI Disponible", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -192,9 +224,11 @@ namespace CpPresentacion
             }
             catch (Exception ex)
             {
+                // Si ocurre un error en la consulta, mostramos el mensaje de error
                 MessageBox.Show("Error al verificar el DNI: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         // Permite solo números y teclas de control (ej: backspace)
         private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)

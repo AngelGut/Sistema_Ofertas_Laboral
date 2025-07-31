@@ -38,8 +38,6 @@ namespace CapaDatos
             }
         }
 
-
-
         public static bool InsertarUsuario(Usuario usuario)
         {
             try

@@ -8,7 +8,7 @@ namespace CapaNegocio
 {
     public class UsuarioNegocio
     {
-        public bool Login(string usuario, string clave)
+        public bool Login(string usuario, string clave, ref string rol)
         {
             return DatosUsuario.VerificarCredenciales(usuario, clave);
         }

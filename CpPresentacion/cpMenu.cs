@@ -14,8 +14,8 @@ namespace CpPresentacion
 {
     public partial class Menu : MaterialForm // <<== ¡Cambiado a MaterialForm!
     {
-
-        public Menu()
+        private string rolUsuario;
+        public Menu(string rol)
         {
             InitializeComponent();
 
@@ -27,7 +27,28 @@ namespace CpPresentacion
             // Mejora visual: habilitar doble búfer para reducir parpadeos
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
+            this.rolUsuario = rolUsuario;
+            ConfigurarMenuPorRol();
+            rolUsuario = rol;
         }
+
+        private void ConfigurarMenuPorRol()
+        {
+            if (rolUsuario == "Admin")
+            {
+                // Habilitar todas las pestañas para el Admin
+                materialTabControl1.TabPages[1].Enabled = true;  // cpOfertas
+                materialTabControl1.TabPages[2].Enabled = true;  // cpEmpresa
+                materialTabControl1.TabPages[3].Enabled = true;  // cpPostulante
+            }
+            else if (rolUsuario == "Usuario")
+            {
+                // Para el usuario normal, deshabilitamos opciones avanzadas
+                materialTabControl1.TabPages[2].Enabled = false;  // cpEmpresa (deshabilitado)
+                materialTabControl1.TabPages[3].Enabled = false;  // cpPostulante (deshabilitado)
+            }
+        }
+
 
         private void tabPage3_Click(object sender, EventArgs e)
         {
@@ -47,29 +68,45 @@ namespace CpPresentacion
             // Si se selecciona cpOfertas (índice 1) y no estamos ya en cpOfertas
             if (selectedIndex == 1 && !(this is cpOfertas))
             {
-                var f = new cpOfertas();    // Crear formulario cpOfertas
-                this.Hide();                // Ocultar Menu (NO se cierra)
-                f.Show();                   // Mostrar cpOfertas
+                if (rolUsuario == "Admin")
+                {
+                    var f = new cpOfertas(rolUsuario);  // Crear formulario cpOfertas
+                    this.Hide();                         // Ocultar Menu (NO se cierra)
+                    f.Show();                            // Mostrar cpOfertas
 
-                await Task.Delay(300);      // Espera breve para transición fluida
+                    await Task.Delay(300);  // Espera breve para transición fluida
+                }
+                else
+                {
+                    MessageBox.Show("Acceso denegado. Solo los administradores pueden acceder a esta sección.", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    materialTabControl1.SelectedIndex = 0;  // Volver a la pestaña de inicio (Menu)
+                }
             }
 
-            // Si se selecciona cpEmpresa (índice 2)
+            // Si se selecciona cpEmpresa (índice 2) y no estamos ya en cpEmpresa
             else if (selectedIndex == 2 && !(this is cpEmpresa))
             {
-                var f = new cpEmpresa();    // Crear cpEmpresa
-                this.Hide();                // Ocultar Menu
-                f.Show();                   // Mostrar cpEmpresa
+                if (rolUsuario == "Admin")
+                {
+                    var f = new cpEmpresa(rolUsuario);  // Crear formulario cpEmpresa
+                    this.Hide();                         // Ocultar Menu
+                    f.Show();                            // Mostrar cpEmpresa
 
-                await Task.Delay(300);
+                    await Task.Delay(300);
+                }
+                else
+                {
+                    MessageBox.Show("Acceso denegado. Solo los administradores pueden acceder a esta sección.", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    materialTabControl1.SelectedIndex = 0;  // Volver a la pestaña de inicio (Menu)
+                }
             }
 
-            // Si se selecciona cpPostulante (índice 3)
+            // Si se selecciona cpPostulante (índice 3) y no estamos ya en cpPostulante
             else if (selectedIndex == 3 && !(this is cpPostulante))
             {
-                var f = new cpPostulante(); // Crear cpPostulante
-                this.Hide();                // Ocultar Menu
-                f.Show();                   // Mostrar cpPostulante
+                var f = new cpPostulante(rolUsuario);  // Crear formulario cpPostulante
+                this.Hide();                            // Ocultar Menu
+                f.Show();                               // Mostrar cpPostulante
 
                 await Task.Delay(300);
             }
