@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace CpPresentacion
 {
-    public partial class cpEmpleo : MaterialForm
+    public partial class Empleo : MaterialForm
     {
-        public cpEmpleo()
+        public Empleo()
         {
             InitializeComponent();
         }
