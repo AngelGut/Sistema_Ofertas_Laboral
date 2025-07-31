@@ -51,6 +51,7 @@
             LblDni = new MaterialSkin.Controls.MaterialLabel();
             TxtNombre = new MaterialSkin.Controls.MaterialMaskedTextBox();
             LblNombrePersona = new MaterialSkin.Controls.MaterialLabel();
+            tabPage5 = new TabPage();
             materialTabControl1.SuspendLayout();
             tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DgvPersonas).BeginInit();
@@ -64,6 +65,7 @@
             materialTabControl1.Controls.Add(tabPage2);
             materialTabControl1.Controls.Add(tabPage3);
             materialTabControl1.Controls.Add(tabPage4);
+            materialTabControl1.Controls.Add(tabPage5);
             materialTabControl1.Depth = 0;
             materialTabControl1.Dock = DockStyle.Fill;
             materialTabControl1.Location = new Point(3, 64);
@@ -517,6 +519,15 @@
             LblNombrePersona.TabIndex = 0;
             LblNombrePersona.Text = "Nombre";
             // 
+            // tabPage5
+            // 
+            tabPage5.Location = new Point(4, 34);
+            tabPage5.Name = "tabPage5";
+            tabPage5.Size = new Size(1886, 975);
+            tabPage5.TabIndex = 4;
+            tabPage5.Text = "Empleo";
+            tabPage5.UseVisualStyleBackColor = true;
+            // 
             // cpPostulante
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -564,5 +575,6 @@
         private DataGridView DgvPersonas;
         private ComboBox CboxOfertas;
         private MaterialSkin.Controls.MaterialLabel LblSelecOferta;
+        private TabPage tabPage5;
     }
 }
