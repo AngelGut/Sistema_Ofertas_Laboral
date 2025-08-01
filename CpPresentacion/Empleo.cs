@@ -17,5 +17,10 @@ namespace CpPresentacion
         {
             InitializeComponent();
         }
+
+        private void tabPage5_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

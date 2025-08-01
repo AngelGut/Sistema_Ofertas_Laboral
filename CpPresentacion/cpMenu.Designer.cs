@@ -36,6 +36,7 @@
             tabPage2 = new TabPage();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
+            BtnRegistrar = new MaterialSkin.Controls.MaterialButton();
             materialTabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -51,25 +52,26 @@
             materialTabControl1.Depth = 0;
             materialTabControl1.Dock = DockStyle.Fill;
             materialTabControl1.Location = new Point(2, 38);
-            materialTabControl1.Margin = new Padding(2, 2, 2, 2);
+            materialTabControl1.Margin = new Padding(2);
             materialTabControl1.MouseState = MaterialSkin.MouseState.HOVER;
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1375, 675);
+            materialTabControl1.Size = new Size(1391, 714);
             materialTabControl1.TabIndex = 0;
             materialTabControl1.SelectedIndexChanged += materialTabControl1_SelectedIndexChanged;
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(BtnRegistrar);
             tabPage1.Controls.Add(pictureBox2);
             tabPage1.Controls.Add(pictureBox1);
             tabPage1.Controls.Add(BtnSalir);
             tabPage1.Location = new Point(4, 24);
-            tabPage1.Margin = new Padding(2, 2, 2, 2);
+            tabPage1.Margin = new Padding(2);
             tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(2, 2, 2, 2);
-            tabPage1.Size = new Size(1367, 647);
+            tabPage1.Padding = new Padding(2);
+            tabPage1.Size = new Size(1383, 686);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Menu";
             tabPage1.UseVisualStyleBackColor = true;
@@ -79,7 +81,7 @@
             // 
             pictureBox2.Image = Properties.Resources.ChatGPT_Image_6_jul_2025__19_27_041;
             pictureBox2.Location = new Point(671, 131);
-            pictureBox2.Margin = new Padding(2, 2, 2, 2);
+            pictureBox2.Margin = new Padding(2);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(436, 368);
             pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
@@ -90,7 +92,7 @@
             // 
             pictureBox1.Image = Properties.Resources.Logo;
             pictureBox1.Location = new Point(232, 131);
-            pictureBox1.Margin = new Padding(2, 2, 2, 2);
+            pictureBox1.Margin = new Padding(2);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(435, 368);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
@@ -121,10 +123,10 @@
             // tabPage2
             // 
             tabPage2.Location = new Point(4, 24);
-            tabPage2.Margin = new Padding(2, 2, 2, 2);
+            tabPage2.Margin = new Padding(2);
             tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(2, 2, 2, 2);
-            tabPage2.Size = new Size(1364, 681);
+            tabPage2.Padding = new Padding(2);
+            tabPage2.Size = new Size(1367, 647);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Ofertas Laborales";
             tabPage2.UseVisualStyleBackColor = true;
@@ -132,10 +134,10 @@
             // tabPage3
             // 
             tabPage3.Location = new Point(4, 24);
-            tabPage3.Margin = new Padding(2, 2, 2, 2);
+            tabPage3.Margin = new Padding(2);
             tabPage3.Name = "tabPage3";
-            tabPage3.Padding = new Padding(2, 2, 2, 2);
-            tabPage3.Size = new Size(1364, 681);
+            tabPage3.Padding = new Padding(2);
+            tabPage3.Size = new Size(1367, 647);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Empresas";
             tabPage3.UseVisualStyleBackColor = true;
@@ -144,23 +146,44 @@
             // tabPage4
             // 
             tabPage4.Location = new Point(4, 24);
-            tabPage4.Margin = new Padding(2, 2, 2, 2);
+            tabPage4.Margin = new Padding(2);
             tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(1364, 681);
+            tabPage4.Size = new Size(1367, 647);
             tabPage4.TabIndex = 3;
             tabPage4.Text = "Postulantes";
             tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // BtnRegistrar
+            // 
+            BtnRegistrar.AutoSize = false;
+            BtnRegistrar.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnRegistrar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            BtnRegistrar.Depth = 0;
+            BtnRegistrar.HighEmphasis = true;
+            BtnRegistrar.Icon = null;
+            BtnRegistrar.Location = new Point(242, 607);
+            BtnRegistrar.Margin = new Padding(3, 4, 3, 4);
+            BtnRegistrar.MouseState = MaterialSkin.MouseState.HOVER;
+            BtnRegistrar.Name = "BtnRegistrar";
+            BtnRegistrar.NoAccentTextColor = Color.Empty;
+            BtnRegistrar.Size = new Size(111, 22);
+            BtnRegistrar.TabIndex = 3;
+            BtnRegistrar.Text = "Usuario";
+            BtnRegistrar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            BtnRegistrar.UseAccentColor = false;
+            BtnRegistrar.UseVisualStyleBackColor = true;
+            BtnRegistrar.Click += BtnRegistrar_Click;
             // 
             // Menu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(1379, 715);
+            ClientSize = new Size(1395, 754);
             Controls.Add(materialTabControl1);
             DrawerTabControl = materialTabControl1;
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "Menu";
@@ -184,5 +207,6 @@
         private MaterialSkin.Controls.MaterialButton BtnSalir;
         private PictureBox pictureBox1;
         private PictureBox pictureBox2;
+        private MaterialSkin.Controls.MaterialButton BtnRegistrar;
     }
 }

@@ -18,7 +18,7 @@ namespace CpPresentacion
         public Menu()
         {
             InitializeComponent();
-            
+
 
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Bloquea redimensionamiento
 
@@ -28,11 +28,11 @@ namespace CpPresentacion
             // Mejora visual: habilitar doble búfer para reducir parpadeos
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
-            
-           
+
+
         }
 
- 
+
 
         private void tabPage3_Click(object sender, EventArgs e)
         {
@@ -92,6 +92,17 @@ namespace CpPresentacion
 
                 Application.Exit();
             }
+        }
+
+        private void BtnRegistrar_Click(object sender, EventArgs e)
+        {
+            RegistrarUsuarios registrarForm = new RegistrarUsuarios();
+
+            // Mostrar el formulario de registro
+            registrarForm.Show();
+
+            // Si quieres ocultar el formulario actual (Menu) mientras está abierto el formulario de registro
+            this.Hide();
         }
     }
 }
