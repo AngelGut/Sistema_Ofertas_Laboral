@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Capa_Datos;
 using Microsoft.Data.SqlClient;
+//Esperemos que todo salga bien xD
 
 namespace CpNegocio.Empresas_y_Postulantes
 {
