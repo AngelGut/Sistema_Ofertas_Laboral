@@ -22,7 +22,7 @@ namespace CpPresentacion
             InitializeComponent();
 
             // Establece el tab activo que corresponde a este formulario
-            materialTabControl1.SelectedIndex = 3;
+            materialTabControl5.SelectedIndex = 3;
 
             // Mejora visual: habilitar doble búfer para reducir parpadeos
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
@@ -40,7 +40,7 @@ namespace CpPresentacion
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Obtener el índice de la pestaña seleccionada
-            int selectedIndex = materialTabControl1.SelectedIndex;
+            int selectedIndex = materialTabControl5.SelectedIndex;
 
             // Si se selecciona la pestaña 0 (Menu) y no estamos ya en Menu
             if (selectedIndex == 0 && !(this is Menu))
@@ -284,5 +284,9 @@ namespace CpPresentacion
             }
         }
 
+        private void tabPage5_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
