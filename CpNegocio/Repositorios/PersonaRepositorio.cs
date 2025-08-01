@@ -11,7 +11,7 @@ using Microsoft.Data.SqlClient;
 
 namespace CpNegocio.Repositorios
 {
-    //TODO: Implementación de la interfaz IPersonaRepositorio para interactuar con la base de datos
+    //TODO: Implementación de la interfaz IPersonaRepositorio para interactuar con la base de datos espeficicamente de la tabla persona
     public class PersonaRepositorio : IPersonaRepositorio
     {
         //TODO: Clase que implementa los métodos definidos en la interfaz IPersonaRepositorio
@@ -23,11 +23,11 @@ namespace CpNegocio.Repositorios
                 //TODO: aqui abrimos nuestra conexion
                 connection.Open();
 
-                //TODO: Implementamos nuestra logica del Select para obtener una persona por su cédula
+                //TODO: Implementamos nuestra logica del Select para obtener una persona por su cédula/Dni
                 string query = "SELECT Id, Nombre, Dni, Correo, Telefono, Direccion FROM Persona WHERE Dni = @Dni";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Dni", cedula);
+                    command.Parameters.AddWithValue("@Dni", cedula); //Aqui Cedula ya que es metodo creado es con este Nombre en vez de Dni
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
