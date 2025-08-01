@@ -14,10 +14,11 @@ namespace CpPresentacion
 {
     public partial class Menu : MaterialForm // <<== ¡Cambiado a MaterialForm!
     {
-
+        private string rolUsuario;
         public Menu()
         {
             InitializeComponent();
+            
 
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Bloquea redimensionamiento
 
@@ -27,7 +28,11 @@ namespace CpPresentacion
             // Mejora visual: habilitar doble búfer para reducir parpadeos
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
+            
+           
         }
+
+ 
 
         private void tabPage3_Click(object sender, EventArgs e)
         {
@@ -39,42 +44,43 @@ namespace CpPresentacion
 
         }
 
-        //Este método debe marcarse como async para poder usar 'await Task.Delay(...)'
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             int selectedIndex = materialTabControl1.SelectedIndex;
 
-            // Si se selecciona cpOfertas (índice 1) y no estamos ya en cpOfertas
-            if (selectedIndex == 1 && !(this is cpOfertas))
+            if (selectedIndex == 1)  // Ofertas
             {
-                var f = new cpOfertas();    // Crear formulario cpOfertas
-                this.Hide();                // Ocultar Menu (NO se cierra)
-                f.Show();                   // Mostrar cpOfertas
-
-                await Task.Delay(300);      // Espera breve para transición fluida
+                // Verifica si el formulario cpOfertas ya está abierto
+                if (!Application.OpenForms.Cast<Form>().Any(f => f.Name == "cpOfertas"))
+                {
+                    var f = new cpOfertas();  // Crear una nueva instancia del formulario cpOfertas
+                    this.Hide();               // Ocultar el formulario actual
+                    f.Show();                  // Mostrar cpOfertas
+                    await Task.Delay(300);     // Pausa breve, si es necesario
+                }
             }
-
-            // Si se selecciona cpEmpresa (índice 2)
-            else if (selectedIndex == 2 && !(this is cpEmpresa))
+            else if (selectedIndex == 2)  // Empresa
             {
-                var f = new cpEmpresa();    // Crear cpEmpresa
-                this.Hide();                // Ocultar Menu
-                f.Show();                   // Mostrar cpEmpresa
-
-                await Task.Delay(300);
+                // Verifica si el formulario cpEmpresa ya está abierto
+                if (!Application.OpenForms.Cast<Form>().Any(f => f.Name == "cpEmpresa"))
+                {
+                    var f = new cpEmpresa();  // Crear una nueva instancia del formulario cpEmpresa
+                    this.Hide();               // Ocultar el formulario actual
+                    f.Show();                  // Mostrar cpEmpresa
+                    await Task.Delay(300);     // Pausa breve, si es necesario
+                }
             }
-
-            // Si se selecciona cpPostulante (índice 3)
-            else if (selectedIndex == 3 && !(this is cpPostulante))
+            else if (selectedIndex == 3)  // Postulante
             {
-                var f = new cpPostulante(); // Crear cpPostulante
-                this.Hide();                // Ocultar Menu
-                f.Show();                   // Mostrar cpPostulante
-
-                await Task.Delay(300);
+                // Verifica si el formulario cpPostulante ya está abierto
+                if (!Application.OpenForms.Cast<Form>().Any(f => f.Name == "cpPostulante"))
+                {
+                    var f = new cpPostulante();  // Crear una nueva instancia del formulario cpPostulante
+                    this.Hide();                  // Ocultar el formulario actual
+                    f.Show();                     // Mostrar cpPostulante
+                    await Task.Delay(300);        // Pausa breve, si es necesario
+                }
             }
-
-            // Si se selecciona el índice 0 (Menu), no se hace nada, ya estamos aquí
         }
 
         private void BtnSalir_Click(object sender, EventArgs e)

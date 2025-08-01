@@ -18,10 +18,11 @@ namespace CpPresentacion
 {
     public partial class cpOfertas : MaterialForm // <<== ¡Cambiado a MaterialForm!
     {
+      
         public cpOfertas()
         {
             InitializeComponent();
-
+            
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 1;
 
@@ -47,6 +48,8 @@ namespace CpPresentacion
             CargarOfertas(); // Cargar ofertas al iniciar el formulario
 
             CargarEmpresas(); // Cargar empresas aquí
+
+            
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -54,40 +57,63 @@ namespace CpPresentacion
             // Obtener el índice de la pestaña seleccionada por el usuario
             int selectedIndex = materialTabControl1.SelectedIndex;
 
-            // Si se selecciona la pestaña 0 (Menu) y no estamos ya en Menu
-            if (selectedIndex == 0 && !(this is Menu))
-            {
-                var f = new Menu();   // Crear una nueva instancia del formulario Menu
-                f.Show();             // Mostrar el formulario Menu
-
-                await Task.Delay(300); // Espera breve para suavizar
-                this.Dispose();        // Liberar el formulario secundario actual
-
-            }
-
-
-            // Si se selecciona la pestaña 2 (cpEmpresa) y no estamos ya en cpEmpresa
-            else if (selectedIndex == 2 && !(this is cpEmpresa))
-            {
-                var f = new cpEmpresa();  // Crear nueva instancia del formulario cpEmpresa
-                f.Show();                 // Mostrar el formulario cpEmpresa
-
-                await Task.Delay(300);    // Espera para suavizar la transición
-                this.Dispose();           // Liberar el formulario cpOfertas
-            }
-
-            // Si se selecciona la pestaña 3 (cpPostulante) y no estamos ya en cpPostulante
-            else if (selectedIndex == 3 && !(this is cpPostulante))
-            {
-                var f = new cpPostulante();  // Crear nueva instancia del formulario cpPostulante
-                f.Show();                    // Mostrar el formulario
-
-                await Task.Delay(300);       // Espera breve
-                this.Dispose();              // Liberar cpOfertas
-            }
-
-            // Si se selecciona la pestaña 1 (cpOfertas), no se hace nada porque ya estamos aquí
+            // Llamar a la función común para abrir formularios
+            await AbrirFormulario(selectedIndex);
         }
+
+        private async Task AbrirFormulario(int selectedIndex)
+        {
+            Form formulario = null;
+
+            // Seleccionar el formulario correspondiente según el índice de la pestaña
+            switch (selectedIndex)
+            {
+                case 0:  // Menu
+                    if (!(this is Menu))
+                    {
+                        formulario = new Menu();  // Crear nueva instancia de Menu
+                    }
+                    break;
+
+                case 1:  // cpOfertas
+                    if (!(this is cpOfertas))
+                    {
+                        formulario = new cpOfertas();  // Crear nueva instancia de cpOfertas
+                    }
+                    break;
+
+                case 2:  // cpEmpresa
+                    if (!(this is cpEmpresa))
+                    {
+                        formulario = new cpEmpresa();  // Crear nueva instancia de cpEmpresa
+                    }
+                    break;
+
+                case 3:  // cpPostulante
+                    if (!(this is cpPostulante))
+                    {
+                        formulario = new cpPostulante();  // Crear nueva instancia de cpPostulante
+                    }
+                    break;
+            }
+
+            // Si se ha seleccionado un formulario válido, mostrarlo
+            if (formulario != null)
+            {
+                this.Hide();        // Ocultar el formulario actual
+                formulario.Show();  // Mostrar el formulario seleccionado
+                await Task.Delay(300); // Pausa breve, si es necesario
+            }
+            else
+            {
+                MessageBox.Show("Este formulario ya está abierto o no se puede acceder.", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                materialTabControl1.SelectedIndex = 0;  // Regresar a la pestaña de inicio (Menu)
+            }
+        }
+
+
+
+
 
         private void materialLabel4_Click(object sender, EventArgs e)
         {
