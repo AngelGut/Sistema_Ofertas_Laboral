@@ -10,8 +10,4 @@
     <ProjectReference Include="..\Sistema_Ofertas_Laboral\CpDatos.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Gmail\" />
-  </ItemGroup>
-
 </Project>

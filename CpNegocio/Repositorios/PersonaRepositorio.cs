@@ -24,10 +24,10 @@ namespace CpNegocio.Repositorios
                 connection.Open();
 
                 //TODO: Implementamos nuestra logica del Select para obtener una persona por su cédula
-                string query = "SELECT Id, Nombre, Cedula, Correo FROM Persona WHERE Cedula = @Cedula";
+                string query = "SELECT Id, Nombre, Dni, Correo, Telefono, Direccion FROM Persona WHERE Dni = @Dni";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Cedula", cedula);
+                    command.Parameters.AddWithValue("@Dni", cedula);
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
@@ -39,8 +39,10 @@ namespace CpNegocio.Repositorios
                                 Id = reader.GetInt32(0),
                                 Nombre = reader.GetString(1),
                                 Dni = reader.GetString(2),
-                                Correo = reader.GetString(3)
-                                
+                                Correo = reader.GetString(3),
+                                Telefono = reader.GetString(4),
+                                Direccion = reader.GetString(5)
+
                             };
                         }
                     }
