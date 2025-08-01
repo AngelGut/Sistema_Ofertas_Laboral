@@ -38,6 +38,7 @@
             txtBuscarDNI = new MaterialSkin.Controls.MaterialMaskedTextBox();
             dgvEmpresas = new DataGridView();
             dgvPostulantes = new DataGridView();
+            materialMaskedTextBox1 = new MaterialSkin.Controls.MaterialMaskedTextBox();
             materialTabControl1.SuspendLayout();
             tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvEmpresas).BeginInit();
@@ -106,6 +107,7 @@
             // 
             // tabPage5
             // 
+            tabPage5.Controls.Add(materialMaskedTextBox1);
             tabPage5.Controls.Add(txtBuscarID);
             tabPage5.Controls.Add(txtBuscarDNI);
             tabPage5.Controls.Add(dgvEmpresas);
@@ -220,6 +222,48 @@
             dgvPostulantes.Size = new Size(567, 275);
             dgvPostulantes.TabIndex = 0;
             // 
+            // materialMaskedTextBox1
+            // 
+            materialMaskedTextBox1.AllowPromptAsInput = true;
+            materialMaskedTextBox1.AnimateReadOnly = false;
+            materialMaskedTextBox1.AsciiOnly = false;
+            materialMaskedTextBox1.BackgroundImageLayout = ImageLayout.None;
+            materialMaskedTextBox1.BeepOnError = false;
+            materialMaskedTextBox1.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
+            materialMaskedTextBox1.Depth = 0;
+            materialMaskedTextBox1.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialMaskedTextBox1.HidePromptOnLeave = false;
+            materialMaskedTextBox1.HideSelection = true;
+            materialMaskedTextBox1.InsertKeyMode = InsertKeyMode.Default;
+            materialMaskedTextBox1.LeadingIcon = null;
+            materialMaskedTextBox1.Location = new Point(600, 400);
+            materialMaskedTextBox1.Mask = "";
+            materialMaskedTextBox1.MaxLength = 32767;
+            materialMaskedTextBox1.MouseState = MaterialSkin.MouseState.OUT;
+            materialMaskedTextBox1.Name = "materialMaskedTextBox1";
+            materialMaskedTextBox1.PasswordChar = '\0';
+            materialMaskedTextBox1.PrefixSuffixText = null;
+            materialMaskedTextBox1.PromptChar = '_';
+            materialMaskedTextBox1.ReadOnly = false;
+            materialMaskedTextBox1.RejectInputOnFirstFailure = false;
+            materialMaskedTextBox1.ResetOnPrompt = true;
+            materialMaskedTextBox1.ResetOnSpace = true;
+            materialMaskedTextBox1.RightToLeft = RightToLeft.No;
+            materialMaskedTextBox1.SelectedText = "";
+            materialMaskedTextBox1.SelectionLength = 0;
+            materialMaskedTextBox1.SelectionStart = 0;
+            materialMaskedTextBox1.ShortcutsEnabled = true;
+            materialMaskedTextBox1.Size = new Size(312, 48);
+            materialMaskedTextBox1.SkipLiterals = true;
+            materialMaskedTextBox1.TabIndex = 4;
+            materialMaskedTextBox1.TabStop = false;
+            materialMaskedTextBox1.Text = "materialMaskedTextBox1";
+            materialMaskedTextBox1.TextAlign = HorizontalAlignment.Left;
+            materialMaskedTextBox1.TextMaskFormat = MaskFormat.IncludeLiterals;
+            materialMaskedTextBox1.TrailingIcon = null;
+            materialMaskedTextBox1.UseSystemPasswordChar = false;
+            materialMaskedTextBox1.ValidatingType = null;
+            // 
             // Empleo
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -249,5 +293,6 @@
         private DataGridView dgvPostulantes;
         private MaterialSkin.Controls.MaterialMaskedTextBox txtBuscarID;
         private MaterialSkin.Controls.MaterialMaskedTextBox txtBuscarDNI;
+        private MaterialSkin.Controls.MaterialMaskedTextBox materialMaskedTextBox1;
     }
 }
