@@ -51,8 +51,7 @@
             LblDni = new MaterialSkin.Controls.MaterialLabel();
             TxtNombre = new MaterialSkin.Controls.MaterialMaskedTextBox();
             LblNombrePersona = new MaterialSkin.Controls.MaterialLabel();
-            tabPage5 = new TabPage();
-            materialTabControl5.SuspendLayout();
+            materialTabControl1.SuspendLayout();
             tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DgvPersonas).BeginInit();
             materialCard2.SuspendLayout();
@@ -61,22 +60,20 @@
             // 
             // materialTabControl5
             // 
-            materialTabControl5.Controls.Add(tabPage1);
-            materialTabControl5.Controls.Add(tabPage2);
-            materialTabControl5.Controls.Add(tabPage3);
-            materialTabControl5.Controls.Add(tabPage4);
-            materialTabControl5.Controls.Add(tabPage5);
-            materialTabControl5.Depth = 0;
-            materialTabControl5.Dock = DockStyle.Fill;
-            materialTabControl5.Location = new Point(2, 51);
-            materialTabControl5.Margin = new Padding(2);
-            materialTabControl5.MouseState = MaterialSkin.MouseState.HOVER;
-            materialTabControl5.Multiline = true;
-            materialTabControl5.Name = "materialTabControl5";
-            materialTabControl5.SelectedIndex = 0;
-            materialTabControl5.Size = new Size(1516, 811);
-            materialTabControl5.TabIndex = 0;
-            materialTabControl5.SelectedIndexChanged += materialTabControl1_SelectedIndexChanged;
+            materialTabControl1.Controls.Add(tabPage1);
+            materialTabControl1.Controls.Add(tabPage2);
+            materialTabControl1.Controls.Add(tabPage3);
+            materialTabControl1.Controls.Add(tabPage4);
+            materialTabControl1.Depth = 0;
+            materialTabControl1.Dock = DockStyle.Fill;
+            materialTabControl1.Location = new Point(3, 64);
+            materialTabControl1.MouseState = MaterialSkin.MouseState.HOVER;
+            materialTabControl1.Multiline = true;
+            materialTabControl1.Name = "materialTabControl1";
+            materialTabControl1.SelectedIndex = 0;
+            materialTabControl1.Size = new Size(1894, 1013);
+            materialTabControl1.TabIndex = 0;
+            materialTabControl1.SelectedIndexChanged += materialTabControl1_SelectedIndexChanged;
             // 
             // tabPage1
             // 
@@ -536,16 +533,6 @@
             LblNombrePersona.Size = new Size(57, 19);
             LblNombrePersona.TabIndex = 0;
             LblNombrePersona.Text = "Nombre";
-            // 
-            // tabPage5
-            // 
-            tabPage5.Location = new Point(4, 29);
-            tabPage5.Name = "tabPage5";
-            tabPage5.Size = new Size(1508, 778);
-            tabPage5.TabIndex = 4;
-            tabPage5.Text = "Historial Mensajes";
-            tabPage5.UseVisualStyleBackColor = true;
-            tabPage5.Click += tabPage5_Click;
             // 
             // cpPostulante
             // 
