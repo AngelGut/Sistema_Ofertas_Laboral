@@ -17,13 +17,12 @@ namespace CpPresentacion
 {
     public partial class cpPostulante : MaterialForm
     {
-        
         public cpPostulante()
         {
             InitializeComponent();
-           
+
             // Establece el tab activo que corresponde a este formulario
-            materialTabControl5.SelectedIndex = 3;
+            materialTabControl1.SelectedIndex = 3;
 
             // Mejora visual: habilitar doble búfer para reducir parpadeos
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
@@ -35,52 +34,48 @@ namespace CpPresentacion
 
             CargarPersonas(); // <-- aquí lo puedes invocar también
             CargarOfertas(); // Llama al método que llenará el ComboBox con las ofertas
-            
+
         }
-
-
-
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Obtener el índice de la pestaña seleccionada
-            int selectedIndex = materialTabControl5.SelectedIndex;
+            int selectedIndex = materialTabControl1.SelectedIndex;
 
             // Si se selecciona la pestaña 0 (Menu) y no estamos ya en Menu
             if (selectedIndex == 0 && !(this is Menu))
             {
-                var f = new Menu();  // Crear una nueva instancia del formulario Menu sin rol
-                f.Show();            // Mostrar el formulario Menu
+                var f = new Menu();   // Crear una nueva instancia del formulario Menu
+                f.Show();             // Mostrar el formulario Menu
 
-                await Task.Delay(300);  // Espera breve para suavizar
-                this.Dispose();         // Liberar el formulario actual
+                await Task.Delay(300); // Espera breve para suavizar
+                this.Dispose();        // Liberar el formulario secundario actual
+
             }
+
+
             // Si se selecciona la pestaña 1 (cpOfertas) y no estamos ya en cpOfertas
             else if (selectedIndex == 1 && !(this is cpOfertas))
             {
-                var f = new cpOfertas();  // Crear nueva instancia del formulario cpOfertas sin rol
-                f.Show();                  // Mostrar el formulario
-                await Task.Delay(300);     // Espera para transición
-                this.Dispose();            // Liberar el formulario actual
+                var f = new cpOfertas();  // Crear nueva instancia del formulario cpOfertas
+                f.Show();                 // Mostrar el formulario
+
+                await Task.Delay(300);    // Espera para transición
+                this.Dispose();           // Liberar cpPostulante
             }
+
             // Si se selecciona la pestaña 2 (cpEmpresa) y no estamos ya en cpEmpresa
             else if (selectedIndex == 2 && !(this is cpEmpresa))
             {
-                var f = new cpEmpresa();  // Crear nueva instancia del formulario cpEmpresa sin rol
+                var f = new cpEmpresa();  // Crear nueva instancia del formulario cpEmpresa
                 f.Show();                 // Mostrar el formulario
-                await Task.Delay(300);    // Espera breve
-                this.Dispose();           // Liberar el formulario actual
-            }
-            // Si se selecciona la pestaña 3 (cpPostulante) y no estamos ya en cpPostulante
-            else if (selectedIndex == 3 && !(this is cpPostulante))
-            {
-                var f = new cpPostulante();  // Crear nueva instancia del formulario cpPostulante sin rol
-                f.Show();                    // Mostrar el formulario
-                await Task.Delay(300);       // Espera breve
-                this.Dispose();              // Liberar el formulario actual
-            }
-        }
 
+                await Task.Delay(300);    // Espera breve
+                this.Dispose();           // Liberar cpPostulante
+            }
+
+            // Si se selecciona la pestaña 3 (cpPostulante), no se hace nada porque ya estamos aquí
+        }
 
         private void cpPostulante_Load(object sender, EventArgs e)
         {
@@ -184,15 +179,12 @@ namespace CpPresentacion
 
             try
             {
-                // Llamada al método que verifica si el DNI ya está registrado en la base de datos
                 bool existe = CpNegocio.servicios.MetodosPersona.PersonaYaExiste(dniTexto);
 
-                // Si el DNI ya está registrado, mostramos un mensaje de advertencia
                 if (existe)
                 {
                     MessageBox.Show("Este DNI ya está registrado.", "DNI Ocupado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                // Si el DNI no está registrado, mostramos un mensaje de éxito
                 else
                 {
                     MessageBox.Show("El DNI está disponible.", "DNI Disponible", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -200,11 +192,9 @@ namespace CpPresentacion
             }
             catch (Exception ex)
             {
-                // Si ocurre un error en la consulta, mostramos el mensaje de error
                 MessageBox.Show("Error al verificar el DNI: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         // Permite solo números y teclas de control (ej: backspace)
         private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
@@ -294,9 +284,5 @@ namespace CpPresentacion
             }
         }
 
-        private void tabPage5_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
