@@ -74,7 +74,7 @@
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1372, 682);
+            materialTabControl1.Size = new Size(913, 507);
             materialTabControl1.TabIndex = 0;
             materialTabControl1.SelectedIndexChanged += materialTabControl1_SelectedIndexChanged;
             // 
@@ -157,14 +157,14 @@
             tabPage7.Location = new Point(4, 29);
             tabPage7.Margin = new Padding(2);
             tabPage7.Name = "tabPage7";
-            tabPage7.Size = new Size(1364, 649);
+            tabPage7.Size = new Size(905, 474);
             tabPage7.TabIndex = 6;
             tabPage7.Text = "Carnet";
             tabPage7.UseVisualStyleBackColor = true;
             // 
             // panelTarjeta
             // 
-            panelTarjeta.Location = new Point(670, 89);
+            panelTarjeta.Location = new Point(619, 25);
             panelTarjeta.Name = "panelTarjeta";
             panelTarjeta.Size = new Size(268, 343);
             panelTarjeta.TabIndex = 11;
@@ -173,7 +173,7 @@
             // picLogo
             // 
             picLogo.Image = (Image)resources.GetObject("picLogo.Image");
-            picLogo.Location = new Point(452, 332);
+            picLogo.Location = new Point(415, 254);
             picLogo.Name = "picLogo";
             picLogo.Size = new Size(140, 114);
             picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -183,7 +183,7 @@
             // 
             // picFoto
             // 
-            picFoto.Location = new Point(425, 89);
+            picFoto.Location = new Point(402, 27);
             picFoto.Name = "picFoto";
             picFoto.Size = new Size(190, 184);
             picFoto.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -418,9 +418,11 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1378, 749);
+            ClientSize = new Size(919, 574);
             Controls.Add(materialTabControl1);
             DrawerTabControl = materialTabControl1;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "Carnet";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Carnet";
