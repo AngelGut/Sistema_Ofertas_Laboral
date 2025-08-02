@@ -52,6 +52,9 @@
             TxtNombre = new MaterialSkin.Controls.MaterialMaskedTextBox();
             LblNombrePersona = new MaterialSkin.Controls.MaterialLabel();
             tabPage5 = new TabPage();
+            tabPage6 = new TabPage();
+            tabPage7 = new TabPage();
+            tabPage8 = new TabPage();
             materialTabControl1.SuspendLayout();
             tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DgvPersonas).BeginInit();
@@ -66,6 +69,9 @@
             materialTabControl1.Controls.Add(tabPage3);
             materialTabControl1.Controls.Add(tabPage4);
             materialTabControl1.Controls.Add(tabPage5);
+            materialTabControl1.Controls.Add(tabPage6);
+            materialTabControl1.Controls.Add(tabPage7);
+            materialTabControl1.Controls.Add(tabPage8);
             materialTabControl1.Depth = 0;
             materialTabControl1.Dock = DockStyle.Fill;
             materialTabControl1.Location = new Point(3, 64);
@@ -525,8 +531,35 @@
             tabPage5.Name = "tabPage5";
             tabPage5.Size = new Size(1886, 975);
             tabPage5.TabIndex = 4;
-            tabPage5.Text = "Empleo";
+            tabPage5.Text = "Asignar Oferta";
             tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // tabPage6
+            // 
+            tabPage6.Location = new Point(4, 34);
+            tabPage6.Name = "tabPage6";
+            tabPage6.Size = new Size(1886, 975);
+            tabPage6.TabIndex = 5;
+            tabPage6.Text = "Historial Correos";
+            tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // tabPage7
+            // 
+            tabPage7.Location = new Point(4, 34);
+            tabPage7.Name = "tabPage7";
+            tabPage7.Size = new Size(1886, 975);
+            tabPage7.TabIndex = 6;
+            tabPage7.Text = "Carnet";
+            tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // tabPage8
+            // 
+            tabPage8.Location = new Point(4, 34);
+            tabPage8.Name = "tabPage8";
+            tabPage8.Size = new Size(1886, 975);
+            tabPage8.TabIndex = 7;
+            tabPage8.Text = "Registro Interno";
+            tabPage8.UseVisualStyleBackColor = true;
             // 
             // cpPostulante
             // 
@@ -576,5 +609,8 @@
         private ComboBox CboxOfertas;
         private MaterialSkin.Controls.MaterialLabel LblSelecOferta;
         private TabPage tabPage5;
+        private TabPage tabPage6;
+        private TabPage tabPage7;
+        private TabPage tabPage8;
     }
 }

@@ -28,18 +28,139 @@
         /// </summary>
         private void InitializeComponent()
         {
+            materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
+            tabPage1 = new TabPage();
+            tabPage2 = new TabPage();
+            tabPage3 = new TabPage();
+            tabPage4 = new TabPage();
+            tabPage5 = new TabPage();
+            tabPage6 = new TabPage();
+            tabPage7 = new TabPage();
+            tabPage8 = new TabPage();
+            materialTabControl1.SuspendLayout();
             SuspendLayout();
+            // 
+            // materialTabControl1
+            // 
+            materialTabControl1.Controls.Add(tabPage1);
+            materialTabControl1.Controls.Add(tabPage2);
+            materialTabControl1.Controls.Add(tabPage3);
+            materialTabControl1.Controls.Add(tabPage4);
+            materialTabControl1.Controls.Add(tabPage5);
+            materialTabControl1.Controls.Add(tabPage6);
+            materialTabControl1.Controls.Add(tabPage7);
+            materialTabControl1.Controls.Add(tabPage8);
+            materialTabControl1.Depth = 0;
+            materialTabControl1.Dock = DockStyle.Fill;
+            materialTabControl1.Location = new Point(4, 80);
+            materialTabControl1.MouseState = MaterialSkin.MouseState.HOVER;
+            materialTabControl1.Multiline = true;
+            materialTabControl1.Name = "materialTabControl1";
+            materialTabControl1.SelectedIndex = 0;
+            materialTabControl1.Size = new Size(1714, 852);
+            materialTabControl1.TabIndex = 0;
+            materialTabControl1.SelectedIndexChanged += materialTabControl1_SelectedIndexChanged;
+            // 
+            // tabPage1
+            // 
+            tabPage1.Location = new Point(4, 34);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new Padding(3);
+            tabPage1.Size = new Size(1706, 814);
+            tabPage1.TabIndex = 0;
+            tabPage1.Text = "Menu";
+            tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            tabPage2.Location = new Point(4, 34);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new Padding(3);
+            tabPage2.Size = new Size(1706, 814);
+            tabPage2.TabIndex = 1;
+            tabPage2.Text = "Ofertas Laborales";
+            tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage3
+            // 
+            tabPage3.Location = new Point(4, 34);
+            tabPage3.Name = "tabPage3";
+            tabPage3.Size = new Size(1706, 814);
+            tabPage3.TabIndex = 2;
+            tabPage3.Text = "Empresas";
+            tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // tabPage4
+            // 
+            tabPage4.Location = new Point(4, 34);
+            tabPage4.Name = "tabPage4";
+            tabPage4.Size = new Size(1706, 814);
+            tabPage4.TabIndex = 3;
+            tabPage4.Text = "Postulantes";
+            tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // tabPage5
+            // 
+            tabPage5.Location = new Point(4, 34);
+            tabPage5.Name = "tabPage5";
+            tabPage5.Size = new Size(1706, 814);
+            tabPage5.TabIndex = 4;
+            tabPage5.Text = "Asignar Oferta";
+            tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // tabPage6
+            // 
+            tabPage6.Location = new Point(4, 34);
+            tabPage6.Name = "tabPage6";
+            tabPage6.Size = new Size(1706, 814);
+            tabPage6.TabIndex = 5;
+            tabPage6.Text = "Historial Correos";
+            tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // tabPage7
+            // 
+            tabPage7.Location = new Point(4, 34);
+            tabPage7.Name = "tabPage7";
+            tabPage7.Size = new Size(1706, 814);
+            tabPage7.TabIndex = 6;
+            tabPage7.Text = "Carnet";
+            tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // tabPage8
+            // 
+            tabPage8.Location = new Point(4, 34);
+            tabPage8.Name = "tabPage8";
+            tabPage8.Size = new Size(1706, 814);
+            tabPage8.TabIndex = 7;
+            tabPage8.Text = "Registro Interno";
+            tabPage8.UseVisualStyleBackColor = true;
             // 
             // Carnet
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(796, 450);
+            ClientSize = new Size(1722, 936);
+            Controls.Add(materialTabControl1);
+            DrawerTabControl = materialTabControl1;
+            Margin = new Padding(4);
             Name = "Carnet";
+            Padding = new Padding(4, 80, 4, 4);
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Carnet";
+            materialTabControl1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
+
+        private MaterialSkin.Controls.MaterialTabControl materialTabControl1;
+        private TabPage tabPage1;
+        private TabPage tabPage2;
+        private TabPage tabPage3;
+        private TabPage tabPage4;
+        private TabPage tabPage5;
+        private TabPage tabPage6;
+        private TabPage tabPage7;
+        private TabPage tabPage8;
     }
 }

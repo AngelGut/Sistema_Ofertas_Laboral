@@ -54,61 +54,41 @@ namespace CpPresentacion
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Obtener el índice de la pestaña seleccionada por el usuario
-            int selectedIndex = materialTabControl1.SelectedIndex;
-
-            // Llamar a la función común para abrir formularios
-            await AbrirFormulario(selectedIndex);
+            await NavegarA(materialTabControl1.SelectedIndex);
         }
 
-        private async Task AbrirFormulario(int selectedIndex)
+        private async Task NavegarA(int idx)
         {
-            Form formulario = null;
-
-            // Seleccionar el formulario correspondiente según el índice de la pestaña
-            switch (selectedIndex)
+            // A) ¿A qué ventana ir?
+            Form destino = idx switch
             {
-                case 0:  // Menu
-                    if (!(this is Menu))
-                    {
-                        formulario = new Menu();  // Crear nueva instancia de Menu
-                    }
-                    break;
+                0 => Application.OpenForms.OfType<Menu>()
+                                          .FirstOrDefault() ?? new Menu(),
 
-                case 1:  // cpOfertas
-                    if (!(this is cpOfertas))
-                    {
-                        formulario = new cpOfertas();  // Crear nueva instancia de cpOfertas
-                    }
-                    break;
+                // Evitamos duplicar instancias si ya estamos ahí
+                1 => this is cpOfertas ? this : new cpOfertas(),
+                2 => this is cpEmpresa ? this : new cpEmpresa(),
+                3 => this is cpPostulante ? this : new cpPostulante(),
+                4 => this is cpAsignarEmpleo ? this : new cpAsignarEmpleo(),
+                5 => this is cpHistorialMensajes ? this : new cpHistorialMensajes(),
+                6 => this is Carnet ? this : new Carnet(),
+                7 => this is cpRegistro ? this : new cpRegistro(),
+                _ => null
+            };
 
-                case 2:  // cpEmpresa
-                    if (!(this is cpEmpresa))
-                    {
-                        formulario = new cpEmpresa();  // Crear nueva instancia de cpEmpresa
-                    }
-                    break;
+            // B) Si ya estamos en el destino, no hacemos nada
+            if (destino == null || destino == this) return;
 
-                case 3:  // cpPostulante
-                    if (!(this is cpPostulante))
-                    {
-                        formulario = new cpPostulante();  // Crear nueva instancia de cpPostulante
-                    }
-                    break;
-            }
+            // C) Mostrar el nuevo formulario
+            destino.Show();
 
-            // Si se ha seleccionado un formulario válido, mostrarlo
-            if (formulario != null)
-            {
-                this.Hide();        // Ocultar el formulario actual
-                formulario.Show();  // Mostrar el formulario seleccionado
-                await Task.Delay(300); // Pausa breve, si es necesario
-            }
+            // D) Menu nunca se cierra; los demás se liberan
+            if (this is Menu)
+                this.Hide();     // se mantiene en memoria
             else
-            {
-                MessageBox.Show("Este formulario ya está abierto o no se puede acceder.", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                materialTabControl1.SelectedIndex = 0;  // Regresar a la pestaña de inicio (Menu)
-            }
+                this.Dispose();  // libera recursos
+
+            await Task.Delay(180); // Pausa opcional, transición suave
         }
 
 

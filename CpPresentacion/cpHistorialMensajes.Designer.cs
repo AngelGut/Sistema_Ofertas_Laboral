@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            materialTabControl5 = new MaterialSkin.Controls.MaterialTabControl();
+            materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             tabPage1 = new TabPage();
             tabPage2 = new TabPage();
             tabPage3 = new TabPage();
@@ -52,70 +52,77 @@
             TxtNombre = new MaterialSkin.Controls.MaterialMaskedTextBox();
             LblNombrePersona = new MaterialSkin.Controls.MaterialLabel();
             tabPage5 = new TabPage();
-            materialCard3 = new MaterialSkin.Controls.MaterialCard();
-            label1 = new Label();
-            textBox1 = new TextBox();
-            materialButton1 = new MaterialSkin.Controls.MaterialButton();
-            materialButton2 = new MaterialSkin.Controls.MaterialButton();
-            dataGridView1 = new DataGridView();
             lblDetalle = new Label();
             txtDetalleMensaje = new TextBox();
-            materialTabControl5.SuspendLayout();
+            dataGridView1 = new DataGridView();
+            materialCard3 = new MaterialSkin.Controls.MaterialCard();
+            materialButton2 = new MaterialSkin.Controls.MaterialButton();
+            textBox1 = new TextBox();
+            materialButton1 = new MaterialSkin.Controls.MaterialButton();
+            label1 = new Label();
+            tabPage6 = new TabPage();
+            tabPage7 = new TabPage();
+            tabPage8 = new TabPage();
+            materialTabControl1.SuspendLayout();
             tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DgvPersonas).BeginInit();
             materialCard2.SuspendLayout();
             materialCard1.SuspendLayout();
             tabPage5.SuspendLayout();
-            materialCard3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            materialCard3.SuspendLayout();
             SuspendLayout();
             // 
-            // materialTabControl5
+            // materialTabControl1
             // 
-            materialTabControl5.Controls.Add(tabPage1);
-            materialTabControl5.Controls.Add(tabPage2);
-            materialTabControl5.Controls.Add(tabPage3);
-            materialTabControl5.Controls.Add(tabPage4);
-            materialTabControl5.Controls.Add(tabPage5);
-            materialTabControl5.Depth = 0;
-            materialTabControl5.Dock = DockStyle.Fill;
-            materialTabControl5.Location = new Point(3, 64);
-            materialTabControl5.Margin = new Padding(2);
-            materialTabControl5.MouseState = MaterialSkin.MouseState.HOVER;
-            materialTabControl5.Multiline = true;
-            materialTabControl5.Name = "materialTabControl5";
-            materialTabControl5.SelectedIndex = 0;
-            materialTabControl5.Size = new Size(1191, 689);
-            materialTabControl5.TabIndex = 1;
+            materialTabControl1.Controls.Add(tabPage1);
+            materialTabControl1.Controls.Add(tabPage2);
+            materialTabControl1.Controls.Add(tabPage3);
+            materialTabControl1.Controls.Add(tabPage4);
+            materialTabControl1.Controls.Add(tabPage5);
+            materialTabControl1.Controls.Add(tabPage6);
+            materialTabControl1.Controls.Add(tabPage7);
+            materialTabControl1.Controls.Add(tabPage8);
+            materialTabControl1.Depth = 0;
+            materialTabControl1.Dock = DockStyle.Fill;
+            materialTabControl1.Location = new Point(4, 80);
+            materialTabControl1.Margin = new Padding(2);
+            materialTabControl1.MouseState = MaterialSkin.MouseState.HOVER;
+            materialTabControl1.Multiline = true;
+            materialTabControl1.Name = "materialTabControl1";
+            materialTabControl1.SelectedIndex = 0;
+            materialTabControl1.Size = new Size(1488, 861);
+            materialTabControl1.TabIndex = 1;
+            materialTabControl1.SelectedIndexChanged += materialTabControl1_SelectedIndexChanged;
             // 
             // tabPage1
             // 
-            tabPage1.Location = new Point(4, 29);
+            tabPage1.Location = new Point(4, 34);
             tabPage1.Margin = new Padding(2);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(2);
-            tabPage1.Size = new Size(1183, 656);
+            tabPage1.Size = new Size(1480, 823);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Menu";
             tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
-            tabPage2.Location = new Point(4, 29);
+            tabPage2.Location = new Point(4, 34);
             tabPage2.Margin = new Padding(2);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(2);
-            tabPage2.Size = new Size(1183, 656);
+            tabPage2.Size = new Size(1480, 823);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Ofertas Laborales";
             tabPage2.UseVisualStyleBackColor = true;
             // 
             // tabPage3
             // 
-            tabPage3.Location = new Point(4, 29);
+            tabPage3.Location = new Point(4, 34);
             tabPage3.Margin = new Padding(2);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1183, 656);
+            tabPage3.Size = new Size(1480, 823);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Empresas";
             tabPage3.UseVisualStyleBackColor = true;
@@ -125,10 +132,10 @@
             tabPage4.Controls.Add(DgvPersonas);
             tabPage4.Controls.Add(materialCard2);
             tabPage4.Controls.Add(materialCard1);
-            tabPage4.Location = new Point(4, 29);
+            tabPage4.Location = new Point(4, 34);
             tabPage4.Margin = new Padding(2);
             tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(1183, 656);
+            tabPage4.Size = new Size(1480, 823);
             tabPage4.TabIndex = 3;
             tabPage4.Text = "Postulantes";
             tabPage4.UseVisualStyleBackColor = true;
@@ -138,14 +145,14 @@
             DgvPersonas.AllowUserToAddRows = false;
             DgvPersonas.AllowUserToDeleteRows = false;
             DgvPersonas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            DgvPersonas.Location = new Point(470, 11);
+            DgvPersonas.Location = new Point(588, 14);
             DgvPersonas.Margin = new Padding(2);
             DgvPersonas.MultiSelect = false;
             DgvPersonas.Name = "DgvPersonas";
             DgvPersonas.ReadOnly = true;
             DgvPersonas.RowHeadersWidth = 62;
             DgvPersonas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DgvPersonas.Size = new Size(999, 407);
+            DgvPersonas.Size = new Size(1249, 509);
             DgvPersonas.TabIndex = 11;
             // 
             // materialCard2
@@ -155,12 +162,12 @@
             materialCard2.Controls.Add(BtnRegistrar);
             materialCard2.Depth = 0;
             materialCard2.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard2.Location = new Point(665, 498);
-            materialCard2.Margin = new Padding(11);
+            materialCard2.Location = new Point(831, 622);
+            materialCard2.Margin = new Padding(14);
             materialCard2.MouseState = MaterialSkin.MouseState.HOVER;
             materialCard2.Name = "materialCard2";
-            materialCard2.Padding = new Padding(11);
-            materialCard2.Size = new Size(522, 74);
+            materialCard2.Padding = new Padding(14);
+            materialCard2.Size = new Size(652, 92);
             materialCard2.TabIndex = 10;
             // 
             // BtnActualizar
@@ -171,12 +178,12 @@
             BtnActualizar.Depth = 0;
             BtnActualizar.HighEmphasis = true;
             BtnActualizar.Icon = null;
-            BtnActualizar.Location = new Point(318, 16);
-            BtnActualizar.Margin = new Padding(3, 5, 3, 5);
+            BtnActualizar.Location = new Point(398, 20);
+            BtnActualizar.Margin = new Padding(4, 6, 4, 6);
             BtnActualizar.MouseState = MaterialSkin.MouseState.HOVER;
             BtnActualizar.Name = "BtnActualizar";
             BtnActualizar.NoAccentTextColor = Color.Empty;
-            BtnActualizar.Size = new Size(190, 43);
+            BtnActualizar.Size = new Size(238, 54);
             BtnActualizar.TabIndex = 9;
             BtnActualizar.Text = "Actualizar";
             BtnActualizar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -191,12 +198,12 @@
             BtnRegistrar.Depth = 0;
             BtnRegistrar.HighEmphasis = true;
             BtnRegistrar.Icon = null;
-            BtnRegistrar.Location = new Point(14, 16);
-            BtnRegistrar.Margin = new Padding(3, 5, 3, 5);
+            BtnRegistrar.Location = new Point(18, 20);
+            BtnRegistrar.Margin = new Padding(4, 6, 4, 6);
             BtnRegistrar.MouseState = MaterialSkin.MouseState.HOVER;
             BtnRegistrar.Name = "BtnRegistrar";
             BtnRegistrar.NoAccentTextColor = Color.Empty;
-            BtnRegistrar.Size = new Size(190, 43);
+            BtnRegistrar.Size = new Size(238, 54);
             BtnRegistrar.TabIndex = 8;
             BtnRegistrar.Text = "Registrar";
             BtnRegistrar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -221,22 +228,22 @@
             materialCard1.Controls.Add(LblNombrePersona);
             materialCard1.Depth = 0;
             materialCard1.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard1.Location = new Point(11, 11);
-            materialCard1.Margin = new Padding(11);
+            materialCard1.Location = new Point(14, 14);
+            materialCard1.Margin = new Padding(14);
             materialCard1.MouseState = MaterialSkin.MouseState.HOVER;
             materialCard1.Name = "materialCard1";
-            materialCard1.Padding = new Padding(11);
-            materialCard1.Size = new Size(423, 697);
+            materialCard1.Padding = new Padding(14);
+            materialCard1.Size = new Size(529, 871);
             materialCard1.TabIndex = 1;
             // 
             // CboxOfertas
             // 
             CboxOfertas.DropDownStyle = ComboBoxStyle.DropDownList;
             CboxOfertas.FormattingEnabled = true;
-            CboxOfertas.Location = new Point(14, 487);
+            CboxOfertas.Location = new Point(18, 609);
             CboxOfertas.Margin = new Padding(2);
             CboxOfertas.Name = "CboxOfertas";
-            CboxOfertas.Size = new Size(146, 28);
+            CboxOfertas.Size = new Size(182, 33);
             CboxOfertas.TabIndex = 11;
             // 
             // LblSelecOferta
@@ -244,7 +251,7 @@
             LblSelecOferta.AutoSize = true;
             LblSelecOferta.Depth = 0;
             LblSelecOferta.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblSelecOferta.Location = new Point(11, 463);
+            LblSelecOferta.Location = new Point(14, 579);
             LblSelecOferta.Margin = new Padding(2, 0, 2, 0);
             LblSelecOferta.MouseState = MaterialSkin.MouseState.HOVER;
             LblSelecOferta.Name = "LblSelecOferta";
@@ -255,10 +262,10 @@
             // LblDireccion
             // 
             LblDireccion.AutoSize = true;
-            LblDireccion.Location = new Point(11, 345);
+            LblDireccion.Location = new Point(14, 431);
             LblDireccion.Margin = new Padding(2, 0, 2, 0);
             LblDireccion.Name = "LblDireccion";
-            LblDireccion.Size = new Size(72, 20);
+            LblDireccion.Size = new Size(85, 25);
             LblDireccion.TabIndex = 9;
             LblDireccion.Text = "Direccion";
             // 
@@ -276,7 +283,7 @@
             TxtDireccion.HideSelection = true;
             TxtDireccion.InsertKeyMode = InsertKeyMode.Default;
             TxtDireccion.LeadingIcon = null;
-            TxtDireccion.Location = new Point(14, 390);
+            TxtDireccion.Location = new Point(18, 488);
             TxtDireccion.Margin = new Padding(2);
             TxtDireccion.Mask = "";
             TxtDireccion.MaxLength = 32767;
@@ -294,7 +301,7 @@
             TxtDireccion.SelectionLength = 0;
             TxtDireccion.SelectionStart = 0;
             TxtDireccion.ShortcutsEnabled = true;
-            TxtDireccion.Size = new Size(300, 48);
+            TxtDireccion.Size = new Size(375, 48);
             TxtDireccion.SkipLiterals = true;
             TxtDireccion.TabIndex = 8;
             TxtDireccion.TabStop = false;
@@ -318,7 +325,7 @@
             TxtCorreo.HideSelection = true;
             TxtCorreo.InsertKeyMode = InsertKeyMode.Default;
             TxtCorreo.LeadingIcon = null;
-            TxtCorreo.Location = new Point(14, 278);
+            TxtCorreo.Location = new Point(18, 348);
             TxtCorreo.Margin = new Padding(2);
             TxtCorreo.Mask = "";
             TxtCorreo.MaxLength = 32767;
@@ -336,7 +343,7 @@
             TxtCorreo.SelectionLength = 0;
             TxtCorreo.SelectionStart = 0;
             TxtCorreo.ShortcutsEnabled = true;
-            TxtCorreo.Size = new Size(300, 48);
+            TxtCorreo.Size = new Size(375, 48);
             TxtCorreo.SkipLiterals = true;
             TxtCorreo.TabIndex = 7;
             TxtCorreo.TabStop = false;
@@ -353,8 +360,8 @@
             BtnValidar.Depth = 0;
             BtnValidar.HighEmphasis = true;
             BtnValidar.Icon = null;
-            BtnValidar.Location = new Point(330, 109);
-            BtnValidar.Margin = new Padding(3, 5, 3, 5);
+            BtnValidar.Location = new Point(412, 136);
+            BtnValidar.Margin = new Padding(4, 6, 4, 6);
             BtnValidar.MouseState = MaterialSkin.MouseState.HOVER;
             BtnValidar.Name = "BtnValidar";
             BtnValidar.NoAccentTextColor = Color.Empty;
@@ -370,7 +377,7 @@
             LblCorreo.AutoSize = true;
             LblCorreo.Depth = 0;
             LblCorreo.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblCorreo.Location = new Point(11, 258);
+            LblCorreo.Location = new Point(14, 322);
             LblCorreo.Margin = new Padding(2, 0, 2, 0);
             LblCorreo.MouseState = MaterialSkin.MouseState.HOVER;
             LblCorreo.Name = "LblCorreo";
@@ -392,7 +399,7 @@
             TxtTelefono.HideSelection = true;
             TxtTelefono.InsertKeyMode = InsertKeyMode.Default;
             TxtTelefono.LeadingIcon = null;
-            TxtTelefono.Location = new Point(14, 194);
+            TxtTelefono.Location = new Point(18, 242);
             TxtTelefono.Margin = new Padding(2);
             TxtTelefono.Mask = "";
             TxtTelefono.MaxLength = 32767;
@@ -410,7 +417,7 @@
             TxtTelefono.SelectionLength = 0;
             TxtTelefono.SelectionStart = 0;
             TxtTelefono.ShortcutsEnabled = true;
-            TxtTelefono.Size = new Size(300, 48);
+            TxtTelefono.Size = new Size(375, 48);
             TxtTelefono.SkipLiterals = true;
             TxtTelefono.TabIndex = 5;
             TxtTelefono.TabStop = false;
@@ -425,7 +432,7 @@
             LblTelefono.AutoSize = true;
             LblTelefono.Depth = 0;
             LblTelefono.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblTelefono.Location = new Point(11, 174);
+            LblTelefono.Location = new Point(14, 218);
             LblTelefono.Margin = new Padding(2, 0, 2, 0);
             LblTelefono.MouseState = MaterialSkin.MouseState.HOVER;
             LblTelefono.Name = "LblTelefono";
@@ -447,7 +454,7 @@
             TxtDni.HideSelection = true;
             TxtDni.InsertKeyMode = InsertKeyMode.Default;
             TxtDni.LeadingIcon = null;
-            TxtDni.Location = new Point(14, 112);
+            TxtDni.Location = new Point(18, 140);
             TxtDni.Margin = new Padding(2);
             TxtDni.Mask = "";
             TxtDni.MaxLength = 32767;
@@ -465,7 +472,7 @@
             TxtDni.SelectionLength = 0;
             TxtDni.SelectionStart = 0;
             TxtDni.ShortcutsEnabled = true;
-            TxtDni.Size = new Size(300, 48);
+            TxtDni.Size = new Size(375, 48);
             TxtDni.SkipLiterals = true;
             TxtDni.TabIndex = 3;
             TxtDni.TabStop = false;
@@ -480,7 +487,7 @@
             LblDni.AutoSize = true;
             LblDni.Depth = 0;
             LblDni.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblDni.Location = new Point(11, 91);
+            LblDni.Location = new Point(14, 114);
             LblDni.Margin = new Padding(2, 0, 2, 0);
             LblDni.MouseState = MaterialSkin.MouseState.HOVER;
             LblDni.Name = "LblDni";
@@ -502,7 +509,7 @@
             TxtNombre.HideSelection = true;
             TxtNombre.InsertKeyMode = InsertKeyMode.Default;
             TxtNombre.LeadingIcon = null;
-            TxtNombre.Location = new Point(14, 36);
+            TxtNombre.Location = new Point(18, 45);
             TxtNombre.Margin = new Padding(2);
             TxtNombre.Mask = "";
             TxtNombre.MaxLength = 32767;
@@ -520,7 +527,7 @@
             TxtNombre.SelectionLength = 0;
             TxtNombre.SelectionStart = 0;
             TxtNombre.ShortcutsEnabled = true;
-            TxtNombre.Size = new Size(300, 48);
+            TxtNombre.Size = new Size(375, 48);
             TxtNombre.SkipLiterals = true;
             TxtNombre.TabIndex = 1;
             TxtNombre.TabStop = false;
@@ -535,7 +542,7 @@
             LblNombrePersona.AutoSize = true;
             LblNombrePersona.Depth = 0;
             LblNombrePersona.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblNombrePersona.Location = new Point(11, 8);
+            LblNombrePersona.Location = new Point(14, 10);
             LblNombrePersona.Margin = new Padding(2, 0, 2, 0);
             LblNombrePersona.MouseState = MaterialSkin.MouseState.HOVER;
             LblNombrePersona.Name = "LblNombrePersona";
@@ -549,12 +556,45 @@
             tabPage5.Controls.Add(txtDetalleMensaje);
             tabPage5.Controls.Add(dataGridView1);
             tabPage5.Controls.Add(materialCard3);
-            tabPage5.Location = new Point(4, 29);
+            tabPage5.Location = new Point(4, 34);
+            tabPage5.Margin = new Padding(4);
             tabPage5.Name = "tabPage5";
-            tabPage5.Size = new Size(1183, 656);
+            tabPage5.Size = new Size(1480, 823);
             tabPage5.TabIndex = 4;
-            tabPage5.Text = "Historial Mensajes";
+            tabPage5.Text = "Asignar Oferta";
             tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // lblDetalle
+            // 
+            lblDetalle.AutoSize = true;
+            lblDetalle.Font = new Font("Segoe UI", 10F);
+            lblDetalle.Location = new Point(394, 434);
+            lblDetalle.Margin = new Padding(4, 0, 4, 0);
+            lblDetalle.Name = "lblDetalle";
+            lblDetalle.Size = new Size(303, 28);
+            lblDetalle.TabIndex = 8;
+            lblDetalle.Text = "Detalle del mensaje seleccionado:";
+            // 
+            // txtDetalleMensaje
+            // 
+            txtDetalleMensaje.Location = new Point(394, 476);
+            txtDetalleMensaje.Margin = new Padding(4, 5, 4, 5);
+            txtDetalleMensaje.Multiline = true;
+            txtDetalleMensaje.Name = "txtDetalleMensaje";
+            txtDetalleMensaje.ReadOnly = true;
+            txtDetalleMensaje.ScrollBars = ScrollBars.Vertical;
+            txtDetalleMensaje.Size = new Size(1028, 302);
+            txtDetalleMensaje.TabIndex = 7;
+            // 
+            // dataGridView1
+            // 
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Location = new Point(394, 11);
+            dataGridView1.Margin = new Padding(4);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.RowHeadersWidth = 51;
+            dataGridView1.Size = new Size(1029, 392);
+            dataGridView1.TabIndex = 1;
             // 
             // materialCard3
             // 
@@ -565,48 +605,13 @@
             materialCard3.Controls.Add(label1);
             materialCard3.Depth = 0;
             materialCard3.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard3.Location = new Point(1, 4);
-            materialCard3.Margin = new Padding(14);
+            materialCard3.Location = new Point(1, 5);
+            materialCard3.Margin = new Padding(18);
             materialCard3.MouseState = MaterialSkin.MouseState.HOVER;
             materialCard3.Name = "materialCard3";
-            materialCard3.Padding = new Padding(14);
-            materialCard3.Size = new Size(277, 646);
+            materialCard3.Padding = new Padding(18);
+            materialCard3.Size = new Size(346, 808);
             materialCard3.TabIndex = 0;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(28, 14);
-            label1.Name = "label1";
-            label1.Size = new Size(210, 20);
-            label1.TabIndex = 1;
-            label1.Text = "Buscar Por Nombre, ID, Correo";
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(17, 37);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(239, 27);
-            textBox1.TabIndex = 1;
-            // 
-            // materialButton1
-            // 
-            materialButton1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            materialButton1.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            materialButton1.Depth = 0;
-            materialButton1.HighEmphasis = true;
-            materialButton1.Icon = null;
-            materialButton1.Location = new Point(43, 73);
-            materialButton1.Margin = new Padding(4, 6, 4, 6);
-            materialButton1.MouseState = MaterialSkin.MouseState.HOVER;
-            materialButton1.Name = "materialButton1";
-            materialButton1.NoAccentTextColor = Color.Empty;
-            materialButton1.Size = new Size(77, 36);
-            materialButton1.TabIndex = 1;
-            materialButton1.Text = "Buscar";
-            materialButton1.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            materialButton1.UseAccentColor = false;
-            materialButton1.UseVisualStyleBackColor = true;
             // 
             // materialButton2
             // 
@@ -615,8 +620,8 @@
             materialButton2.Depth = 0;
             materialButton2.HighEmphasis = true;
             materialButton2.Icon = null;
-            materialButton2.Location = new Point(148, 73);
-            materialButton2.Margin = new Padding(4, 6, 4, 6);
+            materialButton2.Location = new Point(185, 91);
+            materialButton2.Margin = new Padding(5, 8, 5, 8);
             materialButton2.MouseState = MaterialSkin.MouseState.HOVER;
             materialButton2.Name = "materialButton2";
             materialButton2.NoAccentTextColor = Color.Empty;
@@ -627,46 +632,84 @@
             materialButton2.UseAccentColor = false;
             materialButton2.UseVisualStyleBackColor = true;
             // 
-            // dataGridView1
+            // textBox1
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(315, 9);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(823, 314);
-            dataGridView1.TabIndex = 1;
+            textBox1.Location = new Point(21, 46);
+            textBox1.Margin = new Padding(4);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(298, 31);
+            textBox1.TabIndex = 1;
             // 
-            // lblDetalle
+            // materialButton1
             // 
-            lblDetalle.AutoSize = true;
-            lblDetalle.Font = new Font("Segoe UI", 10F);
-            lblDetalle.Location = new Point(315, 347);
-            lblDetalle.Name = "lblDetalle";
-            lblDetalle.Size = new Size(266, 23);
-            lblDetalle.TabIndex = 8;
-            lblDetalle.Text = "Detalle del mensaje seleccionado:";
+            materialButton1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            materialButton1.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            materialButton1.Depth = 0;
+            materialButton1.HighEmphasis = true;
+            materialButton1.Icon = null;
+            materialButton1.Location = new Point(54, 91);
+            materialButton1.Margin = new Padding(5, 8, 5, 8);
+            materialButton1.MouseState = MaterialSkin.MouseState.HOVER;
+            materialButton1.Name = "materialButton1";
+            materialButton1.NoAccentTextColor = Color.Empty;
+            materialButton1.Size = new Size(77, 36);
+            materialButton1.TabIndex = 1;
+            materialButton1.Text = "Buscar";
+            materialButton1.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            materialButton1.UseAccentColor = false;
+            materialButton1.UseVisualStyleBackColor = true;
             // 
-            // txtDetalleMensaje
+            // label1
             // 
-            txtDetalleMensaje.Location = new Point(315, 381);
-            txtDetalleMensaje.Margin = new Padding(3, 4, 3, 4);
-            txtDetalleMensaje.Multiline = true;
-            txtDetalleMensaje.Name = "txtDetalleMensaje";
-            txtDetalleMensaje.ReadOnly = true;
-            txtDetalleMensaje.ScrollBars = ScrollBars.Vertical;
-            txtDetalleMensaje.Size = new Size(823, 242);
-            txtDetalleMensaje.TabIndex = 7;
+            label1.AutoSize = true;
+            label1.Location = new Point(35, 18);
+            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(255, 25);
+            label1.TabIndex = 1;
+            label1.Text = "Buscar Por Nombre, ID, Correo";
+            // 
+            // tabPage6
+            // 
+            tabPage6.Location = new Point(4, 34);
+            tabPage6.Name = "tabPage6";
+            tabPage6.Size = new Size(1480, 823);
+            tabPage6.TabIndex = 5;
+            tabPage6.Text = "Historial Correos";
+            tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // tabPage7
+            // 
+            tabPage7.Location = new Point(4, 34);
+            tabPage7.Name = "tabPage7";
+            tabPage7.Size = new Size(1480, 823);
+            tabPage7.TabIndex = 6;
+            tabPage7.Text = "Carnet";
+            tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // tabPage8
+            // 
+            tabPage8.Location = new Point(4, 34);
+            tabPage8.Name = "tabPage8";
+            tabPage8.Size = new Size(1480, 823);
+            tabPage8.TabIndex = 7;
+            tabPage8.Text = "Registro Interno";
+            tabPage8.UseVisualStyleBackColor = true;
             // 
             // cpHistorialMensajes
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1197, 756);
-            Controls.Add(materialTabControl5);
+            ClientSize = new Size(1496, 945);
+            Controls.Add(materialTabControl1);
+            DrawerTabControl = materialTabControl1;
+            Margin = new Padding(4);
             Name = "cpHistorialMensajes";
+            Padding = new Padding(4, 80, 4, 4);
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Historial Mensajes";
             Load += cpHistorialMensajes_Load;
-            materialTabControl5.ResumeLayout(false);
+            materialTabControl1.ResumeLayout(false);
             tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)DgvPersonas).EndInit();
             materialCard2.ResumeLayout(false);
@@ -674,15 +717,15 @@
             materialCard1.PerformLayout();
             tabPage5.ResumeLayout(false);
             tabPage5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             materialCard3.ResumeLayout(false);
             materialCard3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private MaterialSkin.Controls.MaterialTabControl materialTabControl5;
+        private MaterialSkin.Controls.MaterialTabControl materialTabControl1;
         private TabPage tabPage1;
         private TabPage tabPage2;
         private TabPage tabPage3;
@@ -714,5 +757,8 @@
         private Label lblDetalle;
         private TextBox txtDetalleMensaje;
         private DataGridView dataGridView1;
+        private TabPage tabPage6;
+        private TabPage tabPage7;
+        private TabPage tabPage8;
     }
 }
