@@ -26,8 +26,14 @@ namespace CpPresentacion
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 2;
 
-            // Mejora visual: habilitar doble búfer para reducir parpadeos
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
+            /* ---- Pestaña activa de “Empresas” (0-Menú, 1-Ofertas, 2-Empresas …) ---- */
+            materialTabControl1.SelectedIndex = 2;
+
+            /* ---- Mejoras visuales / validaciones originales ---- */
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer |
+                          ControlStyles.AllPaintingInWmPaint |
+                          ControlStyles.UserPaint, true);
             this.UpdateStyles();
 
             // Asociar evento KeyPress para bloquear letras y espacios en los campos numéricos
@@ -39,53 +45,48 @@ namespace CpPresentacion
         }
 
 
+        //TODO: navegacion
+        /* ══════════════════════  N A V E G A C I Ó N  ═════════════════════ */
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int selectedIndex = materialTabControl1.SelectedIndex;
-
-            if (selectedIndex == 1)  // Si seleccionamos la pestaña 1 (cpOfertas)
-            {
-                // Verificar si el formulario ya está abierto
-                if (Application.OpenForms["cpOfertas"] == null)
-                {
-                    var f = new cpOfertas();  // Crear nueva instancia de cpOfertas sin necesidad de rol
-                    f.Show();
-                    this.Hide();  // Ocultar el formulario actual
-                    await Task.Delay(300);
-                }
-                else
-                {
-                    MessageBox.Show("Ya está abierto el formulario de Ofertas", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-            else if (selectedIndex == 2)  // Si seleccionamos la pestaña 2 (cpEmpresa)
-            {
-                // Verificar si el formulario ya está abierto
-                if (Application.OpenForms["cpEmpresa"] == null)
-                {
-                    var f = new cpEmpresa();  // Crear nueva instancia de cpEmpresa sin necesidad de rol
-                    f.Show();
-                    this.Hide();  // Ocultar el formulario actual
-                    await Task.Delay(300);
-                }
-                else
-                {
-                    MessageBox.Show("Ya está abierto el formulario de Empresas", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-            else if (selectedIndex == 3)  // Si seleccionamos la pestaña 3 (cpPostulante)
-            {
-                // Verificar si el formulario ya está abierto
-                if (Application.OpenForms["cpPostulante"] == null)
-                {
-                    var f = new cpPostulante();  // Crear nueva instancia de cpPostulante sin necesidad de rol
-                    f.Show();
-                    this.Hide();  // Ocultar el formulario actual
-                    await Task.Delay(300);
-                }
-            }
+            await NavegarA(materialTabControl1.SelectedIndex);
         }
+
+        private async Task NavegarA(int idx)
+        {
+            // A) ¿A qué ventana ir?
+            Form destino = idx switch
+            {
+                0 => Application.OpenForms.OfType<Menu>()
+                                          .FirstOrDefault() ?? new Menu(),
+
+                // Evitamos duplicar instancias si ya estamos ahí
+                1 => this is cpOfertas ? this : new cpOfertas(),
+                2 => this is cpEmpresa ? this : new cpEmpresa(),
+                3 => this is cpPostulante ? this : new cpPostulante(),
+                4 => this is cpAsignarEmpleo ? this : new cpAsignarEmpleo(),
+                5 => this is cpHistorialMensajes ? this : new cpHistorialMensajes(),
+                6 => this is Carnet ? this : new Carnet(),
+                7 => this is cpRegistro ? this : new cpRegistro(),
+                _ => null
+            };
+
+            // B) Si ya estamos en el destino, no hacemos nada
+            if (destino == null || destino == this) return;
+
+            // C) Mostrar el nuevo formulario
+            destino.Show();
+
+            // D) Menu nunca se cierra; los demás se liberan
+            if (this is Menu)
+                this.Hide();     // se mantiene en memoria
+            else
+                this.Dispose();  // libera recursos
+
+            await Task.Delay(180); // Pausa opcional, transición suave
+        }
+
 
 
 

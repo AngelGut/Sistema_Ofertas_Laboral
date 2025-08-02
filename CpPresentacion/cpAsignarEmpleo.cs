@@ -12,16 +12,17 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CpPresentacion
 {
-    public partial class cpRegistro : MaterialForm
+    public partial class cpAsignarEmpleo : MaterialForm // <<== ¡Cambiado a MaterialForm!
     {
-        public cpRegistro()
+        public cpAsignarEmpleo()
         {
             InitializeComponent();
 
-            materialTabControl1.SelectedIndex = 7;
-
+            materialTabControl1.SelectedIndex = 4;
         }
 
+
+        /* Conecta este handler en el diseñador (⚡ SelectedIndexChanged) */
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             await NavegarA(materialTabControl1.SelectedIndex);
@@ -61,6 +62,6 @@ namespace CpPresentacion
             await Task.Delay(180); // Pausa opcional, transición suave
         }
 
-
+        /* ── Aquí sigue tu lógica propia: botones, validaciones, etc. ── */
     }
 }

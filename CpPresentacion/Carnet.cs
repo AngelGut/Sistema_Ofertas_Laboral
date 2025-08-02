@@ -1,5 +1,4 @@
-﻿using MaterialSkin.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,20 +7,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MaterialSkin.Controls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CpPresentacion
 {
-    public partial class cpRegistro : MaterialForm
+    public partial class Carnet : MaterialForm
     {
-        public cpRegistro()
+        public Carnet()
         {
             InitializeComponent();
 
-            materialTabControl1.SelectedIndex = 7;
-
+            materialTabControl1.SelectedIndex = 6;
         }
 
+        /* Conecta este handler en el diseñador (⚡ SelectedIndexChanged) */
+        /* Conecta este handler en el diseñador (⚡ SelectedIndexChanged) */
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             await NavegarA(materialTabControl1.SelectedIndex);
@@ -61,6 +62,6 @@ namespace CpPresentacion
             await Task.Delay(180); // Pausa opcional, transición suave
         }
 
-
+        /* ── Aquí sigue tu lógica propia: botones, validaciones, etc. ── */
     }
 }

@@ -38,47 +38,43 @@ namespace CpPresentacion
             
         }
 
-
-
-
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Obtener el índice de la pestaña seleccionada
-            int selectedIndex = materialTabControl1.SelectedIndex;
+            await NavegarA(materialTabControl1.SelectedIndex);
+        }
 
-            // Si se selecciona la pestaña 0 (Menu) y no estamos ya en Menu
-            if (selectedIndex == 0 && !(this is Menu))
+        private async Task NavegarA(int idx)
+        {
+            // A) ¿A qué ventana ir?
+            Form destino = idx switch
             {
-                var f = new Menu();  // Crear una nueva instancia del formulario Menu sin rol
-                f.Show();            // Mostrar el formulario Menu
+                0 => Application.OpenForms.OfType<Menu>()
+                                          .FirstOrDefault() ?? new Menu(),
 
-                await Task.Delay(300);  // Espera breve para suavizar
-                this.Dispose();         // Liberar el formulario actual
-            }
-            // Si se selecciona la pestaña 1 (cpOfertas) y no estamos ya en cpOfertas
-            else if (selectedIndex == 1 && !(this is cpOfertas))
-            {
-                var f = new cpOfertas();  // Crear nueva instancia del formulario cpOfertas sin rol
-                f.Show();                  // Mostrar el formulario
-                await Task.Delay(300);     // Espera para transición
-                this.Dispose();            // Liberar el formulario actual
-            }
-            // Si se selecciona la pestaña 2 (cpEmpresa) y no estamos ya en cpEmpresa
-            else if (selectedIndex == 2 && !(this is cpEmpresa))
-            {
-                var f = new cpEmpresa();  // Crear nueva instancia del formulario cpEmpresa sin rol
-                f.Show();                 // Mostrar el formulario
-                await Task.Delay(300);    // Espera breve
-                this.Dispose();           // Liberar el formulario actual
-            }
-            // Si se selecciona la pestaña 3 (cpPostulante) y no estamos ya en cpPostulante
-            else if (selectedIndex == 3 && !(this is cpPostulante))
-            {
-                var f = new cpPostulante();  // Crear nueva instancia del formulario cpPostulante sin rol
-                f.Show();                    // Mostrar el formulario
-                await Task.Delay(300);       // Espera breve
-                this.Dispose();              // Liberar el formulario actual
-            }
+                // Evitamos duplicar instancias si ya estamos ahí
+                1 => this is cpOfertas ? this : new cpOfertas(),
+                2 => this is cpEmpresa ? this : new cpEmpresa(),
+                3 => this is cpPostulante ? this : new cpPostulante(),
+                4 => this is cpAsignarEmpleo ? this : new cpAsignarEmpleo(),
+                5 => this is cpHistorialMensajes ? this : new cpHistorialMensajes(),
+                6 => this is Carnet ? this : new Carnet(),
+                7 => this is cpRegistro ? this : new cpRegistro(),
+                _ => null
+            };
+
+            // B) Si ya estamos en el destino, no hacemos nada
+            if (destino == null || destino == this) return;
+
+            // C) Mostrar el nuevo formulario
+            destino.Show();
+
+            // D) Menu nunca se cierra; los demás se liberan
+            if (this is Menu)
+                this.Hide();     // se mantiene en memoria
+            else
+                this.Dispose();  // libera recursos
+
+            await Task.Delay(180); // Pausa opcional, transición suave
         }
 
 
