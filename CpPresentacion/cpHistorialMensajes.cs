@@ -1,5 +1,4 @@
-﻿using MaterialSkin.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,17 +7,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MaterialSkin.Controls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CpPresentacion
 {
-    public partial class cpRegistro : MaterialForm
+    public partial class cpHistorialMensajes : MaterialForm
     {
-        public cpRegistro()
+        public cpHistorialMensajes()
         {
             InitializeComponent();
 
-            materialTabControl1.SelectedIndex = 7;
+            materialTabControl1.SelectedIndex = 5;
+        }
+
+        private void cpHistorialMensajes_Load(object sender, EventArgs e)
+        {
 
         }
 
@@ -61,6 +65,6 @@ namespace CpPresentacion
             await Task.Delay(180); // Pausa opcional, transición suave
         }
 
-
     }
 }
+

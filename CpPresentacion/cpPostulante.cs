@@ -17,10 +17,11 @@ namespace CpPresentacion
 {
     public partial class cpPostulante : MaterialForm
     {
+        
         public cpPostulante()
         {
             InitializeComponent();
-
+           
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 3;
 
@@ -34,48 +35,48 @@ namespace CpPresentacion
 
             CargarPersonas(); // <-- aquí lo puedes invocar también
             CargarOfertas(); // Llama al método que llenará el ComboBox con las ofertas
-
+            
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Obtener el índice de la pestaña seleccionada
-            int selectedIndex = materialTabControl1.SelectedIndex;
-
-            // Si se selecciona la pestaña 0 (Menu) y no estamos ya en Menu
-            if (selectedIndex == 0 && !(this is Menu))
-            {
-                var f = new Menu();   // Crear una nueva instancia del formulario Menu
-                f.Show();             // Mostrar el formulario Menu
-
-                await Task.Delay(300); // Espera breve para suavizar
-                this.Dispose();        // Liberar el formulario secundario actual
-
-            }
-
-
-            // Si se selecciona la pestaña 1 (cpOfertas) y no estamos ya en cpOfertas
-            else if (selectedIndex == 1 && !(this is cpOfertas))
-            {
-                var f = new cpOfertas();  // Crear nueva instancia del formulario cpOfertas
-                f.Show();                 // Mostrar el formulario
-
-                await Task.Delay(300);    // Espera para transición
-                this.Dispose();           // Liberar cpPostulante
-            }
-
-            // Si se selecciona la pestaña 2 (cpEmpresa) y no estamos ya en cpEmpresa
-            else if (selectedIndex == 2 && !(this is cpEmpresa))
-            {
-                var f = new cpEmpresa();  // Crear nueva instancia del formulario cpEmpresa
-                f.Show();                 // Mostrar el formulario
-
-                await Task.Delay(300);    // Espera breve
-                this.Dispose();           // Liberar cpPostulante
-            }
-
-            // Si se selecciona la pestaña 3 (cpPostulante), no se hace nada porque ya estamos aquí
+            await NavegarA(materialTabControl1.SelectedIndex);
         }
+
+        private async Task NavegarA(int idx)
+        {
+            // A) ¿A qué ventana ir?
+            Form destino = idx switch
+            {
+                0 => Application.OpenForms.OfType<Menu>()
+                                          .FirstOrDefault() ?? new Menu(),
+
+                // Evitamos duplicar instancias si ya estamos ahí
+                1 => this is cpOfertas ? this : new cpOfertas(),
+                2 => this is cpEmpresa ? this : new cpEmpresa(),
+                3 => this is cpPostulante ? this : new cpPostulante(),
+                4 => this is cpAsignarEmpleo ? this : new cpAsignarEmpleo(),
+                5 => this is cpHistorialMensajes ? this : new cpHistorialMensajes(),
+                6 => this is Carnet ? this : new Carnet(),
+                7 => this is cpRegistro ? this : new cpRegistro(),
+                _ => null
+            };
+
+            // B) Si ya estamos en el destino, no hacemos nada
+            if (destino == null || destino == this) return;
+
+            // C) Mostrar el nuevo formulario
+            destino.Show();
+
+            // D) Menu nunca se cierra; los demás se liberan
+            if (this is Menu)
+                this.Hide();     // se mantiene en memoria
+            else
+                this.Dispose();  // libera recursos
+
+            await Task.Delay(180); // Pausa opcional, transición suave
+        }
+
 
         private void cpPostulante_Load(object sender, EventArgs e)
         {
@@ -179,12 +180,15 @@ namespace CpPresentacion
 
             try
             {
+                // Llamada al método que verifica si el DNI ya está registrado en la base de datos
                 bool existe = CpNegocio.servicios.MetodosPersona.PersonaYaExiste(dniTexto);
 
+                // Si el DNI ya está registrado, mostramos un mensaje de advertencia
                 if (existe)
                 {
                     MessageBox.Show("Este DNI ya está registrado.", "DNI Ocupado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
+                // Si el DNI no está registrado, mostramos un mensaje de éxito
                 else
                 {
                     MessageBox.Show("El DNI está disponible.", "DNI Disponible", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -192,9 +196,11 @@ namespace CpPresentacion
             }
             catch (Exception ex)
             {
+                // Si ocurre un error en la consulta, mostramos el mensaje de error
                 MessageBox.Show("Error al verificar el DNI: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         // Permite solo números y teclas de control (ej: backspace)
         private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
