@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaterialSkin.Controls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,40 +8,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MaterialSkin.Controls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CpPresentacion
 {
-    public partial class Menu : MaterialForm // <<== ¡Cambiado a MaterialForm!
+    public partial class cpRegistro : MaterialForm
     {
-        private string rolUsuario;
-        public Menu()
+        public cpRegistro()
         {
             InitializeComponent();
-            
 
-            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Bloquea redimensionamiento
-
-            // Establece el tab activo que corresponde a este formulario
-            materialTabControl1.SelectedIndex = 0;
-
-            // Mejora visual: habilitar doble búfer para reducir parpadeos
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
-            this.UpdateStyles();
-            
-           
-        }
-
- 
-
-        private void tabPage3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tabPage1_Click(object sender, EventArgs e)
-        {
+            materialTabControl1.SelectedIndex = 7;
 
         }
 
@@ -82,15 +60,7 @@ namespace CpPresentacion
 
             await Task.Delay(180); // Pausa opcional, transición suave
         }
-        private void BtnSalir_Click(object sender, EventArgs e)
-        {
-            var confirm = MessageBox.Show("¿Estás seguro de que quieres salir?", "Confirmar salida",
-                              MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (confirm == DialogResult.Yes)
-            {
 
-                Application.Exit();
-            }
-        }
+
     }
 }

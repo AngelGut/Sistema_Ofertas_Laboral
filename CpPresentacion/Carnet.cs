@@ -12,38 +12,17 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CpPresentacion
 {
-    public partial class Menu : MaterialForm // <<== ¡Cambiado a MaterialForm!
+    public partial class Carnet : MaterialForm
     {
-        private string rolUsuario;
-        public Menu()
+        public Carnet()
         {
             InitializeComponent();
-            
 
-            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Bloquea redimensionamiento
-
-            // Establece el tab activo que corresponde a este formulario
-            materialTabControl1.SelectedIndex = 0;
-
-            // Mejora visual: habilitar doble búfer para reducir parpadeos
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
-            this.UpdateStyles();
-            
-           
+            materialTabControl1.SelectedIndex = 6;
         }
 
- 
-
-        private void tabPage3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tabPage1_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        /* Conecta este handler en el diseñador (⚡ SelectedIndexChanged) */
+        /* Conecta este handler en el diseñador (⚡ SelectedIndexChanged) */
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             await NavegarA(materialTabControl1.SelectedIndex);
@@ -82,15 +61,7 @@ namespace CpPresentacion
 
             await Task.Delay(180); // Pausa opcional, transición suave
         }
-        private void BtnSalir_Click(object sender, EventArgs e)
-        {
-            var confirm = MessageBox.Show("¿Estás seguro de que quieres salir?", "Confirmar salida",
-                              MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (confirm == DialogResult.Yes)
-            {
 
-                Application.Exit();
-            }
-        }
+        /* ── Aquí sigue tu lógica propia: botones, validaciones, etc. ── */
     }
 }
