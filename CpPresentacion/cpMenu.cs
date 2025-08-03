@@ -92,16 +92,5 @@ namespace CpPresentacion
                 Application.Exit();
             }
         }
-
-        private void BtnRegistrar_Click(object sender, EventArgs e)
-        {
-            RegistrarUsuarios registrarForm = new RegistrarUsuarios();
-
-            // Mostrar el formulario de registro
-            registrarForm.Show();
-
-            // Si quieres ocultar el formulario actual (Menu) mientras está abierto el formulario de registro
-            this.Hide();
-        }
     }
 }
