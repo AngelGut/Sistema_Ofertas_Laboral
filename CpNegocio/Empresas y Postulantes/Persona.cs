@@ -42,7 +42,7 @@ namespace CpNegocio.Entidades
         public int Id { get; set; }          // ID único generado por la BD
         public string Dni { get; set; }
 
-        public int OfertaId { get; set; }
+        public int? OfertaId { get; set; }
 
 
 
