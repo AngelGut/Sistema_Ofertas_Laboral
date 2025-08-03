@@ -77,21 +77,23 @@
             materialTabControl1.Controls.Add(tabPage8);
             materialTabControl1.Depth = 0;
             materialTabControl1.Dock = DockStyle.Fill;
-            materialTabControl1.Location = new Point(3, 64);
+            materialTabControl1.Location = new Point(2, 51);
+            materialTabControl1.Margin = new Padding(2, 2, 2, 2);
             materialTabControl1.MouseState = MaterialSkin.MouseState.HOVER;
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1894, 1013);
+            materialTabControl1.Size = new Size(1516, 811);
             materialTabControl1.TabIndex = 0;
             materialTabControl1.SelectedIndexChanged += materialTabControl1_SelectedIndexChanged;
             // 
             // tabPage1
             // 
-            tabPage1.Location = new Point(4, 34);
+            tabPage1.Location = new Point(4, 29);
+            tabPage1.Margin = new Padding(2, 2, 2, 2);
             tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1886, 975);
+            tabPage1.Padding = new Padding(2, 2, 2, 2);
+            tabPage1.Size = new Size(1508, 778);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Menu";
             tabPage1.UseVisualStyleBackColor = true;
@@ -101,10 +103,11 @@
             tabPage2.Controls.Add(materialCard3);
             tabPage2.Controls.Add(materialCard4);
             tabPage2.Controls.Add(DGridOferta);
-            tabPage2.Location = new Point(4, 34);
+            tabPage2.Location = new Point(4, 29);
+            tabPage2.Margin = new Padding(2, 2, 2, 2);
             tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1886, 975);
+            tabPage2.Padding = new Padding(2, 2, 2, 2);
+            tabPage2.Size = new Size(1507, 777);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Ofertas Laborales";
             tabPage2.UseVisualStyleBackColor = true;
@@ -119,12 +122,12 @@
             materialCard3.Controls.Add(BtnRegistrar);
             materialCard3.Depth = 0;
             materialCard3.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard3.Location = new Point(588, 629);
-            materialCard3.Margin = new Padding(14);
+            materialCard3.Location = new Point(470, 503);
+            materialCard3.Margin = new Padding(11, 11, 11, 11);
             materialCard3.MouseState = MaterialSkin.MouseState.HOVER;
             materialCard3.Name = "materialCard3";
-            materialCard3.Padding = new Padding(14);
-            materialCard3.Size = new Size(1226, 171);
+            materialCard3.Padding = new Padding(11, 11, 11, 11);
+            materialCard3.Size = new Size(981, 137);
             materialCard3.TabIndex = 5;
             // 
             // BtnOcupada
@@ -135,12 +138,12 @@
             BtnOcupada.Depth = 0;
             BtnOcupada.HighEmphasis = true;
             BtnOcupada.Icon = null;
-            BtnOcupada.Location = new Point(933, 58);
-            BtnOcupada.Margin = new Padding(4, 6, 4, 6);
+            BtnOcupada.Location = new Point(746, 46);
+            BtnOcupada.Margin = new Padding(3, 5, 3, 5);
             BtnOcupada.MouseState = MaterialSkin.MouseState.HOVER;
             BtnOcupada.Name = "BtnOcupada";
             BtnOcupada.NoAccentTextColor = Color.Empty;
-            BtnOcupada.Size = new Size(237, 54);
+            BtnOcupada.Size = new Size(190, 43);
             BtnOcupada.TabIndex = 3;
             BtnOcupada.Text = "Marcar como Ocupada";
             BtnOcupada.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -156,12 +159,12 @@
             BtnEliminar.Depth = 0;
             BtnEliminar.HighEmphasis = true;
             BtnEliminar.Icon = null;
-            BtnEliminar.Location = new Point(639, 58);
-            BtnEliminar.Margin = new Padding(4, 6, 4, 6);
+            BtnEliminar.Location = new Point(511, 46);
+            BtnEliminar.Margin = new Padding(3, 5, 3, 5);
             BtnEliminar.MouseState = MaterialSkin.MouseState.HOVER;
             BtnEliminar.Name = "BtnEliminar";
             BtnEliminar.NoAccentTextColor = Color.Empty;
-            BtnEliminar.Size = new Size(237, 54);
+            BtnEliminar.Size = new Size(190, 43);
             BtnEliminar.TabIndex = 2;
             BtnEliminar.Text = "Eliminar";
             BtnEliminar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -177,12 +180,12 @@
             BtnMostrar.Depth = 0;
             BtnMostrar.HighEmphasis = true;
             BtnMostrar.Icon = null;
-            BtnMostrar.Location = new Point(323, 58);
-            BtnMostrar.Margin = new Padding(4, 6, 4, 6);
+            BtnMostrar.Location = new Point(258, 46);
+            BtnMostrar.Margin = new Padding(3, 5, 3, 5);
             BtnMostrar.MouseState = MaterialSkin.MouseState.HOVER;
             BtnMostrar.Name = "BtnMostrar";
             BtnMostrar.NoAccentTextColor = Color.Empty;
-            BtnMostrar.Size = new Size(237, 54);
+            BtnMostrar.Size = new Size(190, 43);
             BtnMostrar.TabIndex = 1;
             BtnMostrar.Text = "Mostrar";
             BtnMostrar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -198,12 +201,12 @@
             BtnRegistrar.Depth = 0;
             BtnRegistrar.HighEmphasis = true;
             BtnRegistrar.Icon = null;
-            BtnRegistrar.Location = new Point(18, 58);
-            BtnRegistrar.Margin = new Padding(4, 6, 4, 6);
+            BtnRegistrar.Location = new Point(14, 46);
+            BtnRegistrar.Margin = new Padding(3, 5, 3, 5);
             BtnRegistrar.MouseState = MaterialSkin.MouseState.HOVER;
             BtnRegistrar.Name = "BtnRegistrar";
             BtnRegistrar.NoAccentTextColor = Color.Empty;
-            BtnRegistrar.Size = new Size(237, 54);
+            BtnRegistrar.Size = new Size(190, 43);
             BtnRegistrar.TabIndex = 0;
             BtnRegistrar.Text = "Registrar";
             BtnRegistrar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -230,21 +233,22 @@
             materialCard4.Controls.Add(LblNombreCompania);
             materialCard4.Depth = 0;
             materialCard4.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard4.Location = new Point(25, 27);
-            materialCard4.Margin = new Padding(14);
+            materialCard4.Location = new Point(20, 22);
+            materialCard4.Margin = new Padding(11, 11, 11, 11);
             materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
             materialCard4.Name = "materialCard4";
-            materialCard4.Padding = new Padding(14);
-            materialCard4.Size = new Size(420, 921);
+            materialCard4.Padding = new Padding(11, 11, 11, 11);
+            materialCard4.Size = new Size(336, 737);
             materialCard4.TabIndex = 4;
             // 
             // CboxEmpresas
             // 
             CboxEmpresas.DropDownStyle = ComboBoxStyle.DropDownList;
             CboxEmpresas.FormattingEnabled = true;
-            CboxEmpresas.Location = new Point(17, 105);
+            CboxEmpresas.Location = new Point(14, 84);
+            CboxEmpresas.Margin = new Padding(2, 2, 2, 2);
             CboxEmpresas.Name = "CboxEmpresas";
-            CboxEmpresas.Size = new Size(182, 33);
+            CboxEmpresas.Size = new Size(146, 28);
             CboxEmpresas.TabIndex = 15;
             // 
             // CboxTipoOferta
@@ -252,9 +256,10 @@
             CboxTipoOferta.DropDownStyle = ComboBoxStyle.DropDownList;
             CboxTipoOferta.FormattingEnabled = true;
             CboxTipoOferta.Items.AddRange(new object[] { "Oferta", "Empleo Fijo", "Pasantia" });
-            CboxTipoOferta.Location = new Point(17, 243);
+            CboxTipoOferta.Location = new Point(14, 194);
+            CboxTipoOferta.Margin = new Padding(2, 2, 2, 2);
             CboxTipoOferta.Name = "CboxTipoOferta";
-            CboxTipoOferta.Size = new Size(182, 33);
+            CboxTipoOferta.Size = new Size(146, 28);
             CboxTipoOferta.TabIndex = 14;
             CboxTipoOferta.SelectedIndexChanged += CboxTipoOferta_SelectedIndexChanged;
             // 
@@ -272,7 +277,8 @@
             TxtRequisitos.HideSelection = true;
             TxtRequisitos.InsertKeyMode = InsertKeyMode.Default;
             TxtRequisitos.LeadingIcon = null;
-            TxtRequisitos.Location = new Point(17, 614);
+            TxtRequisitos.Location = new Point(14, 491);
+            TxtRequisitos.Margin = new Padding(2, 2, 2, 2);
             TxtRequisitos.Mask = "";
             TxtRequisitos.MaxLength = 32767;
             TxtRequisitos.MouseState = MaterialSkin.MouseState.OUT;
@@ -289,7 +295,7 @@
             TxtRequisitos.SelectionLength = 0;
             TxtRequisitos.SelectionStart = 0;
             TxtRequisitos.ShortcutsEnabled = true;
-            TxtRequisitos.Size = new Size(375, 48);
+            TxtRequisitos.Size = new Size(300, 48);
             TxtRequisitos.SkipLiterals = true;
             TxtRequisitos.TabIndex = 13;
             TxtRequisitos.TabStop = false;
@@ -304,7 +310,8 @@
             lblRequisitos.AutoSize = true;
             lblRequisitos.Depth = 0;
             lblRequisitos.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            lblRequisitos.Location = new Point(17, 577);
+            lblRequisitos.Location = new Point(14, 462);
+            lblRequisitos.Margin = new Padding(2, 0, 2, 0);
             lblRequisitos.MouseState = MaterialSkin.MouseState.HOVER;
             lblRequisitos.Name = "lblRequisitos";
             lblRequisitos.Size = new Size(75, 19);
@@ -325,7 +332,8 @@
             TxtCreditos.HideSelection = true;
             TxtCreditos.InsertKeyMode = InsertKeyMode.Default;
             TxtCreditos.LeadingIcon = null;
-            TxtCreditos.Location = new Point(17, 845);
+            TxtCreditos.Location = new Point(14, 676);
+            TxtCreditos.Margin = new Padding(2, 2, 2, 2);
             TxtCreditos.Mask = "";
             TxtCreditos.MaxLength = 32767;
             TxtCreditos.MouseState = MaterialSkin.MouseState.OUT;
@@ -342,7 +350,7 @@
             TxtCreditos.SelectionLength = 0;
             TxtCreditos.SelectionStart = 0;
             TxtCreditos.ShortcutsEnabled = true;
-            TxtCreditos.Size = new Size(375, 48);
+            TxtCreditos.Size = new Size(300, 48);
             TxtCreditos.SkipLiterals = true;
             TxtCreditos.TabIndex = 10;
             TxtCreditos.TabStop = false;
@@ -367,7 +375,8 @@
             TxtSalario.HideSelection = true;
             TxtSalario.InsertKeyMode = InsertKeyMode.Default;
             TxtSalario.LeadingIcon = null;
-            TxtSalario.Location = new Point(17, 725);
+            TxtSalario.Location = new Point(14, 580);
+            TxtSalario.Margin = new Padding(2, 2, 2, 2);
             TxtSalario.Mask = "";
             TxtSalario.MaxLength = 32767;
             TxtSalario.MouseState = MaterialSkin.MouseState.OUT;
@@ -384,7 +393,7 @@
             TxtSalario.SelectionLength = 0;
             TxtSalario.SelectionStart = 0;
             TxtSalario.ShortcutsEnabled = true;
-            TxtSalario.Size = new Size(375, 48);
+            TxtSalario.Size = new Size(300, 48);
             TxtSalario.SkipLiterals = true;
             TxtSalario.TabIndex = 9;
             TxtSalario.TabStop = false;
@@ -409,7 +418,8 @@
             TxtDescripcion.HideSelection = true;
             TxtDescripcion.InsertKeyMode = InsertKeyMode.Default;
             TxtDescripcion.LeadingIcon = null;
-            TxtDescripcion.Location = new Point(17, 497);
+            TxtDescripcion.Location = new Point(14, 398);
+            TxtDescripcion.Margin = new Padding(2, 2, 2, 2);
             TxtDescripcion.Mask = "";
             TxtDescripcion.MaxLength = 32767;
             TxtDescripcion.MouseState = MaterialSkin.MouseState.OUT;
@@ -426,7 +436,7 @@
             TxtDescripcion.SelectionLength = 0;
             TxtDescripcion.SelectionStart = 0;
             TxtDescripcion.ShortcutsEnabled = true;
-            TxtDescripcion.Size = new Size(375, 48);
+            TxtDescripcion.Size = new Size(300, 48);
             TxtDescripcion.SkipLiterals = true;
             TxtDescripcion.TabIndex = 8;
             TxtDescripcion.TabStop = false;
@@ -450,7 +460,8 @@
             TxtPuesto.HideSelection = true;
             TxtPuesto.InsertKeyMode = InsertKeyMode.Default;
             TxtPuesto.LeadingIcon = null;
-            TxtPuesto.Location = new Point(17, 370);
+            TxtPuesto.Location = new Point(14, 296);
+            TxtPuesto.Margin = new Padding(2, 2, 2, 2);
             TxtPuesto.Mask = "";
             TxtPuesto.MaxLength = 32767;
             TxtPuesto.MouseState = MaterialSkin.MouseState.OUT;
@@ -467,7 +478,7 @@
             TxtPuesto.SelectionLength = 0;
             TxtPuesto.SelectionStart = 0;
             TxtPuesto.ShortcutsEnabled = true;
-            TxtPuesto.Size = new Size(375, 48);
+            TxtPuesto.Size = new Size(300, 48);
             TxtPuesto.SkipLiterals = true;
             TxtPuesto.TabIndex = 7;
             TxtPuesto.TabStop = false;
@@ -482,7 +493,8 @@
             LblCreditos.AutoSize = true;
             LblCreditos.Depth = 0;
             LblCreditos.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblCreditos.Location = new Point(17, 799);
+            LblCreditos.Location = new Point(14, 639);
+            LblCreditos.Margin = new Padding(2, 0, 2, 0);
             LblCreditos.MouseState = MaterialSkin.MouseState.HOVER;
             LblCreditos.Name = "LblCreditos";
             LblCreditos.Size = new Size(59, 19);
@@ -494,7 +506,8 @@
             LblSalario.AutoSize = true;
             LblSalario.Depth = 0;
             LblSalario.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblSalario.Location = new Point(17, 682);
+            LblSalario.Location = new Point(14, 546);
+            LblSalario.Margin = new Padding(2, 0, 2, 0);
             LblSalario.MouseState = MaterialSkin.MouseState.HOVER;
             LblSalario.Name = "LblSalario";
             LblSalario.Size = new Size(51, 19);
@@ -506,7 +519,8 @@
             LblDescripcion.AutoSize = true;
             LblDescripcion.Depth = 0;
             LblDescripcion.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblDescripcion.Location = new Point(17, 450);
+            LblDescripcion.Location = new Point(14, 360);
+            LblDescripcion.Margin = new Padding(2, 0, 2, 0);
             LblDescripcion.MouseState = MaterialSkin.MouseState.HOVER;
             LblDescripcion.Name = "LblDescripcion";
             LblDescripcion.Size = new Size(84, 19);
@@ -518,7 +532,8 @@
             LblPuesto.AutoSize = true;
             LblPuesto.Depth = 0;
             LblPuesto.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblPuesto.Location = new Point(17, 320);
+            LblPuesto.Location = new Point(14, 256);
+            LblPuesto.Margin = new Padding(2, 0, 2, 0);
             LblPuesto.MouseState = MaterialSkin.MouseState.HOVER;
             LblPuesto.Name = "LblPuesto";
             LblPuesto.Size = new Size(50, 19);
@@ -530,7 +545,8 @@
             LblTIpoOferta.AutoSize = true;
             LblTIpoOferta.Depth = 0;
             LblTIpoOferta.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblTIpoOferta.Location = new Point(17, 187);
+            LblTIpoOferta.Location = new Point(14, 150);
+            LblTIpoOferta.Margin = new Padding(2, 0, 2, 0);
             LblTIpoOferta.MouseState = MaterialSkin.MouseState.HOVER;
             LblTIpoOferta.Name = "LblTIpoOferta";
             LblTIpoOferta.Size = new Size(102, 19);
@@ -542,7 +558,8 @@
             LblNombreCompania.AutoSize = true;
             LblNombreCompania.Depth = 0;
             LblNombreCompania.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblNombreCompania.Location = new Point(17, 52);
+            LblNombreCompania.Location = new Point(14, 42);
+            LblNombreCompania.Margin = new Padding(2, 0, 2, 0);
             LblNombreCompania.MouseState = MaterialSkin.MouseState.HOVER;
             LblNombreCompania.Name = "LblNombreCompania";
             LblNombreCompania.Size = new Size(155, 19);
@@ -554,79 +571,88 @@
             DGridOferta.AllowUserToAddRows = false;
             DGridOferta.AllowUserToDeleteRows = false;
             DGridOferta.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            DGridOferta.Location = new Point(462, 27);
+            DGridOferta.Location = new Point(370, 22);
+            DGridOferta.Margin = new Padding(2, 2, 2, 2);
             DGridOferta.MultiSelect = false;
             DGridOferta.Name = "DGridOferta";
             DGridOferta.ReadOnly = true;
             DGridOferta.RowHeadersWidth = 62;
             DGridOferta.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DGridOferta.Size = new Size(1400, 521);
+            DGridOferta.Size = new Size(1120, 417);
             DGridOferta.TabIndex = 3;
             // 
             // tabPage3
             // 
-            tabPage3.Location = new Point(4, 34);
+            tabPage3.Location = new Point(4, 29);
+            tabPage3.Margin = new Padding(2, 2, 2, 2);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1886, 975);
+            tabPage3.Size = new Size(1507, 777);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Empresas";
             tabPage3.UseVisualStyleBackColor = true;
             // 
             // tabPage4
             // 
-            tabPage4.Location = new Point(4, 34);
+            tabPage4.Location = new Point(4, 29);
+            tabPage4.Margin = new Padding(2, 2, 2, 2);
             tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(1886, 975);
+            tabPage4.Size = new Size(1508, 778);
             tabPage4.TabIndex = 3;
             tabPage4.Text = "Postulantes";
             tabPage4.UseVisualStyleBackColor = true;
             // 
             // tabPage5
             // 
-            tabPage5.Location = new Point(4, 34);
+            tabPage5.Location = new Point(4, 29);
+            tabPage5.Margin = new Padding(2, 2, 2, 2);
             tabPage5.Name = "tabPage5";
-            tabPage5.Size = new Size(1886, 975);
+            tabPage5.Size = new Size(1508, 778);
             tabPage5.TabIndex = 4;
             tabPage5.Text = "Asignar Oferta";
             tabPage5.UseVisualStyleBackColor = true;
             // 
             // tabPage6
             // 
-            tabPage6.Location = new Point(4, 34);
+            tabPage6.Location = new Point(4, 29);
+            tabPage6.Margin = new Padding(2, 2, 2, 2);
             tabPage6.Name = "tabPage6";
-            tabPage6.Size = new Size(1886, 975);
+            tabPage6.Size = new Size(1508, 778);
             tabPage6.TabIndex = 5;
             tabPage6.Text = "Historial Correos";
             tabPage6.UseVisualStyleBackColor = true;
             // 
             // tabPage7
             // 
-            tabPage7.Location = new Point(4, 34);
+            tabPage7.Location = new Point(4, 29);
+            tabPage7.Margin = new Padding(2, 2, 2, 2);
             tabPage7.Name = "tabPage7";
-            tabPage7.Size = new Size(1886, 975);
+            tabPage7.Size = new Size(1508, 778);
             tabPage7.TabIndex = 6;
             tabPage7.Text = "Carnet";
             tabPage7.UseVisualStyleBackColor = true;
             // 
             // tabPage8
             // 
-            tabPage8.Location = new Point(4, 34);
+            tabPage8.Location = new Point(4, 29);
+            tabPage8.Margin = new Padding(2, 2, 2, 2);
             tabPage8.Name = "tabPage8";
-            tabPage8.Size = new Size(1886, 975);
+            tabPage8.Size = new Size(1508, 778);
             tabPage8.TabIndex = 7;
             tabPage8.Text = "Registro Interno";
             tabPage8.UseVisualStyleBackColor = true;
             // 
             // cpOfertas
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1900, 1080);
+            ClientSize = new Size(1520, 864);
             Controls.Add(materialTabControl1);
             DrawerTabControl = materialTabControl1;
+            Margin = new Padding(2, 2, 2, 2);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "cpOfertas";
+            Padding = new Padding(2, 51, 2, 2);
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Ofertas Laborales";
             materialTabControl1.ResumeLayout(false);
