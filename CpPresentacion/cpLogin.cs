@@ -16,12 +16,13 @@ namespace CpPresentacion
 {
     public partial class cpLogin : Form
     {
-
+        private bool showPassword = false;
         private UsuarioNegocio negocio;
         public cpLogin()
         {
             InitializeComponent();
             negocio = new UsuarioNegocio();
+            this.KeyPreview = true;  // Asegura que el formulario capture las teclas
         }
 
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
@@ -32,7 +33,7 @@ namespace CpPresentacion
 
         private void cpLogin_Load(object sender, EventArgs e)
         {
-            txtUsuario.MaxLength = 20; 
+            txtUsuario.MaxLength = 20;
             txtClave.MaxLength = 20;
         }
 
@@ -100,7 +101,6 @@ namespace CpPresentacion
             }
         }
 
-
         private void btnIngresar_Click(object sender, EventArgs e)
         {
             try
@@ -134,11 +134,6 @@ namespace CpPresentacion
             }
         }
 
-
-
-
-
-
         private void pbCerrar_Click(object sender, EventArgs e)
         {
             Application.Exit(); // Cierra la aplicación al hacer clic en el botón de cerrar
@@ -167,27 +162,6 @@ namespace CpPresentacion
             }
         }
 
-        private void txtClave_Enter(object sender, EventArgs e)
-        {
-            // Si el campo tiene el texto por defecto, lo eliminamos y configuramos para que sea oculto
-            if (txtClave.Text == "CONTRASEÑA")
-            {
-                txtClave.Text = "";
-                txtClave.ForeColor = Color.Black;  // Cambiar color del texto a blanco
-                txtClave.UseSystemPasswordChar = true;  // Ocultar la contraseña (asteriscos)
-            }
-        }
-
-        private void txtClave_Leave(object sender, EventArgs e)
-        {
-            if (txtClave.Text == "")
-            {
-                txtClave.Text = "CONTRASEÑA";
-                txtClave.ForeColor = Color.Black;  // Color de texto por defecto
-                txtClave.UseSystemPasswordChar = false; // No ocultar la contraseña
-            }
-        }
-
         private void cpLogin_MouseDown(object sender, MouseEventArgs e)
         {
             ReleaseCapture();
@@ -198,6 +172,30 @@ namespace CpPresentacion
         {
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
+
+        private void pbPassword_Click(object sender, EventArgs e)
+        {
+            showPassword = !showPassword;  // Cambia el estado de visibilidad de la contraseña
+            if (showPassword)
+            {
+                txtClave.PasswordChar = '\0';  // Muestra la contraseña
+                pbPassword.Image = Properties.Resources.OjoCerrado;
+            }
+            else
+            {
+                txtClave.PasswordChar = '*';  // Oculta la contraseña
+                pbPassword.Image = Properties.Resources.OjoAbierto;
+            }
+        }
+
+        private void cpLogin_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Verifica si se presionó la tecla Enter
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnIngresar_Click(sender, e);  // Llama al evento del botón de login
+            }
         }
     }
 }

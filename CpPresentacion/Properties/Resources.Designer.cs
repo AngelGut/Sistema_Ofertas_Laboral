@@ -63,6 +63,36 @@ namespace CpPresentacion.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Adobe_Express___file__4_ {
+            get {
+                object obj = ResourceManager.GetObject("Adobe Express - file (4)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Adobe_Express___file__5_ {
+            get {
+                object obj = ResourceManager.GetObject("Adobe Express - file (5)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Adobe_Express___file__5_1 {
+            get {
+                object obj = ResourceManager.GetObject("Adobe Express - file (5)1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ChatGPT_Image_6_jul_2025__19_27_04 {
             get {
                 object obj = ResourceManager.GetObject("ChatGPT Image 6 jul 2025, 19_27_04", resourceCulture);
@@ -126,6 +156,26 @@ namespace CpPresentacion.Properties {
         internal static System.Drawing.Bitmap Minimizar {
             get {
                 object obj = ResourceManager.GetObject("Minimizar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap OjoAbierto {
+            get {
+                object obj = ResourceManager.GetObject("OjoAbierto", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap OjoCerrado {
+            get {
+                object obj = ResourceManager.GetObject("OjoCerrado", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

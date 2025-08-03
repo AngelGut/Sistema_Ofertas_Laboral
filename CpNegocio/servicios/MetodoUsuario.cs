@@ -17,12 +17,33 @@ namespace CapaDatos
         {
             using var conn = ObtenerConexion();
             conn.Open();
-            string query = "SELECT COUNT(*) FROM Usuarios WHERE Usuario = @usuario AND Clave = @clave";
+
+            // Recuperamos el usuario y la clave desde la base de datos
+            string query = "SELECT Usuario, Clave FROM Usuarios WHERE Usuario = @usuario";
             using var cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@usuario", usuario);
-            cmd.Parameters.AddWithValue("@clave", clave);
-            return (int)cmd.ExecuteScalar() > 0;
+
+            using var reader = cmd.ExecuteReader();
+
+            // Si hay datos que coinciden con el usuario ingresado
+            if (reader.Read())
+            {
+                // Recuperar los valores de la base de datos
+                string usuarioDB = reader["Usuario"].ToString();
+                string claveDB = reader["Clave"].ToString();
+
+                // Comparar el usuario y la clave con String.Compare para ser sensibles a mayúsculas y minúsculas
+                bool usuarioValido = String.Compare(usuario, usuarioDB, StringComparison.Ordinal) == 0;
+                bool claveValida = String.Compare(clave, claveDB, StringComparison.Ordinal) == 0;
+
+                // Retornar true si ambos son válidos
+                return usuarioValido && claveValida;
+            }
+
+            // Si no se encuentra el usuario
+            return false;
         }
+
 
         public static bool ExisteCorreo(string correo)
         {
