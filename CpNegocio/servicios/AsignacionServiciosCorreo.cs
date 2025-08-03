@@ -31,10 +31,10 @@ namespace CpNegocio.servicio
             _empresaRepositorio = new EmpresaRepositorio();
         }
 
-        //TDO: Método que asigna una oferta a una persona y envía correos electrónicos de notificación
+        //TODO: Método que asigna una oferta a una persona y envía correos electrónicos de notificación
         public void AsignarOfertaAPersona(int idPersona, int idOferta)
         {
-            //Obtener los datos de la persona, oferta y empresa
+            //TODO: Obtener los datos de la persona, oferta y empresa
             var persona = _personaRepositorio.ObtenerPersonaPorId(idPersona);
             var oferta = _ofertaRepositorio.ObtenerOfertaPorId(idOferta);
             var empresa = _empresaRepositorio.ObtenerEmpresaPorId(oferta.EmpresaId);
@@ -45,41 +45,63 @@ namespace CpNegocio.servicio
                 throw new Exception("Persona, oferta o empresa no encontrada.");
             }
 
-            //Persistir la asignación en la base de datos
+            //TODO: Persistir la asignación en la base de datos
             _asignacionRepositorio.AsignarPersonaAOferta(idPersona, idOferta);
             _personaRepositorio.ActualizarOfertaIdPersona(idPersona, idOferta);
 
-            //nviar las notificaciones por correo (de forma asíncrona)
+            //TODO: enviar las notificaciones por correo (de forma asíncrona)
             try
             {
-                //Enviar correo a la PERSONA
+                //TODO: enviar correo a la persona
                 var gmailPersona = new GmailService();
+
+                //TODO: Configurar los detalles del correo para la persona
                 gmailPersona.Destinatario = persona.Correo;
-                gmailPersona.Asunto = "¡Felicidades! Has sido asignado a una oferta de trabajo.";
-                gmailPersona.CuerpoMensaje = $"Hola {persona.Nombre},\n\n" +
-                                             $"Nos complace informarte que has sido asignado a la oferta de trabajo '{oferta.Puesto}'.\n" +
-                                             $"Para contactar con la empresa, escribe al siguiente correo: {empresa.Correo}.\n\n" +
-                                             $"¡Mucha suerte!\n\n" +
-                                             "Atentamente,\nEl equipo de GoatComm";
+
+                //TODO: Asunto del correo para la persona
+                gmailPersona.Asunto = "Asignación a Oferta Laboral - EmpleaTech";
+
+                //TODO: Cuerpo del mensaje para la persona
+                gmailPersona.CuerpoMensaje =
+                    $"Estimado/a {persona.Nombre},\n\n" +
+                    $"Nos complace informarte que has sido seleccionado/a y asignado/a a la siguiente oferta de trabajo publicada en Postulate:\n\n" +
+                    $"Puesto: {oferta.Puesto}\n" +
+                    $"Empresa: {empresa.Nombre}\n\n" +
+                    $"Para continuar con el proceso de selección, es importante que te pongas en contacto con la empresa a través del siguiente correo electrónico:\n" +
+                    $"{empresa.Correo}\n\n" +
+                    $"Te recomendamos enviar un correo de presentación indicando tu interés y disponibilidad para coordinar los próximos pasos.\n\n" +
+                    $"Desde EmpleaTech, te deseamos mucho éxito en este proceso.\n\n" +
+                    $"Atentamente,\n" +
+                    $"El equipo de Postulate";
 
                 if (gmailPersona.Validar())
                 {
                     Task.Run(() => gmailPersona.Enviar());
                 }
 
-                //Enviar correo a la EMPRESA
+                //TODO: Enviar correo a la empresa
                 var gmailEmpresa = new GmailService();
+
+                //TODO: Configurar los detalles del correo para la empresa
                 gmailEmpresa.Destinatario = empresa.Correo;
-                gmailEmpresa.Asunto = "Nueva asignación para tu oferta de trabajo";
-                gmailEmpresa.CuerpoMensaje = $"Hola equipo de {empresa.Nombre},\n\n" +
-                                             $"Se ha asignado una persona a tu oferta de '{oferta.Puesto}'.\n\n" +
-                                             $"Detalles de la persona asignada:\n" +
-                                             $"- Nombre: {persona.Nombre}\n" +
-                                             $"- Cédula: {persona.Dni}\n" +
-                                             $"- Correo: {persona.Correo}\n" +
-                                             $"- Teléfono: {persona.Telefono}\n\n" +
-                                             $"Por favor, contacta a esta persona para continuar con el proceso.\n\n" +
-                                             "Atentamente,\nEl equipo de GoatComm";
+
+                //TODO: Asunto del correo para la empresa
+                gmailEmpresa.Asunto = "Nueva Asignación en tu Oferta Laboral - GoatComm";
+
+                //TODO: Cuerpo del mensaje para la empresa
+                gmailEmpresa.CuerpoMensaje =
+                    $"Estimados/as de {empresa.Nombre},\n\n" +
+                    $"Les informamos que un nuevo candidato ha sido asignado a la siguiente oferta laboral publicada en nuestra plataforma Postulate:\n\n" +
+                    $"Oferta: {oferta.Puesto}\n\n" +
+                    $"Detalles del candidato asignado:\n" +
+                    $"- Nombre: {persona.Nombre}\n" +
+                    $"- Cédula: {persona.Dni}\n" +
+                    $"- Correo electrónico: {persona.Correo}\n" +
+                    $"- Teléfono: {persona.Telefono}\n\n" +
+                    $"Les recomendamos contactar al candidato a la brevedad para continuar con el proceso de selección y coordinar los próximos pasos.\n\n" +
+                    $"Agradecemos su confianza en GoatComm para la gestión de su oferta laboral.\n\n" +
+                    $"Atentamente,\n" +
+                    $"El equipo de Postulate";
 
                 if (gmailEmpresa.Validar())
                 {
