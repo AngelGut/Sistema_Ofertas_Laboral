@@ -50,6 +50,39 @@ namespace CpNegocio.Repositorios
             return null;
         }
 
+        //TODO: Implementa la lógica SQL para obtener una persona por su ID
+        public Persona ObtenerPersonaPorId(int id)
+        {
+            using (SqlConnection connection = OfertaDatos.ObtenerConexion())
+            {
+                connection.Open();
+                //TODO: Esta consulta SQL obtiene una persona específica por su ID
+                string query = "SELECT Id, Nombre, Dni, Correo, Telefono, Direccion, OfertaId FROM Persona WHERE Id = @Id";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", id);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Persona
+                            {
+                                //TODO: Crear una instancia de Persona y asignar los valores leídos
+                                Id = reader.GetInt32(0),
+                                Nombre = reader.GetString(1),
+                                Dni = reader.GetString(2),
+                                Correo = reader.GetString(3),
+                                Telefono = reader.GetString(4),
+                                Direccion = reader.GetString(5),
+                                OfertaId = reader.IsDBNull(6) ? (int?)null : reader.GetInt32(6)
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
         //TODO: Implementa la lógica SQL para obtener personas por área
         public List<Persona> ObtenerPersonasPorArea(string area)
         {
