@@ -31,6 +31,20 @@ namespace CpPresentacion
             cmbFiltroBusqueda.Items.Add("Cédula");
             cmbFiltroBusqueda.SelectedIndex = 0;
             cmbFiltroBusqueda.SelectedIndexChanged += cmbFiltroBusqueda_SelectedIndexChanged;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            // Aplica solo color al seleccionar fila
+            dgvPostulantes.EnableHeadersVisualStyles = false;
+            dgvPostulantes.RowHeadersDefaultCellStyle.BackColor = Color.White;
+            dgvPostulantes.RowsDefaultCellStyle.BackColor = Color.White;
+            dgvPostulantes.RowsDefaultCellStyle.SelectionBackColor = Color.LightBlue;
+            dgvPostulantes.RowsDefaultCellStyle.SelectionForeColor = Color.Black;
+            dgvEmpresas.EnableHeadersVisualStyles = false;
+            dgvEmpresas.RowHeadersDefaultCellStyle.BackColor = Color.White;
+            dgvEmpresas.RowsDefaultCellStyle.BackColor = Color.White;
+            dgvEmpresas.RowsDefaultCellStyle.SelectionBackColor = Color.LightBlue;
+            dgvEmpresas.RowsDefaultCellStyle.SelectionForeColor = Color.Black;
 
         }
 

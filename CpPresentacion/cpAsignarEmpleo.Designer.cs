@@ -136,7 +136,7 @@
             // 
             cmbFiltroBusqueda.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbFiltroBusqueda.FormattingEnabled = true;
-            cmbFiltroBusqueda.Location = new Point(37, 383);
+            cmbFiltroBusqueda.Location = new Point(47, 398);
             cmbFiltroBusqueda.Name = "cmbFiltroBusqueda";
             cmbFiltroBusqueda.Size = new Size(151, 28);
             cmbFiltroBusqueda.TabIndex = 5;
@@ -148,7 +148,7 @@
             btnBuscarID.Depth = 0;
             btnBuscarID.HighEmphasis = true;
             btnBuscarID.Icon = null;
-            btnBuscarID.Location = new Point(345, 466);
+            btnBuscarID.Location = new Point(382, 492);
             btnBuscarID.Margin = new Padding(4, 6, 4, 6);
             btnBuscarID.MouseState = MaterialSkin.MouseState.HOVER;
             btnBuscarID.Name = "btnBuscarID";
@@ -175,7 +175,7 @@
             txtBuscarID.HideSelection = true;
             txtBuscarID.InsertKeyMode = InsertKeyMode.Default;
             txtBuscarID.LeadingIcon = null;
-            txtBuscarID.Location = new Point(717, 417);
+            txtBuscarID.Location = new Point(914, 480);
             txtBuscarID.Mask = "";
             txtBuscarID.MaxLength = 32767;
             txtBuscarID.MouseState = MaterialSkin.MouseState.OUT;
@@ -217,7 +217,7 @@
             txtBuscarDNI.HideSelection = true;
             txtBuscarDNI.InsertKeyMode = InsertKeyMode.Default;
             txtBuscarDNI.LeadingIcon = null;
-            txtBuscarDNI.Location = new Point(24, 466);
+            txtBuscarDNI.Location = new Point(63, 480);
             txtBuscarDNI.Mask = "";
             txtBuscarDNI.MaxLength = 32767;
             txtBuscarDNI.MouseState = MaterialSkin.MouseState.OUT;
@@ -257,12 +257,12 @@
             dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
             dgvEmpresas.DefaultCellStyle = dataGridViewCellStyle1;
-            dgvEmpresas.Location = new Point(635, 38);
+            dgvEmpresas.Location = new Point(783, 20);
             dgvEmpresas.Name = "dgvEmpresas";
             dgvEmpresas.ReadOnly = true;
             dgvEmpresas.RowHeadersWidth = 51;
             dgvEmpresas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvEmpresas.Size = new Size(565, 294);
+            dgvEmpresas.Size = new Size(630, 354);
             dgvEmpresas.TabIndex = 1;
             dgvEmpresas.CellContentClick += dgvEmpresas_CellContentClick;
             // 
@@ -279,12 +279,12 @@
             dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
             dgvPostulantes.DefaultCellStyle = dataGridViewCellStyle2;
-            dgvPostulantes.Location = new Point(24, 38);
+            dgvPostulantes.Location = new Point(47, 23);
             dgvPostulantes.Name = "dgvPostulantes";
             dgvPostulantes.ReadOnly = true;
             dgvPostulantes.RowHeadersWidth = 51;
             dgvPostulantes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvPostulantes.Size = new Size(527, 294);
+            dgvPostulantes.Size = new Size(636, 351);
             dgvPostulantes.TabIndex = 0;
             dgvPostulantes.CellContentClick += dgvPostulantes_CellContentClick;
             // 
