@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using CpNegocio.Entidades;
 using CpNegocio.Interfaces;
 using CpNegocio.Repositorios;
-using CpNegocio.Gmail;
 using CpNegocio.Oferta;
 using CpNegocio.Entidades;
 
@@ -17,10 +16,12 @@ namespace CpNegocio.servicio
     //TODO: Clase que se encarga de asignar una oferta a una persona y enviar correos electrónicos de notificación
     public class AsignacionServicio
     {
+        //TODO: Declaración de los repositorios necesarios para acceder a los datos
         private readonly IPersonaRepositorio _personaRepositorio;
         private readonly IOfertaRepositorio _ofertaRepositorio;
         private readonly IAsignacionRepositorio _asignacionRepositorio;
         private readonly IEmpresaRepositorio _empresaRepositorio;
+        private readonly IMensajeriaRepositorio _mensajeriaRepositorio; // Usando la interfaz
 
         //TODO: Constructor que inicializa los repositorios necesarios
         public AsignacionServicio()
@@ -29,6 +30,7 @@ namespace CpNegocio.servicio
             _ofertaRepositorio = new OfertaRepositorio();
             _asignacionRepositorio = new AsignacionRepositorio();
             _empresaRepositorio = new EmpresaRepositorio();
+            _mensajeriaRepositorio = new MensajeriaRepo(); // Inicializando con la implementación
         }
 
         //TODO: Método que asigna una oferta a una persona y envía correos electrónicos de notificación
@@ -39,7 +41,7 @@ namespace CpNegocio.servicio
             var oferta = _ofertaRepositorio.ObtenerOfertaPorId(idOferta);
             var empresa = _empresaRepositorio.ObtenerEmpresaPorId(oferta.EmpresaId);
 
-            //Validar que los datos existan
+            //TODO: Validar que los datos existan
             if (persona == null || oferta == null || empresa == null)
             {
                 throw new Exception("Persona, oferta o empresa no encontrada.");
@@ -49,47 +51,49 @@ namespace CpNegocio.servicio
             _asignacionRepositorio.AsignarPersonaAOferta(idPersona, idOferta);
             _personaRepositorio.ActualizarOfertaIdPersona(idPersona, idOferta);
 
-            //TODO: enviar las notificaciones por correo (de forma asíncrona)
+            //TODO: enviar las notificaciones por correo
             try
             {
-                //TODO: enviar correo a la persona
-                var gmailPersona = new GmailService();
-
-                //TODO: Configurar los detalles del correo para la persona
-                gmailPersona.Destinatario = persona.Correo;
-
-                //TODO: Asunto del correo para la persona
-                gmailPersona.Asunto = "Asignación a Oferta Laboral - EmpleaTech";
+                //TODO: Lógica para determinar el detalle del salario o los créditos
+                string detalleOferta = string.Empty;
+                if (oferta is EmpleoFijo empleoFijo)
+                {
+                    detalleOferta = $"Salario: ${empleoFijo.Salario}";
+                }
+                else if (oferta is Pasantia pasantia)
+                {
+                    detalleOferta = $"Créditos: {pasantia.Creditos}";
+                }
 
                 //TODO: Cuerpo del mensaje para la persona
-                gmailPersona.CuerpoMensaje =
+                string cuerpoPersona =
                     $"Estimado/a {persona.Nombre},\n\n" +
-                    $"Nos complace informarte que has sido seleccionado/a y asignado/a a la siguiente oferta de trabajo publicada en Postulate:\n\n" +
+                    $"Nos complace informarte que has sido seleccionado/a y asignado/a a la siguiente oferta de trabajo publicada en EmpleaTech:\n\n" +
                     $"Puesto: {oferta.Puesto}\n" +
+                    $"Área: {oferta.Area}\n" +
+                    $"{detalleOferta}\n\n" +
+                    $"Descripción del Puesto: \n\n" +
+                    $"{oferta.Descripcion}\n\n" +
                     $"Empresa: {empresa.Nombre}\n\n" +
+                    $"La Empresa {empresa.Nombre} pide que se cumplan los siguientes requisitos antes de empezar el proceso de selección :\n" +
+                    $"{oferta.Requisitos}\n\n" +
                     $"Para continuar con el proceso de selección, es importante que te pongas en contacto con la empresa a través del siguiente correo electrónico:\n" +
                     $"{empresa.Correo}\n\n" +
                     $"Te recomendamos enviar un correo de presentación indicando tu interés y disponibilidad para coordinar los próximos pasos.\n\n" +
                     $"Desde EmpleaTech, te deseamos mucho éxito en este proceso.\n\n" +
                     $"Atentamente,\n" +
-                    $"El equipo de Postulate";
+                    $"El equipo de EmpleaTech";
 
-                if (gmailPersona.Validar())
-                {
-                    Task.Run(() => gmailPersona.Enviar());
-                }
+                //TODO: Usamos el repositorio de mensajería para enviar el correo
+                _mensajeriaRepositorio.EnviarMensaje(
+                    persona.Correo,
+                    "Asignación a Oferta Laboral - EmpleaTech",
+                    cuerpoPersona
+                );
 
-                //TODO: Enviar correo a la empresa
-                var gmailEmpresa = new GmailService();
-
-                //TODO: Configurar los detalles del correo para la empresa
-                gmailEmpresa.Destinatario = empresa.Correo;
-
-                //TODO: Asunto del correo para la empresa
-                gmailEmpresa.Asunto = "Nueva Asignación en tu Oferta Laboral - GoatComm";
 
                 //TODO: Cuerpo del mensaje para la empresa
-                gmailEmpresa.CuerpoMensaje =
+                string cuerpoEmpresa =
                     $"Estimados/as de {empresa.Nombre},\n\n" +
                     $"Les informamos que un nuevo candidato ha sido asignado a la siguiente oferta laboral publicada en nuestra plataforma Postulate:\n\n" +
                     $"Oferta: {oferta.Puesto}\n\n" +
@@ -99,14 +103,16 @@ namespace CpNegocio.servicio
                     $"- Correo electrónico: {persona.Correo}\n" +
                     $"- Teléfono: {persona.Telefono}\n\n" +
                     $"Les recomendamos contactar al candidato a la brevedad para continuar con el proceso de selección y coordinar los próximos pasos.\n\n" +
-                    $"Agradecemos su confianza en GoatComm para la gestión de su oferta laboral.\n\n" +
+                    $"Agradecemos su confianza en EmpleaTech para la gestión de su oferta laboral.\n\n" +
                     $"Atentamente,\n" +
-                    $"El equipo de Postulate";
+                    $"El equipo de EmpleaTech";
 
-                if (gmailEmpresa.Validar())
-                {
-                    Task.Run(() => gmailEmpresa.Enviar());
-                }
+                //TODO: Usamos el repositorio de mensajería para enviar el correo
+                _mensajeriaRepositorio.EnviarMensaje(
+                    empresa.Correo,
+                    "Nueva Asignación en tu Oferta Laboral - EmpleaTech",
+                    cuerpoEmpresa
+                );
             }
             catch (Exception ex)
             {
