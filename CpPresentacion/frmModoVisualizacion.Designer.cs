@@ -58,7 +58,7 @@
             btnVer.NoAccentTextColor = Color.Empty;
             btnVer.Size = new Size(237, 54);
             btnVer.TabIndex = 2;
-            btnVer.Text = "Ver";
+            btnVer.Text = "NO EDITAR";
             btnVer.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             btnVer.UseAccentColor = false;
             btnVer.UseVisualStyleBackColor = true;
@@ -95,7 +95,7 @@
             Controls.Add(label1);
             Name = "frmModoVisualizacion";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "frmModoVisualizacion";
+            Text = "Modo Visualizacion";
             ResumeLayout(false);
             PerformLayout();
         }

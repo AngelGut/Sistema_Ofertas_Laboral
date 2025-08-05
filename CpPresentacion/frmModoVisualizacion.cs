@@ -13,9 +13,8 @@ namespace CpPresentacion
 {
     public partial class frmModoVisualizacion : MaterialForm
     {
-        public enum ResultadoSeleccion { Ver, Editar, Cancelar }
-
-        public ResultadoSeleccion Resultado { get; private set; } = ResultadoSeleccion.Cancelar;
+        public enum ResultadoSeleccion { Ver, Editar }
+        public ResultadoSeleccion Resultado { get; private set; } = ResultadoSeleccion.Ver;
 
         public frmModoVisualizacion()
         {
@@ -25,20 +24,20 @@ namespace CpPresentacion
         private void btnVer_Click(object sender, EventArgs e)
         {
             Resultado = ResultadoSeleccion.Ver;
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void btnEditar_Click(object sender, EventArgs e)
         {
             Resultado = ResultadoSeleccion.Editar;
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            Resultado = ResultadoSeleccion.Cancelar;
+            //Resultado = ResultadoSeleccion.Cancelar;
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }

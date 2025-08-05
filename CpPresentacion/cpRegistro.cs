@@ -12,33 +12,31 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using CpPresentacion.Asistencia;   // contiene IReadOnlyContainer y las extensiones
 
 namespace CpPresentacion
 {
-    public partial class cpRegistro : MaterialForm
+    public partial class cpRegistro : MaterialForm, IReadOnlyContainer
     {
+        public Control Container => this;
+
         public cpRegistro()
         {
             InitializeComponent();
 
             materialTabControl1.SelectedIndex = 7;
 
-            // Bloqueo por defecto
-            EstablecerModoLectura(true);
+            // Bloquear todos los controles recursivamente
+            this.SetReadOnly(true);
 
-            // Mostrar ventana personalizada
-            using (var frm = new frmModoVisualizacion())
+            // Mostrar mini-form Ver/Editar
+            using (var dlg = new frmModoVisualizacion())
             {
-                if (frm.ShowDialog() == DialogResult.OK)
+                if (dlg.ShowDialog() == DialogResult.OK &&
+                    dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
                 {
-                    if (frm.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
-                        EstablecerModoLectura(false); // Desbloquear
-                    else if (frm.Resultado == frmModoVisualizacion.ResultadoSeleccion.Ver)
-                        EstablecerModoLectura(true); // Queda bloqueado
-                }
-                else
-                {
-                    this.Close(); // Canceló
+                    // Desbloquear si eligió Editar
+                    this.SetReadOnly(false);
                 }
             }
         }
@@ -207,21 +205,5 @@ namespace CpPresentacion
             txtUsuario.MaxLength = 20;
             txtContraseña.MaxLength = 20;
         }
-
-        private void EstablecerModoLectura(bool soloLectura)
-        {
-            // MaterialTextBox
-            txtUsuario.ReadOnly = soloLectura;
-            txtCorreo.ReadOnly = soloLectura;
-            txtContraseña.ReadOnly = soloLectura;
-
-            // ComboBox
-            cmbRol.Enabled = !soloLectura;
-
-            // Botones
-            btnRegistrar.Enabled = !soloLectura;
-            btnCancelar.Enabled = !soloLectura;
-        }
-
     }
 }
