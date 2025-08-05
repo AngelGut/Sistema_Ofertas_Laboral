@@ -38,8 +38,8 @@
             BtnActualizar = new MaterialSkin.Controls.MaterialButton();
             BtnRegistrar = new MaterialSkin.Controls.MaterialButton();
             materialCard1 = new MaterialSkin.Controls.MaterialCard();
-            CboxOfertas = new ComboBox();
-            LblSelecOferta = new MaterialSkin.Controls.MaterialLabel();
+            lblPais = new MaterialSkin.Controls.MaterialLabel();
+            cmbPaises = new MaterialSkin.Controls.MaterialComboBox();
             LblDireccion = new Label();
             TxtDireccion = new MaterialSkin.Controls.MaterialMaskedTextBox();
             TxtCorreo = new MaterialSkin.Controls.MaterialMaskedTextBox();
@@ -198,8 +198,8 @@
             // materialCard1
             // 
             materialCard1.BackColor = Color.FromArgb(255, 255, 255);
-            materialCard1.Controls.Add(CboxOfertas);
-            materialCard1.Controls.Add(LblSelecOferta);
+            materialCard1.Controls.Add(lblPais);
+            materialCard1.Controls.Add(cmbPaises);
             materialCard1.Controls.Add(LblDireccion);
             materialCard1.Controls.Add(TxtDireccion);
             materialCard1.Controls.Add(TxtCorreo);
@@ -221,31 +221,44 @@
             materialCard1.Size = new Size(529, 871);
             materialCard1.TabIndex = 1;
             // 
-            // CboxOfertas
+            // lblPais
             // 
-            CboxOfertas.DropDownStyle = ComboBoxStyle.DropDownList;
-            CboxOfertas.FormattingEnabled = true;
-            CboxOfertas.Location = new Point(17, 609);
-            CboxOfertas.Name = "CboxOfertas";
-            CboxOfertas.Size = new Size(182, 33);
-            CboxOfertas.TabIndex = 11;
+            lblPais.AutoSize = true;
+            lblPais.Depth = 0;
+            lblPais.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            lblPais.Location = new Point(17, 226);
+            lblPais.MouseState = MaterialSkin.MouseState.HOVER;
+            lblPais.Name = "lblPais";
+            lblPais.Size = new Size(293, 19);
+            lblPais.TabIndex = 14;
+            lblPais.Text = "Seleccione el pais del numero de telefono";
             // 
-            // LblSelecOferta
+            // cmbPaises
             // 
-            LblSelecOferta.AutoSize = true;
-            LblSelecOferta.Depth = 0;
-            LblSelecOferta.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblSelecOferta.Location = new Point(17, 582);
-            LblSelecOferta.MouseState = MaterialSkin.MouseState.HOVER;
-            LblSelecOferta.Name = "LblSelecOferta";
-            LblSelecOferta.Size = new Size(201, 19);
-            LblSelecOferta.TabIndex = 10;
-            LblSelecOferta.Text = "Selecciona la Oferta Laboral";
+            cmbPaises.AutoResize = false;
+            cmbPaises.BackColor = Color.FromArgb(255, 255, 255);
+            cmbPaises.Depth = 0;
+            cmbPaises.DrawMode = DrawMode.OwnerDrawVariable;
+            cmbPaises.DropDownHeight = 174;
+            cmbPaises.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbPaises.DropDownWidth = 121;
+            cmbPaises.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
+            cmbPaises.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            cmbPaises.FormattingEnabled = true;
+            cmbPaises.IntegralHeight = false;
+            cmbPaises.ItemHeight = 43;
+            cmbPaises.Location = new Point(17, 260);
+            cmbPaises.MaxDropDownItems = 4;
+            cmbPaises.MouseState = MaterialSkin.MouseState.OUT;
+            cmbPaises.Name = "cmbPaises";
+            cmbPaises.Size = new Size(374, 49);
+            cmbPaises.StartIndex = 0;
+            cmbPaises.TabIndex = 13;
             // 
             // LblDireccion
             // 
             LblDireccion.AutoSize = true;
-            LblDireccion.Location = new Point(17, 435);
+            LblDireccion.Location = new Point(17, 563);
             LblDireccion.Name = "LblDireccion";
             LblDireccion.Size = new Size(85, 25);
             LblDireccion.TabIndex = 9;
@@ -265,7 +278,7 @@
             TxtDireccion.HideSelection = true;
             TxtDireccion.InsertKeyMode = InsertKeyMode.Default;
             TxtDireccion.LeadingIcon = null;
-            TxtDireccion.Location = new Point(17, 487);
+            TxtDireccion.Location = new Point(17, 615);
             TxtDireccion.Mask = "";
             TxtDireccion.MaxLength = 32767;
             TxtDireccion.MouseState = MaterialSkin.MouseState.OUT;
@@ -306,7 +319,7 @@
             TxtCorreo.HideSelection = true;
             TxtCorreo.InsertKeyMode = InsertKeyMode.Default;
             TxtCorreo.LeadingIcon = null;
-            TxtCorreo.Location = new Point(17, 348);
+            TxtCorreo.Location = new Point(17, 476);
             TxtCorreo.Mask = "";
             TxtCorreo.MaxLength = 32767;
             TxtCorreo.MouseState = MaterialSkin.MouseState.OUT;
@@ -358,7 +371,7 @@
             LblCorreo.AutoSize = true;
             LblCorreo.Depth = 0;
             LblCorreo.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblCorreo.Location = new Point(17, 326);
+            LblCorreo.Location = new Point(17, 454);
             LblCorreo.MouseState = MaterialSkin.MouseState.HOVER;
             LblCorreo.Name = "LblCorreo";
             LblCorreo.Size = new Size(129, 19);
@@ -379,7 +392,7 @@
             TxtTelefono.HideSelection = true;
             TxtTelefono.InsertKeyMode = InsertKeyMode.Default;
             TxtTelefono.LeadingIcon = null;
-            TxtTelefono.Location = new Point(17, 243);
+            TxtTelefono.Location = new Point(17, 371);
             TxtTelefono.Mask = "";
             TxtTelefono.MaxLength = 32767;
             TxtTelefono.MouseState = MaterialSkin.MouseState.OUT;
@@ -411,7 +424,7 @@
             LblTelefono.AutoSize = true;
             LblTelefono.Depth = 0;
             LblTelefono.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblTelefono.Location = new Point(17, 221);
+            LblTelefono.Location = new Point(17, 349);
             LblTelefono.MouseState = MaterialSkin.MouseState.HOVER;
             LblTelefono.Name = "LblTelefono";
             LblTelefono.Size = new Size(64, 19);
@@ -606,11 +619,11 @@
         private MaterialSkin.Controls.MaterialButton BtnValidar;
         private MaterialSkin.Controls.MaterialCard materialCard2;
         private DataGridView DgvPersonas;
-        private ComboBox CboxOfertas;
-        private MaterialSkin.Controls.MaterialLabel LblSelecOferta;
         private TabPage tabPage5;
         private TabPage tabPage6;
         private TabPage tabPage7;
         private TabPage tabPage8;
+        private MaterialSkin.Controls.MaterialLabel lblPais;
+        private MaterialSkin.Controls.MaterialComboBox cmbPaises;
     }
 }
