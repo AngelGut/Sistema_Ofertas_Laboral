@@ -36,9 +36,11 @@
             btnRecuperarClave = new Button();
             pbCerrar = new PictureBox();
             pbMinimizar = new PictureBox();
+            pbPassword = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbCerrar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbMinimizar).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pbPassword).BeginInit();
             SuspendLayout();
             // 
             // pictureBox1
@@ -80,11 +82,9 @@
             txtClave.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtClave.Location = new Point(367, 127);
             txtClave.Name = "txtClave";
+            txtClave.PasswordChar = '*';
             txtClave.Size = new Size(205, 25);
             txtClave.TabIndex = 2;
-            txtClave.Text = "CONTRASEÑA";
-            txtClave.Enter += txtClave_Enter;
-            txtClave.Leave += txtClave_Leave;
             // 
             // btnIngresar
             // 
@@ -135,12 +135,24 @@
             pbMinimizar.TabStop = false;
             pbMinimizar.Click += pbMinimizar_Click;
             // 
+            // pbPassword
+            // 
+            pbPassword.Image = Properties.Resources.OjoAbierto;
+            pbPassword.Location = new Point(580, 127);
+            pbPassword.Name = "pbPassword";
+            pbPassword.Size = new Size(32, 25);
+            pbPassword.SizeMode = PictureBoxSizeMode.Zoom;
+            pbPassword.TabIndex = 7;
+            pbPassword.TabStop = false;
+            pbPassword.Click += pbPassword_Click;
+            // 
             // cpLogin
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.HotTrack;
             ClientSize = new Size(680, 250);
+            Controls.Add(pbPassword);
             Controls.Add(pbMinimizar);
             Controls.Add(pbCerrar);
             Controls.Add(btnRecuperarClave);
@@ -155,10 +167,12 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "cpLogin";
             Load += cpLogin_Load;
+            KeyDown += cpLogin_KeyDown;
             MouseDown += cpLogin_MouseDown;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbCerrar).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbMinimizar).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbPassword).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -173,5 +187,6 @@
         private Button btnRecuperarClave;
         private PictureBox pbCerrar;
         private PictureBox pbMinimizar;
+        private PictureBox pbPassword;
     }
 }

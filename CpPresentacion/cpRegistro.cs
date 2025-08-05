@@ -1,4 +1,7 @@
-﻿using MaterialSkin.Controls;
+﻿using CapaNegocio;
+using CpNegocio.Empresas_y_Postulantes;
+using CpNegocio.ServiciosCorreo;
+using MaterialSkin.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -61,6 +64,132 @@ namespace CpPresentacion
             await Task.Delay(180); // Pausa opcional, transición suave
         }
 
+        // En el evento btnRegistrar_Click del formulario FormRegistro
+        // En el evento btnRegistrar_Click del formulario FormRegistro
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            string usuarioNombre = txtUsuario.Text.Trim();
+            string correo = txtCorreo.Text.Trim();
+            string clave = txtContraseña.Text.Trim();
+            string rol = cmbRol.SelectedItem?.ToString() ?? "";
 
+            // Validaciones
+            if (string.IsNullOrEmpty(usuarioNombre) || string.IsNullOrEmpty(correo) || string.IsNullOrEmpty(clave) || string.IsNullOrEmpty(rol))
+            {
+                MessageBox.Show("Todos los campos son obligatorios.");
+                return;
+            }
+
+            // Verificar si el correo ya está registrado
+            var negocio = new UsuarioNegocio();
+            if (negocio.CorreoExiste(correo))
+            {
+                MessageBox.Show("El correo ya está registrado. Por favor, ingrese otro correo.");
+                return; // Si el correo ya está registrado, no continuamos
+            }
+
+            // Verificar si el nombre de usuario ya está registrado
+            if (negocio.ExisteUsuario(usuarioNombre))
+            {
+                MessageBox.Show("El nombre de usuario ya está registrado. Por favor, elija otro nombre de usuario.");
+                return; // Si el usuario ya existe, no continuamos
+            }
+
+            // Crear el objeto Usuario
+            var usuario = new Usuario
+            {
+                UsuarioNombre = usuarioNombre,
+                Correo = correo,
+                Clave = clave, // La contraseña no está encriptada aún
+                Rol = rol
+            };
+
+            // Llamar al método de la capa de negocio para registrar el usuario
+            bool registrado = negocio.RegistrarUsuario(usuario);
+
+            if (registrado)
+            {
+                MessageBox.Show("Usuario registrado exitosamente.");
+
+                // Enviar el correo con la nueva cuenta
+                EnviarCorreoBienvenida(correo, usuarioNombre, clave);
+
+                // Ocultar el formulario de registro (no cerrarlo)
+                this.Hide();
+
+                // Verificar si el formulario Menu ya está abierto
+                var menuForm = Application.OpenForms.OfType<Menu>().FirstOrDefault();
+                if (menuForm == null)
+                {
+                    menuForm = new Menu();
+                }
+                menuForm.Show();  // Mostrar el formulario Menu
+            }
+            else
+            {
+                MessageBox.Show("Hubo un error al registrar el usuario.");
+            }
+        }
+
+
+        private void EnviarCorreoBienvenida(string correo, string usuarioNombre, string clave)
+        {
+            // Crear el mensaje de correo
+            string asunto = "Bienvenido a nuestro sistema de Ofertas Laborales";
+            string cuerpo = $"Hola {usuarioNombre},<br><br>" +
+                            $"Gracias por registrarte en nuestro sistema. A continuación te proporcionamos tu información de acceso:<br>" +
+                            $"<b>Usuario:</b> {usuarioNombre}<br>" +
+                            $"<b>Contraseña:</b> {clave}<br><br>" +
+                            $"¡Disfruta de los servicios!";
+
+            // Usar la clase ServiciosCorreo para enviar el mensaje
+            var correoServicio = new ServiciosCorreo(
+                "ofertaslaboralesuce@gmail.com",    // Remitente
+                "xskfnxncewwumili",                 // Contraseña del remitente
+                "smtp.gmail.com",                   // Servidor SMTP
+                587,                                // Puerto SMTP
+                true                                // SSL
+            );
+
+            // Enviar el correo
+            bool enviado = correoServicio.EnviarCorreo(asunto, cuerpo, new List<string> { correo });
+
+            if (enviado)
+            {
+                MessageBox.Show("Correo de bienvenida enviado al usuario.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Hubo un error al enviar el correo de bienvenida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+
+            // Cerrar el formulario de registro
+            this.Hide();  // Oculta el formulario RegistrarUsuarios
+
+            // Crear una nueva instancia del formulario Menu
+            Menu menuForm = new Menu();
+
+            // Mostrar el formulario Menu
+            menuForm.Show(); 
+        }
+
+        private void cpRegistro_Load(object sender, EventArgs e)
+        {
+            // Cargar los roles disponibles en el ComboBox
+            cmbRol.Items.Add("Administrador");
+            cmbRol.Items.Add("Usuario");
+
+            // Establecer el primer rol como seleccionado por defecto
+            cmbRol.SelectedIndex = 0;  // Puedes cambiar el índice si prefieres otro rol seleccionado
+
+            // Establecer la longitud máxima para los campos de texto
+            txtUsuario.MaxLength = 20;
+            txtContraseña.MaxLength = 20;
+        }
     }
 }

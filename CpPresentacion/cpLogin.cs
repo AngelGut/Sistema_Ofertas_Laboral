@@ -16,12 +16,13 @@ namespace CpPresentacion
 {
     public partial class cpLogin : Form
     {
-
+        private bool showPassword = false;
         private UsuarioNegocio negocio;
         public cpLogin()
         {
             InitializeComponent();
             negocio = new UsuarioNegocio();
+            this.KeyPreview = true;  // Asegura que el formulario capture las teclas
         }
 
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
@@ -32,53 +33,57 @@ namespace CpPresentacion
 
         private void cpLogin_Load(object sender, EventArgs e)
         {
-            txtUsuario.MaxLength = 20; 
+            txtUsuario.MaxLength = 20;
             txtClave.MaxLength = 20;
         }
 
         private void btnRecuperarClave_Click(object sender, EventArgs e)
         {
+            // Paso 1: Obtener el correo del usuario
             string correo = Microsoft.VisualBasic.Interaction.InputBox("Ingrese su correo electrónico:", "Recuperar contraseña");
 
+            // Paso 2: Validar si el correo no está vacío
             if (string.IsNullOrWhiteSpace(correo))
             {
                 MessageBox.Show("Debe ingresar un correo válido.");
                 return;
             }
 
-            // Verificar si el correo existe en la base de datos
+            // Paso 3: Verificar si el correo existe en la base de datos
             if (!DatosUsuario.ExisteCorreo(correo))
             {
                 MessageBox.Show("El correo no está registrado en el sistema.");
                 return;
             }
 
-            // Pedir la nueva contraseña al usuario
+            // Paso 4: Pedir la nueva contraseña al usuario
             string nuevaClave = Microsoft.VisualBasic.Interaction.InputBox("Ingrese la nueva contraseña:", "Nueva contraseña");
 
+            // Paso 5: Validar si la nueva contraseña no está vacía
             if (string.IsNullOrWhiteSpace(nuevaClave))
             {
                 MessageBox.Show("Debe ingresar una contraseña válida.");
                 return;
             }
 
-            // Actualizar la contraseña en la base de datos
+            // Paso 6: Actualizar la contraseña en la base de datos
             bool actualizado = DatosUsuario.CambiarClave(correo, nuevaClave);
 
             if (actualizado)
             {
-                // Enviar correo con la nueva contraseña
+                // Paso 7: Enviar un correo con la nueva contraseña
                 var correoServicio = new ServiciosCorreo(
                     "ofertaslaboralesuce@gmail.com",    // Remitente
                     "xskfnxncewwumili",                 // Contraseña del remitente
                     "smtp.gmail.com",                   // Servidor SMTP
-                    587,                                // Puerto
+                    587,                                // Puerto SMTP
                     true                                // SSL
                 );
 
                 string asunto = "Confirmación de cambio de contraseña";
                 string cuerpo = $"Hola,<br>Tu contraseña ha sido cambiada exitosamente.<br><b>Nueva contraseña:</b> {nuevaClave}";
 
+                // Paso 8: Enviar el correo y verificar el resultado
                 bool enviado = correoServicio.EnviarCorreo(asunto, cuerpo, new List<string> { correo });
 
                 if (enviado)
@@ -129,11 +134,6 @@ namespace CpPresentacion
             }
         }
 
-
-
-
-
-
         private void pbCerrar_Click(object sender, EventArgs e)
         {
             Application.Exit(); // Cierra la aplicación al hacer clic en el botón de cerrar
@@ -162,27 +162,6 @@ namespace CpPresentacion
             }
         }
 
-        private void txtClave_Enter(object sender, EventArgs e)
-        {
-            // Si el campo tiene el texto por defecto, lo eliminamos y configuramos para que sea oculto
-            if (txtClave.Text == "CONTRASEÑA")
-            {
-                txtClave.Text = "";
-                txtClave.ForeColor = Color.Black;  // Cambiar color del texto a blanco
-                txtClave.UseSystemPasswordChar = true;  // Ocultar la contraseña (asteriscos)
-            }
-        }
-
-        private void txtClave_Leave(object sender, EventArgs e)
-        {
-            if (txtClave.Text == "")
-            {
-                txtClave.Text = "CONTRASEÑA";
-                txtClave.ForeColor = Color.Black;  // Color de texto por defecto
-                txtClave.UseSystemPasswordChar = false; // No ocultar la contraseña
-            }
-        }
-
         private void cpLogin_MouseDown(object sender, MouseEventArgs e)
         {
             ReleaseCapture();
@@ -193,6 +172,30 @@ namespace CpPresentacion
         {
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
+
+        private void pbPassword_Click(object sender, EventArgs e)
+        {
+            showPassword = !showPassword;  // Cambia el estado de visibilidad de la contraseña
+            if (showPassword)
+            {
+                txtClave.PasswordChar = '\0';  // Muestra la contraseña
+                pbPassword.Image = Properties.Resources.OjoCerrado;
+            }
+            else
+            {
+                txtClave.PasswordChar = '*';  // Oculta la contraseña
+                pbPassword.Image = Properties.Resources.OjoAbierto;
+            }
+        }
+
+        private void cpLogin_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Verifica si se presionó la tecla Enter
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnIngresar_Click(sender, e);  // Llama al evento del botón de login
+            }
         }
     }
 }

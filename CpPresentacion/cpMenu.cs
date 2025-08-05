@@ -18,7 +18,7 @@ namespace CpPresentacion
         public Menu()
         {
             InitializeComponent();
-            
+
 
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Bloquea redimensionamiento
 
@@ -28,11 +28,11 @@ namespace CpPresentacion
             // Mejora visual: habilitar doble búfer para reducir parpadeos
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
-            
-           
+
+
         }
 
- 
+
 
         private void tabPage3_Click(object sender, EventArgs e)
         {
