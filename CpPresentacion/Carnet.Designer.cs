@@ -37,6 +37,9 @@
             tabPage5 = new TabPage();
             tabPage6 = new TabPage();
             tabPage7 = new TabPage();
+            txtCorreo = new MaterialSkin.Controls.MaterialMaskedTextBox();
+            label5 = new Label();
+            label4 = new Label();
             panelTarjeta = new Panel();
             picLogo = new PictureBox();
             picFoto = new PictureBox();
@@ -74,7 +77,7 @@
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(913, 507);
+            materialTabControl1.Size = new Size(913, 538);
             materialTabControl1.TabIndex = 0;
             materialTabControl1.SelectedIndexChanged += materialTabControl1_SelectedIndexChanged;
             // 
@@ -84,7 +87,7 @@
             tabPage1.Margin = new Padding(2);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(2);
-            tabPage1.Size = new Size(1364, 649);
+            tabPage1.Size = new Size(905, 505);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Menu";
             tabPage1.UseVisualStyleBackColor = true;
@@ -95,7 +98,7 @@
             tabPage2.Margin = new Padding(2);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(2);
-            tabPage2.Size = new Size(1364, 649);
+            tabPage2.Size = new Size(905, 505);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Ofertas Laborales";
             tabPage2.UseVisualStyleBackColor = true;
@@ -105,7 +108,7 @@
             tabPage3.Location = new Point(4, 29);
             tabPage3.Margin = new Padding(2);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1364, 649);
+            tabPage3.Size = new Size(905, 505);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Empresas";
             tabPage3.UseVisualStyleBackColor = true;
@@ -115,7 +118,7 @@
             tabPage4.Location = new Point(4, 29);
             tabPage4.Margin = new Padding(2);
             tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(1364, 649);
+            tabPage4.Size = new Size(905, 505);
             tabPage4.TabIndex = 3;
             tabPage4.Text = "Postulantes";
             tabPage4.UseVisualStyleBackColor = true;
@@ -125,7 +128,7 @@
             tabPage5.Location = new Point(4, 29);
             tabPage5.Margin = new Padding(2);
             tabPage5.Name = "tabPage5";
-            tabPage5.Size = new Size(1364, 649);
+            tabPage5.Size = new Size(905, 505);
             tabPage5.TabIndex = 4;
             tabPage5.Text = "Asignar Oferta";
             tabPage5.UseVisualStyleBackColor = true;
@@ -135,13 +138,16 @@
             tabPage6.Location = new Point(4, 29);
             tabPage6.Margin = new Padding(2);
             tabPage6.Name = "tabPage6";
-            tabPage6.Size = new Size(1364, 649);
+            tabPage6.Size = new Size(905, 505);
             tabPage6.TabIndex = 5;
             tabPage6.Text = "Historial Correos";
             tabPage6.UseVisualStyleBackColor = true;
             // 
             // tabPage7
             // 
+            tabPage7.Controls.Add(txtCorreo);
+            tabPage7.Controls.Add(label5);
+            tabPage7.Controls.Add(label4);
             tabPage7.Controls.Add(panelTarjeta);
             tabPage7.Controls.Add(picLogo);
             tabPage7.Controls.Add(picFoto);
@@ -157,16 +163,75 @@
             tabPage7.Location = new Point(4, 29);
             tabPage7.Margin = new Padding(2);
             tabPage7.Name = "tabPage7";
-            tabPage7.Size = new Size(905, 474);
+            tabPage7.Size = new Size(905, 505);
             tabPage7.TabIndex = 6;
             tabPage7.Text = "Carnet";
             tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // txtCorreo
+            // 
+            txtCorreo.AllowPromptAsInput = true;
+            txtCorreo.AnimateReadOnly = false;
+            txtCorreo.AsciiOnly = false;
+            txtCorreo.BackgroundImageLayout = ImageLayout.None;
+            txtCorreo.BeepOnError = false;
+            txtCorreo.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
+            txtCorreo.Depth = 0;
+            txtCorreo.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtCorreo.HidePromptOnLeave = false;
+            txtCorreo.HideSelection = true;
+            txtCorreo.InsertKeyMode = InsertKeyMode.Default;
+            txtCorreo.LeadingIcon = null;
+            txtCorreo.Location = new Point(145, 300);
+            txtCorreo.Mask = "";
+            txtCorreo.MaxLength = 32767;
+            txtCorreo.MouseState = MaterialSkin.MouseState.OUT;
+            txtCorreo.Name = "txtCorreo";
+            txtCorreo.PasswordChar = '\0';
+            txtCorreo.PrefixSuffixText = null;
+            txtCorreo.PromptChar = '_';
+            txtCorreo.ReadOnly = false;
+            txtCorreo.RejectInputOnFirstFailure = false;
+            txtCorreo.ResetOnPrompt = true;
+            txtCorreo.ResetOnSpace = true;
+            txtCorreo.RightToLeft = RightToLeft.No;
+            txtCorreo.SelectedText = "";
+            txtCorreo.SelectionLength = 0;
+            txtCorreo.SelectionStart = 0;
+            txtCorreo.ShortcutsEnabled = true;
+            txtCorreo.Size = new Size(219, 48);
+            txtCorreo.SkipLiterals = true;
+            txtCorreo.TabIndex = 14;
+            txtCorreo.TabStop = false;
+            txtCorreo.TextAlign = HorizontalAlignment.Left;
+            txtCorreo.TextMaskFormat = MaskFormat.IncludeLiterals;
+            txtCorreo.TrailingIcon = null;
+            txtCorreo.UseSystemPasswordChar = false;
+            txtCorreo.ValidatingType = null;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label5.Location = new Point(19, 300);
+            label5.Name = "label5";
+            label5.Size = new Size(72, 28);
+            label5.TabIndex = 13;
+            label5.Text = "Correo";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(44, 328);
+            label4.Name = "label4";
+            label4.Size = new Size(0, 20);
+            label4.TabIndex = 12;
             // 
             // panelTarjeta
             // 
             panelTarjeta.Location = new Point(619, 25);
             panelTarjeta.Name = "panelTarjeta";
-            panelTarjeta.Size = new Size(268, 343);
+            panelTarjeta.Size = new Size(268, 440);
             panelTarjeta.TabIndex = 11;
             panelTarjeta.Paint += panelTarjeta_Paint;
             // 
@@ -199,12 +264,12 @@
             txtPosicion.BeepOnError = false;
             txtPosicion.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
             txtPosicion.Depth = 0;
-            txtPosicion.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            txtPosicion.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtPosicion.HidePromptOnLeave = false;
             txtPosicion.HideSelection = true;
             txtPosicion.InsertKeyMode = InsertKeyMode.Default;
             txtPosicion.LeadingIcon = null;
-            txtPosicion.Location = new Point(154, 225);
+            txtPosicion.Location = new Point(145, 209);
             txtPosicion.Mask = "";
             txtPosicion.MaxLength = 32767;
             txtPosicion.MouseState = MaterialSkin.MouseState.OUT;
@@ -240,12 +305,12 @@
             txtTelefono.BeepOnError = false;
             txtTelefono.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
             txtTelefono.Depth = 0;
-            txtTelefono.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            txtTelefono.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtTelefono.HidePromptOnLeave = false;
             txtTelefono.HideSelection = true;
             txtTelefono.InsertKeyMode = InsertKeyMode.Default;
             txtTelefono.LeadingIcon = null;
-            txtTelefono.Location = new Point(154, 118);
+            txtTelefono.Location = new Point(145, 118);
             txtTelefono.Mask = "";
             txtTelefono.MaxLength = 32767;
             txtTelefono.MouseState = MaterialSkin.MouseState.OUT;
@@ -281,12 +346,12 @@
             txtNombre.BeepOnError = false;
             txtNombre.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
             txtNombre.Depth = 0;
-            txtNombre.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            txtNombre.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtNombre.HidePromptOnLeave = false;
             txtNombre.HideSelection = true;
             txtNombre.InsertKeyMode = InsertKeyMode.Default;
             txtNombre.LeadingIcon = null;
-            txtNombre.Location = new Point(154, 27);
+            txtNombre.Location = new Point(145, 25);
             txtNombre.Mask = "";
             txtNombre.MaxLength = 32767;
             txtNombre.MouseState = MaterialSkin.MouseState.OUT;
@@ -320,7 +385,7 @@
             btnVistaPrevia.Depth = 0;
             btnVistaPrevia.HighEmphasis = true;
             btnVistaPrevia.Icon = null;
-            btnVistaPrevia.Location = new Point(224, 332);
+            btnVistaPrevia.Location = new Point(221, 384);
             btnVistaPrevia.Margin = new Padding(4, 6, 4, 6);
             btnVistaPrevia.MouseState = MaterialSkin.MouseState.HOVER;
             btnVistaPrevia.Name = "btnVistaPrevia";
@@ -340,7 +405,7 @@
             btnCargarFoto.Depth = 0;
             btnCargarFoto.HighEmphasis = true;
             btnCargarFoto.Icon = null;
-            btnCargarFoto.Location = new Point(31, 332);
+            btnCargarFoto.Location = new Point(17, 384);
             btnCargarFoto.Margin = new Padding(4, 6, 4, 6);
             btnCargarFoto.MouseState = MaterialSkin.MouseState.HOVER;
             btnCargarFoto.Name = "btnCargarFoto";
@@ -360,7 +425,7 @@
             btnGuardarTargeta.Depth = 0;
             btnGuardarTargeta.HighEmphasis = true;
             btnGuardarTargeta.Icon = null;
-            btnGuardarTargeta.Location = new Point(111, 410);
+            btnGuardarTargeta.Location = new Point(105, 453);
             btnGuardarTargeta.Margin = new Padding(4, 6, 4, 6);
             btnGuardarTargeta.MouseState = MaterialSkin.MouseState.HOVER;
             btnGuardarTargeta.Name = "btnGuardarTargeta";
@@ -377,7 +442,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label3.Location = new Point(31, 245);
+            label3.Location = new Point(19, 209);
             label3.Name = "label3";
             label3.Size = new Size(84, 28);
             label3.TabIndex = 2;
@@ -388,7 +453,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2.Location = new Point(29, 138);
+            label2.Location = new Point(17, 118);
             label2.Name = "label2";
             label2.Size = new Size(86, 28);
             label2.TabIndex = 1;
@@ -398,7 +463,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(29, 47);
+            label1.Location = new Point(19, 25);
             label1.Name = "label1";
             label1.Size = new Size(85, 28);
             label1.TabIndex = 0;
@@ -409,7 +474,7 @@
             tabPage8.Location = new Point(4, 29);
             tabPage8.Margin = new Padding(2);
             tabPage8.Name = "tabPage8";
-            tabPage8.Size = new Size(1364, 649);
+            tabPage8.Size = new Size(905, 505);
             tabPage8.TabIndex = 7;
             tabPage8.Text = "Registro Interno";
             tabPage8.UseVisualStyleBackColor = true;
@@ -418,7 +483,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(919, 574);
+            ClientSize = new Size(919, 605);
             Controls.Add(materialTabControl1);
             DrawerTabControl = materialTabControl1;
             MaximizeBox = false;
@@ -457,5 +522,8 @@
         private Panel panelTarjeta;
         private PictureBox picLogo;
         private PictureBox picFoto;
+        private MaterialSkin.Controls.MaterialMaskedTextBox txtCorreo;
+        private Label label5;
+        private Label label4;
     }
 }

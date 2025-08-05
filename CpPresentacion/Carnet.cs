@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -83,9 +85,16 @@ namespace CpPresentacion
 
         private void btnVistaPrevia_Click(object sender, EventArgs e)
         {
-            // Crear una vista previa de la tarjeta sin guardar
-            Bitmap bmp = new Bitmap(268, 343);
-            panelTarjeta.DrawToBitmap(bmp, new Rectangle(0, 0, 268, 343));
+            // Asegúrate que el panel se haya renderizado completamente
+            panelTarjeta.Refresh(); // Fuerza repintado
+
+            // Usa el tamaño real del panel
+            int ancho = panelTarjeta.Width;
+            int alto = panelTarjeta.Height;
+
+            // Crear Bitmap del mismo tamaño
+            Bitmap bmp = new Bitmap(ancho, alto);
+            panelTarjeta.DrawToBitmap(bmp, new Rectangle(0, 0, ancho, alto));
 
             Form vistaPreviaForm = new Form
             {
@@ -107,19 +116,12 @@ namespace CpPresentacion
 
         private void btnGuardarTargeta_Click(object sender, EventArgs e)
         {
-            // Validar campos
+
+            // Validar que los campos no estén vacíos
             if (string.IsNullOrWhiteSpace(txtNombre.Text))
             {
                 MessageBox.Show("El campo Nombre no puede estar vacío.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtNombre.Focus();
-                return;
-            }
-
-            var soloDigitos = new string(txtTelefono.Text.Where(char.IsDigit).ToArray());
-            if (soloDigitos.Length != 10)
-            {
-                MessageBox.Show("El número de teléfono debe tener exactamente 10 dígitos.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtTelefono.Focus();
                 return;
             }
 
@@ -129,20 +131,24 @@ namespace CpPresentacion
                 txtPosicion.Focus();
                 return;
             }
-
             if (picFoto.Image == null)
             {
                 MessageBox.Show("Debe cargar una foto antes de guardar la tarjeta.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (string.IsNullOrWhiteSpace(txtCorreo.Text))
+            {
+                MessageBox.Show("El campo Correo no puede estar vacío.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtCorreo.Focus();
+                return;
+            }
+            else if (!EsCorreoValido(txtCorreo.Text))
 
-            // Guardar la tarjeta como imagen
-            try
+                try
             {
                 panelTarjeta.Invalidate();
-                Bitmap bmp = new Bitmap(268, 343);
-                panelTarjeta.DrawToBitmap(bmp, new Rectangle(0, 0, 268, 343));
-
+                Bitmap bmp = new Bitmap(panelTarjeta.Width, panelTarjeta.Height);
+                panelTarjeta.DrawToBitmap(bmp, new Rectangle(0, 0, panelTarjeta.Width, panelTarjeta.Height));
                 SaveFileDialog sfd = new SaveFileDialog();
                 sfd.Filter = "Imagen PNG|*.png";
                 sfd.FileName = "Tarjeta_ID.png";
@@ -162,50 +168,108 @@ namespace CpPresentacion
         private void panelTarjeta_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            g.Clear(Color.White);
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            int width = panelTarjeta.Width;
+            int height = panelTarjeta.Height;
 
-            Font font = new Font("Arial", 10, FontStyle.Bold); // Letra más pequeña para que quepa bien
-            Brush brush = Brushes.Black;
+            // 1. FONDO DIVIDIDO EN DOS
+            int mitad = height / 2;
+            g.FillRectangle(new SolidBrush(Color.FromArgb(25, 25, 64)), 0, 0, width, mitad); // parte superior azul oscuro
+            g.FillRectangle(Brushes.Gray, 0, mitad, width, height - mitad); // parte inferior gris
 
-            int panelWidth = 268;
-            int currentY = 10;
-
-            // 1. Logo
+            // 2. LOGO
             if (picLogo.Image != null)
             {
-                int logoWidth = 60;
-                int logoHeight = 60;
-                g.DrawImage(picLogo.Image, new Rectangle(10, 10, logoWidth, logoHeight));
+                int logoAncho = 150;
+                int logoAlto = 150;
+                int logoX = (width - logoAncho) / 2;
+                int logoY = 10;
+
+                float opacity = 0.2f;
+
+                ColorMatrix matrix = new ColorMatrix();
+                matrix.Matrix33 = opacity;
+
+                ImageAttributes attributes = new ImageAttributes();
+                attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                g.DrawImage(picLogo.Image,
+                    new Rectangle(logoX, logoY, logoAncho, logoAlto),
+                    0, 0, picLogo.Image.Width, picLogo.Image.Height,
+                    GraphicsUnit.Pixel,
+                    attributes);
             }
 
-            // 2. Foto del empleado (centrada)
+            // 3. FOTO EN CÍRCULO
             if (picFoto.Image != null)
             {
-                int fotoWidth = 90;
-                int fotoHeight = 110;
-                int fotoX = (panelWidth - fotoWidth) / 2;
-                g.DrawImage(picFoto.Image, new Rectangle(fotoX, currentY, fotoWidth, fotoHeight));
-                currentY += fotoHeight + 10;
+                int fotoSize = 100;
+                int fotoX = (width - fotoSize) / 2;
+                int fotoY = mitad - (fotoSize / 2);
+
+                using (GraphicsPath path = new GraphicsPath())
+                {
+                    path.AddEllipse(fotoX, fotoY, fotoSize, fotoSize);
+                    g.SetClip(path);
+                    g.DrawImage(picFoto.Image, new Rectangle(fotoX, fotoY, fotoSize, fotoSize));
+                    g.ResetClip();
+                }
+
+                g.DrawEllipse(new Pen(Color.Gray, 2), fotoX, fotoY, fotoSize, fotoSize);
             }
 
-            // 3. Datos centrados
+            // 4. TEXTO: NOMBRE, POSICIÓN
+            string nombre = txtNombre.Text;
+            string posicion = txtPosicion.Text;
+
+            Font fontNombre = new Font("Arial", 10, FontStyle.Bold);
+            Font fontPosicion = new Font("Arial", 10, FontStyle.Italic);
+            Brush blanco = Brushes.White;
+            Brush morado = new SolidBrush(Color.FromArgb(152, 121, 221));
+
+            SizeF nombreSize = g.MeasureString(nombre, fontNombre);
+            SizeF posicionSize = g.MeasureString(posicion, fontPosicion);
+
+            float textoY = mitad + 60;
+
+            g.DrawString(nombre, fontNombre, blanco, (width - nombreSize.Width) / 2, textoY);
+            textoY += nombreSize.Height + 2;
+            g.DrawString(posicion, fontPosicion, morado, (width - posicionSize.Width) / 2, textoY);
+
+            // 5. DATOS INFERIORES
+
             string telefonoFormateado = FormatearTelefono(txtTelefono.Text);
-            string[] datos = {
-        "Nombre: " + txtNombre.Text,
-        "Teléfono: " + telefonoFormateado,
-        txtPosicion.Text
-    };
+            string correo = txtCorreo.Text; // Aquí se toma el correo real
 
-            foreach (string dato in datos)
-            {
-                SizeF textoSize = g.MeasureString(dato, font);
-                float textoX = (panelWidth - textoSize.Width) / 2;
-                g.DrawString(dato, font, brush, textoX, currentY);
-                currentY += (int)textoSize.Height + 5;
-            }
+            Font fontLabel = new Font("Arial", 8, FontStyle.Bold);
+            Font fontDato = new Font("Arial", 8);
+            Brush blancoDatos = Brushes.White;
 
-            // 4. Borde
-            g.DrawRectangle(Pens.Black, 0, 0, 267, 342); // 1 píxel menos por el borde
+            float baseY = textoY + posicionSize.Height + 15;
+            float espacio = 3;
+
+            // Línea 1: "Phone:"
+            SizeF sizePhoneLabel = g.MeasureString("Phone:", fontLabel);
+            float xPhoneLabel = (width - sizePhoneLabel.Width) / 2;
+            g.DrawString("Phone:", fontLabel, blancoDatos, xPhoneLabel, baseY);
+            baseY += sizePhoneLabel.Height + espacio;
+
+            // Línea 2: número de teléfono
+            SizeF sizePhone = g.MeasureString(telefonoFormateado, fontDato);
+            float xPhone = (width - sizePhone.Width) / 2;
+            g.DrawString(telefonoFormateado, fontDato, blancoDatos, xPhone, baseY);
+            baseY += sizePhone.Height + espacio + 5;
+
+            // Línea 3: "E-Mail:"
+            SizeF sizeEmailLabel = g.MeasureString("E-Mail:", fontLabel);
+            float xEmailLabel = (width - sizeEmailLabel.Width) / 2;
+            g.DrawString("E-Mail:", fontLabel, blancoDatos, xEmailLabel, baseY);
+            baseY += sizeEmailLabel.Height + espacio;
+
+            // Línea 4: dirección de correo
+            SizeF sizeEmail = g.MeasureString(correo, fontDato);
+            float xEmail = (width - sizeEmail.Width) / 2;
+            g.DrawString(correo, fontDato, blancoDatos, xEmail, baseY);
         }
 
         // ========================== VALIDACIONES ==========================
@@ -252,6 +316,12 @@ namespace CpPresentacion
                 return telefono;
             }
         }
+
+        private bool EsCorreoValido(string correo)
+        {
+            return System.Text.RegularExpressions.Regex.IsMatch(correo, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+        }
     }
+
 
 }
