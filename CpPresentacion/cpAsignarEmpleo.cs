@@ -16,7 +16,8 @@
     using CpNegocio.Oferta;
     using System.Configuration; 
     using Microsoft.Data.SqlClient;
-
+    using CpNegocio.servicios;
+    using CpNegocio.Interfaces;
 
     namespace CpPresentacion
     {
@@ -547,6 +548,7 @@
           }
 
 
+         /// ya estamos mas cerca
 
 
         }
