@@ -18,11 +18,11 @@ namespace CpPresentacion
 {
     public partial class cpEmpresa : MaterialForm // <<== ¡Cambiado a MaterialForm!
     {
-        
+
         public cpEmpresa()
         {
             InitializeComponent();
-            
+
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 2;
 
@@ -40,7 +40,7 @@ namespace CpPresentacion
             TxtTelefono.KeyPress += SoloNumeros_KeyPress;
             TxtRnc.KeyPress += SoloNumeros_KeyPress;
 
-            
+
             CargarEmpresas();
         }
 
@@ -212,6 +212,8 @@ namespace CpPresentacion
             }
         }
 
+
+
         private void BtnActualizar_Click(object sender, EventArgs e)
         {
             CargarEmpresas(); // Recarga los datos desde la base de datos
@@ -238,5 +240,7 @@ namespace CpPresentacion
                 e.Handled = true; // Bloquea la tecla
             }
         }
+
+        
     }
 }
