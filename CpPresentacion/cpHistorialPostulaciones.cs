@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaterialSkin.Controls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,41 +8,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MaterialSkin.Controls;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CpPresentacion
 {
-    public partial class Menu : MaterialForm // <<== ¡Cambiado a MaterialForm!
+    public partial class cpHistorialPostulaciones : MaterialForm
     {
-        private string rolUsuario;
-        public Menu()
+        public cpHistorialPostulaciones()
         {
             InitializeComponent();
 
-
-            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Bloquea redimensionamiento
-
             // Establece el tab activo que corresponde a este formulario
-            materialTabControl1.SelectedIndex = 0;
-
-            // Mejora visual: habilitar doble búfer para reducir parpadeos
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
-            this.UpdateStyles();
-
-
-        }
-
-
-
-        private void tabPage3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tabPage1_Click(object sender, EventArgs e)
-        {
-
+            materialTabControl1.SelectedIndex = 8;
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -54,10 +31,8 @@ namespace CpPresentacion
             // A) ¿A qué ventana ir?
             Form destino = idx switch
             {
-                0 => Application.OpenForms.OfType<Menu>()
-                                          .FirstOrDefault() ?? new Menu(),
-
-                // Evitamos duplicar instancias si ya estamos ahí
+                // Siempre nueva instancia de Menu
+                0 => new Menu(),
                 1 => this is cpOfertas ? this : new cpOfertas(),
                 2 => this is cpEmpresa ? this : new cpEmpresa(),
                 3 => this is cpPostulante ? this : new cpPostulante(),
@@ -81,17 +56,16 @@ namespace CpPresentacion
             else
                 this.Dispose();  // libera recursos
 
-            await Task.Delay(180); // Pausa opcional, transición suave
-        }
-        private void BtnSalir_Click(object sender, EventArgs e)
-        {
-            var confirm = MessageBox.Show("¿Estás seguro de que quieres salir?", "Confirmar salida",
-                              MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (confirm == DialogResult.Yes)
-            {
+            // Asegurarnos de que la UI repinte inmediatamente:
+            destino.BringToFront();
+            destino.Activate();
 
-                Application.Exit();
-            }
+
+        }
+
+        private void cpHistorialPostulaciones_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
