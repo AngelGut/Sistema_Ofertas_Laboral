@@ -241,6 +241,9 @@ namespace CpPresentacion
             }
         }
 
-        
+        private void BtnHabilitarCambios_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

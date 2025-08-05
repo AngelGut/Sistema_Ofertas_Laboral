@@ -137,7 +137,7 @@
             // 
             // pbPassword
             // 
-            pbPassword.Image = Properties.Resources.OjoAbierto;
+            pbPassword.Image = Properties.Resources.OjoCerrado;
             pbPassword.Location = new Point(580, 127);
             pbPassword.Name = "pbPassword";
             pbPassword.Size = new Size(32, 25);
