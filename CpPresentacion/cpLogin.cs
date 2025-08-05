@@ -180,12 +180,12 @@ namespace CpPresentacion
             if (showPassword)
             {
                 txtClave.PasswordChar = '\0';  // Muestra la contraseña
-                pbPassword.Image = Properties.Resources.OjoCerrado;
+                pbPassword.Image = Properties.Resources.OjoAbierto; // Cambia el ícono a "ojo cerrado"
             }
             else
             {
                 txtClave.PasswordChar = '*';  // Oculta la contraseña
-                pbPassword.Image = Properties.Resources.OjoAbierto;
+                pbPassword.Image = Properties.Resources.OjoCerrado; // Cambia el ícono a "ojo abierto"
             }
         }
 

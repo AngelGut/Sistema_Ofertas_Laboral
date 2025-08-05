@@ -60,7 +60,7 @@
             label1.AutoSize = true;
             label1.Font = new Font("Century Gothic", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.White;
-            label1.Location = new Point(367, 26);
+            label1.Location = new Point(429, 31);
             label1.Name = "label1";
             label1.Size = new Size(90, 30);
             label1.TabIndex = 1;
@@ -92,7 +92,7 @@
             btnIngresar.FlatAppearance.BorderSize = 0;
             btnIngresar.FlatStyle = FlatStyle.Flat;
             btnIngresar.ForeColor = Color.White;
-            btnIngresar.Location = new Point(444, 177);
+            btnIngresar.Location = new Point(429, 174);
             btnIngresar.Name = "btnIngresar";
             btnIngresar.Size = new Size(75, 23);
             btnIngresar.TabIndex = 3;
@@ -105,7 +105,7 @@
             btnRecuperarClave.Cursor = Cursors.Hand;
             btnRecuperarClave.FlatAppearance.BorderSize = 0;
             btnRecuperarClave.FlatStyle = FlatStyle.Flat;
-            btnRecuperarClave.Location = new Point(395, 215);
+            btnRecuperarClave.Location = new Point(380, 215);
             btnRecuperarClave.Name = "btnRecuperarClave";
             btnRecuperarClave.Size = new Size(177, 23);
             btnRecuperarClave.TabIndex = 4;
@@ -137,7 +137,7 @@
             // 
             // pbPassword
             // 
-            pbPassword.Image = Properties.Resources.OjoAbierto;
+            pbPassword.Image = Properties.Resources.OjoCerrado;
             pbPassword.Location = new Point(580, 127);
             pbPassword.Name = "pbPassword";
             pbPassword.Size = new Size(32, 25);
