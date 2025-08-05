@@ -17,7 +17,7 @@ namespace CpPresentacion
 {
     public partial class cpPostulante : MaterialForm
     {
-        
+        //constructor
         public cpPostulante()
         {
             InitializeComponent();
