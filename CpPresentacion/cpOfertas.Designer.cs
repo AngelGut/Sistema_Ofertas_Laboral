@@ -37,6 +37,8 @@
             BtnMostrar = new MaterialSkin.Controls.MaterialButton();
             BtnRegistrar = new MaterialSkin.Controls.MaterialButton();
             materialCard4 = new MaterialSkin.Controls.MaterialCard();
+            cmbArea = new MaterialSkin.Controls.MaterialComboBox();
+            lblArea = new MaterialSkin.Controls.MaterialLabel();
             CboxEmpresas = new ComboBox();
             CboxTipoOferta = new ComboBox();
             TxtRequisitos = new MaterialSkin.Controls.MaterialMaskedTextBox();
@@ -214,6 +216,8 @@
             // materialCard4
             // 
             materialCard4.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard4.Controls.Add(cmbArea);
+            materialCard4.Controls.Add(lblArea);
             materialCard4.Controls.Add(CboxEmpresas);
             materialCard4.Controls.Add(CboxTipoOferta);
             materialCard4.Controls.Add(TxtRequisitos);
@@ -238,11 +242,45 @@
             materialCard4.Size = new Size(420, 921);
             materialCard4.TabIndex = 4;
             // 
+            // cmbArea
+            // 
+            cmbArea.AutoResize = false;
+            cmbArea.BackColor = Color.FromArgb(255, 255, 255);
+            cmbArea.Depth = 0;
+            cmbArea.DrawMode = DrawMode.OwnerDrawVariable;
+            cmbArea.DropDownHeight = 174;
+            cmbArea.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbArea.DropDownWidth = 121;
+            cmbArea.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
+            cmbArea.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            cmbArea.FormattingEnabled = true;
+            cmbArea.IntegralHeight = false;
+            cmbArea.ItemHeight = 43;
+            cmbArea.Location = new Point(17, 246);
+            cmbArea.MaxDropDownItems = 4;
+            cmbArea.MouseState = MaterialSkin.MouseState.OUT;
+            cmbArea.Name = "cmbArea";
+            cmbArea.Size = new Size(375, 49);
+            cmbArea.StartIndex = 0;
+            cmbArea.TabIndex = 17;
+            // 
+            // lblArea
+            // 
+            lblArea.AutoSize = true;
+            lblArea.Depth = 0;
+            lblArea.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            lblArea.Location = new Point(17, 212);
+            lblArea.MouseState = MaterialSkin.MouseState.HOVER;
+            lblArea.Name = "lblArea";
+            lblArea.Size = new Size(33, 19);
+            lblArea.TabIndex = 16;
+            lblArea.Text = "Area";
+            // 
             // CboxEmpresas
             // 
             CboxEmpresas.DropDownStyle = ComboBoxStyle.DropDownList;
             CboxEmpresas.FormattingEnabled = true;
-            CboxEmpresas.Location = new Point(17, 105);
+            CboxEmpresas.Location = new Point(17, 43);
             CboxEmpresas.Name = "CboxEmpresas";
             CboxEmpresas.Size = new Size(182, 33);
             CboxEmpresas.TabIndex = 15;
@@ -252,7 +290,7 @@
             CboxTipoOferta.DropDownStyle = ComboBoxStyle.DropDownList;
             CboxTipoOferta.FormattingEnabled = true;
             CboxTipoOferta.Items.AddRange(new object[] { "Oferta", "Empleo Fijo", "Pasantia" });
-            CboxTipoOferta.Location = new Point(17, 243);
+            CboxTipoOferta.Location = new Point(17, 151);
             CboxTipoOferta.Name = "CboxTipoOferta";
             CboxTipoOferta.Size = new Size(182, 33);
             CboxTipoOferta.TabIndex = 14;
@@ -530,7 +568,7 @@
             LblTIpoOferta.AutoSize = true;
             LblTIpoOferta.Depth = 0;
             LblTIpoOferta.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblTIpoOferta.Location = new Point(17, 187);
+            LblTIpoOferta.Location = new Point(17, 110);
             LblTIpoOferta.MouseState = MaterialSkin.MouseState.HOVER;
             LblTIpoOferta.Name = "LblTIpoOferta";
             LblTIpoOferta.Size = new Size(102, 19);
@@ -542,7 +580,7 @@
             LblNombreCompania.AutoSize = true;
             LblNombreCompania.Depth = 0;
             LblNombreCompania.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblNombreCompania.Location = new Point(17, 52);
+            LblNombreCompania.Location = new Point(17, 7);
             LblNombreCompania.MouseState = MaterialSkin.MouseState.HOVER;
             LblNombreCompania.Name = "LblNombreCompania";
             LblNombreCompania.Size = new Size(155, 19);
@@ -670,5 +708,7 @@
         private TabPage tabPage6;
         private TabPage tabPage7;
         private TabPage tabPage8;
+        private MaterialSkin.Controls.MaterialComboBox cmbArea;
+        private MaterialSkin.Controls.MaterialLabel lblArea;
     }
 }

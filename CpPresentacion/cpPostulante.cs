@@ -21,7 +21,11 @@ namespace CpPresentacion
         public cpPostulante()
         {
             InitializeComponent();
-           
+
+            CargarPaises();
+            cmbPaises.SelectedIndexChanged += (s, e) => FormatearTelefono();
+            TxtTelefono.TextChanged += (s, e) => FormatearTelefono();
+
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 3;
 
@@ -34,7 +38,6 @@ namespace CpPresentacion
             TxtDni.KeyPress += SoloLetrasYNumeros_KeyPress;
 
             CargarPersonas(); // <-- aquí lo puedes invocar también
-            CargarOfertas(); // Llama al método que llenará el ComboBox con las ofertas
             
         }
 
@@ -48,10 +51,8 @@ namespace CpPresentacion
             // A) ¿A qué ventana ir?
             Form destino = idx switch
             {
-                0 => Application.OpenForms.OfType<Menu>()
-                                          .FirstOrDefault() ?? new Menu(),
-
-                // Evitamos duplicar instancias si ya estamos ahí
+                // Siempre nueva instancia de Menu
+                0 => new Menu(),
                 1 => this is cpOfertas ? this : new cpOfertas(),
                 2 => this is cpEmpresa ? this : new cpEmpresa(),
                 3 => this is cpPostulante ? this : new cpPostulante(),
@@ -74,7 +75,11 @@ namespace CpPresentacion
             else
                 this.Dispose();  // libera recursos
 
-            await Task.Delay(180); // Pausa opcional, transición suave
+            // Asegurarnos de que la UI repinte inmediatamente:
+            destino.BringToFront();
+            destino.Activate();
+
+
         }
 
 
@@ -98,13 +103,6 @@ namespace CpPresentacion
                     return;
                 }
 
-                // ✅ Validar que se haya seleccionado una oferta
-                if (CboxOfertas.SelectedItem == null)
-                {
-                    MessageBox.Show("Debe seleccionar una oferta para el postulante.", "Falta oferta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
                 // 2. Leer valores
                 string nombre = TxtNombre.Text.Trim();
                 string telefono = TxtTelefono.Text.Trim();
@@ -112,11 +110,30 @@ namespace CpPresentacion
                 string direccion = TxtDireccion.Text.Trim();
                 string dni = TxtDni.Text.Trim();
 
-                // 3. Validar que el teléfono contenga solo dígitos
-                if (!telefono.All(char.IsDigit))
+                // Validar número con libphonenumber
+                var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
+                if (cmbPaises.SelectedItem is CountryItem cp)
                 {
-                    TxtTelefono.BackColor = Color.MistyRose;
-                    MessageBox.Show("El teléfono debe contener solo números, sin guiones, letras ni espacios.", "Formato inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    try
+                    {
+                        var parsed = phoneUtil.Parse(TxtTelefono.Text, cp.IsoCode);
+                        if (!phoneUtil.IsValidNumber(parsed))
+                        {
+                            MessageBox.Show("El número de teléfono no es válido para el país seleccionado.", "Teléfono inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        telefono = phoneUtil.Format(parsed, PhoneNumbers.PhoneNumberFormat.INTERNATIONAL);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("No se pudo interpretar el número de teléfono.", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un país para el número telefónico.", "País no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -137,8 +154,7 @@ namespace CpPresentacion
                 }
 
                 // 6. Crear objeto Persona (ajusta esto a tu clase real si se llama CnPersona o similar)
-                int ofertaId = (int)CboxOfertas.SelectedValue;
-                var persona = new Persona(nombre, telefono, correo, direccion, dni, ofertaId);
+                var persona = new Persona(nombre, telefono, correo, direccion, dni);
 
                 // 7. Guardar usando tu capa de negocio
                 var servicio = new CpNegocio.servicios.MetodosPersona(persona);
@@ -234,18 +250,11 @@ namespace CpPresentacion
                 if (DgvPersonas.Columns.Contains("Id"))
                     DgvPersonas.Columns["Id"].Visible = false;
 
-                if (DgvPersonas.Columns.Contains("OfertaId"))
-                    DgvPersonas.Columns["OfertaId"].Visible = false;
-
-                // Cambiar encabezados para hacerlo más claro
-                if (DgvPersonas.Columns.Contains("NombreOferta"))
-                    DgvPersonas.Columns["NombreOferta"].HeaderText = "Oferta asignada";
-
                 if (DgvPersonas.Columns.Contains("Nombre"))
                     DgvPersonas.Columns["Nombre"].HeaderText = "Nombre";
 
-                if (DgvPersonas.Columns.Contains("Cedula"))
-                    DgvPersonas.Columns["Cedula"].HeaderText = "Cédula";
+                if (DgvPersonas.Columns.Contains("Dni"))
+                    DgvPersonas.Columns["Dni"].HeaderText = "Cédula";
 
                 if (DgvPersonas.Columns.Contains("Telefono"))
                     DgvPersonas.Columns["Telefono"].HeaderText = "Teléfono";
@@ -258,8 +267,14 @@ namespace CpPresentacion
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar personas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Error al cargar personas:\n" +
+                    ex.Message +
+                    "\n\nDetalle interno:\n" +
+                    (ex.InnerException?.Message ?? "(sin detalle)"),
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
         }
 
         private void TxtNombre_KeyPress(object sender, KeyPressEventArgs e)
@@ -272,23 +287,76 @@ namespace CpPresentacion
             }
         }
 
-        private void CargarOfertas()
+        private class CountryItem
         {
+            public string IsoCode { get; set; }
+            public string Name { get; set; }
+            public string DialCode { get; set; }
+            public string Display => $"{Name} ({DialCode})";
+            public override string ToString() => Display;
+        }
+
+        private void CargarPaises()
+        {
+            var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
+            var regiones = phoneUtil.GetSupportedRegions().OrderBy(iso => iso);
+
+            var lista = regiones.Select(iso =>
+            {
+                try
+                {
+                    var region = new System.Globalization.RegionInfo(iso);
+                    int code = phoneUtil.GetCountryCodeForRegion(iso);
+                    return new CountryItem
+                    {
+                        IsoCode = iso,
+                        Name = region.NativeName,
+                        DialCode = "+" + code.ToString()
+                    };
+                }
+                catch
+                {
+                    return null;
+                }
+            })
+            .Where(ci => ci != null)
+            .OrderBy(ci => ci.Name)
+            .ToList();
+
+            cmbPaises.DataSource = lista;
+            cmbPaises.DisplayMember = "Display";
+            cmbPaises.ValueMember = "IsoCode";
+        }
+
+        private void FormatearTelefono()
+        {
+            if (cmbPaises.SelectedItem is not CountryItem cp)
+                return;
+
+            var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
+
             try
             {
-                var servicio = new CpNegocio.servicios.MetodosOferta();
-                var lista = servicio.ObtenerTodas();
+                var parsed = phoneUtil.Parse(TxtTelefono.Text, cp.IsoCode);
 
-                CboxOfertas.DataSource = lista;
-                CboxOfertas.DisplayMember = "Puesto";  // Muestra el nombre del puesto
-                CboxOfertas.ValueMember = "Id";        // Guarda el ID de la oferta internamente
-                CboxOfertas.SelectedIndex = -1;        // No seleccionar nada por defecto
+                if (phoneUtil.IsValidNumber(parsed))
+                {
+                    string formateado = phoneUtil.Format(parsed, PhoneNumbers.PhoneNumberFormat.INTERNATIONAL);
+                    TxtTelefono.BackColor = Color.White;
+                    System.Windows.Forms.ToolTip tooltip = new System.Windows.Forms.ToolTip();
+                    tooltip.SetToolTip(TxtTelefono, formateado);
+                }
+                else
+                {
+                    TxtTelefono.BackColor = Color.MistyRose;
+                }
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show("Error al cargar las ofertas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                TxtTelefono.BackColor = Color.MistyRose;
             }
         }
+
 
     }
 }

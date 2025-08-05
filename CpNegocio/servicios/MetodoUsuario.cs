@@ -17,12 +17,70 @@ namespace CapaDatos
         {
             using var conn = ObtenerConexion();
             conn.Open();
-            string query = "SELECT COUNT(*) FROM Usuarios WHERE Usuario = @usuario AND Clave = @clave";
+
+            // Recuperamos el usuario y la clave desde la base de datos
+            string query = "SELECT Usuario, Clave FROM Usuarios WHERE Usuario = @usuario";
             using var cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@usuario", usuario);
-            cmd.Parameters.AddWithValue("@clave", clave);
-            return (int)cmd.ExecuteScalar() > 0;
+
+            using var reader = cmd.ExecuteReader();
+
+            // Si hay datos que coinciden con el usuario ingresado
+            if (reader.Read())
+            {
+                // Recuperar los valores de la base de datos
+                string usuarioDB = reader["Usuario"].ToString();
+                string claveDB = reader["Clave"].ToString();
+
+                // Comparar el usuario y la clave con String.Compare para ser sensibles a mayúsculas y minúsculas
+                bool usuarioValido = String.Compare(usuario, usuarioDB, StringComparison.Ordinal) == 0;
+                bool claveValida = String.Compare(clave, claveDB, StringComparison.Ordinal) == 0;
+
+                // Retornar true si ambos son válidos
+                return usuarioValido && claveValida;
+            }
+
+            // Si no se encuentra el usuario
+            return false;
         }
+
+        public static bool CorreoYaRegistrado(string correo)
+        {
+            // Asegúrate de que esta función devuelva 'true' solo si el correo ya está registrado
+            using (var conn = ObtenerConexion())
+            {
+                conn.Open();
+                string query = "SELECT COUNT(*) FROM Usuarios WHERE Correo = @correo";
+                using (var cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@correo", correo);
+                    int count = (int)cmd.ExecuteScalar();
+                    return count > 0; // Retorna true si ya existe un usuario con este correo
+                }
+            }
+        }
+
+        public static bool ExisteUsuario(string usuarioNombre)
+        {
+            try
+            {
+                using (SqlConnection conn = ObtenerConexion())
+                {
+                    conn.Open();
+                    string query = "SELECT COUNT(*) FROM Usuarios WHERE Usuario = @Usuario";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@Usuario", usuarioNombre);
+                    int count = (int)cmd.ExecuteScalar();
+                    return count > 0; // Retorna true si ya existe el nombre de usuario
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al verificar el nombre de usuario: " + ex.Message);
+                return false; // En caso de error
+            }
+        }
+
 
         public static bool ExisteCorreo(string correo)
         {
@@ -42,7 +100,7 @@ namespace CapaDatos
         {
             try
             {
-                using (SqlConnection conn = OfertaDatos.ObtenerConexion())
+                using (SqlConnection conn = ObtenerConexion())
                 {
                     conn.Open();
                     string query = "INSERT INTO Usuarios (Usuario, Clave, Correo, Rol) VALUES (@Usuario, @Clave, @Correo, @Rol)";
@@ -51,15 +109,21 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("@Clave", usuario.Clave);
                     cmd.Parameters.AddWithValue("@Correo", usuario.Correo);
                     cmd.Parameters.AddWithValue("@Rol", usuario.Rol);
+
                     int rowsAffected = cmd.ExecuteNonQuery();
                     return rowsAffected > 0; // Retorna true si se insertaron registros
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                // Log de error detallado
+                Console.WriteLine("Error al insertar usuario: " + ex.Message);
                 return false; // En caso de error
             }
         }
+
+
+
 
         public static bool ComprobarCorreo(string correo)
         {
