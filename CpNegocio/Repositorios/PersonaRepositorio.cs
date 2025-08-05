@@ -22,7 +22,7 @@ namespace CpNegocio.Repositorios
             {
                 //TODO: Abrir la conexión a la base de datos
                 connection.Open();
-                string query = "SELECT Id, Nombre, Dni, Correo, Telefono, Direccion, OfertaId FROM Persona WHERE Dni = @Dni";
+                string query = "SELECT Id, Nombre, Dni, Correo, Telefono, Direccion FROM Persona WHERE Dni = @Dni";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Dni", cedula);
@@ -40,8 +40,7 @@ namespace CpNegocio.Repositorios
                                 Dni = reader.GetString(2),
                                 Correo = reader.GetString(3),
                                 Telefono = reader.GetString(4),
-                                Direccion = reader.GetString(5),
-                                OfertaId = reader.IsDBNull(6) ? (int?)null : reader.GetInt32(6)
+                                Direccion = reader.GetString(5)
                             };
                         }
                     }
@@ -57,7 +56,7 @@ namespace CpNegocio.Repositorios
             {
                 connection.Open();
                 //TODO: Esta consulta SQL obtiene una persona específica por su ID
-                string query = "SELECT Id, Nombre, Dni, Correo, Telefono, Direccion, OfertaId FROM Persona WHERE Id = @Id";
+                string query = "SELECT Id, Nombre, Dni, Correo, Telefono, Direccion FROM Persona WHERE Id = @Id";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -73,8 +72,7 @@ namespace CpNegocio.Repositorios
                                 Dni = reader.GetString(2),
                                 Correo = reader.GetString(3),
                                 Telefono = reader.GetString(4),
-                                Direccion = reader.GetString(5),
-                                OfertaId = reader.IsDBNull(6) ? (int?)null : reader.GetInt32(6)
+                                Direccion = reader.GetString(5)
                             };
                         }
                     }
@@ -90,8 +88,8 @@ namespace CpNegocio.Repositorios
             using (SqlConnection connection = OfertaDatos.ObtenerConexion())
             {
                 connection.Open();
-                //TODO:esta consulta SQL es para obtener a todas las personas que ya han sido asignadas a una oferta específica basándose en el área de la oferta
-                string query = "SELECT p.Id, p.Nombre, p.Dni, p.Correo, p.Telefono, p.Direccion, p.OfertaId FROM Persona p INNER JOIN Oferta o ON p.OfertaId = o.Id WHERE o.Area = @Area AND p.OfertaId IS NOT NULL";
+                //TODO: Esta consulta SQL obtiene una lista de personas que están asignadas a ofertas en un área específica
+                string query = @"SELECT DISTINCT p.Id, p.Nombre, p.Dni, p.Correo, p.Telefono, p.Direccion FROM Persona p INNER JOIN Asignacion a ON p.Id = a.IdPersona INNER JOIN Oferta o ON a.IdOferta = o.Id WHERE o.Area = @Area";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Area", area);
@@ -106,8 +104,7 @@ namespace CpNegocio.Repositorios
                                 Dni = reader.GetString(2),
                                 Correo = reader.GetString(3),
                                 Telefono = reader.GetString(4),
-                                Direccion = reader.GetString(5),
-                                OfertaId = reader.IsDBNull(6) ? (int?)null : reader.GetInt32(6)
+                                Direccion = reader.GetString(5)
                             });
                         }
                     }
@@ -116,21 +113,5 @@ namespace CpNegocio.Repositorios
             return personas;
         }
 
-        //TODO: Implementa la lógica SQL para actualizar OfertaId de una persona
-        public void ActualizarOfertaIdPersona(int idPersona, int idOferta)
-        {
-            using (SqlConnection connection = OfertaDatos.ObtenerConexion())
-            {
-                connection.Open();
-                //TODO: Esta consulta SQL actualiza el campo OfertaId de la tabla Persona para una persona específica
-                string query = "UPDATE Persona SET OfertaId = @IdOferta WHERE Id = @IdPersona";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@IdOferta", idOferta);
-                    command.Parameters.AddWithValue("@IdPersona", idPersona);
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
     }
 }

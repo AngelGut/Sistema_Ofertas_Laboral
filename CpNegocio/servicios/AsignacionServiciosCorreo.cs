@@ -49,7 +49,6 @@ namespace CpNegocio.servicio
 
             //TODO: Persistir la asignación en la base de datos
             _asignacionRepositorio.AsignarPersonaAOferta(idPersona, idOferta);
-            _personaRepositorio.ActualizarOfertaIdPersona(idPersona, idOferta);
 
             //TODO: enviar las notificaciones por correo
             try

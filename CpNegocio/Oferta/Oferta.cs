@@ -21,8 +21,6 @@ namespace CpNegocio.Oferta
         public string Descripcion { get; set; }
         public string Requisitos { get; set; }
         public string TipoContrato { get; set; }
-        public string Area { get; set; }
-
         // → Nueva propiedad para el área
         public string Area { get; set; }
 
