@@ -73,7 +73,7 @@ namespace CpPresentacion
         {
 
         }
-
+        //aqui empieza lo mio 
         private void btnCargarFoto_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
