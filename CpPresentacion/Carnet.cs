@@ -237,7 +237,7 @@ namespace CpPresentacion
             Font fontNombre = new Font("Arial", 11, FontStyle.Bold);
             Font fontPosicion = new Font("Arial", 11, FontStyle.Italic);
             Brush blanco = Brushes.White;
-            Brush morado = new SolidBrush(Color.FromArgb(152, 121, 221));
+            Brush morado = new SolidBrush(Color.FromArgb(255, 215, 0));
 
             SizeF nombreSize = g.MeasureString(nombre, fontNombre);
             SizeF posicionSize = g.MeasureString(posicion, fontPosicion);
