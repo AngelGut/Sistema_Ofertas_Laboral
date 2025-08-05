@@ -181,8 +181,8 @@ namespace CpPresentacion
             // 2. LOGO
             if (picLogo.Image != null)
             {
-                int logoAncho = 150;
-                int logoAlto = 150;
+                int logoAncho = 200;
+                int logoAlto = 200;
                 int logoX = (width - logoAncho) / 2;
                 int logoY = 10;
 
@@ -223,8 +223,8 @@ namespace CpPresentacion
             string nombre = txtNombre.Text;
             string posicion = txtPosicion.Text;
 
-            Font fontNombre = new Font("Arial", 10, FontStyle.Bold);
-            Font fontPosicion = new Font("Arial", 10, FontStyle.Italic);
+            Font fontNombre = new Font("Arial", 11, FontStyle.Bold);
+            Font fontPosicion = new Font("Arial", 11, FontStyle.Italic);
             Brush blanco = Brushes.White;
             Brush morado = new SolidBrush(Color.FromArgb(152, 121, 221));
 
@@ -242,8 +242,8 @@ namespace CpPresentacion
             string telefonoFormateado = FormatearTelefono(txtTelefono.Text);
             string correo = txtCorreo.Text; // Aquí se toma el correo real
 
-            Font fontLabel = new Font("Arial", 8, FontStyle.Bold);
-            Font fontDato = new Font("Arial", 8);
+            Font fontLabel = new Font("Arial", 9, FontStyle.Bold);
+            Font fontDato = new Font("Arial", 9);
             Brush blancoDatos = Brushes.White;
 
             float baseY = textoY + posicionSize.Height + 15;
@@ -342,8 +342,8 @@ namespace CpPresentacion
             g.PageUnit = GraphicsUnit.Inch;
 
             // CR80 size = 3.375 in x 2.125 in
-            float anchoInch = 3.375f;
-            float altoInch = 2.125f;
+            float anchoInch = 2.125f;
+            float altoInch = 3.375f;
 
             // Coordenadas de inicio (con márgenes)
             float startX = 0.5f;
