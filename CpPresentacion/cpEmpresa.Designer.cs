@@ -53,6 +53,7 @@
             tabPage6 = new TabPage();
             tabPage7 = new TabPage();
             tabPage8 = new TabPage();
+            materialComboBox1 = new MaterialSkin.Controls.MaterialComboBox();
             materialTabControl1.SuspendLayout();
             tabPage3.SuspendLayout();
             materialCard2.SuspendLayout();
@@ -85,7 +86,7 @@
             // 
             tabPage1.Location = new Point(4, 34);
             tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3, 3, 3, 3);
+            tabPage1.Padding = new Padding(3);
             tabPage1.Size = new Size(1886, 976);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Menu";
@@ -95,7 +96,7 @@
             // 
             tabPage2.Location = new Point(4, 34);
             tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3, 3, 3, 3);
+            tabPage2.Padding = new Padding(3);
             tabPage2.Size = new Size(1886, 976);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Ofertas laborales";
@@ -187,6 +188,7 @@
             // materialCard1
             // 
             materialCard1.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard1.Controls.Add(materialComboBox1);
             materialCard1.Controls.Add(BtnValidar);
             materialCard1.Controls.Add(TxtCorreo);
             materialCard1.Controls.Add(LblCorreo);
@@ -243,7 +245,7 @@
             TxtCorreo.HideSelection = true;
             TxtCorreo.InsertKeyMode = InsertKeyMode.Default;
             TxtCorreo.LeadingIcon = null;
-            TxtCorreo.Location = new Point(17, 548);
+            TxtCorreo.Location = new Point(17, 716);
             TxtCorreo.Mask = "";
             TxtCorreo.MaxLength = 32767;
             TxtCorreo.MouseState = MaterialSkin.MouseState.OUT;
@@ -275,7 +277,7 @@
             LblCorreo.AutoSize = true;
             LblCorreo.Depth = 0;
             LblCorreo.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblCorreo.Location = new Point(17, 507);
+            LblCorreo.Location = new Point(17, 675);
             LblCorreo.MouseState = MaterialSkin.MouseState.HOVER;
             LblCorreo.Name = "LblCorreo";
             LblCorreo.Size = new Size(129, 19);
@@ -296,7 +298,7 @@
             TxtDireccion.HideSelection = true;
             TxtDireccion.InsertKeyMode = InsertKeyMode.Default;
             TxtDireccion.LeadingIcon = null;
-            TxtDireccion.Location = new Point(17, 408);
+            TxtDireccion.Location = new Point(17, 576);
             TxtDireccion.Mask = "";
             TxtDireccion.MaxLength = 32767;
             TxtDireccion.MouseState = MaterialSkin.MouseState.OUT;
@@ -328,7 +330,7 @@
             LblDireccion.AutoSize = true;
             LblDireccion.Depth = 0;
             LblDireccion.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblDireccion.Location = new Point(17, 387);
+            LblDireccion.Location = new Point(17, 555);
             LblDireccion.MouseState = MaterialSkin.MouseState.HOVER;
             LblDireccion.Name = "LblDireccion";
             LblDireccion.Size = new Size(67, 19);
@@ -349,7 +351,7 @@
             TxtTelefono.HideSelection = true;
             TxtTelefono.InsertKeyMode = InsertKeyMode.Default;
             TxtTelefono.LeadingIcon = null;
-            TxtTelefono.Location = new Point(17, 285);
+            TxtTelefono.Location = new Point(17, 453);
             TxtTelefono.Mask = "";
             TxtTelefono.MaxLength = 32767;
             TxtTelefono.MouseState = MaterialSkin.MouseState.OUT;
@@ -381,7 +383,7 @@
             LblTelefono.AutoSize = true;
             LblTelefono.Depth = 0;
             LblTelefono.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblTelefono.Location = new Point(17, 263);
+            LblTelefono.Location = new Point(17, 431);
             LblTelefono.MouseState = MaterialSkin.MouseState.HOVER;
             LblTelefono.Name = "LblTelefono";
             LblTelefono.Size = new Size(64, 19);
@@ -540,6 +542,28 @@
             tabPage8.Text = "Registro Interno";
             tabPage8.UseVisualStyleBackColor = true;
             // 
+            // materialComboBox1
+            // 
+            materialComboBox1.AutoResize = false;
+            materialComboBox1.BackColor = Color.FromArgb(255, 255, 255);
+            materialComboBox1.Depth = 0;
+            materialComboBox1.DrawMode = DrawMode.OwnerDrawVariable;
+            materialComboBox1.DropDownHeight = 174;
+            materialComboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+            materialComboBox1.DropDownWidth = 121;
+            materialComboBox1.Font = new Font("Roboto Medium", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialComboBox1.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            materialComboBox1.FormattingEnabled = true;
+            materialComboBox1.IntegralHeight = false;
+            materialComboBox1.ItemHeight = 43;
+            materialComboBox1.Location = new Point(17, 343);
+            materialComboBox1.MaxDropDownItems = 4;
+            materialComboBox1.MouseState = MaterialSkin.MouseState.OUT;
+            materialComboBox1.Name = "materialComboBox1";
+            materialComboBox1.Size = new Size(182, 49);
+            materialComboBox1.StartIndex = 0;
+            materialComboBox1.TabIndex = 11;
+            // 
             // cpEmpresa
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -589,5 +613,6 @@
         private TabPage tabPage6;
         private TabPage tabPage7;
         private TabPage tabPage8;
+        private MaterialSkin.Controls.MaterialComboBox materialComboBox1;
     }
 }
