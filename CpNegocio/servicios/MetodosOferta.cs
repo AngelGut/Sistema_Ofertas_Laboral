@@ -76,5 +76,41 @@ namespace CpNegocio.servicios
 
             return lista;
         }
+
+        public void RegistrarOferta(int empresaId, string puesto, string tipo, string descripcion, string requisitos,
+                            int salario, int creditos, string area, bool ocupada)
+        {
+            try
+            {
+                using (SqlConnection conn = OfertaDatos.ObtenerConexion())
+                {
+                    conn.Open();
+
+                    string query = @"
+                INSERT INTO Oferta (EmpresaId, Puesto, Tipo, Descripcion, Requisitos, Salario, Creditos, Area, Ocupada)
+                VALUES (@EmpresaId, @Puesto, @Tipo, @Descripcion, @Requisitos, @Salario, @Creditos, @Area, @Ocupada)";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@EmpresaId", empresaId);
+                        cmd.Parameters.AddWithValue("@Puesto", puesto);
+                        cmd.Parameters.AddWithValue("@Tipo", tipo);
+                        cmd.Parameters.AddWithValue("@Descripcion", descripcion);
+                        cmd.Parameters.AddWithValue("@Requisitos", requisitos);
+                        cmd.Parameters.AddWithValue("@Salario", salario);
+                        cmd.Parameters.AddWithValue("@Creditos", creditos);
+                        cmd.Parameters.AddWithValue("@Area", area);
+                        cmd.Parameters.AddWithValue("@Ocupada", ocupada);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo registrar la oferta: " + ex.Message);
+            }
+        }
+
     }
 }
