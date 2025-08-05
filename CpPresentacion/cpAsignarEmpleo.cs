@@ -14,8 +14,9 @@
     using static System.Windows.Forms.VisualStyles.VisualStyleElement;
     using MaterialSkin;
     using CpNegocio.Oferta;
-using System.Configuration; 
-using Microsoft.Data.SqlClient;
+    using System.Configuration; 
+    using Microsoft.Data.SqlClient;
+
 
     namespace CpPresentacion
     {
@@ -548,5 +549,5 @@ using Microsoft.Data.SqlClient;
 
 
 
-    }
+        }
     }

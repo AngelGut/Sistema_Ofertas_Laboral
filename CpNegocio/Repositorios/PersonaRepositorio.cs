@@ -11,29 +11,28 @@ using Microsoft.Data.SqlClient;
 
 namespace CpNegocio.Repositorios
 {
-    //TODO: Implementación de la interfaz IPersonaRepositorio para interactuar con la base de datos espeficicamente de la tabla persona
+    //TODO: Implementar la interfaz IPersonaRepositorio para la clase PersonaRepositorio
     public class PersonaRepositorio : IPersonaRepositorio
     {
-        //TODO: Clase que implementa los métodos definidos en la interfaz IPersonaRepositorio
+        //TODO: Implementar los métodos de la interfaz IPersonaRepositorio
         public Persona ObtenerPersonaPorCedula(string cedula)
         {
-            //TODO: Usamos un bloque "using" para asegurar que la conexión se cierre correctamente
+            //TODO: Implementar la lógica para obtener una persona por su cédula
             using (SqlConnection connection = OfertaDatos.ObtenerConexion())
             {
-                //TODO: aqui abrimos nuestra conexion
+                //TODO: Abrir la conexión a la base de datos
                 connection.Open();
-
-                //TODO: Implementamos nuestra logica del Select para obtener una persona por su cédula/Dni
                 string query = "SELECT Id, Nombre, Dni, Correo, Telefono, Direccion FROM Persona WHERE Dni = @Dni";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Dni", cedula); //Aqui Cedula ya que es metodo creado es con este Nombre en vez de Dni
+                    command.Parameters.AddWithValue("@Dni", cedula);
 
+                    //TODO: Ejecutar la consulta y leer los resultados
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            //TODO: Creamos una nueva instancia de Persona y asignamos los valores obtenidos del lector
+                            //TODO: Crear una instancia de Persona y asignar los valores leídos
                             return new Persona
                             {
                                 Id = reader.GetInt32(0),
@@ -42,25 +41,77 @@ namespace CpNegocio.Repositorios
                                 Correo = reader.GetString(3),
                                 Telefono = reader.GetString(4),
                                 Direccion = reader.GetString(5)
-
                             };
                         }
                     }
                 }
-            } 
-
-            return null; //TODO: Se retorna null si no se encuentra la persona
+            }
+            return null;
         }
 
+        //TODO: Implementa la lógica SQL para obtener una persona por su ID
+        public Persona ObtenerPersonaPorId(int id)
+        {
+            using (SqlConnection connection = OfertaDatos.ObtenerConexion())
+            {
+                connection.Open();
+                //TODO: Esta consulta SQL obtiene una persona específica por su ID
+                string query = "SELECT Id, Nombre, Dni, Correo, Telefono, Direccion FROM Persona WHERE Id = @Id";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", id);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Persona
+                            {
+                                //TODO: Crear una instancia de Persona y asignar los valores leídos
+                                Id = reader.GetInt32(0),
+                                Nombre = reader.GetString(1),
+                                Dni = reader.GetString(2),
+                                Correo = reader.GetString(3),
+                                Telefono = reader.GetString(4),
+                                Direccion = reader.GetString(5)
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        //TODO: Implementa la lógica SQL para obtener personas por área
         public List<Persona> ObtenerPersonasPorArea(string area)
         {
-            //TODO: Logica similar usando OfertaDatos.ObtenerConexion()
-            return new List<Persona>();
+            List<Persona> personas = new List<Persona>();
+            using (SqlConnection connection = OfertaDatos.ObtenerConexion())
+            {
+                connection.Open();
+                //TODO: Esta consulta SQL obtiene una lista de personas que están asignadas a ofertas en un área específica
+                string query = @"SELECT DISTINCT p.Id, p.Nombre, p.Dni, p.Correo, p.Telefono, p.Direccion FROM Persona p INNER JOIN Asignacion a ON p.Id = a.IdPersona INNER JOIN Oferta o ON a.IdOferta = o.Id WHERE o.Area = @Area";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Area", area);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            personas.Add(new Persona
+                            {
+                                Id = reader.GetInt32(0),
+                                Nombre = reader.GetString(1),
+                                Dni = reader.GetString(2),
+                                Correo = reader.GetString(3),
+                                Telefono = reader.GetString(4),
+                                Direccion = reader.GetString(5)
+                            });
+                        }
+                    }
+                }
+            }
+            return personas;
         }
 
-        public void ActualizarOfertaIdPersona(int idPersona, int idOferta)
-        {
-            
-        }
     }
 }

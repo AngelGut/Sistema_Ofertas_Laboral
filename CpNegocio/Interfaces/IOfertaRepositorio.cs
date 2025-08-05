@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CpNegocio.Oferta
+{
+    public interface IOfertaRepositorio
+    {
+        List<CnOferta> ObtenerOfertasDisponibles();
+        CnOferta ObtenerOfertaPorId(int idOferta);
+    }
+}

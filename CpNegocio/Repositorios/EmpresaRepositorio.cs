@@ -9,12 +9,10 @@ using CpNegocio.Entidades;
 using CpNegocio.Interfaces;
 using Microsoft.Data.SqlClient;
 
-
 namespace CpNegocio.Repositorios
 {
     public class EmpresaRepositorio : IEmpresaRepositorio
     {
-        //TODO: Implementa la lógica SQL para obtener una empresa por su ID
         public CnEmpresa ObtenerEmpresaPorId(int idEmpresa)
         {
             using (SqlConnection connection = OfertaDatos.ObtenerConexion())
@@ -42,7 +40,6 @@ namespace CpNegocio.Repositorios
             return null;
         }
 
-        //TODO: Implementa la lógica SQL para obtener una empresa por su RNC
         public CnEmpresa ObtenerEmpresaPorRnc(string rnc)
         {
             using (SqlConnection connection = OfertaDatos.ObtenerConexion())
