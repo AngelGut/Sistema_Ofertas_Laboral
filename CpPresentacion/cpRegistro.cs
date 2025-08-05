@@ -64,8 +64,6 @@ namespace CpPresentacion
             await Task.Delay(180); // Pausa opcional, transición suave
         }
 
-        // En el evento btnRegistrar_Click del formulario FormRegistro
-        // En el evento btnRegistrar_Click del formulario FormRegistro
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             string usuarioNombre = txtUsuario.Text.Trim();
@@ -113,23 +111,13 @@ namespace CpPresentacion
 
                 // Enviar el correo con la nueva cuenta
                 EnviarCorreoBienvenida(correo, usuarioNombre, clave);
-
-                // Ocultar el formulario de registro (no cerrarlo)
-                this.Hide();
-
-                // Verificar si el formulario Menu ya está abierto
-                var menuForm = Application.OpenForms.OfType<Menu>().FirstOrDefault();
-                if (menuForm == null)
-                {
-                    menuForm = new Menu();
-                }
-                menuForm.Show();  // Mostrar el formulario Menu
             }
             else
             {
                 MessageBox.Show("Hubo un error al registrar el usuario.");
             }
         }
+
 
 
         private void EnviarCorreoBienvenida(string correo, string usuarioNombre, string clave)
