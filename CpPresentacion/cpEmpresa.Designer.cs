@@ -37,6 +37,8 @@
             BtnRegistrar = new MaterialSkin.Controls.MaterialButton();
             DgvEmpresas = new DataGridView();
             materialCard1 = new MaterialSkin.Controls.MaterialCard();
+            lblPais = new MaterialSkin.Controls.MaterialLabel();
+            cmbPaises = new MaterialSkin.Controls.MaterialComboBox();
             BtnValidar = new MaterialSkin.Controls.MaterialButton();
             TxtCorreo = new MaterialSkin.Controls.MaterialMaskedTextBox();
             LblCorreo = new MaterialSkin.Controls.MaterialLabel();
@@ -85,7 +87,7 @@
             // 
             tabPage1.Location = new Point(4, 34);
             tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3, 3, 3, 3);
+            tabPage1.Padding = new Padding(3);
             tabPage1.Size = new Size(1886, 976);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Menu";
@@ -95,7 +97,7 @@
             // 
             tabPage2.Location = new Point(4, 34);
             tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3, 3, 3, 3);
+            tabPage2.Padding = new Padding(3);
             tabPage2.Size = new Size(1886, 976);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Ofertas laborales";
@@ -187,6 +189,8 @@
             // materialCard1
             // 
             materialCard1.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard1.Controls.Add(lblPais);
+            materialCard1.Controls.Add(cmbPaises);
             materialCard1.Controls.Add(BtnValidar);
             materialCard1.Controls.Add(TxtCorreo);
             materialCard1.Controls.Add(LblCorreo);
@@ -207,6 +211,40 @@
             materialCard1.Padding = new Padding(14, 13, 14, 13);
             materialCard1.Size = new Size(489, 947);
             materialCard1.TabIndex = 0;
+            // 
+            // lblPais
+            // 
+            lblPais.AutoSize = true;
+            lblPais.Depth = 0;
+            lblPais.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            lblPais.Location = new Point(17, 256);
+            lblPais.MouseState = MaterialSkin.MouseState.HOVER;
+            lblPais.Name = "lblPais";
+            lblPais.Size = new Size(293, 19);
+            lblPais.TabIndex = 12;
+            lblPais.Text = "Seleccione el pais del numero de telefono";
+            // 
+            // cmbPaises
+            // 
+            cmbPaises.AutoResize = false;
+            cmbPaises.BackColor = Color.FromArgb(255, 255, 255);
+            cmbPaises.Depth = 0;
+            cmbPaises.DrawMode = DrawMode.OwnerDrawVariable;
+            cmbPaises.DropDownHeight = 174;
+            cmbPaises.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbPaises.DropDownWidth = 121;
+            cmbPaises.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
+            cmbPaises.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            cmbPaises.FormattingEnabled = true;
+            cmbPaises.IntegralHeight = false;
+            cmbPaises.ItemHeight = 43;
+            cmbPaises.Location = new Point(17, 290);
+            cmbPaises.MaxDropDownItems = 4;
+            cmbPaises.MouseState = MaterialSkin.MouseState.OUT;
+            cmbPaises.Name = "cmbPaises";
+            cmbPaises.Size = new Size(374, 49);
+            cmbPaises.StartIndex = 0;
+            cmbPaises.TabIndex = 11;
             // 
             // BtnValidar
             // 
@@ -243,7 +281,7 @@
             TxtCorreo.HideSelection = true;
             TxtCorreo.InsertKeyMode = InsertKeyMode.Default;
             TxtCorreo.LeadingIcon = null;
-            TxtCorreo.Location = new Point(17, 548);
+            TxtCorreo.Location = new Point(17, 663);
             TxtCorreo.Mask = "";
             TxtCorreo.MaxLength = 32767;
             TxtCorreo.MouseState = MaterialSkin.MouseState.OUT;
@@ -275,7 +313,7 @@
             LblCorreo.AutoSize = true;
             LblCorreo.Depth = 0;
             LblCorreo.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblCorreo.Location = new Point(17, 507);
+            LblCorreo.Location = new Point(17, 622);
             LblCorreo.MouseState = MaterialSkin.MouseState.HOVER;
             LblCorreo.Name = "LblCorreo";
             LblCorreo.Size = new Size(129, 19);
@@ -296,7 +334,7 @@
             TxtDireccion.HideSelection = true;
             TxtDireccion.InsertKeyMode = InsertKeyMode.Default;
             TxtDireccion.LeadingIcon = null;
-            TxtDireccion.Location = new Point(17, 408);
+            TxtDireccion.Location = new Point(17, 523);
             TxtDireccion.Mask = "";
             TxtDireccion.MaxLength = 32767;
             TxtDireccion.MouseState = MaterialSkin.MouseState.OUT;
@@ -328,7 +366,7 @@
             LblDireccion.AutoSize = true;
             LblDireccion.Depth = 0;
             LblDireccion.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblDireccion.Location = new Point(17, 387);
+            LblDireccion.Location = new Point(17, 502);
             LblDireccion.MouseState = MaterialSkin.MouseState.HOVER;
             LblDireccion.Name = "LblDireccion";
             LblDireccion.Size = new Size(67, 19);
@@ -349,7 +387,7 @@
             TxtTelefono.HideSelection = true;
             TxtTelefono.InsertKeyMode = InsertKeyMode.Default;
             TxtTelefono.LeadingIcon = null;
-            TxtTelefono.Location = new Point(17, 285);
+            TxtTelefono.Location = new Point(17, 400);
             TxtTelefono.Mask = "";
             TxtTelefono.MaxLength = 32767;
             TxtTelefono.MouseState = MaterialSkin.MouseState.OUT;
@@ -381,7 +419,7 @@
             LblTelefono.AutoSize = true;
             LblTelefono.Depth = 0;
             LblTelefono.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblTelefono.Location = new Point(17, 263);
+            LblTelefono.Location = new Point(17, 378);
             LblTelefono.MouseState = MaterialSkin.MouseState.HOVER;
             LblTelefono.Name = "LblTelefono";
             LblTelefono.Size = new Size(64, 19);
@@ -589,5 +627,7 @@
         private TabPage tabPage6;
         private TabPage tabPage7;
         private TabPage tabPage8;
+        private MaterialSkin.Controls.MaterialComboBox cmbPaises;
+        private MaterialSkin.Controls.MaterialLabel lblPais;
     }
 }

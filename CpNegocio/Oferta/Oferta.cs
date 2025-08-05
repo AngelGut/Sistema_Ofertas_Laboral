@@ -23,10 +23,15 @@ namespace CpNegocio.Oferta
         public string TipoContrato { get; set; }
         public string Area { get; set; }
 
+        // → Nueva propiedad para el área
+        public string Area { get; set; }
+
         protected CnOferta()
         {
             Tipo = "Oferta"; // valor por defecto
         }
+
+
     }
 }
 

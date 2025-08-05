@@ -33,10 +33,8 @@ namespace CpPresentacion
             // A) ¿A qué ventana ir?
             Form destino = idx switch
             {
-                0 => Application.OpenForms.OfType<Menu>()
-                                          .FirstOrDefault() ?? new Menu(),
-
-                // Evitamos duplicar instancias si ya estamos ahí
+                // Siempre nueva instancia de Menu
+                0 => new Menu(),
                 1 => this is cpOfertas ? this : new cpOfertas(),
                 2 => this is cpEmpresa ? this : new cpEmpresa(),
                 3 => this is cpPostulante ? this : new cpPostulante(),
@@ -59,9 +57,11 @@ namespace CpPresentacion
             else
                 this.Dispose();  // libera recursos
 
-            await Task.Delay(180); // Pausa opcional, transición suave
-        }
+            // Asegurarnos de que la UI repinte inmediatamente:
+            destino.BringToFront();
+            destino.Activate();
 
-        /* ── Aquí sigue tu lógica propia: botones, validaciones, etc. ── */
+            // await Task.Delay(180); // Pausa opcional, transición suave
+        }
     }
 }

@@ -49,7 +49,9 @@ namespace CpPresentacion
 
             CargarEmpresas(); // Cargar empresas aquí
 
-            
+            PopulateAreas(); //Cargamos las areas laborales
+
+
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -62,10 +64,8 @@ namespace CpPresentacion
             // A) ¿A qué ventana ir?
             Form destino = idx switch
             {
-                0 => Application.OpenForms.OfType<Menu>()
-                                          .FirstOrDefault() ?? new Menu(),
-
-                // Evitamos duplicar instancias si ya estamos ahí
+                // Siempre nueva instancia de Menu
+                0 => new Menu(),
                 1 => this is cpOfertas ? this : new cpOfertas(),
                 2 => this is cpEmpresa ? this : new cpEmpresa(),
                 3 => this is cpPostulante ? this : new cpPostulante(),
@@ -88,7 +88,11 @@ namespace CpPresentacion
             else
                 this.Dispose();  // libera recursos
 
-            await Task.Delay(180); // Pausa opcional, transición suave
+            // Asegurarnos de que la UI repinte inmediatamente:
+            destino.BringToFront();
+            destino.Activate();
+
+          
         }
 
 
@@ -145,6 +149,7 @@ namespace CpPresentacion
                 // Obtener valores seleccionados
                 string tipo = CboxTipoOferta.SelectedItem.ToString();
                 int empresaId = ((CpNegocio.Entidades.EmpresaComboItem)CboxEmpresas.SelectedItem).Id;
+                string areaSeleccionada = cmbArea.SelectedItem?.ToString() ?? string.Empty;
 
                 if (tipo == "Empleo Fijo")
                 {
@@ -154,7 +159,8 @@ namespace CpPresentacion
                         Puesto = TxtPuesto.Text,
                         Descripcion = TxtDescripcion.Text,
                         Requisitos = TxtRequisitos.Text,
-                        Salario = int.TryParse(TxtSalario.Text, out int salario) ? salario : null
+                        Salario = int.TryParse(TxtSalario.Text, out int salario) ? salario : null,
+                        Area = areaSeleccionada
                     };
 
                     new MetodosEmpleoFijo().Registrar(empleo);
@@ -168,7 +174,8 @@ namespace CpPresentacion
                         Puesto = TxtPuesto.Text,
                         Descripcion = TxtDescripcion.Text,
                         Requisitos = TxtRequisitos.Text,
-                        Creditos = int.TryParse(TxtCreditos.Text, out int creditos) ? creditos : 0
+                        Creditos = int.TryParse(TxtCreditos.Text, out int creditos) ? creditos : 0,
+                        Area = areaSeleccionada
                     };
 
                     new MetodosPasantia().Registrar(pasantia);
@@ -333,7 +340,11 @@ namespace CpPresentacion
                 MessageBox.Show("Selecciona una oferta primero.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
-        //ya esta terminado
+        private void PopulateAreas()
+        {
+            cmbArea.DataSource = AreaLaboralProvider.GetAll();
+            cmbArea.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbArea.SelectedIndex = 0;
+        }
     }
 }
