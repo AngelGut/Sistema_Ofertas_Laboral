@@ -37,6 +37,7 @@
             tabPage6 = new TabPage();
             tabPage7 = new TabPage();
             tabPage8 = new TabPage();
+            tabPage9 = new TabPage();
             materialTabControl1.SuspendLayout();
             SuspendLayout();
             // 
@@ -50,6 +51,7 @@
             materialTabControl1.Controls.Add(tabPage6);
             materialTabControl1.Controls.Add(tabPage7);
             materialTabControl1.Controls.Add(tabPage8);
+            materialTabControl1.Controls.Add(tabPage9);
             materialTabControl1.Depth = 0;
             materialTabControl1.Dock = DockStyle.Fill;
             materialTabControl1.Location = new Point(3, 64);
@@ -136,6 +138,15 @@
             tabPage8.Text = "Registro Interno";
             tabPage8.UseVisualStyleBackColor = true;
             // 
+            // tabPage9
+            // 
+            tabPage9.Location = new Point(4, 34);
+            tabPage9.Name = "tabPage9";
+            tabPage9.Size = new Size(2113, 1037);
+            tabPage9.TabIndex = 8;
+            tabPage9.Text = "Historial Postulaciones";
+            tabPage9.UseVisualStyleBackColor = true;
+            // 
             // cpAsignarEmpleo
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -161,5 +172,6 @@
         private TabPage tabPage6;
         private TabPage tabPage7;
         private TabPage tabPage8;
+        private TabPage tabPage9;
     }
 }
