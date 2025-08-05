@@ -23,24 +23,6 @@ namespace CpPresentacion
 
             materialTabControl1.SelectedIndex = 7;
 
-            // Bloqueo por defecto
-            EstablecerModoLectura(true);
-
-            // Mostrar ventana personalizada
-            using (var frm = new frmModoVisualizacion())
-            {
-                if (frm.ShowDialog() == DialogResult.OK)
-                {
-                    if (frm.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
-                        EstablecerModoLectura(false); // Desbloquear
-                    else if (frm.Resultado == frmModoVisualizacion.ResultadoSeleccion.Ver)
-                        EstablecerModoLectura(true); // Queda bloqueado
-                }
-                else
-                {
-                    this.Close(); // Canceló
-                }
-            }
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -207,21 +189,5 @@ namespace CpPresentacion
             txtUsuario.MaxLength = 20;
             txtContraseña.MaxLength = 20;
         }
-
-        private void EstablecerModoLectura(bool soloLectura)
-        {
-            // MaterialTextBox
-            txtUsuario.ReadOnly = soloLectura;
-            txtCorreo.ReadOnly = soloLectura;
-            txtContraseña.ReadOnly = soloLectura;
-
-            // ComboBox
-            cmbRol.Enabled = !soloLectura;
-
-            // Botones
-            btnRegistrar.Enabled = !soloLectura;
-            btnCancelar.Enabled = !soloLectura;
-        }
-
     }
 }
