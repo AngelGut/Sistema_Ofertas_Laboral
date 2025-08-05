@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -145,24 +146,24 @@ namespace CpPresentacion
             else if (!EsCorreoValido(txtCorreo.Text))
 
                 try
-            {
-                panelTarjeta.Invalidate();
-                Bitmap bmp = new Bitmap(panelTarjeta.Width, panelTarjeta.Height);
-                panelTarjeta.DrawToBitmap(bmp, new Rectangle(0, 0, panelTarjeta.Width, panelTarjeta.Height));
-                SaveFileDialog sfd = new SaveFileDialog();
-                sfd.Filter = "Imagen PNG|*.png";
-                sfd.FileName = "Tarjeta_ID.png";
-
-                if (sfd.ShowDialog() == DialogResult.OK)
                 {
-                    bmp.Save(sfd.FileName);
-                    MessageBox.Show("Tarjeta guardada exitosamente.");
+                    panelTarjeta.Invalidate();
+                    Bitmap bmp = new Bitmap(panelTarjeta.Width, panelTarjeta.Height);
+                    panelTarjeta.DrawToBitmap(bmp, new Rectangle(0, 0, panelTarjeta.Width, panelTarjeta.Height));
+                    SaveFileDialog sfd = new SaveFileDialog();
+                    sfd.Filter = "Imagen PNG|*.png";
+                    sfd.FileName = "Tarjeta_ID.png";
+
+                    if (sfd.ShowDialog() == DialogResult.OK)
+                    {
+                        bmp.Save(sfd.FileName);
+                        MessageBox.Show("Tarjeta guardada exitosamente.");
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al guardar la tarjeta: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al guardar la tarjeta: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
         }
 
         private void panelTarjeta_Paint(object sender, PaintEventArgs e)
@@ -320,6 +321,42 @@ namespace CpPresentacion
         private bool EsCorreoValido(string correo)
         {
             return System.Text.RegularExpressions.Regex.IsMatch(correo, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+        }
+
+        private void materialButton1_Click(object sender, EventArgs e)
+        {
+            PrintDocument pd = new PrintDocument();
+            pd.PrintPage += Pd_PrintPage;
+            PrintPreviewDialog preview = new PrintPreviewDialog();
+            preview.Document = pd;
+            preview.ShowDialog(); // Muestra vista previa antes de imprimir
+        }
+
+        //metodo para que se guarde con el formato de imprecion 
+
+        private void Pd_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            Graphics g = e.Graphics;
+
+            // Establecer la unidad en pulgadas y usar 300 DPI
+            g.PageUnit = GraphicsUnit.Inch;
+
+            // CR80 size = 3.375 in x 2.125 in
+            float anchoInch = 3.375f;
+            float altoInch = 2.125f;
+
+            // Coordenadas de inicio (con márgenes)
+            float startX = 0.5f;
+            float startY = 0.5f;
+
+            RectangleF rect = new RectangleF(startX, startY, anchoInch, altoInch);
+
+            // Crear bitmap del panel
+            Bitmap bmp = new Bitmap(panelTarjeta.Width, panelTarjeta.Height);
+            panelTarjeta.DrawToBitmap(bmp, new Rectangle(0, 0, panelTarjeta.Width, panelTarjeta.Height));
+
+            // Dibujar el carnet escalado para que se imprima en tamaño real
+            g.DrawImage(bmp, rect);
         }
     }
 

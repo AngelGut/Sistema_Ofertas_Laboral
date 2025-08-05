@@ -53,6 +53,7 @@
             label2 = new Label();
             label1 = new Label();
             tabPage8 = new TabPage();
+            materialButton1 = new MaterialSkin.Controls.MaterialButton();
             materialTabControl1.SuspendLayout();
             tabPage7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
@@ -145,6 +146,7 @@
             // 
             // tabPage7
             // 
+            tabPage7.Controls.Add(materialButton1);
             tabPage7.Controls.Add(txtCorreo);
             tabPage7.Controls.Add(label5);
             tabPage7.Controls.Add(label4);
@@ -385,7 +387,7 @@
             btnVistaPrevia.Depth = 0;
             btnVistaPrevia.HighEmphasis = true;
             btnVistaPrevia.Icon = null;
-            btnVistaPrevia.Location = new Point(221, 384);
+            btnVistaPrevia.Location = new Point(168, 384);
             btnVistaPrevia.Margin = new Padding(4, 6, 4, 6);
             btnVistaPrevia.MouseState = MaterialSkin.MouseState.HOVER;
             btnVistaPrevia.Name = "btnVistaPrevia";
@@ -425,14 +427,14 @@
             btnGuardarTargeta.Depth = 0;
             btnGuardarTargeta.HighEmphasis = true;
             btnGuardarTargeta.Icon = null;
-            btnGuardarTargeta.Location = new Point(105, 453);
+            btnGuardarTargeta.Location = new Point(316, 384);
             btnGuardarTargeta.Margin = new Padding(4, 6, 4, 6);
             btnGuardarTargeta.MouseState = MaterialSkin.MouseState.HOVER;
             btnGuardarTargeta.Name = "btnGuardarTargeta";
             btnGuardarTargeta.NoAccentTextColor = Color.Empty;
-            btnGuardarTargeta.Size = new Size(157, 36);
+            btnGuardarTargeta.Size = new Size(88, 36);
             btnGuardarTargeta.TabIndex = 3;
-            btnGuardarTargeta.Text = "Guardar Targeta ";
+            btnGuardarTargeta.Text = "Guardar ";
             btnGuardarTargeta.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             btnGuardarTargeta.UseAccentColor = false;
             btnGuardarTargeta.UseVisualStyleBackColor = true;
@@ -478,6 +480,26 @@
             tabPage8.TabIndex = 7;
             tabPage8.Text = "Registro Interno";
             tabPage8.UseVisualStyleBackColor = true;
+            // 
+            // materialButton1
+            // 
+            materialButton1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            materialButton1.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            materialButton1.Depth = 0;
+            materialButton1.HighEmphasis = true;
+            materialButton1.Icon = null;
+            materialButton1.Location = new Point(120, 449);
+            materialButton1.Margin = new Padding(4, 6, 4, 6);
+            materialButton1.MouseState = MaterialSkin.MouseState.HOVER;
+            materialButton1.Name = "materialButton1";
+            materialButton1.NoAccentTextColor = Color.Empty;
+            materialButton1.Size = new Size(200, 36);
+            materialButton1.TabIndex = 15;
+            materialButton1.Text = "Guardar Para Imprimir";
+            materialButton1.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            materialButton1.UseAccentColor = false;
+            materialButton1.UseVisualStyleBackColor = true;
+            materialButton1.Click += materialButton1_Click;
             // 
             // Carnet
             // 
@@ -525,5 +547,6 @@
         private MaterialSkin.Controls.MaterialMaskedTextBox txtCorreo;
         private Label label5;
         private Label label4;
+        private MaterialSkin.Controls.MaterialButton materialButton1;
     }
 }
