@@ -38,7 +38,6 @@ namespace CpPresentacion
             TxtDni.KeyPress += SoloLetrasYNumeros_KeyPress;
 
             CargarPersonas(); // <-- aquí lo puedes invocar también
-            CargarOfertas(); // Llama al método que llenará el ComboBox con las ofertas
             
         }
 
@@ -104,13 +103,6 @@ namespace CpPresentacion
                     return;
                 }
 
-                // ✅ Validar que se haya seleccionado una oferta
-                if (CboxOfertas.SelectedItem == null)
-                {
-                    MessageBox.Show("Debe seleccionar una oferta para el postulante.", "Falta oferta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
                 // 2. Leer valores
                 string nombre = TxtNombre.Text.Trim();
                 string telefono = TxtTelefono.Text.Trim();
@@ -162,8 +154,7 @@ namespace CpPresentacion
                 }
 
                 // 6. Crear objeto Persona (ajusta esto a tu clase real si se llama CnPersona o similar)
-                int ofertaId = (int)CboxOfertas.SelectedValue;
-                var persona = new Persona(nombre, telefono, correo, direccion, dni, ofertaId);
+                var persona = new Persona(nombre, telefono, correo, direccion, dni);
 
                 // 7. Guardar usando tu capa de negocio
                 var servicio = new CpNegocio.servicios.MetodosPersona(persona);
@@ -259,18 +250,11 @@ namespace CpPresentacion
                 if (DgvPersonas.Columns.Contains("Id"))
                     DgvPersonas.Columns["Id"].Visible = false;
 
-                if (DgvPersonas.Columns.Contains("OfertaId"))
-                    DgvPersonas.Columns["OfertaId"].Visible = false;
-
-                // Cambiar encabezados para hacerlo más claro
-                if (DgvPersonas.Columns.Contains("NombreOferta"))
-                    DgvPersonas.Columns["NombreOferta"].HeaderText = "Oferta asignada";
-
                 if (DgvPersonas.Columns.Contains("Nombre"))
                     DgvPersonas.Columns["Nombre"].HeaderText = "Nombre";
 
-                if (DgvPersonas.Columns.Contains("Cedula"))
-                    DgvPersonas.Columns["Cedula"].HeaderText = "Cédula";
+                if (DgvPersonas.Columns.Contains("Dni"))
+                    DgvPersonas.Columns["Dni"].HeaderText = "Cédula";
 
                 if (DgvPersonas.Columns.Contains("Telefono"))
                     DgvPersonas.Columns["Telefono"].HeaderText = "Teléfono";
@@ -283,8 +267,14 @@ namespace CpPresentacion
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar personas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Error al cargar personas:\n" +
+                    ex.Message +
+                    "\n\nDetalle interno:\n" +
+                    (ex.InnerException?.Message ?? "(sin detalle)"),
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
         }
 
         private void TxtNombre_KeyPress(object sender, KeyPressEventArgs e)
@@ -294,24 +284,6 @@ namespace CpPresentacion
             {
                 e.Handled = true; // Bloquea la tecla
                 MessageBox.Show("Solo se permiten letras en este campo.", "Entrada inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void CargarOfertas()
-        {
-            try
-            {
-                var servicio = new CpNegocio.servicios.MetodosOferta();
-                var lista = servicio.ObtenerTodas();
-
-                CboxOfertas.DataSource = lista;
-                CboxOfertas.DisplayMember = "Puesto";  // Muestra el nombre del puesto
-                CboxOfertas.ValueMember = "Id";        // Guarda el ID de la oferta internamente
-                CboxOfertas.SelectedIndex = -1;        // No seleccionar nada por defecto
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al cargar las ofertas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

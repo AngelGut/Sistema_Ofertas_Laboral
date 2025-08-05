@@ -38,8 +38,8 @@
             BtnActualizar = new MaterialSkin.Controls.MaterialButton();
             BtnRegistrar = new MaterialSkin.Controls.MaterialButton();
             materialCard1 = new MaterialSkin.Controls.MaterialCard();
-            CboxOfertas = new ComboBox();
-            LblSelecOferta = new MaterialSkin.Controls.MaterialLabel();
+            lblPais = new MaterialSkin.Controls.MaterialLabel();
+            cmbPaises = new MaterialSkin.Controls.MaterialComboBox();
             LblDireccion = new Label();
             TxtDireccion = new MaterialSkin.Controls.MaterialMaskedTextBox();
             TxtCorreo = new MaterialSkin.Controls.MaterialMaskedTextBox();
@@ -55,8 +55,6 @@
             tabPage6 = new TabPage();
             tabPage7 = new TabPage();
             tabPage8 = new TabPage();
-            lblPais = new MaterialSkin.Controls.MaterialLabel();
-            cmbPaises = new MaterialSkin.Controls.MaterialComboBox();
             materialTabControl1.SuspendLayout();
             tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DgvPersonas).BeginInit();
@@ -201,9 +199,7 @@
             // 
             materialCard1.BackColor = Color.FromArgb(255, 255, 255);
             materialCard1.Controls.Add(lblPais);
-            materialCard1.Controls.Add(CboxOfertas);
             materialCard1.Controls.Add(cmbPaises);
-            materialCard1.Controls.Add(LblSelecOferta);
             materialCard1.Controls.Add(LblDireccion);
             materialCard1.Controls.Add(TxtDireccion);
             materialCard1.Controls.Add(TxtCorreo);
@@ -225,26 +221,39 @@
             materialCard1.Size = new Size(529, 871);
             materialCard1.TabIndex = 1;
             // 
-            // CboxOfertas
+            // lblPais
             // 
-            CboxOfertas.DropDownStyle = ComboBoxStyle.DropDownList;
-            CboxOfertas.FormattingEnabled = true;
-            CboxOfertas.Location = new Point(17, 737);
-            CboxOfertas.Name = "CboxOfertas";
-            CboxOfertas.Size = new Size(182, 33);
-            CboxOfertas.TabIndex = 11;
+            lblPais.AutoSize = true;
+            lblPais.Depth = 0;
+            lblPais.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            lblPais.Location = new Point(17, 226);
+            lblPais.MouseState = MaterialSkin.MouseState.HOVER;
+            lblPais.Name = "lblPais";
+            lblPais.Size = new Size(293, 19);
+            lblPais.TabIndex = 14;
+            lblPais.Text = "Seleccione el pais del numero de telefono";
             // 
-            // LblSelecOferta
+            // cmbPaises
             // 
-            LblSelecOferta.AutoSize = true;
-            LblSelecOferta.Depth = 0;
-            LblSelecOferta.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblSelecOferta.Location = new Point(17, 710);
-            LblSelecOferta.MouseState = MaterialSkin.MouseState.HOVER;
-            LblSelecOferta.Name = "LblSelecOferta";
-            LblSelecOferta.Size = new Size(201, 19);
-            LblSelecOferta.TabIndex = 10;
-            LblSelecOferta.Text = "Selecciona la Oferta Laboral";
+            cmbPaises.AutoResize = false;
+            cmbPaises.BackColor = Color.FromArgb(255, 255, 255);
+            cmbPaises.Depth = 0;
+            cmbPaises.DrawMode = DrawMode.OwnerDrawVariable;
+            cmbPaises.DropDownHeight = 174;
+            cmbPaises.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbPaises.DropDownWidth = 121;
+            cmbPaises.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
+            cmbPaises.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            cmbPaises.FormattingEnabled = true;
+            cmbPaises.IntegralHeight = false;
+            cmbPaises.ItemHeight = 43;
+            cmbPaises.Location = new Point(17, 260);
+            cmbPaises.MaxDropDownItems = 4;
+            cmbPaises.MouseState = MaterialSkin.MouseState.OUT;
+            cmbPaises.Name = "cmbPaises";
+            cmbPaises.Size = new Size(374, 49);
+            cmbPaises.StartIndex = 0;
+            cmbPaises.TabIndex = 13;
             // 
             // LblDireccion
             // 
@@ -565,40 +574,6 @@
             tabPage8.Text = "Registro Interno";
             tabPage8.UseVisualStyleBackColor = true;
             // 
-            // lblPais
-            // 
-            lblPais.AutoSize = true;
-            lblPais.Depth = 0;
-            lblPais.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            lblPais.Location = new Point(17, 226);
-            lblPais.MouseState = MaterialSkin.MouseState.HOVER;
-            lblPais.Name = "lblPais";
-            lblPais.Size = new Size(293, 19);
-            lblPais.TabIndex = 14;
-            lblPais.Text = "Seleccione el pais del numero de telefono";
-            // 
-            // cmbPaises
-            // 
-            cmbPaises.AutoResize = false;
-            cmbPaises.BackColor = Color.FromArgb(255, 255, 255);
-            cmbPaises.Depth = 0;
-            cmbPaises.DrawMode = DrawMode.OwnerDrawVariable;
-            cmbPaises.DropDownHeight = 174;
-            cmbPaises.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbPaises.DropDownWidth = 121;
-            cmbPaises.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
-            cmbPaises.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            cmbPaises.FormattingEnabled = true;
-            cmbPaises.IntegralHeight = false;
-            cmbPaises.ItemHeight = 43;
-            cmbPaises.Location = new Point(17, 260);
-            cmbPaises.MaxDropDownItems = 4;
-            cmbPaises.MouseState = MaterialSkin.MouseState.OUT;
-            cmbPaises.Name = "cmbPaises";
-            cmbPaises.Size = new Size(374, 49);
-            cmbPaises.StartIndex = 0;
-            cmbPaises.TabIndex = 13;
-            // 
             // cpPostulante
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -644,8 +619,6 @@
         private MaterialSkin.Controls.MaterialButton BtnValidar;
         private MaterialSkin.Controls.MaterialCard materialCard2;
         private DataGridView DgvPersonas;
-        private ComboBox CboxOfertas;
-        private MaterialSkin.Controls.MaterialLabel LblSelecOferta;
         private TabPage tabPage5;
         private TabPage tabPage6;
         private TabPage tabPage7;
