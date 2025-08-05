@@ -20,7 +20,7 @@ namespace CpPresentacion
         public Carnet()
         {
             InitializeComponent();
-            panelTarjeta.Size = new Size(268, 343);
+            panelTarjeta.Size = new Size(268, 440);
             materialTabControl1.SelectedIndex = 6;
             // Asociar eventos para validar entrada en tiempo real
             txtNombre.KeyPress += TxtSoloLetras_KeyPress;
@@ -144,26 +144,37 @@ namespace CpPresentacion
                 return;
             }
             else if (!EsCorreoValido(txtCorreo.Text))
+            {
+                MessageBox.Show("El correo electrónico no es válido. Debe tener un formato como: ejemplo@dominio.com", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtCorreo.Focus();
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtTelefono.Text))
+            {
+                MessageBox.Show("El campo Teléfono no puede estar vacío.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTelefono.Focus();
+                return;
+            }
 
-                try
-                {
-                    panelTarjeta.Invalidate();
-                    Bitmap bmp = new Bitmap(panelTarjeta.Width, panelTarjeta.Height);
-                    panelTarjeta.DrawToBitmap(bmp, new Rectangle(0, 0, panelTarjeta.Width, panelTarjeta.Height));
-                    SaveFileDialog sfd = new SaveFileDialog();
-                    sfd.Filter = "Imagen PNG|*.png";
-                    sfd.FileName = "Tarjeta_ID.png";
+            try
+            {
+                panelTarjeta.Invalidate();
+                Bitmap bmp = new Bitmap(panelTarjeta.Width, panelTarjeta.Height);
+                panelTarjeta.DrawToBitmap(bmp, new Rectangle(0, 0, panelTarjeta.Width, panelTarjeta.Height));
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.Filter = "Imagen PNG|*.png";
+                sfd.FileName = "Tarjeta_ID.png";
 
-                    if (sfd.ShowDialog() == DialogResult.OK)
-                    {
-                        bmp.Save(sfd.FileName);
-                        MessageBox.Show("Tarjeta guardada exitosamente.");
-                    }
-                }
-                catch (Exception ex)
+                if (sfd.ShowDialog() == DialogResult.OK)
                 {
-                    MessageBox.Show("Error al guardar la tarjeta: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    bmp.Save(sfd.FileName);
+                    MessageBox.Show("Tarjeta guardada exitosamente.");
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al guardar la tarjeta: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void panelTarjeta_Paint(object sender, PaintEventArgs e)
