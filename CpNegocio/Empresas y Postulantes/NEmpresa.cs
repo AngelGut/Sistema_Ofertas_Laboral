@@ -91,19 +91,19 @@ namespace CpNegocio.Empresas_y_Postulantes
             DataTable tabla = new DataTable();
             // Se usa un LEFT JOIN para asegurar que se muestren las empresas aunque no tengan una oferta asociada todavía
             string query = @"
-        SELECT 
+            SELECT 
             E.Id,
             E.Nombre,
             E.RNC,
             E.Telefono,
             E.Direccion,
             E.Correo,
+            O.Id AS OfertaId,
             O.Area
-        FROM 
+            FROM 
             Empresa E
-        LEFT JOIN 
-            Oferta O ON E.Id = O.EmpresaId
-        ";
+            LEFT JOIN 
+            Oferta O ON E.Id = O.EmpresaId";
 
             using (SqlConnection conn = OfertaDatos.ObtenerConexion())
             {
@@ -117,7 +117,7 @@ namespace CpNegocio.Empresas_y_Postulantes
             return tabla;
         }
 
-        // (Remueve el método MostrarConAreas() si existía, ya que lo reemplazaremos)
+        
 
 
 
