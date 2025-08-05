@@ -40,6 +40,7 @@
             tabPage6 = new TabPage();
             tabPage7 = new TabPage();
             tabPage8 = new TabPage();
+            tabPage9 = new TabPage();
             materialTabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -56,6 +57,7 @@
             materialTabControl1.Controls.Add(tabPage6);
             materialTabControl1.Controls.Add(tabPage7);
             materialTabControl1.Controls.Add(tabPage8);
+            materialTabControl1.Controls.Add(tabPage9);
             materialTabControl1.Depth = 0;
             materialTabControl1.Dock = DockStyle.Fill;
             materialTabControl1.Location = new Point(2, 64);
@@ -64,7 +66,7 @@
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1981, 1148);
+            materialTabControl1.Size = new Size(2003, 1204);
             materialTabControl1.TabIndex = 0;
             materialTabControl1.SelectedIndexChanged += materialTabControl1_SelectedIndexChanged;
             // 
@@ -77,7 +79,7 @@
             tabPage1.Margin = new Padding(2);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(2);
-            tabPage1.Size = new Size(1973, 1110);
+            tabPage1.Size = new Size(1995, 1166);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Menu";
             tabPage1.UseVisualStyleBackColor = true;
@@ -132,7 +134,7 @@
             tabPage2.Margin = new Padding(2);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(2);
-            tabPage2.Size = new Size(1973, 1110);
+            tabPage2.Size = new Size(1995, 1166);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Ofertas Laborales";
             tabPage2.UseVisualStyleBackColor = true;
@@ -143,7 +145,7 @@
             tabPage3.Margin = new Padding(2);
             tabPage3.Name = "tabPage3";
             tabPage3.Padding = new Padding(2);
-            tabPage3.Size = new Size(1973, 1110);
+            tabPage3.Size = new Size(1995, 1166);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Empresas";
             tabPage3.UseVisualStyleBackColor = true;
@@ -154,7 +156,7 @@
             tabPage4.Location = new Point(4, 34);
             tabPage4.Margin = new Padding(2);
             tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(1973, 1110);
+            tabPage4.Size = new Size(1995, 1166);
             tabPage4.TabIndex = 3;
             tabPage4.Text = "Postulantes";
             tabPage4.UseVisualStyleBackColor = true;
@@ -162,9 +164,9 @@
             // tabPage5
             // 
             tabPage5.Location = new Point(4, 34);
-            tabPage5.Margin = new Padding(4, 4, 4, 4);
+            tabPage5.Margin = new Padding(4);
             tabPage5.Name = "tabPage5";
-            tabPage5.Size = new Size(1973, 1110);
+            tabPage5.Size = new Size(1995, 1166);
             tabPage5.TabIndex = 4;
             tabPage5.Text = "Asignar Oferta";
             tabPage5.UseVisualStyleBackColor = true;
@@ -173,7 +175,7 @@
             // 
             tabPage6.Location = new Point(4, 34);
             tabPage6.Name = "tabPage6";
-            tabPage6.Size = new Size(1973, 1110);
+            tabPage6.Size = new Size(1995, 1166);
             tabPage6.TabIndex = 5;
             tabPage6.Text = "Historial Correos";
             tabPage6.UseVisualStyleBackColor = true;
@@ -182,7 +184,7 @@
             // 
             tabPage7.Location = new Point(4, 34);
             tabPage7.Name = "tabPage7";
-            tabPage7.Size = new Size(1973, 1110);
+            tabPage7.Size = new Size(1995, 1166);
             tabPage7.TabIndex = 6;
             tabPage7.Text = "Carnet";
             tabPage7.UseVisualStyleBackColor = true;
@@ -191,17 +193,26 @@
             // 
             tabPage8.Location = new Point(4, 34);
             tabPage8.Name = "tabPage8";
-            tabPage8.Size = new Size(1973, 1110);
+            tabPage8.Size = new Size(1995, 1166);
             tabPage8.TabIndex = 7;
             tabPage8.Text = "Registro interno";
             tabPage8.UseVisualStyleBackColor = true;
+            // 
+            // tabPage9
+            // 
+            tabPage9.Location = new Point(4, 34);
+            tabPage9.Name = "tabPage9";
+            tabPage9.Size = new Size(1995, 1166);
+            tabPage9.TabIndex = 8;
+            tabPage9.Text = "Historial Postulaciones";
+            tabPage9.UseVisualStyleBackColor = true;
             // 
             // Menu
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(1985, 1214);
+            ClientSize = new Size(2007, 1270);
             Controls.Add(materialTabControl1);
             DrawerTabControl = materialTabControl1;
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -233,5 +244,6 @@
         private TabPage tabPage6;
         private TabPage tabPage7;
         private TabPage tabPage8;
+        private TabPage tabPage9;
     }
 }
