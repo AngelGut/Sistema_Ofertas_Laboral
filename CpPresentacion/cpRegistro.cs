@@ -111,6 +111,9 @@ namespace CpPresentacion
 
                 // Enviar el correo con la nueva cuenta
                 EnviarCorreoBienvenida(correo, usuarioNombre, clave);
+                
+                // Limpiar los campos de texto
+                LimpiarCampos();
             }
             else
             {
@@ -118,7 +121,13 @@ namespace CpPresentacion
             }
         }
 
-
+        private void LimpiarCampos()
+        {
+            txtUsuario.Clear();
+            txtCorreo.Clear();
+            txtContraseña.Clear();
+            cmbRol.SelectedIndex = 0;  // Restablecer el ComboBox al primer valor (puedes cambiar esto si prefieres otro valor por defecto)
+        }
 
         private void EnviarCorreoBienvenida(string correo, string usuarioNombre, string clave)
         {
