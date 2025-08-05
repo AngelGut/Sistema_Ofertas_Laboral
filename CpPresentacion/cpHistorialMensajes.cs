@@ -8,7 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MaterialSkin.Controls;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Microsoft.Data.SqlClient;
+using Capa_Datos;
 
 namespace CpPresentacion
 {
@@ -17,13 +18,15 @@ namespace CpPresentacion
         public cpHistorialMensajes()
         {
             InitializeComponent();
-
             materialTabControl1.SelectedIndex = 5;
+
+            // Configurar el DataGridView para que sea solo lectura
+            ConfigurarDataGridView();
         }
 
         private void cpHistorialMensajes_Load(object sender, EventArgs e)
         {
-
+            CargarHistorial(); // Cargar historial al iniciar
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -33,13 +36,9 @@ namespace CpPresentacion
 
         private async Task NavegarA(int idx)
         {
-            // A) ¿A qué ventana ir?
             Form destino = idx switch
             {
-                0 => Application.OpenForms.OfType<Menu>()
-                                          .FirstOrDefault() ?? new Menu(),
-
-                // Evitamos duplicar instancias si ya estamos ahí
+                0 => Application.OpenForms.OfType<Menu>().FirstOrDefault() ?? new Menu(),
                 1 => this is cpOfertas ? this : new cpOfertas(),
                 2 => this is cpEmpresa ? this : new cpEmpresa(),
                 3 => this is cpPostulante ? this : new cpPostulante(),
@@ -50,21 +49,81 @@ namespace CpPresentacion
                 _ => null
             };
 
-            // B) Si ya estamos en el destino, no hacemos nada
             if (destino == null || destino == this) return;
 
-            // C) Mostrar el nuevo formulario
             destino.Show();
 
-            // D) Menu nunca se cierra; los demás se liberan
             if (this is Menu)
-                this.Hide();     // se mantiene en memoria
+                this.Hide();
             else
-                this.Dispose();  // libera recursos
+                this.Dispose();
 
-            await Task.Delay(180); // Pausa opcional, transición suave
+            await Task.Delay(180);
         }
 
+        // 🔹 Cargar historial desde base de datos
+        private void CargarHistorial()
+        {
+            try
+            {
+                string filtro = txtBuscar.Text.Trim();
+
+                using (SqlConnection conn = OfertaDatos.ObtenerConexion())
+                {
+                    conn.Open();
+
+                    string query = @"
+                    SELECT a.Id AS [ID Asignación],
+                           p.Nombre AS [Nombre Persona],
+                           p.Cedula,
+                           p.Correo,
+                           o.Puesto,
+                           e.Nombre AS [Empresa],
+                           a.FechaAsignacion
+                    FROM Asignacion a
+                    JOIN Persona p ON a.PersonaId = p.Id
+                    JOIN Oferta o ON a.OfertaId = o.Id
+                    JOIN Empresa e ON o.EmpresaId = e.Id
+                    WHERE p.Nombre LIKE @filtro OR p.Cedula LIKE @filtro OR p.Correo LIKE @filtro OR o.Puesto LIKE @filtro
+                    ORDER BY a.FechaAsignacion DESC";
+
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@filtro", "%" + filtro + "%");
+
+                    SqlDataAdapter adaptador = new SqlDataAdapter(cmd);
+                    DataTable tabla = new DataTable();
+                    adaptador.Fill(tabla);
+
+                    dgvHistorial.DataSource = tabla;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar el historial: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // 🔹 Configuración del DataGridView
+        private void ConfigurarDataGridView()
+        {
+            dgvHistorial.ReadOnly = true;
+            dgvHistorial.AllowUserToAddRows = false;
+            dgvHistorial.AllowUserToDeleteRows = false;
+            dgvHistorial.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvHistorial.MultiSelect = false;
+            dgvHistorial.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        }
+
+        // 🔹 Evento del botón de búsqueda
+        private void mbtnBuscar_Click(object sender, EventArgs e)
+        {
+            CargarHistorial();
+        }
+
+        private void mbtnLimpiar_Click(object sender, EventArgs e)
+        {
+            txtBuscar.Text = "";            // Limpia el TextBox
+            CargarHistorial();              // Vuelve a cargar todo el historial sin filtro
+        }
     }
 }
-
