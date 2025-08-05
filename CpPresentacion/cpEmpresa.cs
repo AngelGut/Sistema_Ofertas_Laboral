@@ -13,12 +13,14 @@ using CpNegocio.Entidades;
 using System.Text.RegularExpressions;
 using CpNegocio;
 using CpNegocio.servicios;
+using CpPresentacion.Asistencia;   // contiene IReadOnlyContainer y las extensiones
 
 namespace CpPresentacion
 {
-    public partial class cpEmpresa : MaterialForm // <<== ¡Cambiado a MaterialForm!
+    public partial class cpEmpresa : MaterialForm, IReadOnlyContainer
     {
-        
+        public Control Container => this; // Implementación de la interfaz IReadOnlyContainer
+
         public cpEmpresa()
         {
             InitializeComponent();
@@ -48,6 +50,20 @@ namespace CpPresentacion
 
             
             CargarEmpresas();
+
+            // Bloquear todos los controles recursivamente
+            this.SetReadOnly(true);
+
+            // Mostrar mini-form Ver/Editar
+            using (var dlg = new frmModoVisualizacion())
+            {
+                if (dlg.ShowDialog() == DialogResult.OK &&
+                    dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
+                {
+                    // Desbloquear si eligió Editar
+                    this.SetReadOnly(false);
+                }
+            }
         }
 
 

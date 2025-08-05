@@ -12,12 +12,14 @@ using CpNegocio.Entidades;
 using MaterialSkin.Controls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using CpNegocio.servicios;
+using CpPresentacion.Asistencia;   // contiene IReadOnlyContainer y las extensiones
 
 namespace CpPresentacion
 {
-    public partial class cpPostulante : MaterialForm
+    public partial class cpPostulante : MaterialForm, IReadOnlyContainer
     {
-        
+        public Control Container => this; // Implementación de la interfaz
+
         public cpPostulante()
         {
             InitializeComponent();
@@ -38,7 +40,21 @@ namespace CpPresentacion
             TxtDni.KeyPress += SoloLetrasYNumeros_KeyPress;
 
             CargarPersonas(); // <-- aquí lo puedes invocar también
-            
+
+            // Bloquear todos los controles recursivamente
+            this.SetReadOnly(true);
+
+            // Mostrar mini-form Ver/Editar
+            using (var dlg = new frmModoVisualizacion())
+            {
+                if (dlg.ShowDialog() == DialogResult.OK &&
+                    dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
+                {
+                    // Desbloquear si eligió Editar
+                    this.SetReadOnly(false);
+                }
+            }
+
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
