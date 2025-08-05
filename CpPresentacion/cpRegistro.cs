@@ -12,17 +12,33 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using CpPresentacion.Asistencia;   // contiene IReadOnlyContainer y las extensiones
 
 namespace CpPresentacion
 {
-    public partial class cpRegistro : MaterialForm
+    public partial class cpRegistro : MaterialForm, IReadOnlyContainer
     {
+        public Control Container => this;
+
         public cpRegistro()
         {
             InitializeComponent();
 
             materialTabControl1.SelectedIndex = 7;
 
+            // Bloquear todos los controles recursivamente
+            this.SetReadOnly(true);
+
+            // Mostrar mini-form Ver/Editar
+            using (var dlg = new frmModoVisualizacion())
+            {
+                if (dlg.ShowDialog() == DialogResult.OK &&
+                    dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
+                {
+                    // Desbloquear si eligió Editar
+                    this.SetReadOnly(false);
+                }
+            }
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
