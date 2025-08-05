@@ -21,7 +21,11 @@ namespace CpPresentacion
         public cpPostulante()
         {
             InitializeComponent();
-           
+
+            CargarPaises();
+            cmbPaises.SelectedIndexChanged += (s, e) => FormatearTelefono();
+            TxtTelefono.TextChanged += (s, e) => FormatearTelefono();
+
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 3;
 
@@ -114,11 +118,30 @@ namespace CpPresentacion
                 string direccion = TxtDireccion.Text.Trim();
                 string dni = TxtDni.Text.Trim();
 
-                // 3. Validar que el teléfono contenga solo dígitos
-                if (!telefono.All(char.IsDigit))
+                // Validar número con libphonenumber
+                var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
+                if (cmbPaises.SelectedItem is CountryItem cp)
                 {
-                    TxtTelefono.BackColor = Color.MistyRose;
-                    MessageBox.Show("El teléfono debe contener solo números, sin guiones, letras ni espacios.", "Formato inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    try
+                    {
+                        var parsed = phoneUtil.Parse(TxtTelefono.Text, cp.IsoCode);
+                        if (!phoneUtil.IsValidNumber(parsed))
+                        {
+                            MessageBox.Show("El número de teléfono no es válido para el país seleccionado.", "Teléfono inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        telefono = phoneUtil.Format(parsed, PhoneNumbers.PhoneNumberFormat.INTERNATIONAL);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("No se pudo interpretar el número de teléfono.", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un país para el número telefónico.", "País no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -291,6 +314,77 @@ namespace CpPresentacion
                 MessageBox.Show("Error al cargar las ofertas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private class CountryItem
+        {
+            public string IsoCode { get; set; }
+            public string Name { get; set; }
+            public string DialCode { get; set; }
+            public string Display => $"{Name} ({DialCode})";
+            public override string ToString() => Display;
+        }
+
+        private void CargarPaises()
+        {
+            var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
+            var regiones = phoneUtil.GetSupportedRegions().OrderBy(iso => iso);
+
+            var lista = regiones.Select(iso =>
+            {
+                try
+                {
+                    var region = new System.Globalization.RegionInfo(iso);
+                    int code = phoneUtil.GetCountryCodeForRegion(iso);
+                    return new CountryItem
+                    {
+                        IsoCode = iso,
+                        Name = region.NativeName,
+                        DialCode = "+" + code.ToString()
+                    };
+                }
+                catch
+                {
+                    return null;
+                }
+            })
+            .Where(ci => ci != null)
+            .OrderBy(ci => ci.Name)
+            .ToList();
+
+            cmbPaises.DataSource = lista;
+            cmbPaises.DisplayMember = "Display";
+            cmbPaises.ValueMember = "IsoCode";
+        }
+
+        private void FormatearTelefono()
+        {
+            if (cmbPaises.SelectedItem is not CountryItem cp)
+                return;
+
+            var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
+
+            try
+            {
+                var parsed = phoneUtil.Parse(TxtTelefono.Text, cp.IsoCode);
+
+                if (phoneUtil.IsValidNumber(parsed))
+                {
+                    string formateado = phoneUtil.Format(parsed, PhoneNumbers.PhoneNumberFormat.INTERNATIONAL);
+                    TxtTelefono.BackColor = Color.White;
+                    System.Windows.Forms.ToolTip tooltip = new System.Windows.Forms.ToolTip();
+                    tooltip.SetToolTip(TxtTelefono, formateado);
+                }
+                else
+                {
+                    TxtTelefono.BackColor = Color.MistyRose;
+                }
+            }
+            catch
+            {
+                TxtTelefono.BackColor = Color.MistyRose;
+            }
+        }
+
 
     }
 }

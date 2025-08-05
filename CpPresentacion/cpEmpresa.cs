@@ -22,7 +22,13 @@ namespace CpPresentacion
         public cpEmpresa()
         {
             InitializeComponent();
-            
+
+            // Cargar países en el ComboBox
+            CargarPaises();
+            // Evento para formatear cuando cambia selección o número
+            cmbPaises.SelectedIndexChanged += (s, e) => FormatearTelefono();
+            TxtTelefono.TextChanged += (s, e) => FormatearTelefono();
+
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 2;
 
@@ -107,7 +113,33 @@ namespace CpPresentacion
 
                 // 2. Leer datos desde los TextBox
                 string nombre = TxtNombreCompania.Text.Trim();
-                string telefono = TxtTelefono.Text.Trim().Replace(" ", ""); // ❌ quitar espacios
+                // Usar el número formateado con libphonenumber
+                string telefono;
+                var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
+                if (cmbPaises.SelectedItem is CountryItem cp)
+                {
+                    try
+                    {
+                        var parsed = phoneUtil.Parse(TxtTelefono.Text, cp.IsoCode);
+                        if (!phoneUtil.IsValidNumber(parsed))
+                        {
+                            MessageBox.Show("El número de teléfono no es válido para el país seleccionado.", "Teléfono inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        telefono = phoneUtil.Format(parsed, PhoneNumbers.PhoneNumberFormat.INTERNATIONAL);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("No se pudo interpretar el número de teléfono.", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un país para el número telefónico.", "País no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 string correo = TxtCorreo.Text.Trim();
                 string direccion = TxtDireccion.Text.Trim();
                 string rncTexto = TxtRnc.Text.Trim().Replace(" ", ""); // ❌ quitar espacios
@@ -116,14 +148,6 @@ namespace CpPresentacion
                 if (!rncTexto.All(char.IsDigit))
                 {
                     MessageBox.Show("El RNC debe contener solo números, sin espacios ni símbolos.", "Formato inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                // 4. Validar teléfono: solo números
-                if (!telefono.All(char.IsDigit))
-                {
-                    TxtTelefono.BackColor = Color.MistyRose;
-                    MessageBox.Show("El teléfono debe contener solo números, sin espacios ni letras.", "Formato inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -238,5 +262,92 @@ namespace CpPresentacion
                 e.Handled = true; // Bloquea la tecla
             }
         }
+
+        // Clase auxiliar para los países
+        private class CountryItem
+        {
+            public string IsoCode { get; set; } // Código ISO, ej: "US", "DO"
+            public string Name { get; set; } // Nombre visible
+            public string DialCode { get; set; } // Código de marcación, ej: "+1"
+            public string Display => $"{Name} ({DialCode})";
+            public override string ToString() => Display;
+        }
+
+        private void CargarPaises()
+        {
+            var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
+
+            // Obtener todas las regiones soportadas y ordenarlas alfabéticamente
+            var regiones = phoneUtil.GetSupportedRegions().OrderBy(iso => iso);
+
+            // Crear lista filtrando los códigos ISO inválidos para RegionInfo
+            var lista = regiones.Select(iso =>
+            {
+                try
+                {
+                    var region = new System.Globalization.RegionInfo(iso);
+                    int code = phoneUtil.GetCountryCodeForRegion(iso);
+
+                    return new CountryItem
+                    {
+                        IsoCode = iso,
+                        Name = region.NativeName,
+                        DialCode = "+" + code.ToString()
+                    };
+                }
+                catch
+                {
+                    // Si el ISO no es válido (como "AC"), lo omitimos
+                    return null;
+                }
+            })
+            .Where(ci => ci != null)
+            .OrderBy(ci => ci.Name)
+            .ToList();
+
+            // Enlazar la lista al ComboBox
+            cmbPaises.DataSource = lista;
+            cmbPaises.DisplayMember = "Display";   // mostrará "República Dominicana (+1)"
+            cmbPaises.ValueMember = "IsoCode";
+        }
+
+        private void FormatearTelefono()
+        {
+            // Verifica que haya un país seleccionado
+            if (cmbPaises.SelectedItem is not CountryItem cp)
+                return;
+
+            var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
+
+            try
+            {
+                // Intenta parsear el número con el ISO del país
+                var parsed = phoneUtil.Parse(TxtTelefono.Text, cp.IsoCode);
+
+                if (phoneUtil.IsValidNumber(parsed))
+                {
+                    // Si es válido, lo formatea al estilo internacional
+                    string formateado = phoneUtil.Format(parsed, PhoneNumbers.PhoneNumberFormat.INTERNATIONAL);
+
+                    // Cambia el fondo a blanco (válido)
+                    TxtTelefono.BackColor = Color.White;
+
+                    // Muestra el formato correcto como tooltip
+                    System.Windows.Forms.ToolTip tooltip = new System.Windows.Forms.ToolTip();
+                    tooltip.SetToolTip(TxtTelefono, formateado);
+                }
+                else
+                {
+                    // Número no válido → fondo rosado
+                    TxtTelefono.BackColor = Color.MistyRose;
+                }
+            }
+            catch
+            {
+                // Si falla el parseo → fondo rosado
+                TxtTelefono.BackColor = Color.MistyRose;
+            }
+        }
+
     }
 }
