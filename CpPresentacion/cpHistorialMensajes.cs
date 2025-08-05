@@ -74,9 +74,9 @@ namespace CpPresentacion
                     conn.Open();
 
                     string query = @"
-                    SELECT a.Id AS [ID Asignación],
-                           p.Nombre AS [Nombre Persona],
-                           p.Cedula,
+                    SELECT a.Id AS [ID],
+                           p.Nombre AS [Nombre],
+                           p.DNI,
                            p.Correo,
                            o.Puesto,
                            e.Nombre AS [Empresa],
