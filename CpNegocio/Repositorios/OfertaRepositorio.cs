@@ -23,7 +23,7 @@ namespace CpNegocio.Repositorios
             using (SqlConnection connection = OfertaDatos.ObtenerConexion())
             {
                 connection.Open();
-                string query = "SELECT Id, Puesto, Area, EmpresaId, TipoContrato, SalarioFijo, Creditos FROM Oferta WHERE Id = @Id";
+                string query = "SELECT Id, Puesto, Area, EmpresaId, Tipo, Salario, Creditos FROM Oferta WHERE Id = @Id";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", idOferta);
@@ -33,7 +33,7 @@ namespace CpNegocio.Repositorios
                         {
                             string tipoContrato = reader.GetString(4);
 
-                            if (tipoContrato == "Fijo")
+                            if (tipoContrato == "EmpleoFijo")
                             {
                                 return new EmpleoFijo
                                 {
