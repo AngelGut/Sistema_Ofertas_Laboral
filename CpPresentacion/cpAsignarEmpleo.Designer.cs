@@ -36,10 +36,11 @@
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
             tabPage5 = new TabPage();
+            btnAsignar = new MaterialSkin.Controls.MaterialButton();
+            cmbNuevo = new MaterialSkin.Controls.MaterialComboBox();
             cmbFiltroArea = new MaterialSkin.Controls.MaterialComboBox();
             btnBuscar2 = new MaterialSkin.Controls.MaterialButton();
             cmbFiltroEmpresa = new MaterialSkin.Controls.MaterialComboBox();
-            cmbFiltroBusqueda = new ComboBox();
             btnBuscarID = new MaterialSkin.Controls.MaterialButton();
             txtBuscarID = new MaterialSkin.Controls.MaterialMaskedTextBox();
             txtBuscarDNI = new MaterialSkin.Controls.MaterialMaskedTextBox();
@@ -121,10 +122,11 @@
             // 
             // tabPage5
             // 
+            tabPage5.Controls.Add(btnAsignar);
+            tabPage5.Controls.Add(cmbNuevo);
             tabPage5.Controls.Add(cmbFiltroArea);
             tabPage5.Controls.Add(btnBuscar2);
             tabPage5.Controls.Add(cmbFiltroEmpresa);
-            tabPage5.Controls.Add(cmbFiltroBusqueda);
             tabPage5.Controls.Add(btnBuscarID);
             tabPage5.Controls.Add(txtBuscarID);
             tabPage5.Controls.Add(txtBuscarDNI);
@@ -137,6 +139,47 @@
             tabPage5.TabIndex = 4;
             tabPage5.Text = "Asignar Oferta";
             tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // btnAsignar
+            // 
+            btnAsignar.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnAsignar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btnAsignar.Depth = 0;
+            btnAsignar.HighEmphasis = true;
+            btnAsignar.Icon = null;
+            btnAsignar.Location = new Point(600, 492);
+            btnAsignar.Margin = new Padding(4, 6, 4, 6);
+            btnAsignar.MouseState = MaterialSkin.MouseState.HOVER;
+            btnAsignar.Name = "btnAsignar";
+            btnAsignar.NoAccentTextColor = Color.Empty;
+            btnAsignar.Size = new Size(83, 36);
+            btnAsignar.TabIndex = 10;
+            btnAsignar.Text = "Asignar";
+            btnAsignar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btnAsignar.UseAccentColor = false;
+            btnAsignar.UseVisualStyleBackColor = true;
+            // 
+            // cmbNuevo
+            // 
+            cmbNuevo.AutoResize = false;
+            cmbNuevo.BackColor = Color.FromArgb(255, 255, 255);
+            cmbNuevo.Depth = 0;
+            cmbNuevo.DrawMode = DrawMode.OwnerDrawVariable;
+            cmbNuevo.DropDownHeight = 174;
+            cmbNuevo.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbNuevo.DropDownWidth = 121;
+            cmbNuevo.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
+            cmbNuevo.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            cmbNuevo.FormattingEnabled = true;
+            cmbNuevo.IntegralHeight = false;
+            cmbNuevo.ItemHeight = 43;
+            cmbNuevo.Location = new Point(63, 380);
+            cmbNuevo.MaxDropDownItems = 4;
+            cmbNuevo.MouseState = MaterialSkin.MouseState.OUT;
+            cmbNuevo.Name = "cmbNuevo";
+            cmbNuevo.Size = new Size(120, 49);
+            cmbNuevo.StartIndex = 0;
+            cmbNuevo.TabIndex = 9;
             // 
             // cmbFiltroArea
             // 
@@ -156,7 +199,7 @@
             cmbFiltroArea.MaxDropDownItems = 4;
             cmbFiltroArea.MouseState = MaterialSkin.MouseState.OUT;
             cmbFiltroArea.Name = "cmbFiltroArea";
-            cmbFiltroArea.Size = new Size(151, 49);
+            cmbFiltroArea.Size = new Size(213, 49);
             cmbFiltroArea.StartIndex = 0;
             cmbFiltroArea.TabIndex = 8;
             // 
@@ -200,15 +243,6 @@
             cmbFiltroEmpresa.Size = new Size(199, 49);
             cmbFiltroEmpresa.StartIndex = 0;
             cmbFiltroEmpresa.TabIndex = 6;
-            // 
-            // cmbFiltroBusqueda
-            // 
-            cmbFiltroBusqueda.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbFiltroBusqueda.FormattingEnabled = true;
-            cmbFiltroBusqueda.Location = new Point(47, 398);
-            cmbFiltroBusqueda.Name = "cmbFiltroBusqueda";
-            cmbFiltroBusqueda.Size = new Size(151, 28);
-            cmbFiltroBusqueda.TabIndex = 5;
             // 
             // btnBuscarID
             // 
@@ -332,6 +366,7 @@
             dgvEmpresas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvEmpresas.Size = new Size(630, 354);
             dgvEmpresas.TabIndex = 1;
+            dgvEmpresas.CellClick += dgvEmpresas_CellClick;
             dgvEmpresas.CellContentClick += dgvEmpresas_CellContentClick;
             // 
             // dgvPostulantes
@@ -354,6 +389,7 @@
             dgvPostulantes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvPostulantes.Size = new Size(636, 351);
             dgvPostulantes.TabIndex = 0;
+            dgvPostulantes.CellClick += dgvPostulantes_CellClick;
             dgvPostulantes.CellContentClick += dgvPostulantes_CellContentClick;
             // 
             // tabPage6
@@ -426,5 +462,7 @@
         private MaterialSkin.Controls.MaterialComboBox cmbFiltroEmpresa;
         private MaterialSkin.Controls.MaterialButton btnBuscar2;
         private MaterialSkin.Controls.MaterialComboBox cmbFiltroArea;
+        private MaterialSkin.Controls.MaterialButton btnAsignar;
+        private MaterialSkin.Controls.MaterialComboBox cmbNuevo;
     }
 }
