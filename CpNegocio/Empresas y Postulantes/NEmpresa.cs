@@ -67,6 +67,60 @@ namespace CpNegocio.Empresas_y_Postulantes
             }
             return tabla;
         }
+
+        private DataTable EjecutarConsulta(string query)
+        {
+            DataTable tabla = new DataTable();
+            using (SqlConnection conn = OfertaDatos.ObtenerConexion())
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    tabla.Load(reader);
+                }
+            }
+            return tabla;
+        }
+
+
+        // (El resto del código de NEmpresa.cs permanece igual)
+
+        public DataTable ObtenerEmpresasConArea()
+        {
+            DataTable tabla = new DataTable();
+            // Se usa un LEFT JOIN para asegurar que se muestren las empresas aunque no tengan una oferta asociada todavía
+            string query = @"
+            SELECT 
+            E.Id,
+            E.Nombre,
+            E.RNC,
+            E.Telefono,
+            E.Direccion,
+            E.Correo,
+            O.Id AS OfertaId,
+            O.Area
+            FROM 
+            Empresa E
+            LEFT JOIN 
+            Oferta O ON E.Id = O.EmpresaId";
+
+            using (SqlConnection conn = OfertaDatos.ObtenerConexion())
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                {
+                    adapter.Fill(tabla);
+                }
+            }
+            return tabla;
+        }
+
+        
+
+
+
     }
 
 }

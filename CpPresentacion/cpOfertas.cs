@@ -148,62 +148,60 @@ namespace CpPresentacion
         {
             try
             {
-                // Validar que se haya seleccionado una empresa
                 if (CboxEmpresas.SelectedItem == null)
                 {
                     MessageBox.Show("Debe seleccionar una empresa antes de registrar la oferta.", "Empresa requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Validar que se haya seleccionado un tipo de oferta
                 if (CboxTipoOferta.SelectedItem == null)
                 {
                     MessageBox.Show("Debe seleccionar un tipo de oferta.", "Tipo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Obtener valores seleccionados
                 string tipo = CboxTipoOferta.SelectedItem.ToString();
                 int empresaId = ((CpNegocio.Entidades.EmpresaComboItem)CboxEmpresas.SelectedItem).Id;
-                string areaSeleccionada = cmbArea.SelectedItem?.ToString() ?? string.Empty;
+                string puesto = TxtPuesto.Text;
+                string descripcion = TxtDescripcion.Text;
+                string requisitos = TxtRequisitos.Text;
+                string area = cmbArea.SelectedItem?.ToString() ?? "";
+
+                int salario = 0;
+                int creditos = 0;
 
                 if (tipo == "Empleo Fijo")
                 {
-                    var empleo = new EmpleoFijo
+                    if (!int.TryParse(TxtSalario.Text, out salario))
                     {
-                        EmpresaId = empresaId,
-                        Puesto = TxtPuesto.Text,
-                        Descripcion = TxtDescripcion.Text,
-                        Requisitos = TxtRequisitos.Text,
-                        Salario = int.TryParse(TxtSalario.Text, out int salario) ? salario : null,
-                        Area = areaSeleccionada
-                    };
-
-                    new MetodosEmpleoFijo().Registrar(empleo);
-                    MessageBox.Show("Oferta de Empleo registrada con éxito.");
+                        MessageBox.Show("Salario inválido.");
+                        return;
+                    }
                 }
                 else if (tipo == "Pasantia")
                 {
-                    var pasantia = new Pasantia
+                    if (!int.TryParse(TxtCreditos.Text, out creditos))
                     {
-                        EmpresaId = empresaId,
-                        Puesto = TxtPuesto.Text,
-                        Descripcion = TxtDescripcion.Text,
-                        Requisitos = TxtRequisitos.Text,
-                        Creditos = int.TryParse(TxtCreditos.Text, out int creditos) ? creditos : 0,
-                        Area = areaSeleccionada
-                    };
-
-                    new MetodosPasantia().Registrar(pasantia);
-                    MessageBox.Show("Pasantía registrada con éxito.");
-                }
-                else
-                {
-                    MessageBox.Show("Debe seleccionar un tipo de oferta válido.", "Tipo inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                        MessageBox.Show("Créditos inválidos.");
+                        return;
+                    }
                 }
 
-                // Recargar tabla y limpiar
+                // Registrar usando el método unificado
+                var metodosOferta = new MetodosOferta();
+                metodosOferta.RegistrarOferta(
+                    empresaId,
+                    puesto,
+                    tipo,
+                    descripcion,
+                    requisitos,
+                    salario,
+                    creditos,
+                    area,
+                    false
+                );
+
+                MessageBox.Show("Oferta registrada con éxito.");
                 CargarOfertas();
                 LimpiarCampos();
             }
@@ -212,6 +210,7 @@ namespace CpPresentacion
                 MessageBox.Show("Ocurrió un error al registrar la oferta:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         //clase auxiliar para mostrar nombre pero guardar el ID:
         public class EmpresaComboItem
@@ -361,6 +360,7 @@ namespace CpPresentacion
             cmbArea.DataSource = AreaLaboralProvider.GetAll();
             cmbArea.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbArea.SelectedIndex = 0;
-        }
+        } 
     }
+   
 }
