@@ -15,21 +15,27 @@ namespace CpPresentacion
     public partial class FormBoton : MaterialForm
     {
         private readonly IReadOnlyContainer _target;   // formulario a controlar
-        public FormBoton(IReadOnlyContainer target)
+
+        // startInEdit indica el estado inicial del switch
+        public FormBoton(IReadOnlyContainer target, bool startInEdit)
         {
             InitializeComponent();
             {
                 _target = target;
-                InitializeComponent();     // generado por el diseñador
+                InitializeComponent();
+                swthHabilitar.Checked = startInEdit;                 // sincr. inicial
 
                 // Conecta el evento del switch
                 swthHabilitar.CheckedChanged += swthHabilitar_CheckedChanged;
             }
         }
+
+        // ON  = editar   → desbloquear
+        // OFF = solo ver → bloquear
         private void swthHabilitar_CheckedChanged(object sender, EventArgs e)
         {
-            bool editar = swthHabilitar.Checked;   // true = editar
-            _target.SetReadOnly(!editar);          // helper recursivo
+            bool editar = swthHabilitar.Checked;
+            _target.SetReadOnly(!editar);
         }
     }
 }

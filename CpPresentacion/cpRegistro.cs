@@ -19,6 +19,7 @@ namespace CpPresentacion
     public partial class cpRegistro : MaterialForm, IReadOnlyContainer
     {
         public Control Container => this;
+        private FormBoton paleta;
 
         public cpRegistro()
         {
@@ -26,19 +27,25 @@ namespace CpPresentacion
 
             materialTabControl1.SelectedIndex = 7;
 
-            // Bloquear todos los controles recursivamente
-            this.SetReadOnly(true);
-
-            // Mostrar mini-form Ver/Editar
+            // ── 1) Mostrar modal Ver / Editar ───────────────────────────────
+            bool editarModo = false;                           // valor por defecto
             using (var dlg = new frmModoVisualizacion())
             {
                 if (dlg.ShowDialog() == DialogResult.OK &&
                     dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
                 {
-                    // Desbloquear si eligió Editar
-                    this.SetReadOnly(false);
+                    editarModo = true;                         // eligió Editar
                 }
             }
+
+            // ── 2) Aplicar estado inicial al formulario ─────────────────────
+            this.SetReadOnly(!editarModo);                    // true = bloquear
+
+            // ── 3) Crear paleta flotante y sincronizar switch ───────────────
+            paleta = new FormBoton(this, editarModo)          // ← pasa estado
+            {
+                
+            };
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
