@@ -31,9 +31,9 @@ namespace CpNegocio.Repositorios
                     {
                         if (reader.Read())
                         {
-                            string tipoContrato = reader.GetString(4);
+                            string tipo = reader.GetString(reader.GetOrdinal("Tipo"));
 
-                            if (tipoContrato == "EmpleoFijo")
+                            if (tipo == "EmpleoFijo")
                             {
                                 return new EmpleoFijo
                                 {
@@ -41,11 +41,10 @@ namespace CpNegocio.Repositorios
                                     Puesto = reader.GetString(1),
                                     Area = reader.GetString(2),
                                     EmpresaId = reader.GetInt32(3),
-                                    TipoContrato = tipoContrato,
                                     Salario = reader.GetInt32(5)
                                 };
                             }
-                            else if (tipoContrato == "Pasantia")
+                            else if (tipo == "Pasantia")
                             {
                                 return new Pasantia
                                 {
@@ -53,7 +52,6 @@ namespace CpNegocio.Repositorios
                                     Puesto = reader.GetString(1),
                                     Area = reader.GetString(2),
                                     EmpresaId = reader.GetInt32(3),
-                                    TipoContrato = tipoContrato,
                                     Creditos = reader.GetInt32(6)
                                 };
                             }
