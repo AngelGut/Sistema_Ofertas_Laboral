@@ -44,8 +44,17 @@ namespace CpPresentacion
             // ── 3) Crear paleta flotante y sincronizar switch ───────────────
             paleta = new FormBoton(this, editarModo)          // ← pasa estado
             {
-                
+                FormBorderStyle = FormBorderStyle.FixedToolWindow,
+                StartPosition = FormStartPosition.Manual,
+                TopMost = true,
+                ShowInTaskbar = false
             };
+            PositionPaleta();
+            paleta.Show(this);
+
+            // Reposicionar si mueves / redimensionas
+            LocationChanged += (s, e) => PositionPaleta();
+            SizeChanged += (s, e) => PositionPaleta();
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -211,6 +220,14 @@ namespace CpPresentacion
             // Establecer la longitud máxima para los campos de texto
             txtUsuario.MaxLength = 20;
             txtContraseña.MaxLength = 20;
+        }
+
+        private void PositionPaleta()
+            => paleta.Location = new Point(Right + 10, Top);
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            paleta?.Close();
+            base.OnFormClosing(e);
         }
     }
 }
