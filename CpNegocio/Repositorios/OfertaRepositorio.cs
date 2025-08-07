@@ -9,7 +9,6 @@ using Microsoft.Data.SqlClient;
 
 namespace CpNegocio.Repositorios
 {
-
     public class OfertaRepositorio : IOfertaRepositorio
     {
         public List<CnOferta> ObtenerOfertasDisponibles()
@@ -18,9 +17,8 @@ namespace CpNegocio.Repositorios
             using (SqlConnection connection = OfertaDatos.ObtenerConexion())
             {
                 connection.Open();
-                // La consulta ahora sigue el orden exacto de las columnas de tu tabla
-                string query = @"SELECT Id, EmpresaId, Puesto, Tipo, Descripcion, Requisitos, Salario, Creditos, Area 
-                                 FROM Oferta 
+                string query = @"SELECT Id, EmpresaId, Puesto, Tipo, Descripcion, Requisitos, Salario, Creditos, Area
+                                 FROM Oferta
                                  WHERE Ocupada = 0";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
@@ -29,34 +27,35 @@ namespace CpNegocio.Repositorios
                     {
                         while (reader.Read())
                         {
-                            // Los índices numéricos coinciden con el orden de la consulta
-                            string tipoContrato = reader.GetString(3); // 'Tipo' es la cuarta columna (índice 3)
+                            // Obtenemos el tipo de la base de datos de manera segura
+                            string tipoContrato = reader["Tipo"].ToString();
+
                             if (tipoContrato == "EmpleoFijo")
                             {
                                 ofertas.Add(new EmpleoFijo
                                 {
-                                    Id = reader.GetInt32(0),
-                                    EmpresaId = reader.GetInt32(1),
-                                    Puesto = reader.GetString(2),
+                                    Id = (int)reader["Id"],
+                                    EmpresaId = (int)reader["EmpresaId"],
+                                    Puesto = reader["Puesto"].ToString(),
                                     Tipo = tipoContrato,
-                                    Descripcion = reader.GetString(4),
-                                    Requisitos = reader.GetString(5),
-                                    Salario = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
-                                    Area = reader.GetString(8) // 'Area' es la novena columna (índice 8)
+                                    Descripcion = reader["Descripcion"].ToString(),
+                                    Requisitos = reader["Requisitos"].ToString(),
+                                    Salario = reader["Salario"] as int? ?? 0,
+                                    Area = reader["Area"].ToString()
                                 });
                             }
                             else if (tipoContrato == "Pasantia")
                             {
                                 ofertas.Add(new Pasantia
                                 {
-                                    Id = reader.GetInt32(0),
-                                    EmpresaId = reader.GetInt32(1),
-                                    Puesto = reader.GetString(2),
+                                    Id = (int)reader["Id"],
+                                    EmpresaId = (int)reader["EmpresaId"],
+                                    Puesto = reader["Puesto"].ToString(),
                                     Tipo = tipoContrato,
-                                    Descripcion = reader.GetString(4),
-                                    Requisitos = reader.GetString(5),
-                                    Creditos = reader.IsDBNull(7) ? 0 : reader.GetInt32(7),
-                                    Area = reader.GetString(8) // 'Area' es la novena columna (índice 8)
+                                    Descripcion = reader["Descripcion"].ToString(),
+                                    Requisitos = reader["Requisitos"].ToString(),
+                                    Creditos = reader["Creditos"] as int? ?? 0,
+                                    Area = reader["Area"].ToString()
                                 });
                             }
                         }
@@ -71,7 +70,6 @@ namespace CpNegocio.Repositorios
             using (SqlConnection connection = OfertaDatos.ObtenerConexion())
             {
                 connection.Open();
-                // La consulta también se ha ajustado para coincidir con tu tabla
                 string query = "SELECT Id, EmpresaId, Puesto, Tipo, Descripcion, Requisitos, Salario, Creditos, Area FROM Oferta WHERE Id = @Id";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -80,35 +78,34 @@ namespace CpNegocio.Repositorios
                     {
                         if (reader.Read())
                         {
-                            // Los índices numéricos coinciden con el orden de la consulta
-                            string tipo = reader.GetString(3); // 'Tipo' es la cuarta columna (índice 3)
+                            string tipo = reader["Tipo"].ToString();
 
                             if (tipo == "EmpleoFijo")
                             {
                                 return new EmpleoFijo
                                 {
-                                    Id = reader.GetInt32(0),
-                                    EmpresaId = reader.GetInt32(1),
-                                    Puesto = reader.GetString(2),
+                                    Id = (int)reader["Id"],
+                                    EmpresaId = (int)reader["EmpresaId"],
+                                    Puesto = reader["Puesto"].ToString(),
                                     Tipo = tipo,
-                                    Descripcion = reader.GetString(4),
-                                    Requisitos = reader.GetString(5),
-                                    Salario = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
-                                    Area = reader.GetString(8)
+                                    Descripcion = reader["Descripcion"].ToString(),
+                                    Requisitos = reader["Requisitos"].ToString(),
+                                    Salario = reader["Salario"] as int? ?? 0,
+                                    Area = reader["Area"].ToString()
                                 };
                             }
                             else if (tipo == "Pasantia")
                             {
                                 return new Pasantia
                                 {
-                                    Id = reader.GetInt32(0),
-                                    EmpresaId = reader.GetInt32(1),
-                                    Puesto = reader.GetString(2),
+                                    Id = (int)reader["Id"],
+                                    EmpresaId = (int)reader["EmpresaId"],
+                                    Puesto = reader["Puesto"].ToString(),
                                     Tipo = tipo,
-                                    Descripcion = reader.GetString(4),
-                                    Requisitos = reader.GetString(5),
-                                    Creditos = reader.IsDBNull(7) ? 0 : reader.GetInt32(7),
-                                    Area = reader.GetString(8)
+                                    Descripcion = reader["Descripcion"].ToString(),
+                                    Requisitos = reader["Requisitos"].ToString(),
+                                    Creditos = reader["Creditos"] as int? ?? 0,
+                                    Area = reader["Area"].ToString()
                                 };
                             }
                         }

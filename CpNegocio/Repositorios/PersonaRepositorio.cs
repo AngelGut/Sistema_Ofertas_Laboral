@@ -49,14 +49,14 @@ namespace CpNegocio.Repositorios
             return null;
         }
 
-        //TODO: Implementa la lógica SQL para obtener una persona por su ID
         public Persona ObtenerPersonaPorId(int id)
         {
+            // Ahora usa la clase OfertaDatos para obtener la conexión
             using (SqlConnection connection = OfertaDatos.ObtenerConexion())
             {
                 connection.Open();
-                //TODO: Esta consulta SQL obtiene una persona específica por su ID
-                string query = "SELECT Id, Nombre, Dni, Correo, Telefono, Direccion FROM Persona WHERE Id = @Id";
+
+                string query = "SELECT Id, Dni, Nombre, Correo, Telefono FROM Persona WHERE Id = @Id";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -66,13 +66,11 @@ namespace CpNegocio.Repositorios
                         {
                             return new Persona
                             {
-                                //TODO: Crear una instancia de Persona y asignar los valores leídos
-                                Id = reader.GetInt32(0),
-                                Nombre = reader.GetString(1),
-                                Dni = reader.GetString(2),
-                                Correo = reader.GetString(3),
-                                Telefono = reader.GetString(4),
-                                Direccion = reader.GetString(5)
+                                Id = (int)reader["Id"],
+                                Dni = reader["Dni"].ToString(),
+                                Nombre = reader["Nombre"].ToString(),
+                                Correo = reader["Correo"].ToString(),
+                                Telefono = reader["Telefono"].ToString()
                             };
                         }
                     }
@@ -80,6 +78,7 @@ namespace CpNegocio.Repositorios
             }
             return null;
         }
+
 
         //TODO: Implementa la lógica SQL para obtener personas por área
         public List<Persona> ObtenerPersonasPorArea(string area)
@@ -89,7 +88,7 @@ namespace CpNegocio.Repositorios
             {
                 connection.Open();
                 //TODO: Esta consulta SQL obtiene una lista de personas que están asignadas a ofertas en un área específica
-                string query = @"SELECT DISTINCT p.Id, p.Nombre, p.Dni, p.Correo, p.Telefono, p.Direccion FROM Persona p INNER JOIN Asignacion a ON p.Id = a.IdPersona INNER JOIN Oferta o ON a.IdOferta = o.Id WHERE o.Area = @Area";
+                string query = @"SELECT DISTINCT p.Id, p.Nombre, p.Dni, p.Correo, p.Telefono FROM Persona p INNER JOIN Asignacion a ON p.Id = a.IdPersona INNER JOIN Oferta o ON a.IdOferta = o.Id WHERE o.Area = @Area";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Area", area);
@@ -104,7 +103,6 @@ namespace CpNegocio.Repositorios
                                 Dni = reader.GetString(2),
                                 Correo = reader.GetString(3),
                                 Telefono = reader.GetString(4),
-                                Direccion = reader.GetString(5)
                             });
                         }
                     }

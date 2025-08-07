@@ -112,9 +112,16 @@ namespace CpPresentacion
                 if (dgvEmpresas.Columns.Contains("NombreEmpresa")) dgvEmpresas.Columns["NombreEmpresa"].HeaderText = "Empresa";
                 if (dgvEmpresas.Columns.Contains("NombrePuesto")) dgvEmpresas.Columns["NombrePuesto"].HeaderText = "Puesto";
                 if (dgvEmpresas.Columns.Contains("Area")) dgvEmpresas.Columns["Area"].HeaderText = "Área Laboral";
-                if (dgvEmpresas.Columns.Contains("Tipo")) dgvEmpresas.Columns["Tipo"].HeaderText = "Tipo";
+                if (dgvEmpresas.Columns.Contains("Tipo")) dgvEmpresas.Columns["Tipo"].HeaderText = "Tipo"; // <-- SE ASEGURA DE QUE SE MUESTRE EL TIPO
                 if (dgvEmpresas.Columns.Contains("Descripcion")) dgvEmpresas.Columns["Descripcion"].HeaderText = "Descripción";
                 if (dgvEmpresas.Columns.Contains("Creditos")) dgvEmpresas.Columns["Creditos"].HeaderText = "Créditos";
+                if (dgvEmpresas.Columns.Contains("Salario")) dgvEmpresas.Columns["Salario"].HeaderText = "Salario"; // <-- AGREGADO PARA CLARIDAD
+
+                // Oculta las columnas que no son necesarias
+                if (dgvEmpresas.Columns.Contains("EmpresaId")) dgvEmpresas.Columns["EmpresaId"].Visible = false;
+                if (dgvEmpresas.Columns.Contains("RNC")) dgvEmpresas.Columns["RNC"].Visible = false;
+                if (dgvEmpresas.Columns.Contains("Descripcion")) dgvEmpresas.Columns["Descripcion"].Visible = false;
+                if (dgvEmpresas.Columns.Contains("Requisitos")) dgvEmpresas.Columns["Requisitos"].Visible = false;
             }
             catch (Exception ex)
             {
