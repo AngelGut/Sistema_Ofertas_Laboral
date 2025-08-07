@@ -179,7 +179,7 @@ using CpNegocio.servicio;
                 vista.RowFilter = filtro;
                 dgvPostulantes.DataSource = vista;
 
-                // ✅ Verificamos si la vista está vacía DESPUÉS de aplicar el filtro
+                //Verificamos si la vista está vacía DESPUÉS de aplicar el filtro
                 if (vista.Count == 0)
                 {
                     MessageBox.Show($"No se encontró ningún postulante con {opcion}: {texto}", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
