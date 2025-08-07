@@ -13,65 +13,63 @@ namespace CapaDatos
 
         public static SqlConnection ObtenerConexion() => new SqlConnection(cadena);
 
-        public static bool VerificarCredenciales(string usuario, string clave)
+        public static async Task<bool> VerificarCredencialesAsync(string usuario, string clave)
         {
             using var conn = ObtenerConexion();
-            conn.Open();
+            await conn.OpenAsync();  // Usar la versión asíncrona de Open()
 
-            // Recuperamos el usuario y la clave desde la base de datos
             string query = "SELECT Usuario, Clave FROM Usuarios WHERE Usuario = @usuario";
             using var cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@usuario", usuario);
 
-            using var reader = cmd.ExecuteReader();
+            using var reader = await cmd.ExecuteReaderAsync();  // Usar la versión asíncrona de ExecuteReader()
 
-            // Si hay datos que coinciden con el usuario ingresado
             if (reader.Read())
             {
-                // Recuperar los valores de la base de datos
                 string usuarioDB = reader["Usuario"].ToString();
                 string claveDB = reader["Clave"].ToString();
 
-                // Comparar el usuario y la clave con String.Compare para ser sensibles a mayúsculas y minúsculas
-                bool usuarioValido = String.Compare(usuario, usuarioDB, StringComparison.Ordinal) == 0;
-                bool claveValida = String.Compare(clave, claveDB, StringComparison.Ordinal) == 0;
+                bool usuarioValido = string.Compare(usuario, usuarioDB, StringComparison.Ordinal) == 0;
+                bool claveValida = string.Compare(clave, claveDB, StringComparison.Ordinal) == 0;
 
-                // Retornar true si ambos son válidos
                 return usuarioValido && claveValida;
             }
 
-            // Si no se encuentra el usuario
             return false;
         }
 
-        public static bool CorreoYaRegistrado(string correo)
+
+        public static async Task<bool> ExisteCorreoAsync(string correo)
         {
-            // Asegúrate de que esta función devuelva 'true' solo si el correo ya está registrado
-            using (var conn = ObtenerConexion())
-            {
-                conn.Open();
-                string query = "SELECT COUNT(*) FROM Usuarios WHERE Correo = @correo";
-                using (var cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@correo", correo);
-                    int count = (int)cmd.ExecuteScalar();
-                    return count > 0; // Retorna true si ya existe un usuario con este correo
-                }
-            }
+            using var conn = ObtenerConexion();
+            await conn.OpenAsync();  // Usar la versión asíncrona de Open()
+
+            string query = "SELECT COUNT(*) FROM Usuarios WHERE Correo = @correo";
+            using var cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@correo", correo);
+            int count = (int)await cmd.ExecuteScalarAsync();  // Usar ExecuteScalarAsync
+
+            return count > 0;
         }
 
-        public static bool ExisteUsuario(string usuarioNombre)
+
+        public static async Task<bool> ExisteUsuarioAsync(string usuarioNombre)
         {
             try
             {
                 using (SqlConnection conn = ObtenerConexion())
                 {
-                    conn.Open();
+                    await conn.OpenAsync();  // Usar la versión asíncrona de Open()
+
                     string query = "SELECT COUNT(*) FROM Usuarios WHERE Usuario = @Usuario";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@Usuario", usuarioNombre);
-                    int count = (int)cmd.ExecuteScalar();
-                    return count > 0; // Retorna true si ya existe el nombre de usuario
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Usuario", usuarioNombre);
+
+                        // Usamos ExecuteScalarAsync para obtener el valor de la consulta
+                        int count = (int)await cmd.ExecuteScalarAsync();  // Usar ExecuteScalarAsync
+                        return count > 0; // Retorna true si ya existe el nombre de usuario
+                    }
                 }
             }
             catch (Exception ex)
@@ -82,82 +80,79 @@ namespace CapaDatos
         }
 
 
-        public static bool ExisteCorreo(string correo)
-        {
-            using (var conn = OfertaDatos.ObtenerConexion())
-            {
-                conn.Open();
-                string query = "SELECT COUNT(*) FROM Usuarios WHERE Correo = @correo";
-                using (var cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@correo", correo);
-                    return (int)cmd.ExecuteScalar() > 0;
-                }
-            }
-        }
 
-        public static bool InsertarUsuario(Usuario usuario)
+        public static async Task<bool> InsertarUsuarioAsync(Usuario usuario)
         {
             try
             {
-                using (SqlConnection conn = ObtenerConexion())
-                {
-                    conn.Open();
-                    string query = "INSERT INTO Usuarios (Usuario, Clave, Correo, Rol) VALUES (@Usuario, @Clave, @Correo, @Rol)";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@Usuario", usuario.UsuarioNombre);
-                    cmd.Parameters.AddWithValue("@Clave", usuario.Clave);
-                    cmd.Parameters.AddWithValue("@Correo", usuario.Correo);
-                    cmd.Parameters.AddWithValue("@Rol", usuario.Rol);
+                using var conn = ObtenerConexion();
+                await conn.OpenAsync();  // Usar la versión asíncrona de Open()
 
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                    return rowsAffected > 0; // Retorna true si se insertaron registros
-                }
+                string query = "INSERT INTO Usuarios (Usuario, Clave, Correo, Rol) VALUES (@Usuario, @Clave, @Correo, @Rol)";
+                using var cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Usuario", usuario.UsuarioNombre);
+                cmd.Parameters.AddWithValue("@Clave", usuario.Clave);
+                cmd.Parameters.AddWithValue("@Correo", usuario.Correo);
+                cmd.Parameters.AddWithValue("@Rol", usuario.Rol);
+
+                int rowsAffected = await cmd.ExecuteNonQueryAsync();  // Usar ExecuteNonQueryAsync
+                return rowsAffected > 0;
             }
             catch (Exception ex)
             {
                 // Log de error detallado
                 Console.WriteLine("Error al insertar usuario: " + ex.Message);
-                return false; // En caso de error
+                return false;
             }
         }
 
 
-
-
-        public static bool ComprobarCorreo(string correo)
+        public static async Task<bool> ComprobarCorreoAsync(string correo)
         {
             try
             {
-                using (SqlConnection conn = OfertaDatos.ObtenerConexion())
-                {
-                    conn.Open();
-                    string query = "SELECT COUNT(*) FROM Usuarios WHERE Correo = @Correo";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@Correo", correo);
-                    int count = (int)cmd.ExecuteScalar();
-                    return count > 0; // Retorna true si ya existe el correo
-                }
+                using var conn = ObtenerConexion();
+                await conn.OpenAsync();  // Usar la versión asíncrona de Open()
+
+                string query = "SELECT COUNT(*) FROM Usuarios WHERE Correo = @Correo";
+                using var cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Correo", correo);
+
+                int count = (int)await cmd.ExecuteScalarAsync();  // Usar ExecuteScalarAsync
+                return count > 0;
             }
             catch (Exception)
             {
-                return false; // En caso de error
+                return false;  // En caso de error
             }
         }
 
-        public static bool CambiarClave(string correo, string nuevaClave)
+
+        public static async Task<bool> CambiarClaveAsync(string correo, string nuevaClave)
         {
-            using (var conn = OfertaDatos.ObtenerConexion())  // Usando OfertaDatos.ObtenerConexion() para la conexión
-            {
-                conn.Open();
-                string query = "UPDATE Usuarios SET Clave = @clave WHERE Correo = @correo";
-                using (var cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@clave", nuevaClave);
-                    cmd.Parameters.AddWithValue("@correo", correo);
-                    return cmd.ExecuteNonQuery() > 0;  // Retorna true si la contraseña fue actualizada
-                }
-            }
+            using var conn = ObtenerConexion();
+            await conn.OpenAsync();  // Usar la versión asíncrona de Open()
+
+            string query = "UPDATE Usuarios SET Clave = @clave WHERE Correo = @correo";
+            using var cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@clave", nuevaClave);
+            cmd.Parameters.AddWithValue("@correo", correo);
+
+            int rowsAffected = await cmd.ExecuteNonQueryAsync();  // Usar ExecuteNonQueryAsync
+            return rowsAffected > 0;
+        }
+
+        public static async Task<bool> CorreoYaRegistradoAsync(string correo)
+        {
+            using var conn = ObtenerConexion();
+            await conn.OpenAsync();  // Usar la versión asíncrona de Open()
+
+            string query = "SELECT COUNT(*) FROM Usuarios WHERE Correo = @correo";
+            using var cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@correo", correo);
+
+            int count = (int)await cmd.ExecuteScalarAsync();  // Usar ExecuteScalarAsync
+            return count > 0;
         }
 
 
