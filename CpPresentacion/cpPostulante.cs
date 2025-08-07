@@ -1,4 +1,8 @@
-﻿using System;
+﻿using CpNegocio.Entidades;
+using CpNegocio.servicios;
+using MaterialSkin.Controls;
+using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,16 +12,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using CpNegocio.Entidades;
-using MaterialSkin.Controls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using CpNegocio.servicios;
 
 namespace CpPresentacion
 {
     public partial class cpPostulante : MaterialForm
     {
-        
+
         public cpPostulante()
         {
             InitializeComponent();
@@ -37,8 +38,10 @@ namespace CpPresentacion
             TxtTelefono.KeyPress += SoloNumeros_KeyPress;
             TxtDni.KeyPress += SoloLetrasYNumeros_KeyPress;
 
-            CargarPersonas(); // <-- aquí lo puedes invocar también
-            
+            CargarFiltros();  // Llamada a cargar los filtros
+            CargarPersonas();
+            AsignarEventosDeValidacion();
+
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -241,16 +244,19 @@ namespace CpPresentacion
         {
             try
             {
+                // Obtener las personas
                 var persona = new Persona();
                 var servicio = new CpNegocio.servicios.MetodosPersona(persona);
-                DataTable tabla = servicio.Buscar();
+                DataTable tabla = servicio.Buscar();  // Obtén los datos de la base de datos
 
+                // Asigna los datos al DataGridView
                 DgvPersonas.DataSource = tabla;
 
-                // Ocultar columnas no necesarias
+                // Asegúrate de que la columna 'Id' esté visible
                 if (DgvPersonas.Columns.Contains("Id"))
-                    DgvPersonas.Columns["Id"].Visible = false;
+                    DgvPersonas.Columns["Id"].Visible = true; // Asegúrate de que la columna 'Id' esté visible
 
+                // Personaliza los encabezados de las columnas si es necesario
                 if (DgvPersonas.Columns.Contains("Nombre"))
                     DgvPersonas.Columns["Nombre"].HeaderText = "Nombre";
 
@@ -275,8 +281,8 @@ namespace CpPresentacion
                     (ex.InnerException?.Message ?? "(sin detalle)"),
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
+
 
         private void TxtNombre_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -356,6 +362,160 @@ namespace CpPresentacion
             {
                 TxtTelefono.BackColor = Color.MistyRose;
             }
+        }
+
+        private void CargarFiltros()
+        {
+            cmbFiltro.Items.Add("Id");
+            cmbFiltro.Items.Add("Nombre");
+            cmbFiltro.Items.Add("Cédula");
+            cmbFiltro.SelectedIndex = 0;  // Establecer el valor por defecto a "Id"
+        }
+
+
+
+        private void BtnBuscar_Click(object sender, EventArgs e)
+        {
+            string criterio = cmbFiltro.SelectedItem.ToString();  // Obtener el criterio seleccionado (Id, Nombre, Dni)
+            string valorBusqueda = txtBusqueda.Text.Trim();  // Obtener el valor de búsqueda
+
+            if (string.IsNullOrEmpty(valorBusqueda))
+            {
+                MessageBox.Show(
+                    "Por favor, ingrese un valor para buscar. \n\n" +
+                    "Recuerde que debe proporcionar un valor en el campo de búsqueda para poder filtrar la información.",
+                    "Campo de búsqueda vacío",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                // Llamamos al método BuscarConFiltro con el criterio y el valor de búsqueda
+                var persona = new Persona();
+                var servicio = new CpNegocio.servicios.MetodosPersona(persona);
+
+                // Llamamos al servicio con el filtro
+                DataTable tablaFiltrada = servicio.BuscarConFiltro(criterio, valorBusqueda);
+
+                // Asignamos la tabla filtrada al DataGridView
+                DgvPersonas.DataSource = tablaFiltrada;
+
+                // Actualizamos los encabezados de las columnas
+                ActualizarEncabezadosColumnas();
+            }
+            catch (FormatException ex)
+            {
+                // Si el valor de búsqueda no es válido para un número
+                MessageBox.Show(
+                    "El valor para la búsqueda del 'Id' debe ser un número entero. \n\n" +
+                    "Por favor, ingrese un valor numérico válido para el campo 'Id'.",
+                    "Error de formato en 'Id'",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            catch (SqlException ex)
+            {
+                // Si ocurre un error con la base de datos
+                MessageBox.Show(
+                    "Hubo un problema al intentar conectar con la base de datos. \n\n" +
+                    "Por favor, verifique la conexión o intente nuevamente más tarde.",
+                    "Error de base de datos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                // Captura cualquier otro error inesperado
+                MessageBox.Show(
+                    "Ocurrió un error inesperado mientras se realizaba la búsqueda: \n\n" +
+                    ex.Message + "\n\n" +
+                    "Por favor, contacte al administrador si el problema persiste.",
+                    "Error al buscar personas",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+
+
+        private void ActualizarEncabezadosColumnas()
+        {
+            // Actualizar los encabezados de las columnas del DataGridView
+            if (DgvPersonas.Columns.Contains("Id"))
+            {
+                DgvPersonas.Columns["Id"].HeaderText = "ID";
+            }
+
+            if (DgvPersonas.Columns.Contains("Nombre"))
+            {
+                DgvPersonas.Columns["Nombre"].HeaderText = "Nombre";
+            }
+
+            if (DgvPersonas.Columns.Contains("Dni"))
+            {
+                DgvPersonas.Columns["Dni"].HeaderText = "Cédula";
+            }
+
+            if (DgvPersonas.Columns.Contains("Telefono"))
+            {
+                DgvPersonas.Columns["Telefono"].HeaderText = "Teléfono";
+            }
+
+            if (DgvPersonas.Columns.Contains("Correo"))
+            {
+                DgvPersonas.Columns["Correo"].HeaderText = "Correo";
+            }
+
+            if (DgvPersonas.Columns.Contains("Direccion"))
+            {
+                DgvPersonas.Columns["Direccion"].HeaderText = "Dirección";
+            }
+        }
+
+        // Evento KeyPress para Id (solo números)
+        private void TxtBusqueda_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            string criterio = cmbFiltro.SelectedItem.ToString();  // Obtener el criterio seleccionado (Id, Nombre, Dni)
+
+            // Si se selecciona "Id" o "Dni", permitimos solo números
+            if (criterio == "Id" || criterio == "Dni")
+            {
+                // Permitimos solo números y teclas de control (como Backspace)
+                if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+                {
+                    e.Handled = true;  // Bloquea la tecla no válida
+                    MessageBox.Show(
+                        "Solo se permiten números en el campo '" + criterio + "'.",
+                        "Entrada inválida",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                }
+            }
+            // Si el criterio es "Nombre", permitimos solo letras
+            else if (criterio == "Nombre")
+            {
+                // Permitimos solo letras y teclas de control (como Backspace)
+                if (!char.IsLetter(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != ' ')
+                {
+                    e.Handled = true;  // Bloquea cualquier tecla no válida
+                    MessageBox.Show(
+                        "Solo se permiten letras en el campo 'Nombre'.",
+                        "Entrada inválida",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                }
+            }
+        }
+
+        // Asignamos este evento a los TextBox correspondientes
+        private void AsignarEventosDeValidacion()
+        {
+            // Asignar el evento a los controles correspondientes
+            txtBusqueda.KeyPress += TxtBusqueda_KeyPress;
         }
 
 

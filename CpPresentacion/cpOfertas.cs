@@ -18,11 +18,11 @@ namespace CpPresentacion
 {
     public partial class cpOfertas : MaterialForm // <<== ¡Cambiado a MaterialForm!
     {
-      
+
         public cpOfertas()
         {
             InitializeComponent();
-            
+
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 1;
 
@@ -50,7 +50,7 @@ namespace CpPresentacion
             CargarEmpresas(); // Cargar empresas aquí
 
             PopulateAreas(); //Cargamos las areas laborales
-
+            CargarFiltro();
 
         }
 
@@ -93,7 +93,7 @@ namespace CpPresentacion
             destino.BringToFront();
             destino.Activate();
 
-          
+
         }
 
 
@@ -347,5 +347,121 @@ namespace CpPresentacion
             cmbArea.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbArea.SelectedIndex = 0;
         }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            // Obtener los valores seleccionados
+            string filtroSeleccionado = cmbFiltro.SelectedItem?.ToString();
+            string textoFiltro = txtFiltro.Text.Trim();
+
+            if (string.IsNullOrEmpty(filtroSeleccionado))
+            {
+                MessageBox.Show("Debe seleccionar un criterio para filtrar.", "Criterio de filtrado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Filtrar las ofertas según el ComboBox y el TextBox
+            FiltrarOfertas(filtroSeleccionado, textoFiltro);
+        }
+
+        private void FiltrarOfertas(string criterio, string valor)
+        {
+            try
+            {
+                // Obtener todas las ofertas
+                var metodo = new MetodosOferta();
+                var lista = metodo.ObtenerOfertas();  // Esto obtiene todas las ofertas desde la base de datos
+
+                // Comprobar si la lista está vacía
+                if (lista == null || lista.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron ofertas disponibles en la base de datos. " +
+                                    "Por favor, asegúrese de que haya ofertas registradas.",
+                                    "Sin Resultados",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                    return;
+                }
+
+                // Convertir el valor de búsqueda a minúsculas para hacer la comparación insensible a mayúsculas/minúsculas
+                valor = valor.ToLower();
+
+                // Filtrar las ofertas según el criterio seleccionado
+                var ofertasFiltradas = lista.AsEnumerable();
+
+                // Filtrar según el criterio
+                if (criterio == "Empresa")
+                {
+                    ofertasFiltradas = ofertasFiltradas.Where(o => o.Empresa != null &&
+                                                                 o.Empresa.ToLower().Contains(valor));
+                }
+                else if (criterio == "Puesto")
+                {
+                    ofertasFiltradas = ofertasFiltradas.Where(o => o.Puesto != null &&
+                                                                 o.Puesto.ToLower().Contains(valor));
+                }
+                else if (criterio == "Tipo")  // Cambié "Area" por "Tipo"
+                {
+                    ofertasFiltradas = ofertasFiltradas.Where(o => o.Tipo != null &&
+                                                                 o.Tipo.ToLower().Contains(valor)); // Filtrar por el campo "Tipo"
+                }
+                else
+                {
+                    MessageBox.Show("El criterio seleccionado no es válido. " +
+                                    "Por favor, elija 'Empresa', 'Puesto' o 'Tipo' como criterios de búsqueda.",
+                                    "Criterio de Búsqueda Inválido",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Asignamos las ofertas filtradas al DataGridView
+                DGridOferta.DataSource = ofertasFiltradas.ToList(); // Asignar los resultados filtrados
+
+                // Si no se encuentra ninguna oferta después de filtrar
+                if (ofertasFiltradas.Count() == 0)
+                {
+                    MessageBox.Show("No se encontraron ofertas que coincidan con el valor de búsqueda. " +
+                                    "Por favor, asegúrese de que el valor ingresado sea correcto.",
+                                    "Sin Resultados",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                }
+
+            }
+            catch (SqlException sqlEx)
+            {
+                // Captura errores relacionados con la base de datos
+                MessageBox.Show("Error al consultar la base de datos: " + sqlEx.Message + "\n" +
+                                "Por favor, verifique la conexión a la base de datos y intente nuevamente.",
+                                "Error de Conexión",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                // Captura cualquier otro error general
+                MessageBox.Show("Ocurrió un error inesperado: " + ex.Message + "\n" +
+                                "Por favor, contacte con el soporte técnico si el problema persiste.",
+                                "Error General",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+        }
+
+
+
+
+        private void CargarFiltro()
+        {
+            cmbFiltro.Items.Clear();
+            cmbFiltro.Items.Add("Empresa");
+            cmbFiltro.Items.Add("Puesto");
+            cmbFiltro.Items.Add("Area");
+            cmbFiltro.SelectedIndex = 0; // Seleccionar el primer criterio por defecto
+        }
+
+
+
     }
 }
