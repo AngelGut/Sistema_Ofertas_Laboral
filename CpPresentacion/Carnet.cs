@@ -74,8 +74,10 @@ namespace CpPresentacion
 
         }
         //aqui empieza lo mio 
+        
         private void btnCargarFoto_Click(object sender, EventArgs e)
         {
+            //OpenFileDialog es lo que permite que el usuario pueda seleccionar un archivo desde su computadora 
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Archivos de imagen|*.jpg;*.png;*.bmp";
             if (ofd.ShowDialog() == DialogResult.OK)
@@ -155,7 +157,7 @@ namespace CpPresentacion
                 txtTelefono.Focus();
                 return;
             }
-
+            //guarda la targeta 
             try
             {
                 panelTarjeta.Invalidate();
@@ -179,17 +181,18 @@ namespace CpPresentacion
 
         private void panelTarjeta_Paint(object sender, PaintEventArgs e)
         {
+            // la clase Graphics se usa para dibujar en la pantalla
             Graphics g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             int width = panelTarjeta.Width;
             int height = panelTarjeta.Height;
 
-            // 1. FONDO DIVIDIDO EN DOS
+            // FONDO DIVIDIDO EN DOS
             int mitad = height / 2;
             g.FillRectangle(new SolidBrush(Color.FromArgb(25, 25, 64)), 0, 0, width, mitad); // parte superior azul oscuro
             g.FillRectangle(Brushes.Gray, 0, mitad, width, height - mitad); // parte inferior gris
 
-            // 2. LOGO
+            //  LOGO
             if (picLogo.Image != null)
             {
                 int logoAncho = 200;
@@ -212,7 +215,7 @@ namespace CpPresentacion
                     attributes);
             }
 
-            // 3. FOTO EN CÍRCULO
+            //  FOTO EN CÍRCULO
             if (picFoto.Image != null)
             {
                 int fotoSize = 100;
@@ -230,14 +233,14 @@ namespace CpPresentacion
                 g.DrawEllipse(new Pen(Color.Gray, 2), fotoX, fotoY, fotoSize, fotoSize);
             }
 
-            // 4. TEXTO: NOMBRE, POSICIÓN
+            //  TEXTO: NOMBRE, POSICIÓN
             string nombre = txtNombre.Text;
             string posicion = txtPosicion.Text;
 
             Font fontNombre = new Font("Arial", 11, FontStyle.Bold);
             Font fontPosicion = new Font("Arial", 11, FontStyle.Italic);
             Brush blanco = Brushes.White;
-            Brush morado = new SolidBrush(Color.FromArgb(255, 215, 0));
+            Brush morado = new SolidBrush(Color.DarkBlue);
 
             SizeF nombreSize = g.MeasureString(nombre, fontNombre);
             SizeF posicionSize = g.MeasureString(posicion, fontPosicion);
@@ -248,7 +251,7 @@ namespace CpPresentacion
             textoY += nombreSize.Height + 2;
             g.DrawString(posicion, fontPosicion, morado, (width - posicionSize.Width) / 2, textoY);
 
-            // 5. DATOS INFERIORES
+            //  DATOS INFERIORES
 
             string telefonoFormateado = FormatearTelefono(txtTelefono.Text);
             string correo = txtCorreo.Text; // Aquí se toma el correo real
