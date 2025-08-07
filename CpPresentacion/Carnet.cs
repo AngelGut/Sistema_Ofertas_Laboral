@@ -86,16 +86,20 @@ namespace CpPresentacion
             }
         }
 
-        private void btnVistaPrevia_Click(object sender, EventArgs e)
+        private async void btnVistaPrevia_Click(object sender, EventArgs e)
         {
-            // Asegúrate que el panel se haya renderizado completamente
-            panelTarjeta.Refresh(); // Fuerza repintado
+            // Mostrar ventana de carga
+            Form ventanaCarga = CrearVentanaCarga("Generando vista previa...");
+            ventanaCarga.Show();
+            ventanaCarga.Refresh();
 
-            // Usa el tamaño real del panel
+            await Task.Delay(1200); // Simula procesamiento
+            ventanaCarga.Close();
+
+            // Crear bitmap de la tarjeta
+            panelTarjeta.Refresh();
             int ancho = panelTarjeta.Width;
             int alto = panelTarjeta.Height;
-
-            // Crear Bitmap del mismo tamaño
             Bitmap bmp = new Bitmap(ancho, alto);
             panelTarjeta.DrawToBitmap(bmp, new Rectangle(0, 0, ancho, alto));
 
@@ -117,7 +121,7 @@ namespace CpPresentacion
             vistaPreviaForm.ShowDialog();
         }
 
-        private void btnGuardarTargeta_Click(object sender, EventArgs e)
+        private async void btnGuardarTargeta_Click(object sender, EventArgs e)
         {
 
             // Validar que los campos no estén vacíos
@@ -157,6 +161,16 @@ namespace CpPresentacion
                 txtTelefono.Focus();
                 return;
             }
+
+            // Mostrar ventana de carga
+            Form ventanaCarga = CrearVentanaCarga();
+            ventanaCarga.Show();
+
+            // Esperar simulando procesamiento
+            await Task.Delay(1500);
+
+            // Cerrar ventana de carga
+            ventanaCarga.Close();
             //guarda la targeta 
             try
             {
@@ -337,8 +351,16 @@ namespace CpPresentacion
             return System.Text.RegularExpressions.Regex.IsMatch(correo, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
         }
 
-        private void materialButton1_Click(object sender, EventArgs e)
+        private async void materialButton1_Click(object sender, EventArgs e)
         {
+            // Mostrar ventana de carga
+            Form ventanaCarga = CrearVentanaCarga("Preparando impresión...");
+            ventanaCarga.Show();
+            ventanaCarga.Refresh();
+
+            await Task.Delay(1200); // Simula procesamiento
+
+            ventanaCarga.Close();
             PrintDocument pd = new PrintDocument();
             pd.PrintPage += Pd_PrintPage;
             PrintPreviewDialog preview = new PrintPreviewDialog();
@@ -371,6 +393,29 @@ namespace CpPresentacion
 
             // Dibujar el carnet escalado para que se imprima en tamaño real
             g.DrawImage(bmp, rect);
+        }
+
+        private Form CrearVentanaCarga(string mensaje = "Procesando...")
+        {
+            Form carga = new Form
+            {
+                Size = new Size(220, 100),
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                StartPosition = FormStartPosition.CenterScreen,
+                ControlBox = false,
+                Text = "Espere..."
+            };
+
+            Label lbl = new Label
+            {
+                Text = mensaje,
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Arial", 10, FontStyle.Bold)
+            };
+
+            carga.Controls.Add(lbl);
+            return carga;
         }
     }
 
