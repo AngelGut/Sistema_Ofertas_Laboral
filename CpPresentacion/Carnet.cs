@@ -15,12 +15,21 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CpPresentacion
 {
-    public partial class Carnet : MaterialForm
+    public partial class Carnet : MaterialSkin.Controls.MaterialForm
     {
         public Carnet()
         {
             InitializeComponent();
-            panelTarjeta.Size = new Size(268, 440);
+
+            // Suscribimos el evento UNA sola vez, en el constructor
+            txtTelefono.Leave += TxtTelefono_Leave;
+
+            /* DPI-aware --------------------------------------------------- */
+            this.AutoScaleMode = AutoScaleMode.Dpi;          // escala por DPI
+            this.AutoScaleDimensions = new SizeF(96f, 96f);  // referencia 100 %
+                                                             //  this.Load += Carnet_Load;                        // calcula tamaño real
+            /* ------------------------------------------------------------- */
+
             materialTabControl1.SelectedIndex = 6;
             // Asociar eventos para validar entrada en tiempo real
             txtNombre.KeyPress += TxtSoloLetras_KeyPress;
@@ -74,7 +83,7 @@ namespace CpPresentacion
 
         }
         //aqui empieza lo mio 
-        
+
         private void btnCargarFoto_Click(object sender, EventArgs e)
         {
             //OpenFileDialog es lo que permite que el usuario pueda seleccionar un archivo desde su computadora 
@@ -417,7 +426,91 @@ namespace CpPresentacion
             carga.Controls.Add(lbl);
             return carga;
         }
-    }
 
+        /*private void Carnet_Load(object sender, EventArgs e)
+        {
+            float dpi = CreateGraphics().DpiX;      // 96, 120, 144… según escala
+
+            // CR80 vertical: 2.125 in × 3.375 in
+            int widthPx = (int)Math.Round(2.125f * dpi);
+            int heightPx = (int)Math.Round(3.375f * dpi);
+
+            panelTarjeta.Size = new Size(widthPx, heightPx);
+            panelTarjeta.Dock = DockStyle.None;     // evita que Dock Fill lo re-escale
+        }
+        */
+
+        private string FormatearTelefonoDominicano(string entrada)
+        {
+            // 1) Extraer solo dígitos
+            string digitos = new string(entrada.Where(char.IsDigit).ToArray());
+
+            // 2) Quitar el 1 inicial opcional (quedarán 10 dígitos)
+            if (digitos.Length == 11 && digitos.StartsWith("1"))
+                digitos = digitos.Substring(1);
+
+            // 3) Deben quedar exactamente 10 dígitos
+            if (digitos.Length != 10) return null;
+
+            string area = digitos.Substring(0, 3);
+
+            // 4) Validar código de área dominicano
+            if (area != "809" && area != "829" && area != "849") return null;
+
+            // 5) Construir formato final
+            return $"+1 {area}-{digitos.Substring(3, 3)}-{digitos.Substring(6, 4)}";
+        }
+
+        private void TxtTelefono_Leave(object sender, EventArgs e)
+        {
+            string formateado = FormatearTelefonoDominicano(txtTelefono.Text);
+
+            if (formateado == null)
+            {
+                MessageBox.Show(
+                    "Número dominicano inválido. El formato permitido es:\n" +
+                    "+1 809-XXX-XXXX  |  +1 829-XXX-XXXX  |  +1 849-XXX-XXXX",
+                    "Error de validación",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                txtTelefono.Focus();   // devuelve el foco para corregir
+            }
+            else
+            {
+                txtTelefono.Text = formateado;   // coloca el formato correcto
+            }
+        }
+
+        private Bitmap CapturarTarjetaFisica(float dpi = 300f)
+        {
+            const float widthIn = 2.125f;
+            const float heightIn = 3.375f;
+
+            int widthPx = (int)Math.Round(widthIn * dpi);
+            int heightPx = (int)Math.Round(heightIn * dpi);
+
+            // 1) Bitmap “físico”
+            Bitmap bmp = new Bitmap(widthPx, heightPx);
+            bmp.SetResolution(dpi, dpi);          // importante para impresión
+
+            // 2) Dibujamos la tarjeta escalada
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                // Relación entre lo que ves en pantalla y la salida física
+                float scaleX = (float)widthPx / panelTarjeta.Width;
+                float scaleY = (float)heightPx / panelTarjeta.Height;
+
+                g.ScaleTransform(scaleX, scaleY);
+
+                // Usamos tu propio método Paint para reproducir exactamente el diseño
+                panelTarjeta.DrawToBitmap(bmp, new Rectangle(0, 0,
+                                                             panelTarjeta.Width,
+                                                             panelTarjeta.Height));
+            }
+            
+            return bmp;
+        }
+    }
 
 }
