@@ -93,8 +93,8 @@
             btnIngresar.Cursor = Cursors.Hand;
             btnIngresar.FlatAppearance.BorderSize = 0;
             btnIngresar.FlatStyle = FlatStyle.Flat;
-            btnIngresar.ForeColor = Color.Transparent;
-            btnIngresar.Location = new Point(429, 186);
+            btnIngresar.ForeColor = Color.Black;
+            btnIngresar.Location = new Point(429, 177);
             btnIngresar.Name = "btnIngresar";
             btnIngresar.Size = new Size(75, 23);
             btnIngresar.TabIndex = 3;
@@ -108,7 +108,7 @@
             btnRecuperarClave.FlatAppearance.BorderSize = 0;
             btnRecuperarClave.FlatStyle = FlatStyle.Flat;
             btnRecuperarClave.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnRecuperarClave.ForeColor = Color.FromArgb(64, 64, 64);
+            btnRecuperarClave.ForeColor = Color.Black;
             btnRecuperarClave.Location = new Point(354, 215);
             btnRecuperarClave.Name = "btnRecuperarClave";
             btnRecuperarClave.Size = new Size(235, 23);
