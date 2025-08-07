@@ -524,7 +524,6 @@
             MinimizeBox = false;
             Name = "Carnet";
             Padding = new Padding(4, 80, 4, 4);
-            StartPosition = FormStartPosition.CenterScreen;
             Text = "Carnet";
             materialTabControl1.ResumeLayout(false);
             tabPage7.ResumeLayout(false);
