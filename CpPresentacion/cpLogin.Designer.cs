@@ -45,6 +45,7 @@
             // 
             // pictureBox1
             // 
+            pictureBox1.BackColor = Color.White;
             pictureBox1.Dock = DockStyle.Left;
             pictureBox1.Image = Properties.Resources.Logo;
             pictureBox1.Location = new Point(0, 0);
@@ -105,6 +106,7 @@
             btnRecuperarClave.Cursor = Cursors.Hand;
             btnRecuperarClave.FlatAppearance.BorderSize = 0;
             btnRecuperarClave.FlatStyle = FlatStyle.Flat;
+            btnRecuperarClave.ForeColor = Color.White;
             btnRecuperarClave.Location = new Point(380, 215);
             btnRecuperarClave.Name = "btnRecuperarClave";
             btnRecuperarClave.Size = new Size(177, 23);
@@ -150,7 +152,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.HotTrack;
+            BackColor = Color.Teal;
             ClientSize = new Size(680, 250);
             Controls.Add(pbPassword);
             Controls.Add(pbMinimizar);

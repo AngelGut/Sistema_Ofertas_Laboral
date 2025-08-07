@@ -94,7 +94,6 @@ namespace CpNegocio.servicios
         }
 
         // Método que retorna todas las personas registradas en un DataTable
-        // Método que retorna todas las personas registradas en un DataTable
         public override DataTable Buscar()
         {
             try
@@ -105,14 +104,14 @@ namespace CpNegocio.servicios
 
                 // Consulta SQL para obtener los datos de las personas, incluyendo la columna 'Id'
                 const string q = @"
-            SELECT
-                p.Id,           -- Selección de la columna 'Id'
-                p.Nombre,       -- Selección de la columna 'Nombre'
-                p.Dni,          -- Selección de la columna 'Dni'
-                p.Telefono,     -- Selección de la columna 'Telefono'
-                p.Correo,       -- Selección de la columna 'Correo'
-                p.Direccion     -- Selección de la columna 'Direccion'
-            FROM Persona p";   // Tabla de personas
+                 SELECT
+                 p.Id,           -- Selección de la columna 'Id'
+                 p.Nombre,       -- Selección de la columna 'Nombre'
+                 p.Dni,          -- Selección de la columna 'Dni'
+                 p.Telefono,     -- Selección de la columna 'Telefono'
+                 p.Correo,       -- Selección de la columna 'Correo'
+                 p.Direccion     -- Selección de la columna 'Direccion'
+                 FROM Persona p";   // Tabla de personas
 
                 // Ejecutar la consulta
                 using var cmd = new SqlCommand(q, conn);
@@ -194,8 +193,5 @@ namespace CpNegocio.servicios
                 throw new Exception("Error al aplicar el filtro: " + ex.Message, ex);
             }
         }
-
-
-
     }
 }

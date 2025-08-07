@@ -390,25 +390,36 @@ namespace CpPresentacion
                 var ofertasFiltradas = lista.AsEnumerable();
 
                 // Filtrar según el criterio
-                if (criterio == "Empresa")
+                if (criterio == "Id")
                 {
+                    // Filtrar por el ID de la oferta
+                    if (int.TryParse(valor, out int id))
+                    {
+                        ofertasFiltradas = ofertasFiltradas.Where(o => o.Id == id);
+                    }
+                    else
+                    {
+                        MessageBox.Show("El ID ingresado no es válido. Por favor ingrese un número entero.",
+                                        "ID inválido", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                else if (criterio == "Empresa")
+                {
+                    // Filtrar por empresa
                     ofertasFiltradas = ofertasFiltradas.Where(o => o.Empresa != null &&
                                                                  o.Empresa.ToLower().Contains(valor));
                 }
                 else if (criterio == "Puesto")
                 {
+                    // Filtrar por puesto
                     ofertasFiltradas = ofertasFiltradas.Where(o => o.Puesto != null &&
                                                                  o.Puesto.ToLower().Contains(valor));
-                }
-                else if (criterio == "Tipo")  // Cambié "Area" por "Tipo"
-                {
-                    ofertasFiltradas = ofertasFiltradas.Where(o => o.Tipo != null &&
-                                                                 o.Tipo.ToLower().Contains(valor)); // Filtrar por el campo "Tipo"
                 }
                 else
                 {
                     MessageBox.Show("El criterio seleccionado no es válido. " +
-                                    "Por favor, elija 'Empresa', 'Puesto' o 'Tipo' como criterios de búsqueda.",
+                                    "Por favor, elija 'Id', 'Empresa' o 'Puesto' como criterios de búsqueda.",
                                     "Criterio de Búsqueda Inválido",
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Error);
@@ -449,19 +460,13 @@ namespace CpPresentacion
             }
         }
 
-
-
-
         private void CargarFiltro()
         {
             cmbFiltro.Items.Clear();
+            cmbFiltro.Items.Add("Id");
             cmbFiltro.Items.Add("Empresa");
             cmbFiltro.Items.Add("Puesto");
-            cmbFiltro.Items.Add("Area");
             cmbFiltro.SelectedIndex = 0; // Seleccionar el primer criterio por defecto
         }
-
-
-
     }
 }
