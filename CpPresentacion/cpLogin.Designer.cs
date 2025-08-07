@@ -92,7 +92,7 @@
             btnIngresar.Cursor = Cursors.Hand;
             btnIngresar.FlatAppearance.BorderSize = 0;
             btnIngresar.FlatStyle = FlatStyle.Flat;
-            btnIngresar.ForeColor = Color.White;
+            btnIngresar.ForeColor = Color.Black;
             btnIngresar.Location = new Point(429, 174);
             btnIngresar.Name = "btnIngresar";
             btnIngresar.Size = new Size(75, 23);
@@ -106,7 +106,7 @@
             btnRecuperarClave.Cursor = Cursors.Hand;
             btnRecuperarClave.FlatAppearance.BorderSize = 0;
             btnRecuperarClave.FlatStyle = FlatStyle.Flat;
-            btnRecuperarClave.ForeColor = Color.White;
+            btnRecuperarClave.ForeColor = Color.Black;
             btnRecuperarClave.Location = new Point(380, 215);
             btnRecuperarClave.Name = "btnRecuperarClave";
             btnRecuperarClave.Size = new Size(177, 23);

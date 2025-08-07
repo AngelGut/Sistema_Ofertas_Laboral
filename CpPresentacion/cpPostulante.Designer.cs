@@ -35,9 +35,15 @@
             tabPage4 = new TabPage();
             DgvPersonas = new DataGridView();
             materialCard2 = new MaterialSkin.Controls.MaterialCard();
+            BtnBuscar = new MaterialSkin.Controls.MaterialButton();
             BtnActualizar = new MaterialSkin.Controls.MaterialButton();
             BtnRegistrar = new MaterialSkin.Controls.MaterialButton();
             materialCard1 = new MaterialSkin.Controls.MaterialCard();
+            lblDniPlaceholder = new Label();
+            chkExtranjero = new CheckBox();
+            cmbFiltro = new MaterialSkin.Controls.MaterialComboBox();
+            label1 = new Label();
+            txtBusqueda = new MaterialSkin.Controls.MaterialMaskedTextBox();
             lblPais = new MaterialSkin.Controls.MaterialLabel();
             cmbPaises = new MaterialSkin.Controls.MaterialComboBox();
             LblDireccion = new Label();
@@ -48,7 +54,6 @@
             TxtTelefono = new MaterialSkin.Controls.MaterialMaskedTextBox();
             LblTelefono = new MaterialSkin.Controls.MaterialLabel();
             TxtDni = new MaterialSkin.Controls.MaterialMaskedTextBox();
-            LblDni = new MaterialSkin.Controls.MaterialLabel();
             TxtNombre = new MaterialSkin.Controls.MaterialMaskedTextBox();
             LblNombrePersona = new MaterialSkin.Controls.MaterialLabel();
             tabPage5 = new TabPage();
@@ -56,10 +61,6 @@
             tabPage7 = new TabPage();
             tabPage8 = new TabPage();
             tabPage9 = new TabPage();
-            BtnBuscar = new MaterialSkin.Controls.MaterialButton();
-            txtBusqueda = new MaterialSkin.Controls.MaterialMaskedTextBox();
-            label1 = new Label();
-            cmbFiltro = new MaterialSkin.Controls.MaterialComboBox();
             materialTabControl1.SuspendLayout();
             tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DgvPersonas).BeginInit();
@@ -81,22 +82,22 @@
             materialTabControl1.Depth = 0;
             materialTabControl1.Dock = DockStyle.Fill;
             materialTabControl1.Location = new Point(2, 38);
-            materialTabControl1.Margin = new Padding(2, 2, 2, 2);
+            materialTabControl1.Margin = new Padding(2);
             materialTabControl1.MouseState = MaterialSkin.MouseState.HOVER;
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1326, 700);
+            materialTabControl1.Size = new Size(1326, 724);
             materialTabControl1.TabIndex = 0;
             materialTabControl1.SelectedIndexChanged += materialTabControl1_SelectedIndexChanged;
             // 
             // tabPage1
             // 
             tabPage1.Location = new Point(4, 24);
-            tabPage1.Margin = new Padding(2, 2, 2, 2);
+            tabPage1.Margin = new Padding(2);
             tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(2, 2, 2, 2);
-            tabPage1.Size = new Size(1318, 580);
+            tabPage1.Padding = new Padding(2);
+            tabPage1.Size = new Size(1318, 696);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Menu";
             tabPage1.UseVisualStyleBackColor = true;
@@ -104,10 +105,10 @@
             // tabPage2
             // 
             tabPage2.Location = new Point(4, 24);
-            tabPage2.Margin = new Padding(2, 2, 2, 2);
+            tabPage2.Margin = new Padding(2);
             tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(2, 2, 2, 2);
-            tabPage2.Size = new Size(1318, 580);
+            tabPage2.Padding = new Padding(2);
+            tabPage2.Size = new Size(1318, 696);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Ofertas Laborales";
             tabPage2.UseVisualStyleBackColor = true;
@@ -115,9 +116,9 @@
             // tabPage3
             // 
             tabPage3.Location = new Point(4, 24);
-            tabPage3.Margin = new Padding(2, 2, 2, 2);
+            tabPage3.Margin = new Padding(2);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1318, 580);
+            tabPage3.Size = new Size(1318, 696);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Empresas";
             tabPage3.UseVisualStyleBackColor = true;
@@ -128,9 +129,9 @@
             tabPage4.Controls.Add(materialCard2);
             tabPage4.Controls.Add(materialCard1);
             tabPage4.Location = new Point(4, 24);
-            tabPage4.Margin = new Padding(2, 2, 2, 2);
+            tabPage4.Margin = new Padding(2);
             tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(1318, 672);
+            tabPage4.Size = new Size(1318, 696);
             tabPage4.TabIndex = 3;
             tabPage4.Text = "Postulantes";
             tabPage4.UseVisualStyleBackColor = true;
@@ -141,7 +142,7 @@
             DgvPersonas.AllowUserToDeleteRows = false;
             DgvPersonas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DgvPersonas.Location = new Point(411, 8);
-            DgvPersonas.Margin = new Padding(2, 2, 2, 2);
+            DgvPersonas.Margin = new Padding(2);
             DgvPersonas.MultiSelect = false;
             DgvPersonas.Name = "DgvPersonas";
             DgvPersonas.ReadOnly = true;
@@ -165,6 +166,27 @@
             materialCard2.Padding = new Padding(10, 8, 10, 8);
             materialCard2.Size = new Size(606, 55);
             materialCard2.TabIndex = 10;
+            // 
+            // BtnBuscar
+            // 
+            BtnBuscar.AutoSize = false;
+            BtnBuscar.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnBuscar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            BtnBuscar.Depth = 0;
+            BtnBuscar.HighEmphasis = true;
+            BtnBuscar.Icon = null;
+            BtnBuscar.Location = new Point(33, 12);
+            BtnBuscar.Margin = new Padding(3, 4, 3, 4);
+            BtnBuscar.MouseState = MaterialSkin.MouseState.HOVER;
+            BtnBuscar.Name = "BtnBuscar";
+            BtnBuscar.NoAccentTextColor = Color.Empty;
+            BtnBuscar.Size = new Size(166, 32);
+            BtnBuscar.TabIndex = 10;
+            BtnBuscar.Text = "Buscar";
+            BtnBuscar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            BtnBuscar.UseAccentColor = false;
+            BtnBuscar.UseVisualStyleBackColor = true;
+            BtnBuscar.Click += BtnBuscar_Click;
             // 
             // BtnActualizar
             // 
@@ -211,6 +233,8 @@
             // materialCard1
             // 
             materialCard1.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard1.Controls.Add(lblDniPlaceholder);
+            materialCard1.Controls.Add(chkExtranjero);
             materialCard1.Controls.Add(cmbFiltro);
             materialCard1.Controls.Add(label1);
             materialCard1.Controls.Add(txtBusqueda);
@@ -224,7 +248,6 @@
             materialCard1.Controls.Add(TxtTelefono);
             materialCard1.Controls.Add(LblTelefono);
             materialCard1.Controls.Add(TxtDni);
-            materialCard1.Controls.Add(LblDni);
             materialCard1.Controls.Add(TxtNombre);
             materialCard1.Controls.Add(LblNombrePersona);
             materialCard1.Depth = 0;
@@ -234,15 +257,111 @@
             materialCard1.MouseState = MaterialSkin.MouseState.HOVER;
             materialCard1.Name = "materialCard1";
             materialCard1.Padding = new Padding(10, 8, 10, 8);
-            materialCard1.Size = new Size(370, 590);
+            materialCard1.Size = new Size(370, 652);
             materialCard1.TabIndex = 1;
+            // 
+            // lblDniPlaceholder
+            // 
+            lblDniPlaceholder.AutoSize = true;
+            lblDniPlaceholder.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            lblDniPlaceholder.Location = new Point(14, 84);
+            lblDniPlaceholder.Name = "lblDniPlaceholder";
+            lblDniPlaceholder.Size = new Size(0, 17);
+            lblDniPlaceholder.TabIndex = 12;
+            // 
+            // chkExtranjero
+            // 
+            chkExtranjero.AutoSize = true;
+            chkExtranjero.Location = new Point(13, 622);
+            chkExtranjero.Name = "chkExtranjero";
+            chkExtranjero.Size = new Size(128, 19);
+            chkExtranjero.TabIndex = 19;
+            chkExtranjero.Text = "Cedula o Pasaporte";
+            chkExtranjero.UseVisualStyleBackColor = true;
+            chkExtranjero.CheckedChanged += chkExtranjero_CheckedChanged;
+            // 
+            // cmbFiltro
+            // 
+            cmbFiltro.AutoResize = false;
+            cmbFiltro.BackColor = Color.FromArgb(255, 255, 255);
+            cmbFiltro.Depth = 0;
+            cmbFiltro.DrawMode = DrawMode.OwnerDrawVariable;
+            cmbFiltro.DropDownHeight = 174;
+            cmbFiltro.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbFiltro.DropDownWidth = 121;
+            cmbFiltro.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
+            cmbFiltro.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            cmbFiltro.FormattingEnabled = true;
+            cmbFiltro.IntegralHeight = false;
+            cmbFiltro.ItemHeight = 43;
+            cmbFiltro.Location = new Point(13, 516);
+            cmbFiltro.Margin = new Padding(2);
+            cmbFiltro.MaxDropDownItems = 4;
+            cmbFiltro.MouseState = MaterialSkin.MouseState.OUT;
+            cmbFiltro.Name = "cmbFiltro";
+            cmbFiltro.Size = new Size(263, 49);
+            cmbFiltro.StartIndex = 0;
+            cmbFiltro.TabIndex = 17;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            label1.Location = new Point(13, 482);
+            label1.Margin = new Padding(2, 0, 2, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(72, 17);
+            label1.TabIndex = 16;
+            label1.Text = "Busqueda";
+            // 
+            // txtBusqueda
+            // 
+            txtBusqueda.AllowPromptAsInput = true;
+            txtBusqueda.AnimateReadOnly = false;
+            txtBusqueda.AsciiOnly = false;
+            txtBusqueda.BackgroundImageLayout = ImageLayout.None;
+            txtBusqueda.BeepOnError = false;
+            txtBusqueda.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
+            txtBusqueda.Depth = 0;
+            txtBusqueda.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            txtBusqueda.HidePromptOnLeave = false;
+            txtBusqueda.HideSelection = true;
+            txtBusqueda.InsertKeyMode = InsertKeyMode.Default;
+            txtBusqueda.LeadingIcon = null;
+            txtBusqueda.Location = new Point(12, 569);
+            txtBusqueda.Margin = new Padding(2);
+            txtBusqueda.Mask = "";
+            txtBusqueda.MaxLength = 32767;
+            txtBusqueda.MouseState = MaterialSkin.MouseState.OUT;
+            txtBusqueda.Name = "txtBusqueda";
+            txtBusqueda.PasswordChar = '\0';
+            txtBusqueda.PrefixSuffixText = null;
+            txtBusqueda.PromptChar = '_';
+            txtBusqueda.ReadOnly = false;
+            txtBusqueda.RejectInputOnFirstFailure = false;
+            txtBusqueda.ResetOnPrompt = true;
+            txtBusqueda.ResetOnSpace = true;
+            txtBusqueda.RightToLeft = RightToLeft.No;
+            txtBusqueda.SelectedText = "";
+            txtBusqueda.SelectionLength = 0;
+            txtBusqueda.SelectionStart = 0;
+            txtBusqueda.ShortcutsEnabled = true;
+            txtBusqueda.Size = new Size(262, 48);
+            txtBusqueda.SkipLiterals = true;
+            txtBusqueda.TabIndex = 15;
+            txtBusqueda.TabStop = false;
+            txtBusqueda.TextAlign = HorizontalAlignment.Left;
+            txtBusqueda.TextMaskFormat = MaskFormat.IncludeLiterals;
+            txtBusqueda.TrailingIcon = null;
+            txtBusqueda.UseSystemPasswordChar = false;
+            txtBusqueda.ValidatingType = null;
             // 
             // lblPais
             // 
             lblPais.AutoSize = true;
             lblPais.Depth = 0;
             lblPais.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            lblPais.Location = new Point(12, 136);
+            lblPais.Location = new Point(11, 164);
             lblPais.Margin = new Padding(2, 0, 2, 0);
             lblPais.MouseState = MaterialSkin.MouseState.HOVER;
             lblPais.Name = "lblPais";
@@ -264,8 +383,8 @@
             cmbPaises.FormattingEnabled = true;
             cmbPaises.IntegralHeight = false;
             cmbPaises.ItemHeight = 43;
-            cmbPaises.Location = new Point(12, 156);
-            cmbPaises.Margin = new Padding(2, 2, 2, 2);
+            cmbPaises.Location = new Point(12, 185);
+            cmbPaises.Margin = new Padding(2);
             cmbPaises.MaxDropDownItems = 4;
             cmbPaises.MouseState = MaterialSkin.MouseState.OUT;
             cmbPaises.Name = "cmbPaises";
@@ -276,11 +395,11 @@
             // LblDireccion
             // 
             LblDireccion.AutoSize = true;
-            LblDireccion.Font = new Font("Century Gothic", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            LblDireccion.Location = new Point(12, 338);
+            LblDireccion.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            LblDireccion.Location = new Point(12, 408);
             LblDireccion.Margin = new Padding(2, 0, 2, 0);
             LblDireccion.Name = "LblDireccion";
-            LblDireccion.Size = new Size(96, 22);
+            LblDireccion.Size = new Size(67, 17);
             LblDireccion.TabIndex = 9;
             LblDireccion.Text = "Direccion";
             // 
@@ -298,8 +417,8 @@
             TxtDireccion.HideSelection = true;
             TxtDireccion.InsertKeyMode = InsertKeyMode.Default;
             TxtDireccion.LeadingIcon = null;
-            TxtDireccion.Location = new Point(12, 369);
-            TxtDireccion.Margin = new Padding(2, 2, 2, 2);
+            TxtDireccion.Location = new Point(14, 432);
+            TxtDireccion.Margin = new Padding(2);
             TxtDireccion.Mask = "";
             TxtDireccion.MaxLength = 32767;
             TxtDireccion.MouseState = MaterialSkin.MouseState.OUT;
@@ -340,8 +459,8 @@
             TxtCorreo.HideSelection = true;
             TxtCorreo.InsertKeyMode = InsertKeyMode.Default;
             TxtCorreo.LeadingIcon = null;
-            TxtCorreo.Location = new Point(12, 286);
-            TxtCorreo.Margin = new Padding(2, 2, 2, 2);
+            TxtCorreo.Location = new Point(11, 341);
+            TxtCorreo.Margin = new Padding(2);
             TxtCorreo.Mask = "";
             TxtCorreo.MaxLength = 32767;
             TxtCorreo.MouseState = MaterialSkin.MouseState.OUT;
@@ -393,7 +512,7 @@
             LblCorreo.AutoSize = true;
             LblCorreo.Depth = 0;
             LblCorreo.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblCorreo.Location = new Point(12, 272);
+            LblCorreo.Location = new Point(11, 308);
             LblCorreo.Margin = new Padding(2, 0, 2, 0);
             LblCorreo.MouseState = MaterialSkin.MouseState.HOVER;
             LblCorreo.Name = "LblCorreo";
@@ -415,8 +534,8 @@
             TxtTelefono.HideSelection = true;
             TxtTelefono.InsertKeyMode = InsertKeyMode.Default;
             TxtTelefono.LeadingIcon = null;
-            TxtTelefono.Location = new Point(12, 223);
-            TxtTelefono.Margin = new Padding(2, 2, 2, 2);
+            TxtTelefono.Location = new Point(11, 257);
+            TxtTelefono.Margin = new Padding(2);
             TxtTelefono.Mask = "";
             TxtTelefono.MaxLength = 32767;
             TxtTelefono.MouseState = MaterialSkin.MouseState.OUT;
@@ -448,7 +567,7 @@
             LblTelefono.AutoSize = true;
             LblTelefono.Depth = 0;
             LblTelefono.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblTelefono.Location = new Point(12, 209);
+            LblTelefono.Location = new Point(11, 236);
             LblTelefono.Margin = new Padding(2, 0, 2, 0);
             LblTelefono.MouseState = MaterialSkin.MouseState.HOVER;
             LblTelefono.Name = "LblTelefono";
@@ -470,8 +589,8 @@
             TxtDni.HideSelection = true;
             TxtDni.InsertKeyMode = InsertKeyMode.Default;
             TxtDni.LeadingIcon = null;
-            TxtDni.Location = new Point(12, 84);
-            TxtDni.Margin = new Padding(2, 2, 2, 2);
+            TxtDni.Location = new Point(11, 114);
+            TxtDni.Margin = new Padding(2);
             TxtDni.Mask = "";
             TxtDni.MaxLength = 32767;
             TxtDni.MouseState = MaterialSkin.MouseState.OUT;
@@ -497,19 +616,8 @@
             TxtDni.TrailingIcon = null;
             TxtDni.UseSystemPasswordChar = false;
             TxtDni.ValidatingType = null;
-            // 
-            // LblDni
-            // 
-            LblDni.AutoSize = true;
-            LblDni.Depth = 0;
-            LblDni.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            LblDni.Location = new Point(12, 71);
-            LblDni.Margin = new Padding(2, 0, 2, 0);
-            LblDni.MouseState = MaterialSkin.MouseState.HOVER;
-            LblDni.Name = "LblDni";
-            LblDni.Size = new Size(139, 19);
-            LblDni.TabIndex = 2;
-            LblDni.Text = "Cedula o Pasaporte";
+            TxtDni.Enter += TxtDni_Enter;
+            TxtDni.Leave += TxtDni_Leave;
             // 
             // TxtNombre
             // 
@@ -526,7 +634,7 @@
             TxtNombre.InsertKeyMode = InsertKeyMode.Default;
             TxtNombre.LeadingIcon = null;
             TxtNombre.Location = new Point(12, 27);
-            TxtNombre.Margin = new Padding(2, 2, 2, 2);
+            TxtNombre.Margin = new Padding(2);
             TxtNombre.Mask = "";
             TxtNombre.MaxLength = 32767;
             TxtNombre.MouseState = MaterialSkin.MouseState.OUT;
@@ -570,9 +678,9 @@
             // tabPage5
             // 
             tabPage5.Location = new Point(4, 24);
-            tabPage5.Margin = new Padding(2, 2, 2, 2);
+            tabPage5.Margin = new Padding(2);
             tabPage5.Name = "tabPage5";
-            tabPage5.Size = new Size(1318, 580);
+            tabPage5.Size = new Size(1318, 696);
             tabPage5.TabIndex = 4;
             tabPage5.Text = "Asignar Oferta";
             tabPage5.UseVisualStyleBackColor = true;
@@ -580,9 +688,9 @@
             // tabPage6
             // 
             tabPage6.Location = new Point(4, 24);
-            tabPage6.Margin = new Padding(2, 2, 2, 2);
+            tabPage6.Margin = new Padding(2);
             tabPage6.Name = "tabPage6";
-            tabPage6.Size = new Size(1318, 580);
+            tabPage6.Size = new Size(1318, 696);
             tabPage6.TabIndex = 5;
             tabPage6.Text = "Historial Correos";
             tabPage6.UseVisualStyleBackColor = true;
@@ -590,9 +698,9 @@
             // tabPage7
             // 
             tabPage7.Location = new Point(4, 24);
-            tabPage7.Margin = new Padding(2, 2, 2, 2);
+            tabPage7.Margin = new Padding(2);
             tabPage7.Name = "tabPage7";
-            tabPage7.Size = new Size(1318, 580);
+            tabPage7.Size = new Size(1318, 696);
             tabPage7.TabIndex = 6;
             tabPage7.Text = "Carnet";
             tabPage7.UseVisualStyleBackColor = true;
@@ -600,9 +708,9 @@
             // tabPage8
             // 
             tabPage8.Location = new Point(4, 24);
-            tabPage8.Margin = new Padding(2, 2, 2, 2);
+            tabPage8.Margin = new Padding(2);
             tabPage8.Name = "tabPage8";
-            tabPage8.Size = new Size(1318, 580);
+            tabPage8.Size = new Size(1318, 696);
             tabPage8.TabIndex = 7;
             tabPage8.Text = "Registro Interno";
             tabPage8.UseVisualStyleBackColor = true;
@@ -610,118 +718,21 @@
             // tabPage9
             // 
             tabPage9.Location = new Point(4, 24);
-            tabPage9.Margin = new Padding(2, 2, 2, 2);
+            tabPage9.Margin = new Padding(2);
             tabPage9.Name = "tabPage9";
-            tabPage9.Size = new Size(1318, 580);
+            tabPage9.Size = new Size(1318, 696);
             tabPage9.TabIndex = 8;
             tabPage9.Text = "Historial Postulaciones";
             tabPage9.UseVisualStyleBackColor = true;
-            // 
-            // BtnBuscar
-            // 
-            BtnBuscar.AutoSize = false;
-            BtnBuscar.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            BtnBuscar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            BtnBuscar.Depth = 0;
-            BtnBuscar.HighEmphasis = true;
-            BtnBuscar.Icon = null;
-            BtnBuscar.Location = new Point(33, 12);
-            BtnBuscar.Margin = new Padding(3, 4, 3, 4);
-            BtnBuscar.MouseState = MaterialSkin.MouseState.HOVER;
-            BtnBuscar.Name = "BtnBuscar";
-            BtnBuscar.NoAccentTextColor = Color.Empty;
-            BtnBuscar.Size = new Size(166, 32);
-            BtnBuscar.TabIndex = 10;
-            BtnBuscar.Text = "Buscar";
-            BtnBuscar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            BtnBuscar.UseAccentColor = false;
-            BtnBuscar.UseVisualStyleBackColor = true;
-            BtnBuscar.Click += BtnBuscar_Click;
-            // 
-            // txtBusqueda
-            // 
-            txtBusqueda.AllowPromptAsInput = true;
-            txtBusqueda.AnimateReadOnly = false;
-            txtBusqueda.AsciiOnly = false;
-            txtBusqueda.BackgroundImageLayout = ImageLayout.None;
-            txtBusqueda.BeepOnError = false;
-            txtBusqueda.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
-            txtBusqueda.Depth = 0;
-            txtBusqueda.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
-            txtBusqueda.HidePromptOnLeave = false;
-            txtBusqueda.HideSelection = true;
-            txtBusqueda.InsertKeyMode = InsertKeyMode.Default;
-            txtBusqueda.LeadingIcon = null;
-            txtBusqueda.Location = new Point(13, 532);
-            txtBusqueda.Margin = new Padding(2);
-            txtBusqueda.Mask = "";
-            txtBusqueda.MaxLength = 32767;
-            txtBusqueda.MouseState = MaterialSkin.MouseState.OUT;
-            txtBusqueda.Name = "txtBusqueda";
-            txtBusqueda.PasswordChar = '\0';
-            txtBusqueda.PrefixSuffixText = null;
-            txtBusqueda.PromptChar = '_';
-            txtBusqueda.ReadOnly = false;
-            txtBusqueda.RejectInputOnFirstFailure = false;
-            txtBusqueda.ResetOnPrompt = true;
-            txtBusqueda.ResetOnSpace = true;
-            txtBusqueda.RightToLeft = RightToLeft.No;
-            txtBusqueda.SelectedText = "";
-            txtBusqueda.SelectionLength = 0;
-            txtBusqueda.SelectionStart = 0;
-            txtBusqueda.ShortcutsEnabled = true;
-            txtBusqueda.Size = new Size(262, 48);
-            txtBusqueda.SkipLiterals = true;
-            txtBusqueda.TabIndex = 15;
-            txtBusqueda.TabStop = false;
-            txtBusqueda.TextAlign = HorizontalAlignment.Left;
-            txtBusqueda.TextMaskFormat = MaskFormat.IncludeLiterals;
-            txtBusqueda.TrailingIcon = null;
-            txtBusqueda.UseSystemPasswordChar = false;
-            txtBusqueda.ValidatingType = null;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Century Gothic", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(12, 439);
-            label1.Margin = new Padding(2, 0, 2, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(103, 22);
-            label1.TabIndex = 16;
-            label1.Text = "Busqueda";
-            // 
-            // cmbFiltro
-            // 
-            cmbFiltro.AutoResize = false;
-            cmbFiltro.BackColor = Color.FromArgb(255, 255, 255);
-            cmbFiltro.Depth = 0;
-            cmbFiltro.DrawMode = DrawMode.OwnerDrawVariable;
-            cmbFiltro.DropDownHeight = 174;
-            cmbFiltro.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbFiltro.DropDownWidth = 121;
-            cmbFiltro.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
-            cmbFiltro.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            cmbFiltro.FormattingEnabled = true;
-            cmbFiltro.IntegralHeight = false;
-            cmbFiltro.ItemHeight = 43;
-            cmbFiltro.Location = new Point(13, 463);
-            cmbFiltro.Margin = new Padding(2);
-            cmbFiltro.MaxDropDownItems = 4;
-            cmbFiltro.MouseState = MaterialSkin.MouseState.OUT;
-            cmbFiltro.Name = "cmbFiltro";
-            cmbFiltro.Size = new Size(263, 49);
-            cmbFiltro.StartIndex = 0;
-            cmbFiltro.TabIndex = 17;
             // 
             // cpPostulante
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1330, 740);
+            ClientSize = new Size(1330, 764);
             Controls.Add(materialTabControl1);
             DrawerTabControl = materialTabControl1;
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "cpPostulante";
@@ -749,7 +760,6 @@
         private MaterialSkin.Controls.MaterialMaskedTextBox TxtTelefono;
         private MaterialSkin.Controls.MaterialLabel LblTelefono;
         private MaterialSkin.Controls.MaterialMaskedTextBox TxtDni;
-        private MaterialSkin.Controls.MaterialLabel LblDni;
         private MaterialSkin.Controls.MaterialMaskedTextBox TxtNombre;
         private MaterialSkin.Controls.MaterialLabel LblNombrePersona;
         private MaterialSkin.Controls.MaterialLabel LblCorreo;
@@ -772,5 +782,7 @@
         private Label label1;
         private MaterialSkin.Controls.MaterialMaskedTextBox txtBusqueda;
         private MaterialSkin.Controls.MaterialComboBox cmbFiltro;
+        private CheckBox chkExtranjero;
+        private Label lblDniPlaceholder;
     }
 }
