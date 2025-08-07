@@ -59,6 +59,8 @@ namespace CpPresentacion
             cmbFiltroEmpresa.Items.Clear();
             cmbFiltroEmpresa.Items.Add("ID Oferta");
             cmbFiltroEmpresa.SelectedIndex = 0; // Se selecciona por defecto la única opción.
+
+            
         }
 
         private void CargarCombos()
@@ -74,14 +76,14 @@ namespace CpPresentacion
 
             // Cargar cmbNuevo para el filtro de postulantes
             cmbNuevo.Items.Clear();
-            cmbNuevo.Items.Add("Todas"); //Se agrega la opción "Todas"**
+            cmbNuevo.Items.Add("Todas");
             cmbNuevo.Items.Add("ID");
             cmbNuevo.Items.Add("Dni");
             cmbNuevo.Items.Add("Nombre");
-            cmbNuevo.SelectedIndex = 0; //Se selecciona "Todas" por defecto**
+            cmbNuevo.SelectedIndex = 0;
         }
 
-      
+        
         /// Método de carga del formulario. Inicia la carga de datos.
         
         private void cpAsignarEmpleo_Load(object sender, EventArgs e)
@@ -92,7 +94,7 @@ namespace CpPresentacion
 
         
         /// Carga los datos de las ofertas de empleo en el DataGridView de empresas.
-        
+      
         private void CargarOfertas()
         {
             try
@@ -106,9 +108,13 @@ namespace CpPresentacion
                     MessageBox.Show("No se encontraron ofertas de empleo para mostrar. Por favor, asegúrate de haber registrado ofertas y empresas en las secciones correspondientes.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
 
+                // Actualización de los encabezados de las columnas.
                 if (dgvEmpresas.Columns.Contains("NombreEmpresa")) dgvEmpresas.Columns["NombreEmpresa"].HeaderText = "Empresa";
-                if (dgvEmpresas.Columns.Contains("puesto")) dgvEmpresas.Columns["puesto"].HeaderText = "Puesto";
-                if (dgvEmpresas.Columns.Contains("area")) dgvEmpresas.Columns["area"].HeaderText = "Área Laboral";
+                if (dgvEmpresas.Columns.Contains("NombrePuesto")) dgvEmpresas.Columns["NombrePuesto"].HeaderText = "Puesto";
+                if (dgvEmpresas.Columns.Contains("Area")) dgvEmpresas.Columns["Area"].HeaderText = "Área Laboral";
+                if (dgvEmpresas.Columns.Contains("Tipo")) dgvEmpresas.Columns["Tipo"].HeaderText = "Tipo";
+                if (dgvEmpresas.Columns.Contains("Descripcion")) dgvEmpresas.Columns["Descripcion"].HeaderText = "Descripción";
+                if (dgvEmpresas.Columns.Contains("Creditos")) dgvEmpresas.Columns["Creditos"].HeaderText = "Créditos";
             }
             catch (Exception ex)
             {
@@ -123,7 +129,7 @@ namespace CpPresentacion
             dgvPostulantes.DataSource = tablaPostulantes;
         }
 
-       
+        
         /// Filtra los postulantes según el criterio seleccionado en cmbNuevo.
        
         private void FiltrarPostulantes(string texto)
@@ -131,7 +137,7 @@ namespace CpPresentacion
             if (tablaPostulantes == null) return;
             string filtroSeleccionado = cmbNuevo.SelectedItem?.ToString();
 
-            //Si la opción es "Todas" o el texto está vacío, se muestran todos los postulantes.**
+            // Si la opción es "Todas" o el texto está vacío, se muestran todos los postulantes.
             if (filtroSeleccionado == "Todas" || string.IsNullOrWhiteSpace(texto))
             {
                 dgvPostulantes.DataSource = tablaPostulantes;
@@ -156,7 +162,7 @@ namespace CpPresentacion
             vista.RowFilter = filtro;
             dgvPostulantes.DataSource = vista;
 
-            //Se muestra un mensaje si no se encuentran resultados**
+            // Se muestra un mensaje si no se encuentran resultados
             if (vista.Count == 0)
             {
                 MessageBox.Show("No se encontraron resultados para la búsqueda.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -247,12 +253,14 @@ namespace CpPresentacion
         // Eventos
         private void btnAsignar_Click(object sender, EventArgs e)
         {
+            // Se valida si se ha seleccionado un postulante.
             if (idPostulanteSeleccionado == -1)
             {
                 MessageBox.Show("Por favor, selecciona un postulante.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
+            // Se valida si se ha seleccionado una oferta de empleo.
             if (idOfertaSeleccionada == -1)
             {
                 MessageBox.Show("Por favor, selecciona una oferta.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -290,9 +298,38 @@ namespace CpPresentacion
             FiltrarPostulantes(txtBuscarDNI.Text.Trim());
         }
 
-        // Métodos que deben existir para que el diseñador no cause errores
-        private void dgvEmpresas_CellClick(object sender, DataGridViewCellEventArgs e) { }
-        private void dgvPostulantes_CellClick(object sender, DataGridViewCellEventArgs e) { }
+       
+        /// Maneja el evento CellClick para dgvPostulantes, confirma la selección y guarda el ID.
+        
+        private void dgvPostulantes_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Asegurarse de que el clic no es en el encabezado de la columna
+            if (e.RowIndex >= 0)
+            {
+                // Obtener el ID y el nombre de la fila seleccionada y almacenarlos
+                int.TryParse(dgvPostulantes.Rows[e.RowIndex].Cells["Id"].Value.ToString(), out idPostulanteSeleccionado);
+                string nombrePostulante = dgvPostulantes.Rows[e.RowIndex].Cells["Nombre"].Value.ToString();
+
+                MessageBox.Show($"Se ha seleccionado el postulante: {nombrePostulante} (ID: {idPostulanteSeleccionado})", "Selección Confirmada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        
+        /// Maneja el evento CellClick para dgvEmpresas, confirma la selección y guarda el ID.
+        
+        private void dgvEmpresas_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Asegurarse de que el clic no es en el encabezado de la columna
+            if (e.RowIndex >= 0)
+            {
+                // Obtener el ID y el puesto de la oferta de la fila seleccionada y almacenarlos
+                int.TryParse(dgvEmpresas.Rows[e.RowIndex].Cells["IdOferta"].Value.ToString(), out idOfertaSeleccionada);
+                string nombrePuesto = dgvEmpresas.Rows[e.RowIndex].Cells["NombrePuesto"].Value.ToString();
+
+                MessageBox.Show($"Se ha seleccionado la oferta de empleo: {nombrePuesto} (ID: {idOfertaSeleccionada})", "Selección Confirmada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
         private void cmbNuevo_SelectedIndexChanged(object sender, EventArgs e) { }
         private void txtBuscarDNI_TextChanged(object sender, EventArgs e) { }
 
