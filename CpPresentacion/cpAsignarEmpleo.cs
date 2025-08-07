@@ -18,6 +18,7 @@
     using Microsoft.Data.SqlClient;
     using CpNegocio.servicios;
     using CpNegocio.Interfaces;
+using CpNegocio.servicio;
 
     namespace CpPresentacion
     {
@@ -178,7 +179,7 @@
                 vista.RowFilter = filtro;
                 dgvPostulantes.DataSource = vista;
 
-                // ✅ Verificamos si la vista está vacía DESPUÉS de aplicar el filtro
+                //Verificamos si la vista está vacía DESPUÉS de aplicar el filtro
                 if (vista.Count == 0)
                 {
                     MessageBox.Show($"No se encontró ningún postulante con {opcion}: {texto}", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -473,8 +474,9 @@
 
 
             }
-        private void btnAsignar_Click(object sender, EventArgs e)
-        {
+            private void btnAsignar_Click(object sender, EventArgs e)
+            {
+            // Validaciones
             if (idPostulanteSeleccionado == -1)
             {
                 MessageBox.Show("Por favor, selecciona un postulante de la tabla de la izquierda.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -487,65 +489,42 @@
                 return;
             }
 
-            string connectionString = "Server=.;Database=OfertaLaboral;Integrated Security=true;TrustServerCertificate=True;";
-            string query = @"
-        INSERT INTO Asignacion (PersonaId, OfertaId) 
-        VALUES (@personaId, @ofertaId)";
+            // Instanciar el servicio para manejar la lógica de negocio
+            AsignacionServicio asignacionServicio = new AsignacionServicio();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            using (SqlCommand command = new SqlCommand(query, connection))
+            try
             {
-                command.Parameters.AddWithValue("@personaId", idPostulanteSeleccionado);
-                command.Parameters.AddWithValue("@ofertaId", idOfertaSeleccionada);
+                // Llamar al método del servicio. Este método se encarga de todo:
+                // - Insertar el registro en la tabla Asignacion
+                // - Enviar los correos electrónicos de notificación
+                asignacionServicio.AsignarOfertaAPersona(idPostulanteSeleccionado, idOfertaSeleccionada);
 
-                try
-                {
-                    connection.Open();
-                    int rowsAffected = command.ExecuteNonQuery();
+                // Notificar al usuario del éxito
+                MessageBox.Show("Asignación realizada y notificaciones enviadas correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    if (rowsAffected > 0)
-                    {
-                        MessageBox.Show("Asignación realizada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        idPostulanteSeleccionado = -1;
-                        idOfertaSeleccionada = -1;
-
-                        // Opcional: limpiar selección visual o refrescar tablas
-                    }
-                    else
-                    {
-                        MessageBox.Show("No se pudo realizar la asignación.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                catch (SqlException ex)
-                {
-                    if (ex.Number == 2627) // violación UNIQUE (PersonaId, OfertaId)
-                    {
-                        MessageBox.Show("Esta asignación ya existe y no puede duplicarse.", "Duplicado detectado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Error de base de datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ocurrió un error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                // Opcional: Reiniciar los IDs seleccionados para evitar asignaciones duplicadas
+                idPostulanteSeleccionado = -1;
+                idOfertaSeleccionada = -1;
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores centralizado
+                MessageBox.Show($"Ocurrió un error al asignar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
 
-        // En tu archivo cpAsignarEmpleo.cs
-        private void dgvEmpresas_CellContentClick(object sender, DataGridViewCellEventArgs e)
+                // En tu archivo cpAsignarEmpleo.cs
+             private void dgvEmpresas_CellContentClick(object sender, DataGridViewCellEventArgs e)
              {
-               // Lógica para manejar el clic en la celda de dgvEmpresas
-               // Si no tienes lógica, puedes dejarlo vacío por ahora.
+                   // Lógica para manejar el clic en la celda de dgvEmpresas
+                   // Si no tienes lógica, puedes dejarlo vacío por ahora.
              }
-          private void dgvPostulantes_CellContentClick(object sender, DataGridViewCellEventArgs e)
-          {
-            // Lógica para manejar el clic en la celda de dgvEmpresas
-            // Si no tienes lógica, puedes dejarlo vacío por ahora.
-          }
+             private void dgvPostulantes_CellContentClick(object sender, DataGridViewCellEventArgs e)
+             {
+                // Lógica para manejar el clic en la celda de dgvEmpresas
+                // Si no tienes lógica, puedes dejarlo vacío por ahora.
+             }
 
 
          /// ya estamos mas cerca

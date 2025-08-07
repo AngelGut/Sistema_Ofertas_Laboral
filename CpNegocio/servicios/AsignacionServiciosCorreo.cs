@@ -36,15 +36,24 @@ namespace CpNegocio.servicio
         //TODO: Método que asigna una oferta a una persona y envía correos electrónicos de notificación
         public void AsignarOfertaAPersona(int idPersona, int idOferta)
         {
-            //TODO: Obtener los datos de la persona, oferta y empresa
+
+            // 1. Obtener los datos de la persona y la oferta
             var persona = _personaRepositorio.ObtenerPersonaPorId(idPersona);
             var oferta = _ofertaRepositorio.ObtenerOfertaPorId(idOferta);
+
+            // 2. Validar que la persona y la oferta existan de inmediato
+            if (persona == null || oferta == null)
+            {
+                throw new Exception("Persona u oferta no encontrada.");
+            }
+
+            // 3. Ahora que sabemos que la oferta no es null, podemos obtener la empresa de forma segura
             var empresa = _empresaRepositorio.ObtenerEmpresaPorId(oferta.EmpresaId);
 
-            //TODO: Validar que los datos existan
-            if (persona == null || oferta == null || empresa == null)
+            // 4. Validar que la empresa también exista
+            if (empresa == null)
             {
-                throw new Exception("Persona, oferta o empresa no encontrada.");
+                throw new Exception("Empresa no encontrada para la oferta especificada.");
             }
 
             //TODO: Persistir la asignación en la base de datos
