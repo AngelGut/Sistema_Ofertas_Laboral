@@ -268,58 +268,71 @@ namespace CpPresentacion
         // Eventos
         private void btnAsignar_Click(object sender, EventArgs e)
         {
-            // 1) Intentar leer ID de los TextBox si el usuario los escribió manualmente
-            int personaIdManual, ofertaIdManual;
+            if (_enAsignacion) return;     // evita doble disparo / doble click
+            _enAsignacion = true;
+            btnAsignar.Enabled = false;
+            UseWaitCursor = true;          // feedback visual (opcional)
 
-            // Si hay texto en txboxIdPersona y es un int válido, se usa (tiene prioridad)
-            if (!string.IsNullOrWhiteSpace(txboxIdPersona.Text) && int.TryParse(txboxIdPersona.Text, out personaIdManual))
-                idPostulanteSeleccionado = personaIdManual;
-
-            // Si hay texto en txboxIdOferta y es un int válido, se usa (tiene prioridad)
-            if (!string.IsNullOrWhiteSpace(texboxIdOferta.Text) && int.TryParse(texboxIdOferta.Text, out ofertaIdManual))
-                idOfertaSeleccionada = ofertaIdManual;
-
-            // 2) Validaciones simples
-            if (idPostulanteSeleccionado <= 0)
-            {
-                MessageBox.Show("Por favor, selecciona un postulante del listado o escribe un ID válido en 'txboxIdPersona'.",
-                    "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (idOfertaSeleccionada <= 0)
-            {
-                MessageBox.Show("Por favor, selecciona una oferta del listado o escribe un ID válido en 'txboxIdOferta'.",
-                    "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // 3) Llamar al servicio de asignación
-            var asignacionServicio = new AsignacionServicio();
             try
             {
-                // Si tienes usuario logueado, pásalo; si no, omite el parámetro (sobrecarga)
-                // Ejemplo con usuario opcional: asignacionServicio.AsignarOfertaAPersona(idPostulanteSeleccionado, idOfertaSeleccionada, usuarioId);
+                // 1) Leer IDs desde los TextBox si están escritos
+                if (!string.IsNullOrWhiteSpace(txboxIdPersona.Text) &&
+                    int.TryParse(txboxIdPersona.Text, out var personaIdManual))
+                {
+                    idPostulanteSeleccionado = personaIdManual;
+                }
+
+                if (!string.IsNullOrWhiteSpace(texboxIdOferta.Text) &&
+                    int.TryParse(texboxIdOferta.Text, out var ofertaIdManual))
+                {
+                    idOfertaSeleccionada = ofertaIdManual;
+                }
+
+                // 2) Validaciones
+                if (idPostulanteSeleccionado <= 0)
+                {
+                    MessageBox.Show("Por favor, selecciona un postulante o escribe un ID válido en 'txboxIdPersona'.",
+                        "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (idOfertaSeleccionada <= 0)
+                {
+                    MessageBox.Show("Por favor, selecciona una oferta o escribe un ID válido en 'texboxIdOferta'.",
+                        "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // 3) Ejecutar asignación (no cambia Ocupada)
+                var asignacionServicio = new AsignacionServicio();
                 asignacionServicio.AsignarOfertaAPersona(idPostulanteSeleccionado, idOfertaSeleccionada);
 
+                // 4) Confirmación (puedes refrescar si quieres; ya no la marcará Ocupada)
                 MessageBox.Show(
                     $"Asignación OK.\nPersonaId: {idPostulanteSeleccionado}\nOfertaId: {idOfertaSeleccionada}",
                     "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Limpieza de estado (opcional)
-                // idPostulanteSeleccionado = -1;
-                // idOfertaSeleccionada = -1;
-                // txboxIdPersona.Clear();
-                // txboxIdOferta.Clear();
+                // Opcional: recargar la grilla (seguirá mostrando la oferta)
+                CargarOfertas();
             }
             catch (InvalidOperationException ex)
             {
-                // Mensajes de negocio mapeados en el repositorio (duplicado, FK, etc.)
                 MessageBox.Show(ex.Message, "No se pudo asignar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ocurrió un error al asignar: {ex.Message}",
+                var msg = ex is Microsoft.Data.SqlClient.SqlException sqlEx
+                    ? $"{ex.Message}\n(SQL #{sqlEx.Number})"
+                    : ex.Message;
+
+                MessageBox.Show($"Ocurrió un error al asignar: {msg}",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                UseWaitCursor = false;
+                btnAsignar.Enabled = true;
+                _enAsignacion = false;
             }
         }
 
@@ -438,5 +451,9 @@ namespace CpPresentacion
 
             await System.Threading.Tasks.Task.Delay(180);
         }
+
+        private bool _enAsignacion = false;
+
+
     }
 }
