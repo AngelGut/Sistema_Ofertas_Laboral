@@ -15,17 +15,18 @@ namespace CpNegocio.Empresas_y_Postulantes
         {
             DataTable tabla = new DataTable();
             string query = @"
-        SELECT 
-            o.Id AS IdOferta, 
-            o.Puesto AS NombrePuesto, 
-            o.Area, 
-            o.Salario, 
-            o.Requisitos, 
-            o.EmpresaId, 
-            e.Nombre AS NombreEmpresa,
-            e.Rnc AS RNC
-        FROM Oferta o
-        INNER JOIN Empresa e ON o.EmpresaId = e.Id";
+            SELECT 
+                o.Id AS IdOferta, 
+                o.Puesto AS NombrePuesto, 
+                o.Area, 
+                o.Salario, 
+                o.Requisitos, 
+                o.EmpresaId, 
+                e.Nombre AS NombreEmpresa,
+                e.Rnc AS RNC
+            FROM Oferta o
+            INNER JOIN Empresa e ON o.EmpresaId = e.Id
+            WHERE o.Ocupada = 0"; //filtrar las ofertas disponibles.
 
             using (SqlConnection conn = OfertaDatos.ObtenerConexion())
             {
