@@ -39,68 +39,33 @@ namespace CpPresentacion
             dgvEmpresas.EnableHeadersVisualStyles = false;
             dgvEmpresas.RowsDefaultCellStyle.SelectionBackColor = Color.LightBlue;
 
-            // Cargar áreas en cmbFiltroArea
             CargarCombos();
 
             // Asignar eventos
             this.Load += new EventHandler(cpAsignarEmpleo_Load);
-            cmbNuevo.SelectedIndexChanged += cmbNuevo_SelectedIndexChanged;
+
+            // Eventos para filtros de Empresas
             btnBuscar2.Click += btnBuscar2_Click;
             cmbFiltroArea.SelectedIndexChanged += cmbFiltroArea_SelectedIndexChanged;
+            txtBuscarID.KeyPress += txtBuscarID_KeyPress;
+
+            // Evento Click del botón para filtrar postulantes
+            btnBuscarID.Click += btnBuscarID_Click;
+
+            // Se asigna el evento KeyPress al txtBuscarDNI
+            txtBuscarDNI.KeyPress += txtBuscarDNI_KeyPress;
+
+            // Se modifica cmbFiltroEmpresa para que solo tenga la opción "ID Oferta".
+            cmbFiltroEmpresa.Items.Clear();
+            cmbFiltroEmpresa.Items.Add("ID Oferta");
+            cmbFiltroEmpresa.SelectedIndex = 0; // Se selecciona por defecto la única opción.
+
+            
         }
-
-        /// <summary>
-        /// Método de carga del formulario. Inicia la carga de datos.
-        /// </summary>
-        private void cpAsignarEmpleo_Load(object sender, EventArgs e)
-        {
-            // Solo se debe llamar a un método para cargar cada DataGridView.
-            // Esto evita redundancias y posibles conflictos.
-            CargarOfertas();
-            MostrarPostulantes();
-        }
-
-        /// <summary>
-        /// Carga los datos de las ofertas de empleo en el DataGridView de empresas.
-        /// </summary>
-        private void CargarOfertas()
-        {
-            try
-            {
-                // Se crea una instancia de la clase de negocio para ofertas.
-                // Esta es la llamada correcta a tu capa de negocio.
-                var negocioOferta = new NOferta();
-
-                // Se obtienen los datos de las ofertas desde la capa de negocio.
-                tablaEmpresas = negocioOferta.ObtenerOfertas();
-
-                // Se asigna la tabla de datos como fuente del DataGridView.
-                dgvEmpresas.DataSource = tablaEmpresas;
-
-                // Si la tabla de empresas está vacía, mostramos un mensaje de advertencia.
-                if (tablaEmpresas.Rows.Count == 0)
-                {
-                    MessageBox.Show("No se encontraron ofertas de empleo para mostrar. Por favor, asegúrate de haber registrado ofertas y empresas en las secciones correspondientes.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-
-                // Configurar los encabezados de las columnas para que sean más legibles.
-                if (dgvEmpresas.Columns.Contains("NombreEmpresa")) dgvEmpresas.Columns["NombreEmpresa"].HeaderText = "Empresa";
-                if (dgvEmpresas.Columns.Contains("puesto")) dgvEmpresas.Columns["puesto"].HeaderText = "Puesto";
-                if (dgvEmpresas.Columns.Contains("area")) dgvEmpresas.Columns["area"].HeaderText = "Área Laboral";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al cargar las ofertas: " + ex.Message, "Error de Carga", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        // El resto de los métodos del formulario se mantienen igual, pero los he reorganizado
-        // y renombrado para mejorar la legibilidad. He eliminado tu método local 'ObtenerOfertas'
-        // ya que el formulario no debería tener lógica de base de datos.
 
         private void CargarCombos()
         {
-            // Limpiar y cargar cmbFiltroArea
+            // Cargar cmbFiltroArea con todas las áreas laborales
             cmbFiltroArea.Items.Clear();
             cmbFiltroArea.Items.Add("Todas");
             foreach (var area in AreaLaboralProvider.GetAll())
@@ -109,20 +74,52 @@ namespace CpPresentacion
             }
             cmbFiltroArea.SelectedIndex = 0;
 
-            // Limpiar y cargar cmbNuevo para el filtro de postulantes
+            // Cargar cmbNuevo para el filtro de postulantes
             cmbNuevo.Items.Clear();
+            cmbNuevo.Items.Add("Todas");
             cmbNuevo.Items.Add("ID");
             cmbNuevo.Items.Add("Dni");
             cmbNuevo.Items.Add("Nombre");
             cmbNuevo.SelectedIndex = 0;
+        }
 
-            // Limpiar y cargar cmbFiltroEmpresa
-            cmbFiltroEmpresa.Items.Clear();
-            cmbFiltroEmpresa.Items.Add("Todas");
-            cmbFiltroEmpresa.Items.Add("ID");
-            cmbFiltroEmpresa.Items.Add("Nombre");
-            cmbFiltroEmpresa.Items.Add("RNC");
-            cmbFiltroEmpresa.SelectedIndex = 0;
+        
+        /// Método de carga del formulario. Inicia la carga de datos.
+        
+        private void cpAsignarEmpleo_Load(object sender, EventArgs e)
+        {
+            CargarOfertas();
+            MostrarPostulantes();
+        }
+
+        
+        /// Carga los datos de las ofertas de empleo en el DataGridView de empresas.
+      
+        private void CargarOfertas()
+        {
+            try
+            {
+                var negocioOferta = new NOferta();
+                tablaEmpresas = negocioOferta.ObtenerOfertas();
+                dgvEmpresas.DataSource = tablaEmpresas;
+
+                if (tablaEmpresas.Rows.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron ofertas de empleo para mostrar. Por favor, asegúrate de haber registrado ofertas y empresas en las secciones correspondientes.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
+                // Actualización de los encabezados de las columnas.
+                if (dgvEmpresas.Columns.Contains("NombreEmpresa")) dgvEmpresas.Columns["NombreEmpresa"].HeaderText = "Empresa";
+                if (dgvEmpresas.Columns.Contains("NombrePuesto")) dgvEmpresas.Columns["NombrePuesto"].HeaderText = "Puesto";
+                if (dgvEmpresas.Columns.Contains("Area")) dgvEmpresas.Columns["Area"].HeaderText = "Área Laboral";
+                if (dgvEmpresas.Columns.Contains("Tipo")) dgvEmpresas.Columns["Tipo"].HeaderText = "Tipo";
+                if (dgvEmpresas.Columns.Contains("Descripcion")) dgvEmpresas.Columns["Descripcion"].HeaderText = "Descripción";
+                if (dgvEmpresas.Columns.Contains("Creditos")) dgvEmpresas.Columns["Creditos"].HeaderText = "Créditos";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar las ofertas: " + ex.Message, "Error de Carga", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void MostrarPostulantes()
@@ -132,12 +129,16 @@ namespace CpPresentacion
             dgvPostulantes.DataSource = tablaPostulantes;
         }
 
+        
+        /// Filtra los postulantes según el criterio seleccionado en cmbNuevo.
+       
         private void FiltrarPostulantes(string texto)
         {
             if (tablaPostulantes == null) return;
             string filtroSeleccionado = cmbNuevo.SelectedItem?.ToString();
 
-            if (string.IsNullOrWhiteSpace(texto) || string.IsNullOrEmpty(filtroSeleccionado))
+            // Si la opción es "Todas" o el texto está vacío, se muestran todos los postulantes.
+            if (filtroSeleccionado == "Todas" || string.IsNullOrWhiteSpace(texto))
             {
                 dgvPostulantes.DataSource = tablaPostulantes;
                 return;
@@ -151,7 +152,7 @@ namespace CpPresentacion
                     filtro = $"Convert(Id, 'System.String') LIKE '%{texto}%'";
                     break;
                 case "Dni":
-                    filtro = $"Cedula LIKE '%{texto}%'";
+                    filtro = $"Dni LIKE '%{texto}%'";
                     break;
                 case "Nombre":
                     filtro = $"Nombre LIKE '%{texto}%'";
@@ -160,99 +161,106 @@ namespace CpPresentacion
 
             vista.RowFilter = filtro;
             dgvPostulantes.DataSource = vista;
+
+            // Se muestra un mensaje si no se encuentran resultados
+            if (vista.Count == 0)
+            {
+                MessageBox.Show("No se encontraron resultados para la búsqueda.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                dgvPostulantes.DataSource = tablaPostulantes; // Vuelve a mostrar todos los postulantes
+            }
         }
 
+        
+        /// Aplica los filtros de Área e ID de Oferta en el DataGridView de empresas.
+        
         private void AplicarFiltrosEmpresas()
         {
             if (tablaEmpresas == null) return;
 
             DataView vista = new DataView(tablaEmpresas);
-            string filtroGeneral = "";
-            string filtroArea = "";
+            string filtroFinal = "";
 
-            if (cmbFiltroArea.SelectedItem?.ToString() != "Todas")
+            // Lógica para el filtro de área (si se selecciona algo diferente a "Todas")
+            string areaSeleccionada = cmbFiltroArea.SelectedItem?.ToString();
+            if (areaSeleccionada != "Todas")
             {
-                filtroArea = $"Area = '{cmbFiltroArea.SelectedItem?.ToString().Replace("'", "''")}'";
+                filtroFinal = $"Area = '{areaSeleccionada.Replace("'", "''")}'";
             }
 
+            // Lógica para el filtro por ID de Oferta
             string textoBusqueda = txtBuscarID.Text.Trim();
-            string filtroSeleccionado = cmbFiltroEmpresa.SelectedItem?.ToString();
-
             if (!string.IsNullOrEmpty(textoBusqueda))
             {
-                switch (filtroSeleccionado)
+                // Se agrega un "AND" si ya existe un filtro de área
+                if (!string.IsNullOrEmpty(filtroFinal))
                 {
-                    case "ID":
-                        filtroGeneral = $"Convert(idEmpresa, 'System.String') LIKE '%{textoBusqueda}%'";
-                        break;
-                    case "Nombre":
-                        filtroGeneral = $"NombreEmpresa LIKE '%{textoBusqueda}%'";
-                        break;
-                    case "RNC":
-                        filtroGeneral = $"rnc LIKE '%{textoBusqueda}%'";
-                        break;
-                    case "Todas":
-                        filtroGeneral = $"NombreEmpresa LIKE '%{textoBusqueda}%' OR rnc LIKE '%{textoBusqueda}%' OR Convert(idEmpresa, 'System.String') LIKE '%{textoBusqueda}%'";
-                        break;
+                    filtroFinal += " AND ";
                 }
+                // Se filtra por el ID de la oferta
+                filtroFinal += $"Convert(idOferta, 'System.String') LIKE '%{textoBusqueda}%'";
             }
 
-            string filtroFinal = "";
-            if (!string.IsNullOrEmpty(filtroArea) && !string.IsNullOrEmpty(filtroGeneral))
+            // Aplicar el filtro final si no está vacío
+            if (!string.IsNullOrEmpty(filtroFinal))
             {
-                filtroFinal = $"{filtroArea} AND ({filtroGeneral})";
+                vista.RowFilter = filtroFinal;
             }
-            else if (!string.IsNullOrEmpty(filtroArea))
+            else
             {
-                filtroFinal = filtroArea;
-            }
-            else if (!string.IsNullOrEmpty(filtroGeneral))
-            {
-                filtroFinal = filtroGeneral;
+                // Si no hay filtros, mostrar todos los datos.
+                vista.RowFilter = string.Empty;
             }
 
-            vista.RowFilter = filtroFinal;
             dgvEmpresas.DataSource = vista;
 
-            if (vista.Count == 0 && !string.IsNullOrEmpty(filtroFinal))
+            if (vista.Count == 0 && (!string.IsNullOrEmpty(filtroFinal)))
             {
                 MessageBox.Show("No se encontraron resultados con los filtros aplicados.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 dgvEmpresas.DataSource = tablaEmpresas;
             }
         }
 
+        
+        /// Maneja el evento KeyPress para permitir solo números en el txtBuscarID.
+        
+        private void txtBuscarID_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Solo permite dígitos y la tecla de Backspace (para borrar).
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                // Si la tecla no es un número ni una tecla de control, se cancela la entrada.
+                e.Handled = true;
+            }
+        }
+
+        // Maneja el evento KeyPress para permitir solo números en txtBuscarDNI si se elige la opción "ID"
+        private void txtBuscarDNI_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Obtener la opción seleccionada en el ComboBox
+            string filtroSeleccionado = cmbNuevo.SelectedItem?.ToString();
+
+            // Solo aplicar el filtro si la opción es "ID"
+            if (filtroSeleccionado == "ID")
+            {
+                // Solo permite dígitos y la tecla de Backspace (para borrar).
+                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+            }
+        }
+
         // Eventos
-        private void cmbNuevo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            FiltrarPostulantes(txtBuscarDNI.Text.Trim());
-        }
-
-        private void dgvEmpresas_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                idOfertaSeleccionada = Convert.ToInt32(dgvEmpresas.Rows[e.RowIndex].Cells["idOferta"].Value);
-                MessageBox.Show("Oferta seleccionada ID: " + idOfertaSeleccionada);
-            }
-        }
-
-        private void dgvPostulantes_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                idPostulanteSeleccionado = Convert.ToInt32(dgvPostulantes.Rows[e.RowIndex].Cells["Id"].Value);
-                MessageBox.Show("Postulante seleccionado ID: " + idPostulanteSeleccionado);
-            }
-        }
-
         private void btnAsignar_Click(object sender, EventArgs e)
         {
+            // Se valida si se ha seleccionado un postulante.
             if (idPostulanteSeleccionado == -1)
             {
                 MessageBox.Show("Por favor, selecciona un postulante.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
+            // Se valida si se ha seleccionado una oferta de empleo.
             if (idOfertaSeleccionada == -1)
             {
                 MessageBox.Show("Por favor, selecciona una oferta.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -283,18 +291,58 @@ namespace CpPresentacion
             AplicarFiltrosEmpresas();
         }
 
-        // Métodos vacíos y eventos no utilizados que he dejado como referencia pero que podrías eliminar
+        // Maneja el clic del botón para filtrar postulantes
+        private void btnBuscarID_Click(object sender, EventArgs e)
+        {
+            // Llama a la función de filtrado con el texto del TextBox.
+            FiltrarPostulantes(txtBuscarDNI.Text.Trim());
+        }
+
+       
+        /// Maneja el evento CellClick para dgvPostulantes, confirma la selección y guarda el ID.
+        
+        private void dgvPostulantes_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Asegurarse de que el clic no es en el encabezado de la columna
+            if (e.RowIndex >= 0)
+            {
+                // Obtener el ID y el nombre de la fila seleccionada y almacenarlos
+                int.TryParse(dgvPostulantes.Rows[e.RowIndex].Cells["Id"].Value.ToString(), out idPostulanteSeleccionado);
+                string nombrePostulante = dgvPostulantes.Rows[e.RowIndex].Cells["Nombre"].Value.ToString();
+
+                MessageBox.Show($"Se ha seleccionado el postulante: {nombrePostulante} (ID: {idPostulanteSeleccionado})", "Selección Confirmada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        
+        /// Maneja el evento CellClick para dgvEmpresas, confirma la selección y guarda el ID.
+        
+        private void dgvEmpresas_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Asegurarse de que el clic no es en el encabezado de la columna
+            if (e.RowIndex >= 0)
+            {
+                // Obtener el ID y el puesto de la oferta de la fila seleccionada y almacenarlos
+                int.TryParse(dgvEmpresas.Rows[e.RowIndex].Cells["IdOferta"].Value.ToString(), out idOfertaSeleccionada);
+                string nombrePuesto = dgvEmpresas.Rows[e.RowIndex].Cells["NombrePuesto"].Value.ToString();
+
+                MessageBox.Show($"Se ha seleccionado la oferta de empleo: {nombrePuesto} (ID: {idOfertaSeleccionada})", "Selección Confirmada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void cmbNuevo_SelectedIndexChanged(object sender, EventArgs e) { }
+        private void txtBuscarDNI_TextChanged(object sender, EventArgs e) { }
+
+        // Métodos vacíos
         private void dgvEmpresas_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
         private void dgvPostulantes_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
         private void cmbFiltroBusqueda_SelectedIndexChanged(object sender, EventArgs e) { }
-        private void txtBuscarDNI_TextChanged(object sender, EventArgs e) { FiltrarPostulantes(txtBuscarDNI.Text.Trim()); }
         private void txtBuscarDNI_Click(object sender, EventArgs e) { }
         private void txtBuscarID_Click(object sender, EventArgs e) { }
         private void tabPage3_Click(object sender, EventArgs e) { }
-        private void btnBuscarID_Click(object sender, EventArgs e) { }
         private void btnBuscar_Click(object sender, EventArgs e) { }
 
-        // Aquí termina la refactorización. La navegación se ha dejado como estaba.
+        // Lógica de navegación
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             await NavegarA(materialTabControl1.SelectedIndex);
@@ -325,7 +373,6 @@ namespace CpPresentacion
                 this.Dispose();
 
             await System.Threading.Tasks.Task.Delay(180);
-            //Jeiferson si jode loco
         }
     }
 }
