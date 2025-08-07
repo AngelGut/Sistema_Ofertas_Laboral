@@ -17,7 +17,7 @@ namespace CpNegocio.Oferta
 
         // Datos comunes a toda oferta
         public string Puesto { get; set; }
-        public string Tipo { get;  set; }
+        public string Tipo { get; set; }
         public string Descripcion { get; set; }
         public string Requisitos { get; set; }
         // → Nueva propiedad para el área
