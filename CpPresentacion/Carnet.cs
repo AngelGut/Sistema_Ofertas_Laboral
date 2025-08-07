@@ -12,29 +12,37 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MaterialSkin.Controls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using CpPresentacion.Asistencia;   // contiene IReadOnlyContainer y las extensiones
 
 namespace CpPresentacion
 {
-    public partial class Carnet : MaterialSkin.Controls.MaterialForm
+    public partial class Carnet : MaterialForm, IReadOnlyContainer
     {
+        public Control Container => this;
+
         public Carnet()
         {
             InitializeComponent();
-
-            // Suscribimos el evento UNA sola vez, en el constructor
-            txtTelefono.Leave += TxtTelefono_Leave;
-
-            /* DPI-aware --------------------------------------------------- */
-            this.AutoScaleMode = AutoScaleMode.Dpi;          // escala por DPI
-            this.AutoScaleDimensions = new SizeF(96f, 96f);  // referencia 100 %
-                                                             //  this.Load += Carnet_Load;                        // calcula tamaño real
-            /* ------------------------------------------------------------- */
-
+            panelTarjeta.Size = new Size(268, 440);
             materialTabControl1.SelectedIndex = 6;
             // Asociar eventos para validar entrada en tiempo real
             txtNombre.KeyPress += TxtSoloLetras_KeyPress;
             txtTelefono.KeyPress += TxtSoloNumeros_KeyPress;
             txtPosicion.KeyPress += TxtSoloLetras_KeyPress;
+
+            // Bloquear todos los controles recursivamente
+            this.SetReadOnly(true);
+
+            // Mostrar mini-form Ver/Editar
+            using (var dlg = new frmModoVisualizacion())
+            {
+                if (dlg.ShowDialog() == DialogResult.OK &&
+                    dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
+                {
+                    // Desbloquear si eligió Editar
+                    this.SetReadOnly(false);
+                }
+            }
         }
 
         /* Conecta este handler en el diseñador (⚡ SelectedIndexChanged) */
@@ -49,10 +57,8 @@ namespace CpPresentacion
             // A) ¿A qué ventana ir?
             Form destino = idx switch
             {
-                0 => Application.OpenForms.OfType<Menu>()
-                                          .FirstOrDefault() ?? new Menu(),
-
-                // Evitamos duplicar instancias si ya estamos ahí
+                // Siempre nueva instancia de Menu
+                0 => new Menu(),
                 1 => this is cpOfertas ? this : new cpOfertas(),
                 2 => this is cpEmpresa ? this : new cpEmpresa(),
                 3 => this is cpPostulante ? this : new cpPostulante(),
@@ -60,6 +66,7 @@ namespace CpPresentacion
                 5 => this is cpHistorialMensajes ? this : new cpHistorialMensajes(),
                 6 => this is Carnet ? this : new Carnet(),
                 7 => this is cpRegistro ? this : new cpRegistro(),
+                8 => this is cpHistorialPostulaciones ? this : new cpHistorialPostulaciones(),
                 _ => null
             };
 
@@ -75,18 +82,21 @@ namespace CpPresentacion
             else
                 this.Dispose();  // libera recursos
 
-            await Task.Delay(180); // Pausa opcional, transición suave
+            // Asegurarnos de que la UI repinte inmediatamente:
+            destino.BringToFront();
+            destino.Activate();
+
+
         }
-        /* ── Aquí sigue tu lógica propia: botones, validaciones, etc. ── */
+
+
         private void label3_Click(object sender, EventArgs e)
         {
 
         }
         //aqui empieza lo mio 
-
         private void btnCargarFoto_Click(object sender, EventArgs e)
         {
-            //OpenFileDialog es lo que permite que el usuario pueda seleccionar un archivo desde su computadora 
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Archivos de imagen|*.jpg;*.png;*.bmp";
             if (ofd.ShowDialog() == DialogResult.OK)
@@ -95,20 +105,16 @@ namespace CpPresentacion
             }
         }
 
-        private async void btnVistaPrevia_Click(object sender, EventArgs e)
+        private void btnVistaPrevia_Click(object sender, EventArgs e)
         {
-            // Mostrar ventana de carga
-            Form ventanaCarga = CrearVentanaCarga("Generando vista previa...");
-            ventanaCarga.Show();
-            ventanaCarga.Refresh();
+            // Asegúrate que el panel se haya renderizado completamente
+            panelTarjeta.Refresh(); // Fuerza repintado
 
-            await Task.Delay(1200); // Simula procesamiento
-            ventanaCarga.Close();
-
-            // Crear bitmap de la tarjeta
-            panelTarjeta.Refresh();
+            // Usa el tamaño real del panel
             int ancho = panelTarjeta.Width;
             int alto = panelTarjeta.Height;
+
+            // Crear Bitmap del mismo tamaño
             Bitmap bmp = new Bitmap(ancho, alto);
             panelTarjeta.DrawToBitmap(bmp, new Rectangle(0, 0, ancho, alto));
 
@@ -130,7 +136,7 @@ namespace CpPresentacion
             vistaPreviaForm.ShowDialog();
         }
 
-        private async void btnGuardarTargeta_Click(object sender, EventArgs e)
+        private void btnGuardarTargeta_Click(object sender, EventArgs e)
         {
 
             // Validar que los campos no estén vacíos
@@ -171,16 +177,6 @@ namespace CpPresentacion
                 return;
             }
 
-            // Mostrar ventana de carga
-            Form ventanaCarga = CrearVentanaCarga();
-            ventanaCarga.Show();
-
-            // Esperar simulando procesamiento
-            await Task.Delay(1500);
-
-            // Cerrar ventana de carga
-            ventanaCarga.Close();
-            //guarda la targeta 
             try
             {
                 panelTarjeta.Invalidate();
@@ -204,18 +200,17 @@ namespace CpPresentacion
 
         private void panelTarjeta_Paint(object sender, PaintEventArgs e)
         {
-            // la clase Graphics se usa para dibujar en la pantalla
             Graphics g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             int width = panelTarjeta.Width;
             int height = panelTarjeta.Height;
 
-            // FONDO DIVIDIDO EN DOS
+            // 1. FONDO DIVIDIDO EN DOS
             int mitad = height / 2;
             g.FillRectangle(new SolidBrush(Color.FromArgb(25, 25, 64)), 0, 0, width, mitad); // parte superior azul oscuro
             g.FillRectangle(Brushes.Gray, 0, mitad, width, height - mitad); // parte inferior gris
 
-            //  LOGO
+            // 2. LOGO
             if (picLogo.Image != null)
             {
                 int logoAncho = 200;
@@ -238,7 +233,7 @@ namespace CpPresentacion
                     attributes);
             }
 
-            //  FOTO EN CÍRCULO
+            // 3. FOTO EN CÍRCULO
             if (picFoto.Image != null)
             {
                 int fotoSize = 100;
@@ -256,14 +251,14 @@ namespace CpPresentacion
                 g.DrawEllipse(new Pen(Color.Gray, 2), fotoX, fotoY, fotoSize, fotoSize);
             }
 
-            //  TEXTO: NOMBRE, POSICIÓN
+            // 4. TEXTO: NOMBRE, POSICIÓN
             string nombre = txtNombre.Text;
             string posicion = txtPosicion.Text;
 
             Font fontNombre = new Font("Arial", 11, FontStyle.Bold);
             Font fontPosicion = new Font("Arial", 11, FontStyle.Italic);
             Brush blanco = Brushes.White;
-            Brush morado = new SolidBrush(Color.DarkBlue);
+            Brush morado = new SolidBrush(Color.FromArgb(255, 215, 0));
 
             SizeF nombreSize = g.MeasureString(nombre, fontNombre);
             SizeF posicionSize = g.MeasureString(posicion, fontPosicion);
@@ -274,7 +269,7 @@ namespace CpPresentacion
             textoY += nombreSize.Height + 2;
             g.DrawString(posicion, fontPosicion, morado, (width - posicionSize.Width) / 2, textoY);
 
-            //  DATOS INFERIORES
+            // 5. DATOS INFERIORES
 
             string telefonoFormateado = FormatearTelefono(txtTelefono.Text);
             string correo = txtCorreo.Text; // Aquí se toma el correo real
@@ -360,16 +355,8 @@ namespace CpPresentacion
             return System.Text.RegularExpressions.Regex.IsMatch(correo, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
         }
 
-        private async void materialButton1_Click(object sender, EventArgs e)
+        private void materialButton1_Click(object sender, EventArgs e)
         {
-            // Mostrar ventana de carga
-            Form ventanaCarga = CrearVentanaCarga("Preparando impresión...");
-            ventanaCarga.Show();
-            ventanaCarga.Refresh();
-
-            await Task.Delay(1200); // Simula procesamiento
-
-            ventanaCarga.Close();
             PrintDocument pd = new PrintDocument();
             pd.PrintPage += Pd_PrintPage;
             PrintPreviewDialog preview = new PrintPreviewDialog();
@@ -403,114 +390,7 @@ namespace CpPresentacion
             // Dibujar el carnet escalado para que se imprima en tamaño real
             g.DrawImage(bmp, rect);
         }
-
-        private Form CrearVentanaCarga(string mensaje = "Procesando...")
-        {
-            Form carga = new Form
-            {
-                Size = new Size(220, 100),
-                FormBorderStyle = FormBorderStyle.FixedDialog,
-                StartPosition = FormStartPosition.CenterScreen,
-                ControlBox = false,
-                Text = "Espere..."
-            };
-
-            Label lbl = new Label
-            {
-                Text = mensaje,
-                Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Arial", 10, FontStyle.Bold)
-            };
-
-            carga.Controls.Add(lbl);
-            return carga;
-        }
-
-        /*private void Carnet_Load(object sender, EventArgs e)
-        {
-            float dpi = CreateGraphics().DpiX;      // 96, 120, 144… según escala
-
-            // CR80 vertical: 2.125 in × 3.375 in
-            int widthPx = (int)Math.Round(2.125f * dpi);
-            int heightPx = (int)Math.Round(3.375f * dpi);
-
-            panelTarjeta.Size = new Size(widthPx, heightPx);
-            panelTarjeta.Dock = DockStyle.None;     // evita que Dock Fill lo re-escale
-        }
-        */
-
-        private string FormatearTelefonoDominicano(string entrada)
-        {
-            // 1) Extraer solo dígitos
-            string digitos = new string(entrada.Where(char.IsDigit).ToArray());
-
-            // 2) Quitar el 1 inicial opcional (quedarán 10 dígitos)
-            if (digitos.Length == 11 && digitos.StartsWith("1"))
-                digitos = digitos.Substring(1);
-
-            // 3) Deben quedar exactamente 10 dígitos
-            if (digitos.Length != 10) return null;
-
-            string area = digitos.Substring(0, 3);
-
-            // 4) Validar código de área dominicano
-            if (area != "809" && area != "829" && area != "849") return null;
-
-            // 5) Construir formato final
-            return $"+1 {area}-{digitos.Substring(3, 3)}-{digitos.Substring(6, 4)}";
-        }
-
-        private void TxtTelefono_Leave(object sender, EventArgs e)
-        {
-            string formateado = FormatearTelefonoDominicano(txtTelefono.Text);
-
-            if (formateado == null)
-            {
-                MessageBox.Show(
-                    "Número dominicano inválido. El formato permitido es:\n" +
-                    "+1 809-XXX-XXXX  |  +1 829-XXX-XXXX  |  +1 849-XXX-XXXX",
-                    "Error de validación",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtTelefono.Focus();   // devuelve el foco para corregir
-            }
-            else
-            {
-                txtTelefono.Text = formateado;   // coloca el formato correcto
-            }
-        }
-
-        private Bitmap CapturarTarjetaFisica(float dpi = 300f)
-        {
-            const float widthIn = 2.125f;
-            const float heightIn = 3.375f;
-
-            int widthPx = (int)Math.Round(widthIn * dpi);
-            int heightPx = (int)Math.Round(heightIn * dpi);
-
-            // 1) Bitmap “físico”
-            Bitmap bmp = new Bitmap(widthPx, heightPx);
-            bmp.SetResolution(dpi, dpi);          // importante para impresión
-
-            // 2) Dibujamos la tarjeta escalada
-            using (Graphics g = Graphics.FromImage(bmp))
-            {
-                // Relación entre lo que ves en pantalla y la salida física
-                float scaleX = (float)widthPx / panelTarjeta.Width;
-                float scaleY = (float)heightPx / panelTarjeta.Height;
-
-                g.ScaleTransform(scaleX, scaleY);
-
-                // Usamos tu propio método Paint para reproducir exactamente el diseño
-                panelTarjeta.DrawToBitmap(bmp, new Rectangle(0, 0,
-                                                             panelTarjeta.Width,
-                                                             panelTarjeta.Height));
-            }
-            
-            return bmp;
-        }
     }
+
 
 }

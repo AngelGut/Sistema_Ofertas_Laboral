@@ -36,13 +36,16 @@
             btnRecuperarClave = new Button();
             pbCerrar = new PictureBox();
             pbMinimizar = new PictureBox();
+            pbPassword = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbCerrar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbMinimizar).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pbPassword).BeginInit();
             SuspendLayout();
             // 
             // pictureBox1
             // 
+            pictureBox1.BackColor = Color.White;
             pictureBox1.Dock = DockStyle.Left;
             pictureBox1.Image = Properties.Resources.Logo;
             pictureBox1.Location = new Point(0, 0);
@@ -58,7 +61,7 @@
             label1.AutoSize = true;
             label1.Font = new Font("Century Gothic", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.White;
-            label1.Location = new Point(367, 26);
+            label1.Location = new Point(429, 31);
             label1.Name = "label1";
             label1.Size = new Size(90, 30);
             label1.TabIndex = 1;
@@ -80,19 +83,17 @@
             txtClave.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtClave.Location = new Point(367, 127);
             txtClave.Name = "txtClave";
+            txtClave.PasswordChar = '*';
             txtClave.Size = new Size(205, 25);
             txtClave.TabIndex = 2;
-            txtClave.Text = "CONTRASEÑA";
-            txtClave.Enter += txtClave_Enter;
-            txtClave.Leave += txtClave_Leave;
             // 
             // btnIngresar
             // 
             btnIngresar.Cursor = Cursors.Hand;
             btnIngresar.FlatAppearance.BorderSize = 0;
             btnIngresar.FlatStyle = FlatStyle.Flat;
-            btnIngresar.ForeColor = Color.White;
-            btnIngresar.Location = new Point(444, 177);
+            btnIngresar.ForeColor = Color.Black;
+            btnIngresar.Location = new Point(429, 174);
             btnIngresar.Name = "btnIngresar";
             btnIngresar.Size = new Size(75, 23);
             btnIngresar.TabIndex = 3;
@@ -105,7 +106,8 @@
             btnRecuperarClave.Cursor = Cursors.Hand;
             btnRecuperarClave.FlatAppearance.BorderSize = 0;
             btnRecuperarClave.FlatStyle = FlatStyle.Flat;
-            btnRecuperarClave.Location = new Point(395, 215);
+            btnRecuperarClave.ForeColor = Color.Black;
+            btnRecuperarClave.Location = new Point(380, 215);
             btnRecuperarClave.Name = "btnRecuperarClave";
             btnRecuperarClave.Size = new Size(177, 23);
             btnRecuperarClave.TabIndex = 4;
@@ -135,12 +137,24 @@
             pbMinimizar.TabStop = false;
             pbMinimizar.Click += pbMinimizar_Click;
             // 
+            // pbPassword
+            // 
+            pbPassword.Image = Properties.Resources.OjoCerrado;
+            pbPassword.Location = new Point(580, 127);
+            pbPassword.Name = "pbPassword";
+            pbPassword.Size = new Size(32, 25);
+            pbPassword.SizeMode = PictureBoxSizeMode.Zoom;
+            pbPassword.TabIndex = 7;
+            pbPassword.TabStop = false;
+            pbPassword.Click += pbPassword_Click;
+            // 
             // cpLogin
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.HotTrack;
+            BackColor = Color.Teal;
             ClientSize = new Size(680, 250);
+            Controls.Add(pbPassword);
             Controls.Add(pbMinimizar);
             Controls.Add(pbCerrar);
             Controls.Add(btnRecuperarClave);
@@ -155,10 +169,12 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "cpLogin";
             Load += cpLogin_Load;
+            KeyDown += cpLogin_KeyDown;
             MouseDown += cpLogin_MouseDown;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbCerrar).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbMinimizar).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbPassword).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -173,5 +189,6 @@
         private Button btnRecuperarClave;
         private PictureBox pbCerrar;
         private PictureBox pbMinimizar;
+        private PictureBox pbPassword;
     }
 }
