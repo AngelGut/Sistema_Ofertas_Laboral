@@ -113,7 +113,7 @@ using CpNegocio.servicio;
             private void frmEmpleo_Load(object sender, EventArgs e)
             {
                 MostrarPostulantes();
-                MostrarEmpresas();
+                //TODO: MostrarEmpresas();
             }
 
             private void MostrarPostulantes()
@@ -135,121 +135,113 @@ using CpNegocio.servicio;
                 dgvPostulantes.DataSource = negocioPostulante.BuscarPorDNI(dni);
             }
 
-        public void MostrarEmpresas()
-        {
-            var negocioEmpresa = new NEmpresa();
-            // Llama al nuevo método para obtener los datos completos
-            tablaEmpresas = negocioEmpresa.ObtenerEmpresasConArea();
-            dgvEmpresas.DataSource = tablaEmpresas;
-        }
-
-
-
-        private void btnBuscar_Click(object sender, EventArgs e)
+            /*public void MostrarEmpresas()
             {
-                string texto = txtBuscarDNI.Text.Trim();
-                if (string.IsNullOrEmpty(texto))
-                {
-                    dgvPostulantes.DataSource = tablaPostulantes;
-                    return;
-                }
-
-                if (cmbFiltroBusqueda.SelectedItem == null)
-                {
-                    MessageBox.Show("Por favor, selecciona un filtro: ID o DNI.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                string opcion = cmbFiltroBusqueda.SelectedItem.ToString();
-                DataView vista = new DataView(tablaPostulantes);
-
-                string filtro = opcion switch
-                {
-                    "ID" => $"Convert(Id, 'System.String') = '{texto}'",
-                    "Dni" => $"Cedula LIKE '%{texto}%'",
-                    _ => ""
-                };
-
-                if (string.IsNullOrEmpty(filtro))
-                {
-                    MessageBox.Show("Filtro inválido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                vista.RowFilter = filtro;
-                dgvPostulantes.DataSource = vista;
-
-                //Verificamos si la vista está vacía DESPUÉS de aplicar el filtro
-                if (vista.Count == 0)
-                {
-                    MessageBox.Show($"No se encontró ningún postulante con {opcion}: {texto}", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    dgvPostulantes.DataSource = tablaPostulantes; // (opcional) restaurar lista completa
-                }
+                var negocioEmpresa = new NEmpresa();
+                // Llama al nuevo método para obtener los datos completos
+                tablaEmpresas = negocioEmpresa.ObtenerEmpresasConArea();
+                dgvEmpresas.DataSource = tablaEmpresas;
             }
+            */
 
 
+            private void btnBuscar_Click(object sender, EventArgs e)
+            {
+                    string texto = txtBuscarDNI.Text.Trim();
+                    if (string.IsNullOrEmpty(texto))
+                    {
+                        dgvPostulantes.DataSource = tablaPostulantes;
+                        return;
+                    }
+
+                    if (cmbFiltroBusqueda.SelectedItem == null)
+                    {
+                        MessageBox.Show("Por favor, selecciona un filtro: ID o DNI.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    string opcion = cmbFiltroBusqueda.SelectedItem.ToString();
+                    DataView vista = new DataView(tablaPostulantes);
+
+                    string filtro = opcion switch
+                    {
+                        "ID" => $"Convert(Id, 'System.String') = '{texto}'",
+                        "Dni" => $"Cedula LIKE '%{texto}%'",
+                        _ => ""
+                    };
+
+                    if (string.IsNullOrEmpty(filtro))
+                    {
+                        MessageBox.Show("Filtro inválido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    vista.RowFilter = filtro;
+                    dgvPostulantes.DataSource = vista;
+
+                    //Verificamos si la vista está vacía DESPUÉS de aplicar el filtro
+                    if (vista.Count == 0)
+                    {
+                        MessageBox.Show($"No se encontró ningún postulante con {opcion}: {texto}", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        dgvPostulantes.DataSource = tablaPostulantes; // (opcional) restaurar lista completa
+                    }
+            }
 
             private void btnBuscarID_Click(object sender, EventArgs e)
             {
-            string texto = txtBuscarDNI.Text;
+                string texto = txtBuscarDNI.Text;
 
-            // ➡️ Aquí es donde se valida y se muestra la alerta si el campo está vacío.
-            if (string.IsNullOrWhiteSpace(texto))
-            {
-                MessageBox.Show("Por favor, introduce un valor para realizar la búsqueda.", "Campo de búsqueda vacío", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                // Salimos del método para que no se ejecute el resto del código.
-                return;
-            }
+                // ➡️ Aquí es donde se valida y se muestra la alerta si el campo está vacío.
+                if (string.IsNullOrWhiteSpace(texto))
+                {
+                    MessageBox.Show("Por favor, introduce un valor para realizar la búsqueda.", "Campo de búsqueda vacío", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    // Salimos del método para que no se ejecute el resto del código.
+                    return;
+                }
 
-            // Si el campo tiene texto, llamamos a la función de filtrado.
-            FiltrarPostulantes(texto);
+                    // Si el campo tiene texto, llamamos a la función de filtrado.
+                    FiltrarPostulantes(texto);
+
+
+                    if (string.IsNullOrEmpty(texto))
+                    {
+                        dgvPostulantes.DataSource = tablaPostulantes;
+                        return;
+                    }
+
+                    if (cmbNuevo.SelectedItem == null)
+                    {
+                        MessageBox.Show("Por favor, selecciona un filtro: ID o Dni.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    string opcion = cmbNuevo.SelectedItem.ToString();
+                    DataView vista = new DataView(tablaPostulantes);
+
+                    string filtro = opcion switch
+                    {
+                        "ID" => $"Convert(Id, 'System.String') = '{texto}'",
+                        "Dni" => $"Dni LIKE '%{texto}%'",
+                        "Nombre" => $"Nombre LIKE '%{texto}%'",
+                        _ => ""
+                    };
 
             
 
+                    if (string.IsNullOrEmpty(filtro))
+                    {
+                        MessageBox.Show("Filtro inválido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
 
+                    vista.RowFilter = filtro;
+                    dgvPostulantes.DataSource = vista;
 
-
-
-
-                if (string.IsNullOrEmpty(texto))
-                {
-                    dgvPostulantes.DataSource = tablaPostulantes;
-                    return;
-                }
-
-                if (cmbNuevo.SelectedItem == null)
-                {
-                    MessageBox.Show("Por favor, selecciona un filtro: ID o Dni.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                string opcion = cmbNuevo.SelectedItem.ToString();
-                DataView vista = new DataView(tablaPostulantes);
-
-                string filtro = opcion switch
-                {
-                    "ID" => $"Convert(Id, 'System.String') = '{texto}'",
-                    "Dni" => $"Dni LIKE '%{texto}%'",
-                    "Nombre" => $"Nombre LIKE '%{texto}%'",
-                    _ => ""
-                };
-
-            
-
-                if (string.IsNullOrEmpty(filtro))
-                {
-                    MessageBox.Show("Filtro inválido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                vista.RowFilter = filtro;
-                dgvPostulantes.DataSource = vista;
-
-                if (vista.Count == 0)
-                {
-                    MessageBox.Show($"No se encontró ningún postulante con {opcion}.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    dgvPostulantes.DataSource = tablaPostulantes;
-                }
+                    if (vista.Count == 0)
+                    {
+                        MessageBox.Show($"No se encontró ningún postulante con {opcion}.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        dgvPostulantes.DataSource = tablaPostulantes;
+                    }
             }
 
 
@@ -262,55 +254,55 @@ using CpNegocio.servicio;
             }
 
 
-        private void FiltrarPostulantes(string texto)
-        {
+            private void FiltrarPostulantes(string texto)
+            {
 
             
-            if (tablaPostulantes == null) return;
+                if (tablaPostulantes == null) return;
 
-            // Si el texto de búsqueda está vacío, mostramos la tabla completa.
-            if (string.IsNullOrWhiteSpace(texto))
-            {
-                dgvPostulantes.DataSource = tablaPostulantes;
-                return;
-            }
+                // Si el texto de búsqueda está vacío, mostramos la tabla completa.
+                if (string.IsNullOrWhiteSpace(texto))
+                {
+                    dgvPostulantes.DataSource = tablaPostulantes;
+                    return;
+                }
 
-            DataView vista = new DataView(tablaPostulantes);
-            string filtro = "";
-            string filtroSeleccionado = cmbNuevo.SelectedItem?.ToString();
+                DataView vista = new DataView(tablaPostulantes);
+                string filtro = "";
+                string filtroSeleccionado = cmbNuevo.SelectedItem?.ToString();
 
-            // Lógica para aplicar el filtro según la opción seleccionada.
-            if (filtroSeleccionado == "ID")
-            {
-                filtro = $"Convert(Id, 'System.String') LIKE '%{texto}%'";
-            }
-            else if (filtroSeleccionado == "Dni")
-            {
-                filtro = $"Dni LIKE '%{texto}%'";
-            }
-            else if (filtroSeleccionado == "Nombre")
-            {
-                filtro = $"Nombre LIKE '%{texto}%'";
-            }
-            else
-            {
-                // En caso de que no se haya seleccionado un filtro, busca en todos los campos.
-                filtro = $"Convert(Id, 'System.String') LIKE '%{texto}%' OR Dni LIKE '%{texto}%' OR Nombre LIKE '%{texto}%'";
-            }
+                // Lógica para aplicar el filtro según la opción seleccionada.
+                if (filtroSeleccionado == "ID")
+                {
+                    filtro = $"Convert(Id, 'System.String') LIKE '%{texto}%'";
+                }
+                else if (filtroSeleccionado == "Dni")
+                {
+                    filtro = $"Dni LIKE '%{texto}%'";
+                }
+                else if (filtroSeleccionado == "Nombre")
+                {
+                    filtro = $"Nombre LIKE '%{texto}%'";
+                }
+                else
+                {
+                    // En caso de que no se haya seleccionado un filtro, busca en todos los campos.
+                    filtro = $"Convert(Id, 'System.String') LIKE '%{texto}%' OR Dni LIKE '%{texto}%' OR Nombre LIKE '%{texto}%'";
+                }
 
-            // Aplica el filtro a la vista de datos.
-            vista.RowFilter = filtro;
-            dgvPostulantes.DataSource = vista;
+                // Aplica el filtro a la vista de datos.
+                vista.RowFilter = filtro;
+                dgvPostulantes.DataSource = vista;
 
-            // --- Aquí está la clave para la alerta ---
-            // Si la vista está vacía después de aplicar el filtro, mostramos el mensaje.
-            if (vista.Count == 0)
-            {
-                MessageBox.Show($"No se encontraron postulantes con ese '{filtroSeleccionado}' que coincidan con '{texto}'.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                // Opcional: restaurar el DataGridView para que muestre todos los postulantes.
-                dgvPostulantes.DataSource = tablaPostulantes;
+                // --- Aquí está la clave para la alerta ---
+                // Si la vista está vacía después de aplicar el filtro, mostramos el mensaje.
+                if (vista.Count == 0)
+                {
+                    MessageBox.Show($"No se encontraron postulantes con ese '{filtroSeleccionado}' que coincidan con '{texto}'.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // Opcional: restaurar el DataGridView para que muestre todos los postulantes.
+                    dgvPostulantes.DataSource = tablaPostulantes;
+                }
             }
-        }
 
         private string cedulaPostulanteSeleccionado;
             private string correoEmpresaSeleccionada;
@@ -320,67 +312,67 @@ using CpNegocio.servicio;
                 FiltrarPostulantes(txtBuscarDNI.Text.Trim());
             }
 
-        private void AplicarFiltrosEmpresas()
-        {
-            if (tablaEmpresas == null) return;
-
-            DataView vista = new DataView(tablaEmpresas);
-            string filtroGeneral = "";
-            string filtroArea = "";
-
-            // Lógica para el filtro de área
-            if (cmbFiltroArea.SelectedItem?.ToString() != "Todas")
+            private void AplicarFiltrosEmpresas()
             {
-                filtroArea = $"Area = '{cmbFiltroArea.SelectedItem?.ToString().Replace("'", "''")}'";
-            }
+                if (tablaEmpresas == null) return;
 
-            // Lógica para el filtro general (ID, Nombre, RNC)
-            string textoBusqueda = txtBuscarID.Text.Trim();
-            string filtroSeleccionado = cmbFiltroEmpresa.SelectedItem?.ToString();
+                DataView vista = new DataView(tablaEmpresas);
+                string filtroGeneral = "";
+                string filtroArea = "";
 
-            if (!string.IsNullOrEmpty(textoBusqueda))
-            {
-                switch (filtroSeleccionado)
+                // Lógica para el filtro de área
+                if (cmbFiltroArea.SelectedItem?.ToString() != "Todas")
                 {
-                    case "ID":
-                        filtroGeneral = $"Convert(Id, 'System.String') LIKE '%{textoBusqueda}%'";
-                        break;
-                    case "Nombre":
-                        filtroGeneral = $"Nombre LIKE '%{textoBusqueda}%'";
-                        break;
-                    case "RNC":
-                        filtroGeneral = $"RNC LIKE '%{textoBusqueda}%'";
-                        break;
-                    case "Todas":
-                        filtroGeneral = $"Nombre LIKE '%{textoBusqueda}%' OR RNC LIKE '%{textoBusqueda}%' OR Convert(Id, 'System.String') LIKE '%{textoBusqueda}%'";
-                        break;
+                    filtroArea = $"Area = '{cmbFiltroArea.SelectedItem?.ToString().Replace("'", "''")}'";
+                }
+
+                // Lógica para el filtro general (ID, Nombre, RNC)
+                string textoBusqueda = txtBuscarID.Text.Trim();
+                string filtroSeleccionado = cmbFiltroEmpresa.SelectedItem?.ToString();
+
+                if (!string.IsNullOrEmpty(textoBusqueda))
+                {
+                    switch (filtroSeleccionado)
+                    {
+                        case "ID":
+                            filtroGeneral = $"Convert(Id, 'System.String') LIKE '%{textoBusqueda}%'";
+                            break;
+                        case "Nombre":
+                            filtroGeneral = $"Nombre LIKE '%{textoBusqueda}%'";
+                            break;
+                        case "RNC":
+                            filtroGeneral = $"RNC LIKE '%{textoBusqueda}%'";
+                            break;
+                        case "Todas":
+                            filtroGeneral = $"Nombre LIKE '%{textoBusqueda}%' OR RNC LIKE '%{textoBusqueda}%' OR Convert(Id, 'System.String') LIKE '%{textoBusqueda}%'";
+                            break;
+                    }
+                }
+
+                // Combina ambos filtros
+                string filtroFinal = "";
+                if (!string.IsNullOrEmpty(filtroArea) && !string.IsNullOrEmpty(filtroGeneral))
+                {
+                    filtroFinal = $"{filtroArea} AND ({filtroGeneral})";
+                }
+                else if (!string.IsNullOrEmpty(filtroArea))
+                {
+                    filtroFinal = filtroArea;
+                }
+                else if (!string.IsNullOrEmpty(filtroGeneral))
+                {
+                    filtroFinal = filtroGeneral;
+                }
+
+                vista.RowFilter = filtroFinal;
+                dgvEmpresas.DataSource = vista;
+
+                if (vista.Count == 0 && (!string.IsNullOrEmpty(filtroFinal)))
+                {
+                    MessageBox.Show("No se encontraron resultados con los filtros aplicados.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    dgvEmpresas.DataSource = tablaEmpresas;
                 }
             }
-
-            // Combina ambos filtros
-            string filtroFinal = "";
-            if (!string.IsNullOrEmpty(filtroArea) && !string.IsNullOrEmpty(filtroGeneral))
-            {
-                filtroFinal = $"{filtroArea} AND ({filtroGeneral})";
-            }
-            else if (!string.IsNullOrEmpty(filtroArea))
-            {
-                filtroFinal = filtroArea;
-            }
-            else if (!string.IsNullOrEmpty(filtroGeneral))
-            {
-                filtroFinal = filtroGeneral;
-            }
-
-            vista.RowFilter = filtroFinal;
-            dgvEmpresas.DataSource = vista;
-
-            if (vista.Count == 0 && (!string.IsNullOrEmpty(filtroFinal)))
-            {
-                MessageBox.Show("No se encontraron resultados con los filtros aplicados.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                dgvEmpresas.DataSource = tablaEmpresas;
-            }
-        }
 
 
 
