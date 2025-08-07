@@ -13,51 +13,62 @@ namespace CpNegocio.Repositorios
     {
         public List<CnOferta> ObtenerOfertasDisponibles()
         {
-            List<CnOferta> ofertas = new List<CnOferta>();
+            var ofertas = new List<CnOferta>();
+
             using (SqlConnection connection = OfertaDatos.ObtenerConexion())
             {
                 connection.Open();
-                string query = @"SELECT Id, EmpresaId, Puesto, Tipo, Descripcion, Requisitos, Salario, Creditos, Area
-                                 FROM Oferta
-                                 WHERE Ocupada = 0";
 
-                using (SqlCommand command = new SqlCommand(query, connection))
+                string query = @"
+                SELECT Id, EmpresaId, Puesto, Tipo, Descripcion, Requisitos, Salario, Creditos, Area
+                FROM [dbo].[Oferta]
+                WHERE Ocupada = 0;";
+
+                using (var command = new SqlCommand(query, connection))
+                using (var reader = command.ExecuteReader())
                 {
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    while (reader.Read())
                     {
-                        while (reader.Read())
-                        {
-                            // Obtenemos el tipo de la base de datos de manera segura
-                            string tipoContrato = reader["Tipo"].ToString();
+                        // Normalizar el tipo
+                        string tipoRaw = (reader["Tipo"]?.ToString() ?? "").Trim();
+                        string tipo = NormalizarTipo(tipoRaw);
 
-                            if (tipoContrato == "EmpleoFijo")
+                        int id = (int)reader["Id"];
+                        int empresaId = (int)reader["EmpresaId"];
+                        string puesto = reader["Puesto"]?.ToString() ?? "";
+                        string desc = reader["Descripcion"]?.ToString() ?? "";
+                        string req = reader["Requisitos"]?.ToString() ?? "";
+                        string area = reader["Area"]?.ToString() ?? "";
+                        int salario = reader["Salario"] is DBNull ? 0 : (int)reader["Salario"];
+                        int creditos = reader["Creditos"] is DBNull ? 0 : (int)reader["Creditos"];
+
+                        if (tipo == "empleofijo" || tipo == "fijo")
+                        {
+                            ofertas.Add(new EmpleoFijo
                             {
-                                ofertas.Add(new EmpleoFijo
-                                {
-                                    Id = (int)reader["Id"],
-                                    EmpresaId = (int)reader["EmpresaId"],
-                                    Puesto = reader["Puesto"].ToString(),
-                                    Tipo = tipoContrato,
-                                    Descripcion = reader["Descripcion"].ToString(),
-                                    Requisitos = reader["Requisitos"].ToString(),
-                                    Salario = reader["Salario"] as int? ?? 0,
-                                    Area = reader["Area"].ToString()
-                                });
-                            }
-                            else if (tipoContrato == "Pasantia")
+                                Id = id,
+                                EmpresaId = empresaId,
+                                Puesto = puesto,
+                                Tipo = tipoRaw, // conserva original
+                                Descripcion = desc,
+                                Requisitos = req,
+                                Salario = salario,
+                                Area = area
+                            });
+                        }
+                        else // pasantía u otro → tratamos como pasantía por defecto
+                        {
+                            ofertas.Add(new Pasantia
                             {
-                                ofertas.Add(new Pasantia
-                                {
-                                    Id = (int)reader["Id"],
-                                    EmpresaId = (int)reader["EmpresaId"],
-                                    Puesto = reader["Puesto"].ToString(),
-                                    Tipo = tipoContrato,
-                                    Descripcion = reader["Descripcion"].ToString(),
-                                    Requisitos = reader["Requisitos"].ToString(),
-                                    Creditos = reader["Creditos"] as int? ?? 0,
-                                    Area = reader["Area"].ToString()
-                                });
-                            }
+                                Id = id,
+                                EmpresaId = empresaId,
+                                Puesto = puesto,
+                                Tipo = tipoRaw,
+                                Descripcion = desc,
+                                Requisitos = req,
+                                Creditos = creditos,
+                                Area = area
+                            });
                         }
                     }
                 }
@@ -70,49 +81,80 @@ namespace CpNegocio.Repositorios
             using (SqlConnection connection = OfertaDatos.ObtenerConexion())
             {
                 connection.Open();
-                string query = "SELECT Id, EmpresaId, Puesto, Tipo, Descripcion, Requisitos, Salario, Creditos, Area FROM Oferta WHERE Id = @Id";
-                using (SqlCommand command = new SqlCommand(query, connection))
+
+                string query = @"
+SELECT Id, EmpresaId, Puesto, Tipo, Descripcion, Requisitos, Salario, Creditos, Area
+FROM [dbo].[Oferta]
+WHERE Id = @Id;";
+
+                using (var command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", idOferta);
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            string tipo = reader["Tipo"].ToString();
 
-                            if (tipo == "EmpleoFijo")
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (!reader.Read()) return null;
+
+                        string tipoRaw = (reader["Tipo"]?.ToString() ?? "").Trim();
+                        string tipo = NormalizarTipo(tipoRaw);
+
+                        int id = (int)reader["Id"];
+                        int empresaId = (int)reader["EmpresaId"];
+                        string puesto = reader["Puesto"]?.ToString() ?? "";
+                        string desc = reader["Descripcion"]?.ToString() ?? "";
+                        string req = reader["Requisitos"]?.ToString() ?? "";
+                        string area = reader["Area"]?.ToString() ?? "";
+                        int salario = reader["Salario"] is DBNull ? 0 : (int)reader["Salario"];
+                        int creditos = reader["Creditos"] is DBNull ? 0 : (int)reader["Creditos"];
+
+                        if (tipo == "empleofijo" || tipo == "fijo")
+                        {
+                            return new EmpleoFijo
                             {
-                                return new EmpleoFijo
-                                {
-                                    Id = (int)reader["Id"],
-                                    EmpresaId = (int)reader["EmpresaId"],
-                                    Puesto = reader["Puesto"].ToString(),
-                                    Tipo = tipo,
-                                    Descripcion = reader["Descripcion"].ToString(),
-                                    Requisitos = reader["Requisitos"].ToString(),
-                                    Salario = reader["Salario"] as int? ?? 0,
-                                    Area = reader["Area"].ToString()
-                                };
-                            }
-                            else if (tipo == "Pasantia")
+                                Id = id,
+                                EmpresaId = empresaId,
+                                Puesto = puesto,
+                                Tipo = tipoRaw,
+                                Descripcion = desc,
+                                Requisitos = req,
+                                Salario = salario,
+                                Area = area
+                            };
+                        }
+                        else // pasantía u otro → devolver Pasantia
+                        {
+                            return new Pasantia
                             {
-                                return new Pasantia
-                                {
-                                    Id = (int)reader["Id"],
-                                    EmpresaId = (int)reader["EmpresaId"],
-                                    Puesto = reader["Puesto"].ToString(),
-                                    Tipo = tipo,
-                                    Descripcion = reader["Descripcion"].ToString(),
-                                    Requisitos = reader["Requisitos"].ToString(),
-                                    Creditos = reader["Creditos"] as int? ?? 0,
-                                    Area = reader["Area"].ToString()
-                                };
-                            }
+                                Id = id,
+                                EmpresaId = empresaId,
+                                Puesto = puesto,
+                                Tipo = tipoRaw,
+                                Descripcion = desc,
+                                Requisitos = req,
+                                Creditos = creditos,
+                                Area = area
+                            };
                         }
                     }
                 }
             }
-            return null;
+        }
+
+        // --- helpers ---
+        private static string NormalizarTipo(string tipoRaw)
+        {
+            // quita espacios y baja a minúsculas; reemplaza tildes comunes
+            string t = tipoRaw
+                .Replace("á", "a").Replace("é", "e").Replace("í", "i")
+                .Replace("ó", "o").Replace("ú", "u")
+                .Replace(" ", "")
+                .ToLowerInvariant();
+
+            // mapea variantes comunes
+            if (t == "empleofijo" || t == "empleo" || t == "fijo") return "empleofijo";
+            if (t == "pasantia" || t == "pasantia") return "pasantia";
+
+            return t; // deja lo que venga (y tratamos default como pasantía arriba)
         }
     }
 }

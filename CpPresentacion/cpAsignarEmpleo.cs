@@ -60,7 +60,15 @@ namespace CpPresentacion
             cmbFiltroEmpresa.Items.Add("ID Oferta");
             cmbFiltroEmpresa.SelectedIndex = 0; // Se selecciona por defecto la única opción.
 
-            
+            // Limitar entrada a dígitos en los textboxes manuales (opcional)
+            txboxIdPersona.KeyPress += (s, ev) =>
+            {
+                if (!char.IsControl(ev.KeyChar) && !char.IsDigit(ev.KeyChar)) ev.Handled = true;
+            };
+            texboxIdOferta.KeyPress += (s, ev) =>
+            {
+                if (!char.IsControl(ev.KeyChar) && !char.IsDigit(ev.KeyChar)) ev.Handled = true;
+            };
         }
 
         private void CargarCombos()
@@ -260,31 +268,58 @@ namespace CpPresentacion
         // Eventos
         private void btnAsignar_Click(object sender, EventArgs e)
         {
-            // Se valida si se ha seleccionado un postulante.
-            if (idPostulanteSeleccionado == -1)
+            // 1) Intentar leer ID de los TextBox si el usuario los escribió manualmente
+            int personaIdManual, ofertaIdManual;
+
+            // Si hay texto en txboxIdPersona y es un int válido, se usa (tiene prioridad)
+            if (!string.IsNullOrWhiteSpace(txboxIdPersona.Text) && int.TryParse(txboxIdPersona.Text, out personaIdManual))
+                idPostulanteSeleccionado = personaIdManual;
+
+            // Si hay texto en txboxIdOferta y es un int válido, se usa (tiene prioridad)
+            if (!string.IsNullOrWhiteSpace(texboxIdOferta.Text) && int.TryParse(texboxIdOferta.Text, out ofertaIdManual))
+                idOfertaSeleccionada = ofertaIdManual;
+
+            // 2) Validaciones simples
+            if (idPostulanteSeleccionado <= 0)
             {
-                MessageBox.Show("Por favor, selecciona un postulante.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Por favor, selecciona un postulante del listado o escribe un ID válido en 'txboxIdPersona'.",
+                    "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (idOfertaSeleccionada <= 0)
+            {
+                MessageBox.Show("Por favor, selecciona una oferta del listado o escribe un ID válido en 'txboxIdOferta'.",
+                    "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Se valida si se ha seleccionado una oferta de empleo.
-            if (idOfertaSeleccionada == -1)
-            {
-                MessageBox.Show("Por favor, selecciona una oferta.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            AsignacionServicio asignacionServicio = new AsignacionServicio();
+            // 3) Llamar al servicio de asignación
+            var asignacionServicio = new AsignacionServicio();
             try
             {
+                // Si tienes usuario logueado, pásalo; si no, omite el parámetro (sobrecarga)
+                // Ejemplo con usuario opcional: asignacionServicio.AsignarOfertaAPersona(idPostulanteSeleccionado, idOfertaSeleccionada, usuarioId);
                 asignacionServicio.AsignarOfertaAPersona(idPostulanteSeleccionado, idOfertaSeleccionada);
-                MessageBox.Show("Asignación realizada y notificaciones enviadas correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                idPostulanteSeleccionado = -1;
-                idOfertaSeleccionada = -1;
+
+                MessageBox.Show(
+                    $"Asignación OK.\nPersonaId: {idPostulanteSeleccionado}\nOfertaId: {idOfertaSeleccionada}",
+                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Limpieza de estado (opcional)
+                // idPostulanteSeleccionado = -1;
+                // idOfertaSeleccionada = -1;
+                // txboxIdPersona.Clear();
+                // txboxIdOferta.Clear();
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Mensajes de negocio mapeados en el repositorio (duplicado, FK, etc.)
+                MessageBox.Show(ex.Message, "No se pudo asignar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ocurrió un error al asignar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Ocurrió un error al asignar: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -310,15 +345,27 @@ namespace CpPresentacion
         
         private void dgvPostulantes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Asegurarse de que el clic no es en el encabezado de la columna
-            if (e.RowIndex >= 0)
-            {
-                // Obtener el ID y el nombre de la fila seleccionada y almacenarlos
-                int.TryParse(dgvPostulantes.Rows[e.RowIndex].Cells["Id"].Value.ToString(), out idPostulanteSeleccionado);
-                string nombrePostulante = dgvPostulantes.Rows[e.RowIndex].Cells["Nombre"].Value.ToString();
+            if (e.RowIndex < 0) return;
 
-                MessageBox.Show($"Se ha seleccionado el postulante: {nombrePostulante} (ID: {idPostulanteSeleccionado})", "Selección Confirmada", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            var row = dgvPostulantes.Rows[e.RowIndex];
+
+            // Intenta leer el ID por nombre de columna; si no, prueba conversión
+            if (row.Cells["Id"]?.Value is int id)
+                idPostulanteSeleccionado = id;
+            else
+                int.TryParse(row.Cells["Id"]?.Value?.ToString(), out idPostulanteSeleccionado);
+
+            // Refleja en el TextBox
+            txboxIdPersona.Text = idPostulanteSeleccionado > 0 ? idPostulanteSeleccionado.ToString() : string.Empty;
+
+            var nombrePostulante = row.Cells["Nombre"]?.Value?.ToString() ?? string.Empty;
+
+            if (idPostulanteSeleccionado > 0)
+                MessageBox.Show($"Postulante seleccionado: {nombrePostulante} (ID: {idPostulanteSeleccionado})",
+                    "Selección Confirmada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            else
+                MessageBox.Show("No se pudo leer el Id del postulante de la fila seleccionada.",
+                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         
@@ -326,15 +373,25 @@ namespace CpPresentacion
         
         private void dgvEmpresas_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Asegurarse de que el clic no es en el encabezado de la columna
-            if (e.RowIndex >= 0)
-            {
-                // Obtener el ID y el puesto de la oferta de la fila seleccionada y almacenarlos
-                int.TryParse(dgvEmpresas.Rows[e.RowIndex].Cells["IdOferta"].Value.ToString(), out idOfertaSeleccionada);
-                string nombrePuesto = dgvEmpresas.Rows[e.RowIndex].Cells["NombrePuesto"].Value.ToString();
+            if (e.RowIndex < 0) return;
 
-                MessageBox.Show($"Se ha seleccionado la oferta de empleo: {nombrePuesto} (ID: {idOfertaSeleccionada})", "Selección Confirmada", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            var row = dgvEmpresas.Rows[e.RowIndex];
+
+            if (row.Cells["IdOferta"]?.Value is int id)
+                idOfertaSeleccionada = id;
+            else
+                int.TryParse(row.Cells["IdOferta"]?.Value?.ToString(), out idOfertaSeleccionada);
+
+            texboxIdOferta.Text = idOfertaSeleccionada > 0 ? idOfertaSeleccionada.ToString() : string.Empty;
+
+            var nombrePuesto = row.Cells["NombrePuesto"]?.Value?.ToString() ?? string.Empty;
+
+            if (idOfertaSeleccionada > 0)
+                MessageBox.Show($"Oferta seleccionada: {nombrePuesto} (ID: {idOfertaSeleccionada})",
+                    "Selección Confirmada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            else
+                MessageBox.Show("No se pudo leer el Id de la oferta de la fila seleccionada.",
+                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void cmbNuevo_SelectedIndexChanged(object sender, EventArgs e) { }

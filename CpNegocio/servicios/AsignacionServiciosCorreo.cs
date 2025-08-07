@@ -37,24 +37,24 @@ namespace CpNegocio.servicio
         public void AsignarOfertaAPersona(int idPersona, int idOferta)
         {
 
-            // 1. Obtener los datos de la persona y la oferta
+            // 1) Obtener
             var persona = _personaRepositorio.ObtenerPersonaPorId(idPersona);
             var oferta = _ofertaRepositorio.ObtenerOfertaPorId(idOferta);
 
-            // 2. Validar que la persona y la oferta existan de inmediato
-            if (persona == null || oferta == null)
-            {
-                throw new Exception("Persona u oferta no encontrada.");
-            }
+            // 2) Validaciones con mensajes específicos
+            if (persona == null)
+                throw new Exception($"Persona no encontrada (Id={idPersona}).");
 
-            // 3. Ahora que sabemos que la oferta no es null, podemos obtener la empresa de forma segura
+            if (oferta == null)
+                throw new Exception($"Oferta no encontrada (Id={idOferta}).");
+
+            // 3) Empresa
             var empresa = _empresaRepositorio.ObtenerEmpresaPorId(oferta.EmpresaId);
-
-            // 4. Validar que la empresa también exista
             if (empresa == null)
-            {
-                throw new Exception("Empresa no encontrada para la oferta especificada.");
-            }
+                throw new Exception($"Empresa no encontrada para la oferta (EmpresaId={oferta.EmpresaId}).");
+
+            // 4) Insertar
+            _asignacionRepositorio.AsignarPersonaAOferta(idPersona, idOferta);
 
             //TODO: Persistir la asignación en la base de datos
             _asignacionRepositorio.AsignarPersonaAOferta(idPersona, idOferta);
