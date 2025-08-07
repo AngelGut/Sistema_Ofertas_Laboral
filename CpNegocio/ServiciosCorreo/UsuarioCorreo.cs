@@ -4,43 +4,44 @@ using CpNegocio.ServiciosCorreo;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CapaNegocio
 {
     public class UsuarioNegocio
     {
-        // Verificar las credenciales de usuario
-        public bool Login(string usuario, string clave)
+        // Verificar las credenciales de usuario de forma asíncrona
+        public async Task<bool> LoginAsync(string usuario, string clave)
         {
-            return DatosUsuario.VerificarCredenciales(usuario, clave);
+            return await DatosUsuario.VerificarCredencialesAsync(usuario, clave);
         }
 
-        // Cambiar la clave del usuario
-        public bool CambiarClave(string correo, string nuevaClave)
+        // Cambiar la clave del usuario de forma asíncrona
+        public async Task<bool> CambiarClaveAsync(string correo, string nuevaClave)
         {
-            return DatosUsuario.CambiarClave(correo, nuevaClave);
+            return await DatosUsuario.CambiarClaveAsync(correo, nuevaClave);
         }
 
-        // Verificar si un correo ya está registrado
-        public bool CorreoExiste(string correo)
+        // Verificar si un correo ya está registrado de forma asíncrona
+        public async Task<bool> CorreoExisteAsync(string correo)
         {
-            return DatosUsuario.ExisteCorreo(correo);
+            return await DatosUsuario.ExisteCorreoAsync(correo);
         }
 
-        // Recuperar la clave del usuario
-        public bool RecuperarClave(string correo)
+        // Recuperar la clave del usuario de forma asíncrona
+        public async Task<bool> RecuperarClaveAsync(string correo)
         {
-            if (!DatosUsuario.ExisteCorreo(correo))
+            if (!await DatosUsuario.ExisteCorreoAsync(correo))  // Verifica si el correo existe de forma asíncrona
                 return false; // Si el correo no existe, retornamos false
 
             // Genera una nueva clave de forma segura
             string nuevaClave = GenerarNuevaClave(); // Usar un generador más seguro si es necesario
-            bool actualizada = DatosUsuario.CambiarClave(correo, nuevaClave);
+            bool actualizada = await DatosUsuario.CambiarClaveAsync(correo, nuevaClave);
 
             if (!actualizada)
                 return false; // Si no se pudo actualizar la clave, retornamos false
 
-            // Enviar correo con la nueva clave
+            // Enviar correo con la nueva clave de forma asíncrona
             var correoServicio = new ServiciosCorreo(
                 "ofertaslaboralesuce@gmail.com",         // Remitente
                 "xskfnxncewwumili",                    // Clave del remitente
@@ -51,29 +52,29 @@ namespace CapaNegocio
 
             string asunto = "Recuperación de contraseña";
             string cuerpo = $"<b>Tu nueva contraseña es:</b> {nuevaClave}";
-            return correoServicio.EnviarCorreo(asunto, cuerpo, new List<string> { correo });
+            return await correoServicio.EnviarCorreoAsync(asunto, cuerpo, new List<string> { correo });  // Enviar correo de forma asíncrona
         }
 
-        // Registrar un nuevo usuario
-        public bool RegistrarUsuario(Usuario usuario)
+        // Registrar un nuevo usuario de forma asíncrona
+        public async Task<bool> RegistrarUsuarioAsync(Usuario usuario)
         {
             try
             {
                 // Verificar si el correo ya está registrado
-                if (DatosUsuario.ExisteCorreo(usuario.Correo))
+                if (await DatosUsuario.ExisteCorreoAsync(usuario.Correo))  // Comprobar de forma asíncrona
                 {
                     Console.WriteLine("Error: El correo '{0}' ya está registrado. Por favor, ingrese otro correo.", usuario.Correo);
                     return false; // Si el correo ya existe, retorna falso
                 }
 
-                // Verificar si el nombre de usuario ya está registrado
-                if (DatosUsuario.ExisteUsuario(usuario.UsuarioNombre))
+                // Verificar si el nombre de usuario ya está registrado de forma asíncrona
+                if (await DatosUsuario.ExisteUsuarioAsync(usuario.UsuarioNombre))
                 {
                     Console.WriteLine("Error: El nombre de usuario '{0}' ya está registrado. Por favor, elija otro nombre de usuario.", usuario.UsuarioNombre);
                     return false; // Si el nombre de usuario ya existe, retorna falso
                 }
 
-                bool registrado = DatosUsuario.InsertarUsuario(usuario);  // Llamada a InsertarUsuario estática
+                bool registrado = await DatosUsuario.InsertarUsuarioAsync(usuario);  // Llamada asíncrona a InsertarUsuario
 
                 if (!registrado)
                 {
@@ -106,11 +107,10 @@ namespace CapaNegocio
             }
         }
 
-        public bool ExisteUsuario(string usuarioNombre)
+        public async Task<bool> ExisteUsuarioAsync(string usuarioNombre)
         {
-            return DatosUsuario.ExisteUsuario(usuarioNombre); // Llamada a DatosUsuario para verificar si el usuario ya existe
+            return await DatosUsuario.ExisteUsuarioAsync(usuarioNombre);  // Llamada asíncrona a DatosUsuario para verificar si el usuario ya existe
         }
-
 
         // Función para generar una nueva clave (puedes mejorar la seguridad aquí si lo deseas)
         private string GenerarNuevaClave()

@@ -37,7 +37,7 @@ namespace CpPresentacion
             txtClave.MaxLength = 20;
         }
 
-        private void btnRecuperarClave_Click(object sender, EventArgs e)
+        private async void btnRecuperarClave_Click(object sender, EventArgs e)
         {
             // Paso 1: Obtener el correo del usuario
             string correo = Microsoft.VisualBasic.Interaction.InputBox("Ingrese su correo electrónico:", "Recuperar contraseña");
@@ -49,8 +49,8 @@ namespace CpPresentacion
                 return;
             }
 
-            // Paso 3: Verificar si el correo existe en la base de datos
-            if (!DatosUsuario.ExisteCorreo(correo))
+            // Paso 3: Verificar si el correo existe en la base de datos de manera asíncrona
+            if (!await DatosUsuario.ExisteCorreoAsync(correo)) // Usamos el método asíncrono
             {
                 MessageBox.Show("El correo no está registrado en el sistema.");
                 return;
@@ -66,12 +66,12 @@ namespace CpPresentacion
                 return;
             }
 
-            // Paso 6: Actualizar la contraseña en la base de datos
-            bool actualizado = DatosUsuario.CambiarClave(correo, nuevaClave);
+            // Paso 6: Actualizar la contraseña en la base de datos de manera asíncrona
+            bool actualizado = await DatosUsuario.CambiarClaveAsync(correo, nuevaClave); // Usamos el método asíncrono
 
             if (actualizado)
             {
-                // Paso 7: Enviar un correo con la nueva contraseña
+                // Paso 7: Enviar un correo con la nueva contraseña de manera asíncrona
                 var correoServicio = new ServiciosCorreo(
                     "ofertaslaboralesuce@gmail.com",    // Remitente
                     "xskfnxncewwumili",                 // Contraseña del remitente
@@ -84,7 +84,7 @@ namespace CpPresentacion
                 string cuerpo = $"Hola,<br>Tu contraseña ha sido cambiada exitosamente.<br><b>Nueva contraseña:</b> {nuevaClave}";
 
                 // Paso 8: Enviar el correo y verificar el resultado
-                bool enviado = correoServicio.EnviarCorreo(asunto, cuerpo, new List<string> { correo });
+                bool enviado = await correoServicio.EnviarCorreoAsync(asunto, cuerpo, new List<string> { correo }); // Asíncrono
 
                 if (enviado)
                 {
@@ -101,10 +101,18 @@ namespace CpPresentacion
             }
         }
 
-        private void btnIngresar_Click(object sender, EventArgs e)
+
+        private async void btnIngresar_Click(object sender, EventArgs e)
         {
             try
             {
+                // Aseguramos que el Label de Cargando sea visible
+                lblCargando.Visible = true;  // Asegúrate de que el Label de "Cargando..." sea visible
+                this.Cursor = Cursors.WaitCursor;  // Cambiar el cursor para indicar espera
+
+                // Forzar la actualización de la interfaz de usuario antes de continuar
+                Application.DoEvents();  // Actualiza la UI para mostrar el indicador de carga
+
                 // Validar que los campos no estén vacíos
                 if (string.IsNullOrWhiteSpace(txtUsuario.Text) || string.IsNullOrWhiteSpace(txtClave.Text))
                 {
@@ -112,10 +120,12 @@ namespace CpPresentacion
                     return;
                 }
 
-                // Llamar al método de login
-                if (negocio.Login(txtUsuario.Text.Trim(), txtClave.Text.Trim()))
+                // Llamar al método de login asíncrono
+                bool loginExitoso = await negocio.LoginAsync(txtUsuario.Text.Trim(), txtClave.Text.Trim());
+
+                if (loginExitoso)
                 {
-                    MessageBox.Show("Bienvenido al sistema");
+                    MessageBox.Show("¡Bienvenido al sistema!", "Acceso Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     // Crear una nueva instancia del formulario Menu sin pasar el rol
                     Menu menuForm = new Menu();
@@ -132,7 +142,15 @@ namespace CpPresentacion
                 // Manejo de errores en caso de excepciones durante el login
                 MessageBox.Show("Error al realizar login: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                // Ocultar el indicador de espera
+                lblCargando.Visible = false;  // Ocultar el Label de "Cargando..." después de la operación
+                this.Cursor = Cursors.Default;  // Restaurar el cursor original
+            }
         }
+
+
 
         private void pbCerrar_Click(object sender, EventArgs e)
         {

@@ -114,7 +114,7 @@ namespace CpPresentacion
 
                 // 2. Leer datos desde los TextBox
                 string nombre = TxtNombreCompania.Text.Trim();
-                // Usar el número formateado con libphonenumber
+                // Usar el número formateado with libphonenumber
                 string telefono;
                 var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
                 if (cmbPaises.SelectedItem is CountryItem cp)
