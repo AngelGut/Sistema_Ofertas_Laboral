@@ -310,16 +310,22 @@ namespace CpPresentacion
         
         private void dgvPostulantes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Asegurarse de que el clic no es en el encabezado de la columna
             if (e.RowIndex >= 0)
             {
-                // Obtener el ID y el nombre de la fila seleccionada y almacenarlos
-                int.TryParse(dgvPostulantes.Rows[e.RowIndex].Cells["Id"].Value.ToString(), out idPostulanteSeleccionado);
-                string nombrePostulante = dgvPostulantes.Rows[e.RowIndex].Cells["Nombre"].Value.ToString();
 
-                MessageBox.Show($"Se ha seleccionado el postulante: {nombrePostulante} (ID: {idPostulanteSeleccionado})", "Selección Confirmada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (dgvPostulantes.Columns.Contains("Id"))
+                {
+                    int.TryParse(dgvPostulantes.Rows[e.RowIndex].Cells["Id"].Value.ToString(), out idPostulanteSeleccionado);
+                    string nombrePostulante = dgvPostulantes.Rows[e.RowIndex].Cells["Nombre"].Value.ToString();
+                    MessageBox.Show($"Se ha seleccionado el postulante: {nombrePostulante} (ID: {idPostulanteSeleccionado})", "Selección Confirmada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("La columna 'Id' no se encontró en la tabla de postulantes.", "Error de Columna", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
+        
 
         
         /// Maneja el evento CellClick para dgvEmpresas, confirma la selección y guarda el ID.
