@@ -45,8 +45,14 @@ namespace CpPresentacion
             // Asociar evento KeyPress para bloquear letras y espacios en los campos numéricos
             TxtTelefono.KeyPress += SoloNumeros_KeyPress;
             TxtRnc.KeyPress += SoloNumeros_KeyPress;
+            btnBuscarE.Click += btnBuscarE_Click;
+            //Llenar las opciones del combox
+            cmbBusquedaE.Items.AddRange(new string[] { "Todas", "Id", "Nombre", "Rnc" });
+            cmbBusquedaE.SelectedIndex = 0; //predeterminado: Todas
 
-            
+
+
+
             CargarEmpresas();
         }
 
@@ -349,6 +355,60 @@ namespace CpPresentacion
                 TxtTelefono.BackColor = Color.MistyRose;
             }
         }
+
+        private void BuscarEmpresas()
+        {
+            try
+            {
+                var servicio = new CpNegocio.servicios.CnMetodosEmpresa(new CnEmpresa());
+                DataTable tabla = servicio.Buscar(); //Obtener todos por defecto
+
+                string criterio = cmbBusquedaE.SelectedItem?.ToString();
+                string valor = txtBusqueda.Text.Trim().ToLower();
+
+                // Si selecciona "Todas", no se aplica filtro
+                if (criterio != "Todas" && !string.IsNullOrWhiteSpace(valor))
+                {
+                    IEnumerable<DataRow> filasFiltradas = null;
+
+                    switch (criterio)
+                    {
+                        case "Id":
+                            filasFiltradas = tabla.AsEnumerable()
+                                .Where(row => row["Id"].ToString().ToLower().Contains(valor));
+                            break;
+
+                        case "Nombre":
+                            filasFiltradas = tabla.AsEnumerable()
+                                .Where(row => row["Nombre"].ToString().ToLower().Contains(valor));
+                            break;
+
+                        case "Rnc":
+                            filasFiltradas = tabla.AsEnumerable()
+                                .Where(row => row["RNC"].ToString().ToLower().Contains(valor));
+                            break;
+                    }
+
+                    if (filasFiltradas != null)
+                        tabla = filasFiltradas.CopyToDataTable(); // convertir el resultado en DataTable
+                    else
+                        tabla = tabla.Clone(); // sin resultados, crear tabla vacía con misma estructura
+                }
+
+                DgvEmpresas.DataSource = tabla;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al buscar empresas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnBuscarE_Click(object sender, EventArgs e)
+        {
+            BuscarEmpresas();
+        }
+
+
 
     }
 }
