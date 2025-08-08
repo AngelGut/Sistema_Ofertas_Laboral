@@ -18,11 +18,13 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CpPresentacion
 {
+    //TODO: clase que representa el formulario de gestión de empresas
     public partial class cpEmpresa : MaterialForm, IReadOnlyContainer
     {
         public Control Container => this; // Implementación de la interfaz IReadOnlyContainer
         private FormBoton _formBoton; // ← switch flotante
 
+        //TODO: Constructor del formulario
         public cpEmpresa()
         {
             InitializeComponent();
@@ -38,10 +40,10 @@ namespace CpPresentacion
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 2;
 
-            /* ---- Pestaña activa de “Empresas” (0-Menú, 1-Ofertas, 2-Empresas …) ---- */
+            // ---- Pestaña activa de “Empresas” (0-Menú, 1-Ofertas, 2-Empresas …) ----
             materialTabControl1.SelectedIndex = 2;
 
-            /* ---- Mejoras visuales / validaciones originales ---- */
+            // Configurar el formulario
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer |
                           ControlStyles.AllPaintingInWmPaint |
@@ -52,16 +54,17 @@ namespace CpPresentacion
             TxtTelefono.KeyPress += SoloNumeros_KeyPress;
             TxtRnc.KeyPress += SoloNumeros_KeyPress;
 
+            // Asignar eventos de validación y cargar datos iniciales
             AsignarEventosDeValidacion();
             CargarFiltro();
             CargarEmpresas();
             txtBusqueda.KeyPress += TxtBusqueda_KeyPress_Numeros;
 
-            // Bloquear todos los controles recursivamente
-            // Bloquear de inicio
+
+            // Configurar el DataGridView
             this.SetReadOnly(true);
 
-            // Mostrar mini-form y decidir estado inicial
+            // Preguntar al usuario si quiere empezar en modo edición o visualización
             bool startInEdit = false;
             using (var dlg = new frmModoVisualizacion())
             {
@@ -72,13 +75,13 @@ namespace CpPresentacion
                 }
             }
 
-            // Aplicar estado inicial
+            // Si el usuario eligió editar, desbloquear controles
             this.SetReadOnly(!startInEdit);
 
-            // Abrir el switch flotante (siempre activo)
+            // Abrir el formulario flotante para editar/añadir empresas
             AbrirFormBoton(startInEdit);
 
-            // Si este form se cierra, cierra también el flotante
+            // Evento para cerrar el formulario flotante al cerrar este formulario
             this.FormClosed += (s, e) =>
             {
                 if (_formBoton != null && !_formBoton.IsDisposed) _formBoton.Close();
@@ -86,17 +89,18 @@ namespace CpPresentacion
             };
         }
 
-        //TODO: navegacion
-        /* ══════════════════════  N A V E G A C I Ó N  ═════════════════════ */
 
+        //TODO: Evento que se dispara al cambiar la pestaña del TabControl
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Evitar que se ejecute si el índice no ha cambiado
             await NavegarA(materialTabControl1.SelectedIndex);
         }
 
+        //TODO: Método para navegar a la pestaña correspondiente
         private async Task NavegarA(int idx)
         {
-            // A) ¿A qué ventana ir?
+            //Determinar el formulario destino según el índice seleccionado
             Form destino = idx switch
             {
                 0 => new Menu(),
@@ -111,13 +115,13 @@ namespace CpPresentacion
                 _ => null
             };
 
-            // B) Si ya estamos en el destino, no hacemos nada
+            //Si ya estamos en el destino, no hacemos nada
             if (destino == null || destino == this) return;
 
-            // C) Mostrar el nuevo formulario
+            //Mostrar el nuevo formulario
             destino.Show();
 
-            // D) Menu nunca se cierra; los demás se liberan
+            //Menu nunca se cierra; los demás se liberan
             if (this is Menu)
                 this.Hide();     // se mantiene en memoria
             else
@@ -128,11 +132,12 @@ namespace CpPresentacion
             destino.Activate();
         }
 
+        //TODO: Evento que se dispara al hacer clic en el botón de registrar empresa
         private void BtnRegistrar_Click(object sender, EventArgs e)
         {
             try
             {
-                // 1. Validar que ningún campo esté vacío
+                //TODO: Validar que todos los campos obligatorios estén llenos
                 if (string.IsNullOrWhiteSpace(TxtNombreCompania.Text) ||
                     string.IsNullOrWhiteSpace(TxtTelefono.Text) ||
                     string.IsNullOrWhiteSpace(TxtCorreo.Text) ||
@@ -143,15 +148,16 @@ namespace CpPresentacion
                     return;
                 }
 
-                // 2. Leer datos desde los TextBox
+                //Validar que el nombre de la compañía no esté vacío
                 string nombre = TxtNombreCompania.Text.Trim();
-                // Usar el número formateado with libphonenumber
+                // Validar que el nombre no contenga caracteres especiales o números / Usar el número formateado with libphonenumber
                 string telefono;
                 var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
                 if (cmbPaises.SelectedItem is CountryItem cp)
                 {
                     try
                     {
+                        // Intenta parsear el número de teléfono con el código ISO del país seleccionado
                         var parsed = phoneUtil.Parse(TxtTelefono.Text, cp.IsoCode);
                         if (!phoneUtil.IsValidNumber(parsed))
                         {
@@ -159,6 +165,7 @@ namespace CpPresentacion
                             return;
                         }
 
+                        //Formatear el número de teléfono al formato internacional
                         telefono = phoneUtil.Format(parsed, PhoneNumbers.PhoneNumberFormat.INTERNATIONAL);
                     }
                     catch
@@ -172,25 +179,26 @@ namespace CpPresentacion
                     MessageBox.Show("Debe seleccionar un país para el número telefónico.", "País no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+                //Valida que el teléfono no esté vacío y tenga un formato correcto
                 string correo = TxtCorreo.Text.Trim();
                 string direccion = TxtDireccion.Text.Trim();
-                string rncTexto = TxtRnc.Text.Trim().Replace(" ", ""); // ❌ quitar espacios
+                string rncTexto = TxtRnc.Text.Trim().Replace(" ", ""); // Eliminar espacios en blanco del RNC
 
-                // 3. Validar que el RNC contenga solo dígitos (sin espacios ni símbolos)
+                //Valida que el RNC contenga solo dígitos (sin espacios ni símbolos)
                 if (!rncTexto.All(char.IsDigit))
                 {
                     MessageBox.Show("El RNC debe contener solo números, sin espacios ni símbolos.", "Formato inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // 4. Validar que el RNC tenga exactamente 9 dígitos
+                //Valida que el RNC tenga exactamente 9 dígitos
                 if (rncTexto.Length != 9)
                 {
                     MessageBox.Show("El RNC debe tener exactamente 9 dígitos.", "Longitud incorrecta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // 5. Validar que el correo tenga un formato correcto con expresión regular
+                //Valida que el correo tenga un formato correcto con expresión regular
                 if (!Regex.IsMatch(correo, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                 {
                     TxtCorreo.BackColor = Color.MistyRose;
@@ -198,46 +206,46 @@ namespace CpPresentacion
                     return;
                 }
 
-                // 6. Crear el objeto empresa usando el constructor con RNC tipo string
+                //Crear el objeto empresa usando el constructor con RNC tipo string
                 CnEmpresa empresa = new CnEmpresa(nombre, telefono, correo, direccion, rncTexto);
 
-                // 7. Instanciar el servicio y registrar la empresa
+                //Instanciar el servicio y registrar la empresa
                 CpNegocio.servicios.CnMetodosEmpresa servicio = new CpNegocio.servicios.CnMetodosEmpresa(empresa);
                 servicio.Registrar();
 
-                // 8. Mostrar mensaje de éxito
+                //Mostrar mensaje de éxito
                 MessageBox.Show("Empresa registrada correctamente.", "Registro Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // 9. Limpiar los campos del formulario
+                //Limpiar los campos del formulario
                 TxtNombreCompania.Clear();
                 TxtTelefono.Clear();
                 TxtCorreo.Clear();
                 TxtDireccion.Clear();
                 TxtRnc.Clear();
 
-                // 10. (Opcional) Refrescar el DataGridView si lo deseas
+                //Con esto se Recargan las listas de empresas en el DataGridView
                 CargarEmpresas();
             }
             catch (Exception ex)
             {
-                // 11. Mostrar cualquier error durante el proceso
+                //Si ocurre un error al registrar la empresa
                 MessageBox.Show("Error al registrar la empresa: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-
+        //TODO: Evento que se dispara al hacer clic en el botón de validar RNC
         private void BtnValidar_Click(object sender, EventArgs e)
         {
             string rncTexto = TxtRnc.Text.Trim(); // El TextBox del RNC
 
-            // Validar que no esté vacío
+            // Valida que no esté vacío
             if (string.IsNullOrWhiteSpace(rncTexto))
             {
                 MessageBox.Show("Por favor, ingrese un RNC.", "Campo vacío", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Validar que el RNC tenga exactamente 9 dígitos
+            // Valida que el RNC tenga exactamente 9 dígitos
             if (rncTexto.Length != 9 || !rncTexto.All(char.IsDigit))
             {
                 MessageBox.Show("El RNC debe tener exactamente 9 dígitos numéricos.", "RNC inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -266,7 +274,7 @@ namespace CpPresentacion
             }
         }
 
-
+        //TODO: Método para cargar las empresas en el DataGridView
         private void CargarEmpresas()
         {
             try
@@ -306,6 +314,7 @@ namespace CpPresentacion
             }
         }
 
+        //TODO: Evento para permitir solo números en el campo de teléfono
         private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
@@ -314,7 +323,7 @@ namespace CpPresentacion
             }
         }
 
-        // Clase auxiliar para los países
+        //TODO: Clase interna para representar un país con su código ISO, nombre y código de marcación
         private class CountryItem
         {
             public string IsoCode { get; set; } // Código ISO, ej: "US", "DO"
@@ -324,6 +333,7 @@ namespace CpPresentacion
             public override string ToString() => Display;
         }
 
+        //TODO: Método para cargar los países en el ComboBox
         private void CargarPaises()
         {
             var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
@@ -336,9 +346,11 @@ namespace CpPresentacion
             {
                 try
                 {
+                    // Intentar crear un RegionInfo para validar el ISO
                     var region = new System.Globalization.RegionInfo(iso);
                     int code = phoneUtil.GetCountryCodeForRegion(iso);
 
+                    // Si el código es 0, significa que no hay código de marcación para esa región
                     return new CountryItem
                     {
                         IsoCode = iso,
@@ -348,7 +360,7 @@ namespace CpPresentacion
                 }
                 catch
                 {
-                    // Si el ISO no es válido (como "AC"), lo omitimos
+                    // Si falla al crear RegionInfo, ignorar este código ISO
                     return null;
                 }
             })
@@ -356,12 +368,13 @@ namespace CpPresentacion
             .OrderBy(ci => ci.Name)
             .ToList();
 
-            // Enlazar la lista al ComboBox
+            // Asignar la lista al ComboBox
             cmbPaises.DataSource = lista;
             cmbPaises.DisplayMember = "Display";   // mostrará "República Dominicana (+1)"
             cmbPaises.ValueMember = "IsoCode";
         }
 
+        //TODO: Método para cargar los criterios de filtro en el ComboBox
         private void CargarFiltro()
         {
             cmbFiltro.Items.Clear();
@@ -371,6 +384,7 @@ namespace CpPresentacion
             cmbFiltro.SelectedIndex = 0; // Seleccionar el primer criterio por defecto
         }
 
+        //TODO : Método para formatear el número de teléfono según el país seleccionado
         private void FormatearTelefono()
         {
             // Verifica que haya un país seleccionado
@@ -409,11 +423,13 @@ namespace CpPresentacion
             }
         }
 
+        //TODO: Evento que se dispara al hacer clic en el botón de buscar
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
             string criterio = cmbFiltro.SelectedItem.ToString();  // Obtener el criterio seleccionado (Id, Nombre, Dni)
             string valorBusqueda = txtBusqueda.Text.Trim();  // Obtener el valor de búsqueda
 
+            // Validar que el campo de búsqueda no esté vacío
             if (string.IsNullOrEmpty(valorBusqueda))
             {
                 MessageBox.Show(
@@ -425,6 +441,7 @@ namespace CpPresentacion
                 return;
             }
 
+            // Validar que el valor de búsqueda sea un número si el criterio es "Id" o "Rnc"
             try
             {
                 // Llamamos al método BuscarConFiltro con el criterio y el valor de búsqueda
@@ -473,7 +490,7 @@ namespace CpPresentacion
             }
         }
 
-
+        //TODO: Método para actualizar los encabezados de las columnas del DataGridView
         private void ActualizarEncabezadosColumnas()
         {
             if (DgvEmpresas.Columns.Contains("Id"))
@@ -501,6 +518,7 @@ namespace CpPresentacion
 
         }
 
+        //TODO: Evento para validar la entrada de texto en el campo de búsqueda
         private void TxtBusqueda_KeyPress_Numeros(object sender, KeyPressEventArgs e)
         {
             // Permitir solo números y la tecla Backspace
@@ -510,6 +528,7 @@ namespace CpPresentacion
             }
         }
 
+        //TODO: Evento para validar la entrada de texto en el campo de búsqueda (solo letras)
         private void TxtBusqueda_KeyPress_Letras(object sender, KeyPressEventArgs e)
         {
             // Permitir solo letras (sin distinguir mayúsculas/minúsculas) y la tecla Backspace
@@ -519,7 +538,7 @@ namespace CpPresentacion
             }
         }
 
-        
+        //TODO: Método para personalizar el DataGridView
         private void PersonalizarDataGridView()
         {
             // Cambiar el color de fondo general del DataGridView
@@ -572,6 +591,7 @@ namespace CpPresentacion
             DgvEmpresas.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
 
+        //TODO: Método para abrir el formulario flotante de edición/agregado de empresas
         private void AbrirFormBoton(bool startInEdit)
         {
             if (_formBoton != null && !_formBoton.IsDisposed) return;
@@ -582,6 +602,7 @@ namespace CpPresentacion
                 TopMost = true
             };
 
+            //TODO:  Método para reposicionar el formulario flotante al lado derecho del formulario principal
             void Reposicionar()
             {
                 if (_formBoton == null || _formBoton.IsDisposed) return;
@@ -610,6 +631,7 @@ namespace CpPresentacion
             _formBoton.Show(this);
         }
 
+        //TODO: Evento que se dispara al cambiar el filtro seleccionado en el ComboBox
         private void cmbFiltro_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             // Limpiar el texto para que no quede ningún valor previo

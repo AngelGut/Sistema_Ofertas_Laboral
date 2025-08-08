@@ -148,7 +148,7 @@ namespace CpPresentacion
             vistaPreviaForm.Controls.Add(pb);
             vistaPreviaForm.ShowDialog();
         }
-
+       
         private async void btnGuardarTargeta_Click(object sender, EventArgs e)
         {
 
@@ -226,6 +226,8 @@ namespace CpPresentacion
         }
 
         // ======== DIBUJO V2: fuentes y márgenes proporcionales + clamp al borde ========
+
+        //TODO:esto dibuja todo en el panel para guardarlo
         private void DrawCarnet(Graphics g, int width, int height,
                                 Image logo, Image foto,
                                 string nombre, string posicion, string telefono, string correo)
@@ -341,7 +343,7 @@ namespace CpPresentacion
                 g.DrawString(correo, fDato, Brushes.White, (width - sE.Width) / 2, y);
             }
         }
-
+        //TODO:bitmad esto es para que se guarde con formato
         private Bitmap RenderCarnetBitmap(int dpi)
         {
             int w = Px(CARD_W_IN, dpi);   // 2.125" → 638 px @300dpi
@@ -431,7 +433,7 @@ namespace CpPresentacion
             // Dibujar el carnet escalado para que se imprima en tamaño real
             g.DrawImage(bmp, rect);
         }
-
+        //TODO:esto es para los eventos asincronos 
         private Form CrearVentanaCarga(string mensaje = "Procesando...")
         {
             Form carga = new Form
