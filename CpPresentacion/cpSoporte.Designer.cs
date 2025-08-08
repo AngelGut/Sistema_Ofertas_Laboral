@@ -43,13 +43,13 @@
             lblNombre = new Label();
             picPerfil = new PictureBox();
             label6 = new Label();
+            mtbtnAngel = new MaterialSkin.Controls.MaterialButton();
             materialCard4 = new MaterialSkin.Controls.MaterialCard();
-            btnRonald = new Button();
-            btnBraylin = new Button();
-            btnJeifferson = new Button();
-            btnAngel = new Button();
-            btnLuis = new Button();
-            btnElian = new Button();
+            mtbtnRonald = new MaterialSkin.Controls.MaterialButton();
+            mtbtnBrailyn = new MaterialSkin.Controls.MaterialButton();
+            mtbtnLuis = new MaterialSkin.Controls.MaterialButton();
+            mtbtnElian = new MaterialSkin.Controls.MaterialButton();
+            mtbtnJeiferson = new MaterialSkin.Controls.MaterialButton();
             materialCard1.SuspendLayout();
             materialCard2.SuspendLayout();
             materialCard3.SuspendLayout();
@@ -184,12 +184,12 @@
             S.Controls.Add(picPerfil);
             S.Depth = 0;
             S.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            S.Location = new Point(464, 58);
+            S.Location = new Point(397, 58);
             S.Margin = new Padding(12, 10, 12, 10);
             S.MouseState = MaterialSkin.MouseState.HOVER;
             S.Name = "S";
             S.Padding = new Padding(12, 10, 12, 10);
-            S.Size = new Size(219, 388);
+            S.Size = new Size(316, 388);
             S.TabIndex = 9;
             S.Paint += S_Paint;
             // 
@@ -197,29 +197,30 @@
             // 
             lblRedSocial.AutoSize = true;
             lblRedSocial.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblRedSocial.Location = new Point(24, 254);
+            lblRedSocial.Location = new Point(13, 254);
             lblRedSocial.Name = "lblRedSocial";
-            lblRedSocial.Size = new Size(79, 20);
+            lblRedSocial.Size = new Size(82, 20);
             lblRedSocial.TabIndex = 9;
-            lblRedSocial.Text = "Red Social";
+            lblRedSocial.Text = "Red Social:";
             // 
             // lblNombre
             // 
             lblNombre.AutoSize = true;
             lblNombre.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblNombre.Location = new Point(24, 214);
+            lblNombre.Location = new Point(14, 214);
             lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(64, 20);
+            lblNombre.Size = new Size(67, 20);
             lblNombre.TabIndex = 8;
-            lblNombre.Text = "Nombre";
+            lblNombre.Text = "Nombre:";
             lblNombre.Click += lblNombre_Click;
             // 
             // picPerfil
             // 
-            picPerfil.Location = new Point(15, 22);
+            picPerfil.Location = new Point(65, 13);
             picPerfil.Margin = new Padding(3, 2, 3, 2);
             picPerfil.Name = "picPerfil";
             picPerfil.Size = new Size(189, 169);
+            picPerfil.SizeMode = PictureBoxSizeMode.Zoom;
             picPerfil.TabIndex = 0;
             picPerfil.TabStop = false;
             // 
@@ -227,21 +228,44 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label6.Location = new Point(27, 10);
+            label6.Location = new Point(27, 15);
             label6.Name = "label6";
             label6.Size = new Size(192, 25);
             label6.TabIndex = 1;
             label6.Text = "DESARROLLADORES";
             // 
+            // mtbtnAngel
+            // 
+            mtbtnAngel.AutoSize = false;
+            mtbtnAngel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            mtbtnAngel.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            mtbtnAngel.Depth = 0;
+            mtbtnAngel.FlatStyle = FlatStyle.Flat;
+            mtbtnAngel.Font = new Font("Segoe UI", 9F);
+            mtbtnAngel.HighEmphasis = true;
+            mtbtnAngel.Icon = null;
+            mtbtnAngel.Location = new Point(28, 39);
+            mtbtnAngel.Margin = new Padding(4, 6, 4, 6);
+            mtbtnAngel.MouseState = MaterialSkin.MouseState.HOVER;
+            mtbtnAngel.Name = "mtbtnAngel";
+            mtbtnAngel.NoAccentTextColor = Color.Empty;
+            mtbtnAngel.Size = new Size(300, 36);
+            mtbtnAngel.TabIndex = 10;
+            mtbtnAngel.Text = "Angel D. Gutiérrez C.";
+            mtbtnAngel.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            mtbtnAngel.UseAccentColor = false;
+            mtbtnAngel.UseVisualStyleBackColor = true;
+            mtbtnAngel.Click += mtbtnAngel_Click;
+            // 
             // materialCard4
             // 
             materialCard4.BackColor = Color.FromArgb(255, 255, 255);
-            materialCard4.Controls.Add(btnRonald);
-            materialCard4.Controls.Add(btnBraylin);
-            materialCard4.Controls.Add(btnJeifferson);
-            materialCard4.Controls.Add(btnAngel);
-            materialCard4.Controls.Add(btnLuis);
-            materialCard4.Controls.Add(btnElian);
+            materialCard4.Controls.Add(mtbtnRonald);
+            materialCard4.Controls.Add(mtbtnBrailyn);
+            materialCard4.Controls.Add(mtbtnAngel);
+            materialCard4.Controls.Add(mtbtnLuis);
+            materialCard4.Controls.Add(mtbtnElian);
+            materialCard4.Controls.Add(mtbtnJeiferson);
             materialCard4.Depth = 0;
             materialCard4.ForeColor = Color.FromArgb(222, 0, 0, 0);
             materialCard4.Location = new Point(42, 316);
@@ -249,74 +273,123 @@
             materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
             materialCard4.Name = "materialCard4";
             materialCard4.Padding = new Padding(12, 10, 12, 10);
-            materialCard4.Size = new Size(413, 388);
+            materialCard4.Size = new Size(355, 388);
             materialCard4.TabIndex = 8;
             // 
-            // btnRonald
+            // mtbtnRonald
             // 
-            btnRonald.Location = new Point(15, 301);
-            btnRonald.Margin = new Padding(3, 2, 3, 2);
-            btnRonald.Name = "btnRonald";
-            btnRonald.Size = new Size(383, 32);
-            btnRonald.TabIndex = 6;
-            btnRonald.Text = "Ronald Reyes";
-            btnRonald.UseVisualStyleBackColor = true;
-            btnRonald.Click += btnRonald_Click;
+            mtbtnRonald.AutoSize = false;
+            mtbtnRonald.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            mtbtnRonald.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            mtbtnRonald.Depth = 0;
+            mtbtnRonald.FlatStyle = FlatStyle.Flat;
+            mtbtnRonald.Font = new Font("Segoe UI", 9F);
+            mtbtnRonald.HighEmphasis = true;
+            mtbtnRonald.Icon = null;
+            mtbtnRonald.Location = new Point(28, 315);
+            mtbtnRonald.Margin = new Padding(4, 6, 4, 6);
+            mtbtnRonald.MouseState = MaterialSkin.MouseState.HOVER;
+            mtbtnRonald.Name = "mtbtnRonald";
+            mtbtnRonald.NoAccentTextColor = Color.Empty;
+            mtbtnRonald.Size = new Size(300, 36);
+            mtbtnRonald.TabIndex = 14;
+            mtbtnRonald.Text = "Ronald A. Reyes";
+            mtbtnRonald.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            mtbtnRonald.UseAccentColor = false;
+            mtbtnRonald.UseVisualStyleBackColor = true;
+            mtbtnRonald.Click += mtbtnRonald_Click;
             // 
-            // btnBraylin
+            // mtbtnBrailyn
             // 
-            btnBraylin.Location = new Point(15, 242);
-            btnBraylin.Margin = new Padding(3, 2, 3, 2);
-            btnBraylin.Name = "btnBraylin";
-            btnBraylin.Size = new Size(383, 32);
-            btnBraylin.TabIndex = 5;
-            btnBraylin.Text = "Brailin Jaques";
-            btnBraylin.UseVisualStyleBackColor = true;
-            btnBraylin.Click += btnBraylin_Click;
+            mtbtnBrailyn.AutoSize = false;
+            mtbtnBrailyn.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            mtbtnBrailyn.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            mtbtnBrailyn.Depth = 0;
+            mtbtnBrailyn.FlatStyle = FlatStyle.Flat;
+            mtbtnBrailyn.Font = new Font("Segoe UI", 9F);
+            mtbtnBrailyn.HighEmphasis = true;
+            mtbtnBrailyn.Icon = null;
+            mtbtnBrailyn.Location = new Point(28, 258);
+            mtbtnBrailyn.Margin = new Padding(4, 6, 4, 6);
+            mtbtnBrailyn.MouseState = MaterialSkin.MouseState.HOVER;
+            mtbtnBrailyn.Name = "mtbtnBrailyn";
+            mtbtnBrailyn.NoAccentTextColor = Color.Empty;
+            mtbtnBrailyn.Size = new Size(300, 36);
+            mtbtnBrailyn.TabIndex = 13;
+            mtbtnBrailyn.Text = "Brailyn Jaquez";
+            mtbtnBrailyn.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            mtbtnBrailyn.UseAccentColor = false;
+            mtbtnBrailyn.UseVisualStyleBackColor = true;
+            mtbtnBrailyn.Click += mtbtnBrailyn_Click;
             // 
-            // btnJeifferson
+            // mtbtnLuis
             // 
-            btnJeifferson.Location = new Point(15, 186);
-            btnJeifferson.Margin = new Padding(3, 2, 3, 2);
-            btnJeifferson.Name = "btnJeifferson";
-            btnJeifferson.Size = new Size(383, 32);
-            btnJeifferson.TabIndex = 4;
-            btnJeifferson.Text = "Jeifferson David";
-            btnJeifferson.UseVisualStyleBackColor = true;
-            btnJeifferson.Click += btnJeifferson_Click;
+            mtbtnLuis.AutoSize = false;
+            mtbtnLuis.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            mtbtnLuis.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            mtbtnLuis.Depth = 0;
+            mtbtnLuis.FlatStyle = FlatStyle.Flat;
+            mtbtnLuis.Font = new Font("Segoe UI", 9F);
+            mtbtnLuis.HighEmphasis = true;
+            mtbtnLuis.Icon = null;
+            mtbtnLuis.Location = new Point(28, 146);
+            mtbtnLuis.Margin = new Padding(4, 6, 4, 6);
+            mtbtnLuis.MouseState = MaterialSkin.MouseState.HOVER;
+            mtbtnLuis.Name = "mtbtnLuis";
+            mtbtnLuis.NoAccentTextColor = Color.Empty;
+            mtbtnLuis.Size = new Size(300, 36);
+            mtbtnLuis.TabIndex = 12;
+            mtbtnLuis.Text = "Luis Bravo";
+            mtbtnLuis.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            mtbtnLuis.UseAccentColor = false;
+            mtbtnLuis.UseVisualStyleBackColor = true;
+            mtbtnLuis.Click += mtbtnLuis_Click;
             // 
-            // btnAngel
+            // mtbtnElian
             // 
-            btnAngel.Location = new Point(15, 22);
-            btnAngel.Margin = new Padding(3, 2, 3, 2);
-            btnAngel.Name = "btnAngel";
-            btnAngel.Size = new Size(383, 32);
-            btnAngel.TabIndex = 3;
-            btnAngel.Text = "Angel David";
-            btnAngel.UseVisualStyleBackColor = true;
-            btnAngel.Click += btnAngel_Click;
+            mtbtnElian.AutoSize = false;
+            mtbtnElian.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            mtbtnElian.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            mtbtnElian.Depth = 0;
+            mtbtnElian.FlatStyle = FlatStyle.Flat;
+            mtbtnElian.Font = new Font("Segoe UI", 9F);
+            mtbtnElian.HighEmphasis = true;
+            mtbtnElian.Icon = null;
+            mtbtnElian.Location = new Point(28, 93);
+            mtbtnElian.Margin = new Padding(4, 6, 4, 6);
+            mtbtnElian.MouseState = MaterialSkin.MouseState.HOVER;
+            mtbtnElian.Name = "mtbtnElian";
+            mtbtnElian.NoAccentTextColor = Color.Empty;
+            mtbtnElian.Size = new Size(300, 36);
+            mtbtnElian.TabIndex = 11;
+            mtbtnElian.Text = "Elian Nicolas";
+            mtbtnElian.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            mtbtnElian.UseAccentColor = false;
+            mtbtnElian.UseVisualStyleBackColor = true;
+            mtbtnElian.Click += mtbtnElian_Click;
             // 
-            // btnLuis
+            // mtbtnJeiferson
             // 
-            btnLuis.Location = new Point(15, 130);
-            btnLuis.Margin = new Padding(3, 2, 3, 2);
-            btnLuis.Name = "btnLuis";
-            btnLuis.Size = new Size(383, 32);
-            btnLuis.TabIndex = 2;
-            btnLuis.Text = "Luis Bravo";
-            btnLuis.UseVisualStyleBackColor = true;
-            btnLuis.Click += btnLuis_Click;
-            // 
-            // btnElian
-            // 
-            btnElian.Location = new Point(15, 75);
-            btnElian.Margin = new Padding(3, 2, 3, 2);
-            btnElian.Name = "btnElian";
-            btnElian.Size = new Size(383, 32);
-            btnElian.TabIndex = 1;
-            btnElian.Text = "Elian Nicolas";
-            btnElian.UseVisualStyleBackColor = true;
-            btnElian.Click += btnElian_Click;
+            mtbtnJeiferson.AutoSize = false;
+            mtbtnJeiferson.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            mtbtnJeiferson.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            mtbtnJeiferson.Depth = 0;
+            mtbtnJeiferson.FlatStyle = FlatStyle.Flat;
+            mtbtnJeiferson.Font = new Font("Segoe UI", 9F);
+            mtbtnJeiferson.HighEmphasis = true;
+            mtbtnJeiferson.Icon = null;
+            mtbtnJeiferson.Location = new Point(28, 202);
+            mtbtnJeiferson.Margin = new Padding(4, 6, 4, 6);
+            mtbtnJeiferson.MouseState = MaterialSkin.MouseState.HOVER;
+            mtbtnJeiferson.Name = "mtbtnJeiferson";
+            mtbtnJeiferson.NoAccentTextColor = Color.Empty;
+            mtbtnJeiferson.Size = new Size(300, 36);
+            mtbtnJeiferson.TabIndex = 11;
+            mtbtnJeiferson.Text = "Jeiferson David";
+            mtbtnJeiferson.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            mtbtnJeiferson.UseAccentColor = false;
+            mtbtnJeiferson.UseVisualStyleBackColor = true;
+            mtbtnJeiferson.Click += mtbtnJeiferson_Click;
             // 
             // cpSoporte
             // 
@@ -332,7 +405,8 @@
             MinimizeBox = false;
             Name = "cpSoporte";
             Padding = new Padding(3, 48, 3, 2);
-            Text = "Acerca";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Soporte";
             Load += cpSoporte_Load;
             materialCard1.ResumeLayout(false);
             materialCard1.PerformLayout();
@@ -361,15 +435,16 @@
         private Label label12;
         private Label label13;
         private MaterialSkin.Controls.MaterialCard materialCard4;
-        private Button btnRonald;
-        private Button btnBraylin;
-        private Button btnJeifferson;
         private Button btnAngel;
-        private Button btnLuis;
-        private Button btnElian;
         private MaterialSkin.Controls.MaterialCard S;
         private PictureBox picPerfil;
         private Label lblRedSocial;
         private Label lblNombre;
+        private MaterialSkin.Controls.MaterialButton mtbtnAngel;
+        private MaterialSkin.Controls.MaterialButton mtbtnRonald;
+        private MaterialSkin.Controls.MaterialButton mtbtnBrailyn;
+        private MaterialSkin.Controls.MaterialButton mtbtnLuis;
+        private MaterialSkin.Controls.MaterialButton mtbtnElian;
+        private MaterialSkin.Controls.MaterialButton mtbtnJeiferson;
     }
 }

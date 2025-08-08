@@ -28,9 +28,11 @@ namespace CpPresentacion
 
         }
 
-        private void btnAngel_Click(object sender, EventArgs e)
+        private void mtbtnAngel_Click(object sender, EventArgs e)
         {
-            MostrarDesarrollador("Angel David", Properties.Resources.angel, "@angel_david");
+            MostrarDesarrollador("Angel David", Properties.Resources.angel, "GitHub: AngelGut\n" +
+                "Instagram: @angeldavid_gutierrez18\n" +
+                "Linkedin.com/in/angel-david-gutierrez-contreras");
         }
 
         private void materialCard4_Paint(object sender, PaintEventArgs e)
@@ -43,33 +45,43 @@ namespace CpPresentacion
 
         }
 
-        private void btnElian_Click(object sender, EventArgs e)
+        private void mtbtnElian_Click(object sender, EventArgs e)
         {
-            MostrarDesarrollador("Elian Nicolas", Properties.Resources.elian, "@elian.dev");
+            MostrarDesarrollador("Elian Nicolas", Properties.Resources.elian, "GitHub: Eliancmercedes\n" +
+                "Instagram: @https._elian\n" +
+                "Linkedin.com/in/eliancamino/");
 
         }
 
-        private void btnLuis_Click(object sender, EventArgs e)
+        private void mtbtnLuis_Click(object sender, EventArgs e)
         {
-            MostrarDesarrollador("Luis Bravo", Properties.Resources.luis, "@luisbravo");
+            MostrarDesarrollador("Luis Bravo", Properties.Resources.luis, "GitHub: luisbravobello\n" +
+                "Instagram: @alejandro_bravo27\n" +
+                "Linkedin.com/in/luis-alejandro-bravo-bello");
 
         }
 
-        private void btnJeifferson_Click(object sender, EventArgs e)
+        private void mtbtnJeiferson_Click(object sender, EventArgs e)
         {
-            MostrarDesarrollador("Jeifferson David", Properties.Resources.jeifferson, "@jeiff.dev");
+            MostrarDesarrollador("Jeiferson David", Properties.Resources.jeifferson, "GitHub: NEW-Jeiferson\n" +
+         "Instagram: @jd.a.v.i.d.zpz\n" +
+         "Linkedin.com/in/jeiferson-d-paez");
 
         }
 
-        private void btnBraylin_Click(object sender, EventArgs e)
-        {
-            MostrarDesarrollador("Braylin Jaques", Properties.Resources.braylin, "@braylin.j");
+        private void mtbtnBrailyn_Click(object sender, EventArgs e)
+        { 
+            MostrarDesarrollador("Braylin Jaques", Properties.Resources.braylin, "GitHub: Brailyn1905\n" +
+         "Instagram: @brailyn.jaquez.3\n" +
+         "LinkedIn.com/in/brailyn-ramirez");
 
         }
 
-        private void btnRonald_Click(object sender, EventArgs e)
+        private void mtbtnRonald_Click(object sender, EventArgs e)
         {
-            MostrarDesarrollador("Ronald Reyes", Properties.Resources.ronald, "@ronald_reyes");
+            MostrarDesarrollador("Ronald Reyes", Properties.Resources.ronald, "GitHub: RonaldReyes27\n" +
+                "Instagram: @reyesronaldalberto\n" +
+                "Linkedin.com/in/ronaldr15");
 
         }
 
@@ -82,5 +94,7 @@ namespace CpPresentacion
         {
 
         }
+
+    
     }
 }
