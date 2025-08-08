@@ -36,18 +36,24 @@ namespace CpNegocio.servicio
         //TODO: Método que asigna una oferta a una persona y envía correos electrónicos de notificación
         public void AsignarOfertaAPersona(int idPersona, int idOferta)
         {
-            //TODO: Obtener los datos de la persona, oferta y empresa
+
+            // 1) Obtener
             var persona = _personaRepositorio.ObtenerPersonaPorId(idPersona);
             var oferta = _ofertaRepositorio.ObtenerOfertaPorId(idOferta);
+
+            // 2) Validaciones con mensajes específicos
+            if (persona == null)
+                throw new Exception($"Persona no encontrada (Id={idPersona}).");
+
+            if (oferta == null)
+                throw new Exception($"Oferta no encontrada (Id={idOferta}).");
+
+            // 3) Empresa
             var empresa = _empresaRepositorio.ObtenerEmpresaPorId(oferta.EmpresaId);
+            if (empresa == null)
+                throw new Exception($"Empresa no encontrada para la oferta (EmpresaId={oferta.EmpresaId}).");
 
-            //TODO: Validar que los datos existan
-            if (persona == null || oferta == null || empresa == null)
-            {
-                throw new Exception("Persona, oferta o empresa no encontrada.");
-            }
-
-            //TODO: Persistir la asignación en la base de datos
+            // 4) Insertar (una sola vez)
             _asignacionRepositorio.AsignarPersonaAOferta(idPersona, idOferta);
 
             //TODO: enviar las notificaciones por correo
@@ -83,13 +89,11 @@ namespace CpNegocio.servicio
                     $"Atentamente,\n" +
                     $"El equipo de EmpleaTech";
 
-                //TODO: Usamos el repositorio de mensajería para enviar el correo
                 _mensajeriaRepositorio.EnviarMensaje(
                     persona.Correo,
                     "Asignación a Oferta Laboral - EmpleaTech",
                     cuerpoPersona
                 );
-
 
                 //TODO: Cuerpo del mensaje para la empresa
                 string cuerpoEmpresa =
@@ -106,7 +110,6 @@ namespace CpNegocio.servicio
                     $"Atentamente,\n" +
                     $"El equipo de EmpleaTech";
 
-                //TODO: Usamos el repositorio de mensajería para enviar el correo
                 _mensajeriaRepositorio.EnviarMensaje(
                     empresa.Correo,
                     "Nueva Asignación en tu Oferta Laboral - EmpleaTech",

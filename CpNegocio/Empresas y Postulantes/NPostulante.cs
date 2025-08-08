@@ -18,7 +18,7 @@ namespace CpNegocio.Empresas_y_Postulantes
             using (SqlConnection conn = OfertaDatos.ObtenerConexion())
             {
                 conn.Open();
-                string query = "SELECT * FROM Persona";
+                string query = "SELECT Id, Nombre, Dni, Correo, Telefono, Direccion FROM Persona";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
