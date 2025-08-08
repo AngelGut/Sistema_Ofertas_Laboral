@@ -113,31 +113,40 @@ namespace CpNegocio.servicios
             }
         }
 
-        // Método para filtrar ofertas según el filtro seleccionado
-        public DataTable FiltrarOfertas(string filtroSeleccionado, string busqueda)
+        public DataTable FiltrarOfertas(string filtro, string busqueda)
         {
-            string query = "";
+            try
+            {
+                string query = string.Empty;
 
-            // Si el filtro es por "Id Empresa", se espera un número, si no es así, devolveremos null
-            if (filtroSeleccionado == "Id Empresa" && int.TryParse(busqueda, out int empresaId))
-            {
-                query = "SELECT * FROM Oferta WHERE EmpresaId = @Busqueda"; // Filtrar por ID de empresa
-            }
-            else if (filtroSeleccionado == "Puesto")
-            {
-                query = "SELECT * FROM Oferta WHERE Puesto LIKE @Busqueda"; // Filtrar por Puesto
-                busqueda = "%" + busqueda + "%"; // Agregar el comodín para búsqueda parcial
-            }
-            else
-            {
-                return null; // Si no se seleccionó un filtro válido, retornamos null
-            }
+                // Filtrar por ID o Puesto
+                if (filtro == "Id")
+                {
+                    query = "SELECT Id, Puesto FROM Oferta WHERE Id = @busqueda";
+                }
+                else if (filtro == "Puesto")
+                {
+                    query = "SELECT Id, Puesto FROM Oferta WHERE Puesto LIKE @busqueda";
+                    busqueda = "%" + busqueda + "%"; // Para búsqueda parcial
+                }
 
-            // Llamar al método de la capa de datos para ejecutar la consulta y obtener los resultados
-            return ObtenerOfertasFiltradas(query, busqueda);
+                using (SqlConnection conn = Capa_Datos.OfertaDatos.ObtenerConexion())
+                {
+                    SqlDataAdapter da = new SqlDataAdapter(query, conn);
+                    da.SelectCommand.Parameters.AddWithValue("@busqueda", busqueda);
+
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al filtrar las ofertas: " + ex.Message);
+            }
         }
 
-        // Método que maneja la ejecución de la consulta en la base de datos
+
         private DataTable ObtenerOfertasFiltradas(string query, string busqueda)
         {
             using (SqlConnection conn = Capa_Datos.OfertaDatos.ObtenerConexion())

@@ -31,11 +31,6 @@ namespace CpPresentacion
         {
             InitializeComponent();
 
-            //TODO: Llamado del Metodo Para Configurar el DataGridView
-            PersonalizarDataGridView();
-
-
-
             materialTabControl1.SelectedIndex = 1;
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
@@ -80,7 +75,7 @@ namespace CpPresentacion
             };
 
             // Llenar el ComboBox con las opciones para filtrar
-            cmbFiltro.Items.Add("Id Empresa");
+            cmbFiltro.Items.Add("Id");
             cmbFiltro.Items.Add("Puesto");
             cmbFiltro.SelectedIndex = 0;
 
@@ -461,47 +456,41 @@ namespace CpPresentacion
                 return;
             }
 
-            // Definir la consulta SQL según el tipo de filtro seleccionado
-            string query = "";
-
-            if (filtroSeleccionado == "Id Empresa")
+            try
             {
-                // Verificar si el valor ingresado es un número
-                if (!int.TryParse(busqueda, out int empresaId))
+                var metodosOferta = new MetodosOferta();
+                DataTable dt = metodosOferta.FiltrarOfertas(filtroSeleccionado, busqueda);
+
+                // Verificar si se obtuvieron datos
+                if (dt != null && dt.Rows.Count > 0)
                 {
-                    MessageBox.Show("Por favor ingrese un número válido para el ID de la empresa.", "ID no válido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+                    DGridOferta.DataSource = dt;
 
-                query = "SELECT * FROM Oferta WHERE EmpresaId = @Busqueda"; // Filtrar por ID de Empresa
-            }
-            else if (filtroSeleccionado == "Puesto")
-            {
-                query = "SELECT * FROM Oferta WHERE Puesto LIKE @Busqueda"; // Filtrar por el Puesto
-                busqueda = "%" + busqueda + "%"; // Agregar el comodín % para hacer búsqueda parcial
-            }
+                    // Ocultar las demás columnas que no deseas mostrar
+                    DGridOferta.Columns["Id"].Visible = true;  // Asegurarte de que la columna Id sea visible
+                    DGridOferta.Columns["Puesto"].Visible = true; // Asegurarte de que la columna Puesto sea visible
 
-            // Ejecutar la consulta y llenar el DataGridView
-            using (SqlConnection conn = Capa_Datos.OfertaDatos.ObtenerConexion())
-            {
-                try
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    // Si tienes otras columnas que no deseas mostrar, puedes ocultarlas
+                    foreach (DataGridViewColumn column in DGridOferta.Columns)
                     {
-                        cmd.Parameters.AddWithValue("@Busqueda", busqueda); // Agregar el parámetro de búsqueda
-                        SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
-                        DataTable dt = new DataTable();
-                        dataAdapter.Fill(dt);
-                        DGridOferta.DataSource = dt; // Cargar los datos filtrados en el DataGridView
+                        if (column.Name != "Id" && column.Name != "Puesto")
+                        {
+                            column.Visible = false;  // Ocultar las demás columnas
+                        }
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show("Error al filtrar las ofertas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("No se encontraron ofertas con los criterios proporcionados.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al filtrar las ofertas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
+
 
         private static bool EsPermitido(char ch)
         {
@@ -513,57 +502,7 @@ namespace CpPresentacion
             return permitidos.Contains(ch);
         }
 
-        private void PersonalizarDataGridView()
-        {
-            // Cambiar el color de fondo general del DataGridView
-            DGridOferta.BackgroundColor = Color.FromArgb(240, 248, 255); // Azul muy suave, estilo "Azure"
-
-            // Personalizar el color de los encabezados de las columnas
-            DGridOferta.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 122, 204); // Azul oscuro
-            DGridOferta.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            DGridOferta.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
-            DGridOferta.ColumnHeadersHeight = 40;
-
-            // Cambiar el color de las filas
-            DGridOferta.RowsDefaultCellStyle.BackColor = Color.White;
-            DGridOferta.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(230, 240, 255); // Azul suave en filas alternas
-            DGridOferta.RowsDefaultCellStyle.ForeColor = Color.Black;
-
-            // Cambiar el color del borde del DataGridView
-            DGridOferta.BorderStyle = BorderStyle.FixedSingle;
-            DGridOferta.GridColor = Color.FromArgb(200, 200, 200); // Gris claro para las líneas de la cuadrícula
-
-            // Personalizar las celdas
-            DGridOferta.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 122, 204); // Azul oscuro cuando se selecciona
-            DGridOferta.DefaultCellStyle.SelectionForeColor = Color.White; // Texto blanco cuando se selecciona
-
-            // Personalizar las celdas al pasar el ratón (Hover)
-            DGridOferta.CellMouseEnter += (sender, e) =>
-            {
-                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
-                {
-                    DGridOferta.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.FromArgb(173, 216, 230); // Azul claro cuando el mouse pasa
-                }
-            };
-
-            DGridOferta.CellMouseLeave += (sender, e) =>
-            {
-                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
-                {
-                    DGridOferta.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.White; // Vuelve a blanco
-                }
-            };
-
-            // Personalizar la fuente de las celdas
-            DGridOferta.DefaultCellStyle.Font = new Font("Arial", 9);
-
-            // Personalizar las filas de la cabecera al ser seleccionadas
-            DGridOferta.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DGridOferta.MultiSelect = false;
-
-            // Ajustar el tamaño de las columnas automáticamente según el contenido
-            DGridOferta.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-        }
+        
     }
 
 }
