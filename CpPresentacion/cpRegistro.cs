@@ -144,5 +144,14 @@ namespace CpPresentacion
             txtUsuario.MaxLength = 20;
             txtContraseña.MaxLength = 20;
         }
+
+        private void txtUsuario_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true; // Bloquear el carácter
+            MessageBox.Show("No se permiten caracteres especiales en el campo 'Usuario'.",
+                            "Carácter inválido",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+        }
     }
 }
