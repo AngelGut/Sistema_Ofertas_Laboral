@@ -360,7 +360,7 @@ namespace CpPresentacion
 
         // ========================== UTILIDADES ==========================
 
-        
+
 
         private bool EsCorreoValido(string correo)
         {
@@ -434,10 +434,15 @@ namespace CpPresentacion
             return carga;
         }
 
-        private void maskTelefono_Click(object sender, EventArgs e)
+
+        private void maskTelefono_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
+        }
+
+        private void maskTelefono_Click_1(object sender, EventArgs e)
         {
             maskTelefono.SelectionStart = 0;
-            maskTelefono.SelectionLength = 0;
         }
 
         private void AbrirFormBoton(bool startInEdit)
