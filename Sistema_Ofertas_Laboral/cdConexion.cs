@@ -1,8 +1,9 @@
 ﻿using System;
 using Microsoft.Data.SqlClient;
 
+//TODO:CONEXION A LA  BASE DE DATOS 
 namespace Capa_Datos
-{
+{ 
     public static class OfertaDatos
     {
         // Cadena de conexión a la base de datos
