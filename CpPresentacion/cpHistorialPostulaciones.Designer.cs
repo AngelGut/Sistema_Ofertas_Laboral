@@ -44,7 +44,6 @@
             txtBusqueda = new TextBox();
             label8 = new Label();
             label7 = new Label();
-            lblPersonaId = new Label();
             pictureBox1 = new PictureBox();
             dgvHistorialPostulaciones = new DataGridView();
             btnBuscar = new MaterialSkin.Controls.MaterialButton();
@@ -201,7 +200,6 @@
             panel1.Controls.Add(txtBusqueda);
             panel1.Controls.Add(label8);
             panel1.Controls.Add(label7);
-            panel1.Controls.Add(lblPersonaId);
             panel1.Controls.Add(pictureBox1);
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 0);
@@ -229,7 +227,7 @@
             // 
             label8.AutoSize = true;
             label8.ForeColor = Color.White;
-            label8.Location = new Point(9, 305);
+            label8.Location = new Point(12, 302);
             label8.Name = "label8";
             label8.Size = new Size(51, 15);
             label8.TabIndex = 6;
@@ -239,21 +237,11 @@
             // 
             label7.AutoSize = true;
             label7.ForeColor = Color.White;
-            label7.Location = new Point(9, 265);
+            label7.Location = new Point(12, 260);
             label7.Name = "label7";
-            label7.Size = new Size(48, 15);
+            label7.Size = new Size(34, 15);
             label7.TabIndex = 5;
-            label7.Text = "Ofertas:";
-            // 
-            // lblPersonaId
-            // 
-            lblPersonaId.AutoSize = true;
-            lblPersonaId.ForeColor = Color.White;
-            lblPersonaId.Location = new Point(9, 216);
-            lblPersonaId.Name = "lblPersonaId";
-            lblPersonaId.Size = new Size(66, 15);
-            lblPersonaId.TabIndex = 4;
-            lblPersonaId.Text = "Persona ID:";
+            label7.Text = "Filtro";
             // 
             // pictureBox1
             // 
@@ -335,7 +323,6 @@
         private Panel panel1;
         private MaterialSkin.Controls.MaterialButton btnBuscar;
         private Label label7;
-        private Label lblPersonaId;
         private PictureBox pictureBox1;
         private ComboBox cmbFiltro;
         private MaterialSkin.Controls.MaterialButton btnLimpiarFiltros;
