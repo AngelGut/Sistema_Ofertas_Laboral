@@ -27,7 +27,7 @@ namespace CpPresentacion
             materialTabControl1.SelectedIndex = 6;
             // Asociar eventos para validar entrada en tiempo real
             txtNombre.KeyPress += TxtSoloLetras_KeyPress;
-            txtTelefono.KeyPress += TxtSoloNumeros_KeyPress;
+            maskTelefono.KeyPress += TxtSoloNumeros_KeyPress;
             txtPosicion.KeyPress += TxtSoloLetras_KeyPress;
 
             // Bloquear todos los controles recursivamente
@@ -105,8 +105,16 @@ namespace CpPresentacion
             }
         }
 
-        private void btnVistaPrevia_Click(object sender, EventArgs e)
+        private async void btnVistaPrevia_Click(object sender, EventArgs e)
         {
+            //TODO: Mostrar ventana de carga
+            Form ventanaCarga = CrearVentanaCarga("Generando vista previa...");
+            ventanaCarga.Show();
+            ventanaCarga.Refresh();
+
+            await Task.Delay(1200); // Simula procesamiento
+            ventanaCarga.Close();
+
             // Asegúrate que el panel se haya renderizado completamente
             panelTarjeta.Refresh(); // Fuerza repintado
 
@@ -136,7 +144,7 @@ namespace CpPresentacion
             vistaPreviaForm.ShowDialog();
         }
 
-        private void btnGuardarTargeta_Click(object sender, EventArgs e)
+        private async void btnGuardarTargeta_Click(object sender, EventArgs e)
         {
 
             // Validar que los campos no estén vacíos
@@ -170,13 +178,21 @@ namespace CpPresentacion
                 txtCorreo.Focus();
                 return;
             }
-            if (string.IsNullOrWhiteSpace(txtTelefono.Text))
+            if (string.IsNullOrWhiteSpace(maskTelefono.Text))
             {
                 MessageBox.Show("El campo Teléfono no puede estar vacío.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtTelefono.Focus();
+                maskTelefono.Focus();
                 return;
             }
+            // Mostrar ventana de carga
+            Form ventanaCarga = CrearVentanaCarga();
+            ventanaCarga.Show();
 
+            // Esperar simulando procesamiento
+            await Task.Delay(1500);
+
+            // Cerrar ventana de carga
+            ventanaCarga.Close();
             try
             {
                 panelTarjeta.Invalidate();
@@ -198,6 +214,7 @@ namespace CpPresentacion
             }
         }
 
+        //estes es el panel donde se dibujaran todos los datos recolectados en los campos 
         private void panelTarjeta_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -205,12 +222,12 @@ namespace CpPresentacion
             int width = panelTarjeta.Width;
             int height = panelTarjeta.Height;
 
-            // 1. FONDO DIVIDIDO EN DOS
+            //FONDO DIVIDIDO EN DOS
             int mitad = height / 2;
             g.FillRectangle(new SolidBrush(Color.FromArgb(25, 25, 64)), 0, 0, width, mitad); // parte superior azul oscuro
             g.FillRectangle(Brushes.Gray, 0, mitad, width, height - mitad); // parte inferior gris
 
-            // 2. LOGO
+            //LOGO
             if (picLogo.Image != null)
             {
                 int logoAncho = 200;
@@ -233,7 +250,7 @@ namespace CpPresentacion
                     attributes);
             }
 
-            // 3. FOTO EN CÍRCULO
+            //FOTO EN CÍRCULO
             if (picFoto.Image != null)
             {
                 int fotoSize = 100;
@@ -251,7 +268,7 @@ namespace CpPresentacion
                 g.DrawEllipse(new Pen(Color.Gray, 2), fotoX, fotoY, fotoSize, fotoSize);
             }
 
-            // 4. TEXTO: NOMBRE, POSICIÓN
+            // TEXTO: NOMBRE, POSICIÓN
             string nombre = txtNombre.Text;
             string posicion = txtPosicion.Text;
 
@@ -271,7 +288,7 @@ namespace CpPresentacion
 
             // 5. DATOS INFERIORES
 
-            string telefonoFormateado = FormatearTelefono(txtTelefono.Text);
+            string telefonoFormateado = maskTelefono.Text;
             string correo = txtCorreo.Text; // Aquí se toma el correo real
 
             Font fontLabel = new Font("Arial", 9, FontStyle.Bold);
@@ -307,6 +324,7 @@ namespace CpPresentacion
 
         // ========================== VALIDACIONES ==========================
 
+        //TODO:estos son los metodos que se usan paran que solo se permitan x cosas en lo campos 
         private void TxtSoloLetras_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsLetter(e.KeyChar) && e.KeyChar != ' ')
@@ -325,38 +343,24 @@ namespace CpPresentacion
             }
         }
 
-        // ========================== UTILIDADES ==========================
-
-        private string FormatearTelefono(string telefono)
-        {
-            var soloDigitos = new string(telefono.Where(char.IsDigit).ToArray());
-
-            if (soloDigitos.Length == 10)
-            {
-                return string.Format("({0}) {1}-{2}",
-                    soloDigitos.Substring(0, 3),
-                    soloDigitos.Substring(3, 3),
-                    soloDigitos.Substring(6, 4));
-            }
-            else if (soloDigitos.Length == 7)
-            {
-                return string.Format("{0}-{1}",
-                    soloDigitos.Substring(0, 3),
-                    soloDigitos.Substring(3, 4));
-            }
-            else
-            {
-                return telefono;
-            }
-        }
-
+        
+        //TODO:ESTO PARA VALIDAR LO DEL CORREO 
         private bool EsCorreoValido(string correo)
         {
             return System.Text.RegularExpressions.Regex.IsMatch(correo, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
         }
 
-        private void materialButton1_Click(object sender, EventArgs e)
+        private async void materialButton1_Click(object sender, EventArgs e)
         {
+
+            // Mostrar ventana de carga
+            Form ventanaCarga = CrearVentanaCarga("Preparando impresión...");
+            ventanaCarga.Show();
+            ventanaCarga.Refresh();
+
+            await Task.Delay(1200); // Simula procesamiento
+            ventanaCarga.Close();
+
             PrintDocument pd = new PrintDocument();
             pd.PrintPage += Pd_PrintPage;
             PrintPreviewDialog preview = new PrintPreviewDialog();
@@ -364,7 +368,7 @@ namespace CpPresentacion
             preview.ShowDialog(); // Muestra vista previa antes de imprimir
         }
 
-        //metodo para que se guarde con el formato de imprecion 
+        //TODO:metodo para que se guarde con el formato de imprecion 
 
         private void Pd_PrintPage(object sender, PrintPageEventArgs e)
         {
@@ -389,6 +393,41 @@ namespace CpPresentacion
 
             // Dibujar el carnet escalado para que se imprima en tamaño real
             g.DrawImage(bmp, rect);
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //TODO:Esto es para que al momento de dar clic para poner el telefono se selecione el primer lugar
+        private void maskTelefono_Click(object sender, EventArgs e)
+        {
+            maskTelefono.SelectionStart = 0;
+            maskTelefono.SelectionLength = 0;
+        }
+        //TODO:Esto es la ventana que aparece con el mensaje de esprea
+        private Form CrearVentanaCarga(string mensaje = "Procesando...")
+        {
+            Form carga = new Form
+            {
+                Size = new Size(220, 100),
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                StartPosition = FormStartPosition.CenterScreen,
+                ControlBox = false,
+                Text = "Espere..."
+            };
+
+            Label lbl = new Label
+            {
+                Text = mensaje,
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Arial", 10, FontStyle.Bold)
+            };
+
+            carga.Controls.Add(lbl);
+            return carga;
         }
     }
 
