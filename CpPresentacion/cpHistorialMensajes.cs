@@ -38,9 +38,11 @@ namespace CpPresentacion
 
         private async Task NavegarA(int idx)
         {
+
             Form destino = idx switch
             {
-                0 => Application.OpenForms.OfType<Menu>().FirstOrDefault() ?? new Menu(),
+                // Siempre nueva instancia de Menu
+                0 => new Menu(),
                 1 => this is cpOfertas ? this : new cpOfertas(),
                 2 => this is cpEmpresa ? this : new cpEmpresa(),
                 3 => this is cpPostulante ? this : new cpPostulante(),
@@ -52,16 +54,21 @@ namespace CpPresentacion
                 _ => null
             };
 
+            // B) Si ya estamos en el destino, no hacemos nada
             if (destino == null || destino == this) return;
 
+            // C) Mostrar el nuevo formulario
             destino.Show();
 
+            // D) Menu nunca se cierra; los demás se liberan
             if (this is Menu)
-                this.Hide();
+                this.Hide();      // se mantiene en memoria
             else
-                this.Dispose();
+                this.Dispose();  // libera recursos
 
-            await Task.Delay(180);
+            // Asegurarnos de que la UI repinte inmediatamente:
+            destino.BringToFront();
+            destino.Activate();
         }
 
         // 🔹 Cargar historial desde base de datos
