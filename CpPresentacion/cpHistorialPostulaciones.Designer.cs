@@ -41,7 +41,6 @@
             btnLimpiarFiltros = new MaterialSkin.Controls.MaterialButton();
             panel1 = new Panel();
             cmbFiltro = new ComboBox();
-            label6 = new Label();
             txtBusqueda = new TextBox();
             label8 = new Label();
             label7 = new Label();
@@ -198,7 +197,6 @@
             // 
             panel1.BackColor = SystemColors.HotTrack;
             panel1.Controls.Add(cmbFiltro);
-            panel1.Controls.Add(label6);
             panel1.Controls.Add(txtBusqueda);
             panel1.Controls.Add(label8);
             panel1.Controls.Add(label7);
@@ -220,16 +218,6 @@
             cmbFiltro.Name = "cmbFiltro";
             cmbFiltro.Size = new Size(244, 33);
             cmbFiltro.TabIndex = 10;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(136, 282);
-            label6.Margin = new Padding(4, 0, 4, 0);
-            label6.Name = "label6";
-            label6.Size = new Size(59, 25);
-            label6.TabIndex = 11;
-            label6.Text = "label6";
             // 
             // txtBusqueda
             // 
@@ -357,7 +345,6 @@
         private PictureBox pictureBox1;
         private ComboBox cmbFiltro;
         private MaterialSkin.Controls.MaterialButton btnLimpiarFiltros;
-        private Label label6;
         private TextBox txtBusqueda;
         private Label label8;
     }
