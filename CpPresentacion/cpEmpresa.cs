@@ -463,31 +463,14 @@ namespace CpPresentacion
 
         private void AsignarEventosDeValidacion()
         {
-            // Asegúrate de que el TextBox está bien referenciado
-            txtBusqueda.KeyPress += TxtBusqueda_KeyPress;
+            
+            
         }
 
         private void TxtBusqueda_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Verificamos el filtro seleccionado
-            string filtro = cmbFiltro.SelectedItem.ToString();
-
-            // Si el filtro es "Id" o "Rnc", solo permitimos números
-            if (filtro == "Id" || filtro == "Rnc")
-            {
-                if (!Char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
-                {
-                    e.Handled = true;  // Bloquea la entrada de caracteres no numéricos
-                }
-            }
-            // Si el filtro es "Nombre", solo permitimos letras
-            else if (filtro == "Nombre")
-            {
-                if (!Char.IsLetter(e.KeyChar) && e.KeyChar != (char)Keys.Back)
-                {
-                    e.Handled = true;  // Bloquea la entrada de caracteres no alfabéticos
-                }
-            }
+            
         }
 
         private void TxtBusqueda_KeyPress_Numeros(object sender, KeyPressEventArgs e)
@@ -513,17 +496,19 @@ namespace CpPresentacion
             // Limpiar el texto para que no quede ningún valor previo
             txtBusqueda.Clear();
 
+            // Eliminar cualquier validación previa
+            txtBusqueda.KeyPress -= TxtBusqueda_KeyPress_Numeros;
+            txtBusqueda.KeyPress -= TxtBusqueda_KeyPress_Letras;
+
             // Asignamos el evento de validación correcto según el filtro seleccionado
             if (cmbFiltro.SelectedItem.ToString() == "Id" || cmbFiltro.SelectedItem.ToString() == "Rnc")
             {
                 // Validar solo números
-                txtBusqueda.KeyPress -= TxtBusqueda_KeyPress_Letras; // Eliminar validación de letras
                 txtBusqueda.KeyPress += TxtBusqueda_KeyPress_Numeros; // Asignar validación solo números
             }
             else if (cmbFiltro.SelectedItem.ToString() == "Nombre")
             {
                 // Validar solo letras
-                txtBusqueda.KeyPress -= TxtBusqueda_KeyPress_Numeros; // Eliminar validación de números
                 txtBusqueda.KeyPress += TxtBusqueda_KeyPress_Letras; // Asignar validación solo letras
             }
         }
