@@ -13,16 +13,20 @@ using CpNegocio.servicios;
 using MaterialSkin.Controls;
 using Microsoft.Data.SqlClient;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using CpPresentacion.Asistencia;   // contiene IReadOnlyContainer y las extensiones
+using System.Media;
+
 
 namespace CpPresentacion
 {
-    public partial class cpOfertas : MaterialForm // <<== ¡Cambiado a MaterialForm!
+    public partial class cpOfertas : MaterialForm, IReadOnlyContainer
     {
-      
+        public Control Container => this;
+
         public cpOfertas()
         {
             InitializeComponent();
-            
+
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 1;
 
@@ -49,66 +53,64 @@ namespace CpPresentacion
 
             CargarEmpresas(); // Cargar empresas aquí
 
-            
+            PopulateAreas(); //Cargamos las areas laborales
+
+            // Bloquear todos los controles recursivamente
+            this.SetReadOnly(true);
+
+            // Mostrar mini-form Ver/Editar
+            using (var dlg = new frmModoVisualizacion())
+            {
+                if (dlg.ShowDialog() == DialogResult.OK &&
+                    dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
+                {
+                    // Desbloquear si eligió Editar
+                    this.SetReadOnly(false);
+                }
+            }
+
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Obtener el índice de la pestaña seleccionada por el usuario
-            int selectedIndex = materialTabControl1.SelectedIndex;
-
-            // Llamar a la función común para abrir formularios
-            await AbrirFormulario(selectedIndex);
+            await NavegarA(materialTabControl1.SelectedIndex);
         }
 
-        private async Task AbrirFormulario(int selectedIndex)
+        private async Task NavegarA(int idx)
         {
-            Form formulario = null;
-
-            // Seleccionar el formulario correspondiente según el índice de la pestaña
-            switch (selectedIndex)
+            // A) ¿A qué ventana ir?
+            Form destino = idx switch
             {
-                case 0:  // Menu
-                    if (!(this is Menu))
-                    {
-                        formulario = new Menu();  // Crear nueva instancia de Menu
-                    }
-                    break;
+                // Siempre nueva instancia de Menu
+                0 => new Menu(),
+                1 => this is cpOfertas ? this : new cpOfertas(),
+                2 => this is cpEmpresa ? this : new cpEmpresa(),
+                3 => this is cpPostulante ? this : new cpPostulante(),
+                4 => this is cpAsignarEmpleo ? this : new cpAsignarEmpleo(),
+                5 => this is cpHistorialMensajes ? this : new cpHistorialMensajes(),
+                6 => this is Carnet ? this : new Carnet(),
+                7 => this is cpRegistro ? this : new cpRegistro(),
+                8 => this is cpHistorialPostulaciones ? this : new cpHistorialPostulaciones(),
+                _ => null
+            };
 
-                case 1:  // cpOfertas
-                    if (!(this is cpOfertas))
-                    {
-                        formulario = new cpOfertas();  // Crear nueva instancia de cpOfertas
-                    }
-                    break;
+            // B) Si ya estamos en el destino, no hacemos nada
+            if (destino == null || destino == this) return;
 
-                case 2:  // cpEmpresa
-                    if (!(this is cpEmpresa))
-                    {
-                        formulario = new cpEmpresa();  // Crear nueva instancia de cpEmpresa
-                    }
-                    break;
+            // C) Mostrar el nuevo formulario
+            destino.Show();
 
-                case 3:  // cpPostulante
-                    if (!(this is cpPostulante))
-                    {
-                        formulario = new cpPostulante();  // Crear nueva instancia de cpPostulante
-                    }
-                    break;
-            }
-
-            // Si se ha seleccionado un formulario válido, mostrarlo
-            if (formulario != null)
-            {
-                this.Hide();        // Ocultar el formulario actual
-                formulario.Show();  // Mostrar el formulario seleccionado
-                await Task.Delay(300); // Pausa breve, si es necesario
-            }
+            // D) Menu nunca se cierra; los demás se liberan
+            if (this is Menu)
+                this.Hide();     // se mantiene en memoria
             else
-            {
-                MessageBox.Show("Este formulario ya está abierto o no se puede acceder.", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                materialTabControl1.SelectedIndex = 0;  // Regresar a la pestaña de inicio (Menu)
-            }
+                this.Dispose();  // libera recursos
+
+            // Asegurarnos de que la UI repinte inmediatamente:
+            destino.BringToFront();
+            destino.Activate();
+
+
         }
 
 
@@ -148,59 +150,60 @@ namespace CpPresentacion
         {
             try
             {
-                // Validar que se haya seleccionado una empresa
                 if (CboxEmpresas.SelectedItem == null)
                 {
                     MessageBox.Show("Debe seleccionar una empresa antes de registrar la oferta.", "Empresa requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Validar que se haya seleccionado un tipo de oferta
                 if (CboxTipoOferta.SelectedItem == null)
                 {
                     MessageBox.Show("Debe seleccionar un tipo de oferta.", "Tipo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Obtener valores seleccionados
                 string tipo = CboxTipoOferta.SelectedItem.ToString();
                 int empresaId = ((CpNegocio.Entidades.EmpresaComboItem)CboxEmpresas.SelectedItem).Id;
+                string puesto = TxtPuesto.Text;
+                string descripcion = TxtDescripcion.Text;
+                string requisitos = TxtRequisitos.Text;
+                string area = cmbArea.SelectedItem?.ToString() ?? "";
+
+                int salario = 0;
+                int creditos = 0;
 
                 if (tipo == "Empleo Fijo")
                 {
-                    var empleo = new EmpleoFijo
+                    if (!int.TryParse(TxtSalario.Text, out salario))
                     {
-                        EmpresaId = empresaId,
-                        Puesto = TxtPuesto.Text,
-                        Descripcion = TxtDescripcion.Text,
-                        Requisitos = TxtRequisitos.Text,
-                        Salario = int.TryParse(TxtSalario.Text, out int salario) ? salario : null
-                    };
-
-                    new MetodosEmpleoFijo().Registrar(empleo);
-                    MessageBox.Show("Oferta de Empleo registrada con éxito.");
+                        MessageBox.Show("Salario inválido.");
+                        return;
+                    }
                 }
                 else if (tipo == "Pasantia")
                 {
-                    var pasantia = new Pasantia
+                    if (!int.TryParse(TxtCreditos.Text, out creditos))
                     {
-                        EmpresaId = empresaId,
-                        Puesto = TxtPuesto.Text,
-                        Descripcion = TxtDescripcion.Text,
-                        Requisitos = TxtRequisitos.Text,
-                        Creditos = int.TryParse(TxtCreditos.Text, out int creditos) ? creditos : 0
-                    };
-
-                    new MetodosPasantia().Registrar(pasantia);
-                    MessageBox.Show("Pasantía registrada con éxito.");
-                }
-                else
-                {
-                    MessageBox.Show("Debe seleccionar un tipo de oferta válido.", "Tipo inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                        MessageBox.Show("Créditos inválidos.");
+                        return;
+                    }
                 }
 
-                // Recargar tabla y limpiar
+                // Registrar usando el método unificado
+                var metodosOferta = new MetodosOferta();
+                metodosOferta.RegistrarOferta(
+                    empresaId,
+                    puesto,
+                    tipo,
+                    descripcion,
+                    requisitos,
+                    salario,
+                    creditos,
+                    area,
+                    false
+                );
+
+                MessageBox.Show("Oferta registrada con éxito.");
                 CargarOfertas();
                 LimpiarCampos();
             }
@@ -209,6 +212,7 @@ namespace CpPresentacion
                 MessageBox.Show("Ocurrió un error al registrar la oferta:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         //clase auxiliar para mostrar nombre pero guardar el ID:
         public class EmpresaComboItem
@@ -353,7 +357,43 @@ namespace CpPresentacion
                 MessageBox.Show("Selecciona una oferta primero.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+        private void PopulateAreas()
+        {
+            cmbArea.DataSource = AreaLaboralProvider.GetAll();
+            cmbArea.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbArea.SelectedIndex = 0;
+        }
 
-        //ya esta terminado
+        private void TxtPuesto_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true; // Bloquear el carácter
+            MessageBox.Show("No se permiten caracteres especiales en el campo 'Puesto'.",
+                            "Carácter inválido",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+        }
+
+        private void TxtDescripcion_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true; // Bloquear el carácter
+            MessageBox.Show("No se permiten caracteres especiales en el campo 'Descripcion'.",
+                            "Carácter inválido",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+        }
+
+        private void TxtRequisitos_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Permitir letras, números, espacio y teclas de control (como backspace)
+            if (!char.IsLetterOrDigit(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != ' ')
+            {
+                e.Handled = true; // Bloquear el carácter
+                MessageBox.Show("No se permiten caracteres especiales en el campo 'Requisitos'.",
+                                "Carácter inválido",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+            }
+        }
     }
+
 }

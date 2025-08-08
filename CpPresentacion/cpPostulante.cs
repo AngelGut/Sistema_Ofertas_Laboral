@@ -12,16 +12,22 @@ using CpNegocio.Entidades;
 using MaterialSkin.Controls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using CpNegocio.servicios;
+using CpPresentacion.Asistencia;   // contiene IReadOnlyContainer y las extensiones
 
 namespace CpPresentacion
 {
-    public partial class cpPostulante : MaterialForm
+    public partial class cpPostulante : MaterialForm, IReadOnlyContainer
     {
-        
+        public Control Container => this; // Implementación de la interfaz
+
         public cpPostulante()
         {
             InitializeComponent();
-           
+
+            CargarPaises();
+            cmbPaises.SelectedIndexChanged += (s, e) => FormatearTelefono();
+            TxtTelefono.TextChanged += (s, e) => FormatearTelefono();
+
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 3;
 
@@ -34,51 +40,63 @@ namespace CpPresentacion
             TxtDni.KeyPress += SoloLetrasYNumeros_KeyPress;
 
             CargarPersonas(); // <-- aquí lo puedes invocar también
-            CargarOfertas(); // Llama al método que llenará el ComboBox con las ofertas
-            
+
+            // Bloquear todos los controles recursivamente
+            this.SetReadOnly(true);
+
+            // Mostrar mini-form Ver/Editar
+            using (var dlg = new frmModoVisualizacion())
+            {
+                if (dlg.ShowDialog() == DialogResult.OK &&
+                    dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
+                {
+                    // Desbloquear si eligió Editar
+                    this.SetReadOnly(false);
+                }
+            }
+
         }
-
-
-
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Obtener el índice de la pestaña seleccionada
-            int selectedIndex = materialTabControl1.SelectedIndex;
+            await NavegarA(materialTabControl1.SelectedIndex);
+        }
 
-            // Si se selecciona la pestaña 0 (Menu) y no estamos ya en Menu
-            if (selectedIndex == 0 && !(this is Menu))
+        private async Task NavegarA(int idx)
+        {
+            // A) ¿A qué ventana ir?
+            Form destino = idx switch
             {
-                var f = new Menu();  // Crear una nueva instancia del formulario Menu sin rol
-                f.Show();            // Mostrar el formulario Menu
+                // Siempre nueva instancia de Menu
+                0 => new Menu(),
+                1 => this is cpOfertas ? this : new cpOfertas(),
+                2 => this is cpEmpresa ? this : new cpEmpresa(),
+                3 => this is cpPostulante ? this : new cpPostulante(),
+                4 => this is cpAsignarEmpleo ? this : new cpAsignarEmpleo(),
+                5 => this is cpHistorialMensajes ? this : new cpHistorialMensajes(),
+                6 => this is Carnet ? this : new Carnet(),
+                7 => this is cpRegistro ? this : new cpRegistro(),
+                8 => this is cpHistorialPostulaciones ? this : new cpHistorialPostulaciones(),
+                _ => null
+            };
 
-                await Task.Delay(300);  // Espera breve para suavizar
-                this.Dispose();         // Liberar el formulario actual
-            }
-            // Si se selecciona la pestaña 1 (cpOfertas) y no estamos ya en cpOfertas
-            else if (selectedIndex == 1 && !(this is cpOfertas))
-            {
-                var f = new cpOfertas();  // Crear nueva instancia del formulario cpOfertas sin rol
-                f.Show();                  // Mostrar el formulario
-                await Task.Delay(300);     // Espera para transición
-                this.Dispose();            // Liberar el formulario actual
-            }
-            // Si se selecciona la pestaña 2 (cpEmpresa) y no estamos ya en cpEmpresa
-            else if (selectedIndex == 2 && !(this is cpEmpresa))
-            {
-                var f = new cpEmpresa();  // Crear nueva instancia del formulario cpEmpresa sin rol
-                f.Show();                 // Mostrar el formulario
-                await Task.Delay(300);    // Espera breve
-                this.Dispose();           // Liberar el formulario actual
-            }
-            // Si se selecciona la pestaña 3 (cpPostulante) y no estamos ya en cpPostulante
-            else if (selectedIndex == 3 && !(this is cpPostulante))
-            {
-                var f = new cpPostulante();  // Crear nueva instancia del formulario cpPostulante sin rol
-                f.Show();                    // Mostrar el formulario
-                await Task.Delay(300);       // Espera breve
-                this.Dispose();              // Liberar el formulario actual
-            }
+            // B) Si ya estamos en el destino, no hacemos nada
+            if (destino == null || destino == this) return;
+
+            // C) Mostrar el nuevo formulario
+            destino.Show();
+
+            // D) Menu nunca se cierra; los demás se liberan
+            if (this is Menu)
+                this.Hide();     // se mantiene en memoria
+            else
+                this.Dispose();  // libera recursos
+
+            // Asegurarnos de que la UI repinte inmediatamente:
+            destino.BringToFront();
+            destino.Activate();
+
+
         }
 
 
@@ -102,13 +120,6 @@ namespace CpPresentacion
                     return;
                 }
 
-                // ✅ Validar que se haya seleccionado una oferta
-                if (CboxOfertas.SelectedItem == null)
-                {
-                    MessageBox.Show("Debe seleccionar una oferta para el postulante.", "Falta oferta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
                 // 2. Leer valores
                 string nombre = TxtNombre.Text.Trim();
                 string telefono = TxtTelefono.Text.Trim();
@@ -116,11 +127,30 @@ namespace CpPresentacion
                 string direccion = TxtDireccion.Text.Trim();
                 string dni = TxtDni.Text.Trim();
 
-                // 3. Validar que el teléfono contenga solo dígitos
-                if (!telefono.All(char.IsDigit))
+                // Validar número con libphonenumber
+                var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
+                if (cmbPaises.SelectedItem is CountryItem cp)
                 {
-                    TxtTelefono.BackColor = Color.MistyRose;
-                    MessageBox.Show("El teléfono debe contener solo números, sin guiones, letras ni espacios.", "Formato inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    try
+                    {
+                        var parsed = phoneUtil.Parse(TxtTelefono.Text, cp.IsoCode);
+                        if (!phoneUtil.IsValidNumber(parsed))
+                        {
+                            MessageBox.Show("El número de teléfono no es válido para el país seleccionado.", "Teléfono inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        telefono = phoneUtil.Format(parsed, PhoneNumbers.PhoneNumberFormat.INTERNATIONAL);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("No se pudo interpretar el número de teléfono.", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un país para el número telefónico.", "País no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -141,8 +171,7 @@ namespace CpPresentacion
                 }
 
                 // 6. Crear objeto Persona (ajusta esto a tu clase real si se llama CnPersona o similar)
-                int ofertaId = (int)CboxOfertas.SelectedValue;
-                var persona = new Persona(nombre, telefono, correo, direccion, dni, ofertaId);
+                var persona = new Persona(nombre, telefono, correo, direccion, dni);
 
                 // 7. Guardar usando tu capa de negocio
                 var servicio = new CpNegocio.servicios.MetodosPersona(persona);
@@ -238,18 +267,11 @@ namespace CpPresentacion
                 if (DgvPersonas.Columns.Contains("Id"))
                     DgvPersonas.Columns["Id"].Visible = false;
 
-                if (DgvPersonas.Columns.Contains("OfertaId"))
-                    DgvPersonas.Columns["OfertaId"].Visible = false;
-
-                // Cambiar encabezados para hacerlo más claro
-                if (DgvPersonas.Columns.Contains("NombreOferta"))
-                    DgvPersonas.Columns["NombreOferta"].HeaderText = "Oferta asignada";
-
                 if (DgvPersonas.Columns.Contains("Nombre"))
                     DgvPersonas.Columns["Nombre"].HeaderText = "Nombre";
 
-                if (DgvPersonas.Columns.Contains("Cedula"))
-                    DgvPersonas.Columns["Cedula"].HeaderText = "Cédula";
+                if (DgvPersonas.Columns.Contains("Dni"))
+                    DgvPersonas.Columns["Dni"].HeaderText = "Cédula";
 
                 if (DgvPersonas.Columns.Contains("Telefono"))
                     DgvPersonas.Columns["Telefono"].HeaderText = "Teléfono";
@@ -262,8 +284,14 @@ namespace CpPresentacion
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar personas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Error al cargar personas:\n" +
+                    ex.Message +
+                    "\n\nDetalle interno:\n" +
+                    (ex.InnerException?.Message ?? "(sin detalle)"),
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
         }
 
         private void TxtNombre_KeyPress(object sender, KeyPressEventArgs e)
@@ -276,23 +304,76 @@ namespace CpPresentacion
             }
         }
 
-        private void CargarOfertas()
+        private class CountryItem
         {
+            public string IsoCode { get; set; }
+            public string Name { get; set; }
+            public string DialCode { get; set; }
+            public string Display => $"{Name} ({DialCode})";
+            public override string ToString() => Display;
+        }
+
+        private void CargarPaises()
+        {
+            var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
+            var regiones = phoneUtil.GetSupportedRegions().OrderBy(iso => iso);
+
+            var lista = regiones.Select(iso =>
+            {
+                try
+                {
+                    var region = new System.Globalization.RegionInfo(iso);
+                    int code = phoneUtil.GetCountryCodeForRegion(iso);
+                    return new CountryItem
+                    {
+                        IsoCode = iso,
+                        Name = region.NativeName,
+                        DialCode = "+" + code.ToString()
+                    };
+                }
+                catch
+                {
+                    return null;
+                }
+            })
+            .Where(ci => ci != null)
+            .OrderBy(ci => ci.Name)
+            .ToList();
+
+            cmbPaises.DataSource = lista;
+            cmbPaises.DisplayMember = "Display";
+            cmbPaises.ValueMember = "IsoCode";
+        }
+
+        private void FormatearTelefono()
+        {
+            if (cmbPaises.SelectedItem is not CountryItem cp)
+                return;
+
+            var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
+
             try
             {
-                var servicio = new CpNegocio.servicios.MetodosOferta();
-                var lista = servicio.ObtenerTodas();
+                var parsed = phoneUtil.Parse(TxtTelefono.Text, cp.IsoCode);
 
-                CboxOfertas.DataSource = lista;
-                CboxOfertas.DisplayMember = "Puesto";  // Muestra el nombre del puesto
-                CboxOfertas.ValueMember = "Id";        // Guarda el ID de la oferta internamente
-                CboxOfertas.SelectedIndex = -1;        // No seleccionar nada por defecto
+                if (phoneUtil.IsValidNumber(parsed))
+                {
+                    string formateado = phoneUtil.Format(parsed, PhoneNumbers.PhoneNumberFormat.INTERNATIONAL);
+                    TxtTelefono.BackColor = Color.White;
+                    System.Windows.Forms.ToolTip tooltip = new System.Windows.Forms.ToolTip();
+                    tooltip.SetToolTip(TxtTelefono, formateado);
+                }
+                else
+                {
+                    TxtTelefono.BackColor = Color.MistyRose;
+                }
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show("Error al cargar las ofertas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                TxtTelefono.BackColor = Color.MistyRose;
             }
         }
+
 
     }
 }

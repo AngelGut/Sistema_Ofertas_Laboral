@@ -18,7 +18,7 @@ namespace CpPresentacion
         public Menu()
         {
             InitializeComponent();
-            
+
 
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Bloquea redimensionamiento
 
@@ -28,11 +28,11 @@ namespace CpPresentacion
             // Mejora visual: habilitar doble búfer para reducir parpadeos
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
-            
-           
+
+
         }
 
- 
+
 
         private void tabPage3_Click(object sender, EventArgs e)
         {
@@ -46,43 +46,43 @@ namespace CpPresentacion
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int selectedIndex = materialTabControl1.SelectedIndex;
-
-            if (selectedIndex == 1)  // Ofertas
-            {
-                // Verifica si el formulario cpOfertas ya está abierto
-                if (!Application.OpenForms.Cast<Form>().Any(f => f.Name == "cpOfertas"))
-                {
-                    var f = new cpOfertas();  // Crear una nueva instancia del formulario cpOfertas
-                    this.Hide();               // Ocultar el formulario actual
-                    f.Show();                  // Mostrar cpOfertas
-                    await Task.Delay(300);     // Pausa breve, si es necesario
-                }
-            }
-            else if (selectedIndex == 2)  // Empresa
-            {
-                // Verifica si el formulario cpEmpresa ya está abierto
-                if (!Application.OpenForms.Cast<Form>().Any(f => f.Name == "cpEmpresa"))
-                {
-                    var f = new cpEmpresa();  // Crear una nueva instancia del formulario cpEmpresa
-                    this.Hide();               // Ocultar el formulario actual
-                    f.Show();                  // Mostrar cpEmpresa
-                    await Task.Delay(300);     // Pausa breve, si es necesario
-                }
-            }
-            else if (selectedIndex == 3)  // Postulante
-            {
-                // Verifica si el formulario cpPostulante ya está abierto
-                if (!Application.OpenForms.Cast<Form>().Any(f => f.Name == "cpPostulante"))
-                {
-                    var f = new cpPostulante();  // Crear una nueva instancia del formulario cpPostulante
-                    this.Hide();                  // Ocultar el formulario actual
-                    f.Show();                     // Mostrar cpPostulante
-                    await Task.Delay(300);        // Pausa breve, si es necesario
-                }
-            }
+            await NavegarA(materialTabControl1.SelectedIndex);
         }
 
+        private async Task NavegarA(int idx)
+        {
+            // A) ¿A qué ventana ir?
+            Form destino = idx switch
+            {
+                0 => Application.OpenForms.OfType<Menu>()
+                                          .FirstOrDefault() ?? new Menu(),
+
+                // Evitamos duplicar instancias si ya estamos ahí
+                1 => this is cpOfertas ? this : new cpOfertas(),
+                2 => this is cpEmpresa ? this : new cpEmpresa(),
+                3 => this is cpPostulante ? this : new cpPostulante(),
+                4 => this is cpAsignarEmpleo ? this : new cpAsignarEmpleo(),
+                5 => this is cpHistorialMensajes ? this : new cpHistorialMensajes(),
+                6 => this is Carnet ? this : new Carnet(),
+                7 => this is cpRegistro ? this : new cpRegistro(),
+                8 => this is cpHistorialPostulaciones ? this : new cpHistorialPostulaciones(),
+                _ => null
+            };
+
+            // B) Si ya estamos en el destino, no hacemos nada
+            if (destino == null || destino == this) return;
+
+            // C) Mostrar el nuevo formulario
+            destino.Show();
+
+            // D) Menu nunca se cierra; los demás se liberan
+            if (this is Menu)
+                this.Hide();     // se mantiene en memoria
+            else
+                this.Dispose();  // libera recursos
+
+            await Task.Delay(180); // Pausa opcional, transición suave
+        }
         private void BtnSalir_Click(object sender, EventArgs e)
         {
             var confirm = MessageBox.Show("¿Estás seguro de que quieres salir?", "Confirmar salida",

@@ -22,19 +22,21 @@ namespace CpNegocio.servicios
             persona = p;
         }
 
+        // Verifica existencia usando la columna Dni
         public static bool PersonaYaExiste(string dni)
         {
-            using (SqlConnection conn = OfertaDatos.ObtenerConexion())
+            try
             {
+                using var conn = OfertaDatos.ObtenerConexion();
                 conn.Open();
-
-                string query = "SELECT COUNT(*) FROM Persona WHERE Cedula = @Dni";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@Dni", dni);
-                    int count = (int)cmd.ExecuteScalar();
-                    return count > 0;
-                }
+                const string q = "SELECT COUNT(*) FROM Persona WHERE Dni = @Dni";
+                using var cmd = new SqlCommand(q, conn);
+                cmd.Parameters.AddWithValue("@Dni", dni);
+                return (int)cmd.ExecuteScalar() > 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al verificar existencia de persona.", ex);
             }
         }
 
@@ -44,37 +46,27 @@ namespace CpNegocio.servicios
         {
             try
             {
-                // Se abre la conexión a la base de datos usando la clase OfertaDatos
-                using (SqlConnection conn = OfertaDatos.ObtenerConexion())
-                {
-                    conn.Open();
+                using var conn = OfertaDatos.ObtenerConexion();
+                conn.Open();
 
-                    // Validar si ya existe
-                    if (PersonaYaExiste(conn, persona.Dni))
-                    {
-                        throw new Exception("Esta persona ya está registrada.");
-                    }
+                if (PersonaYaExiste(persona.Dni))
+                    throw new Exception("Esta persona ya está registrada.");
 
-                    // Sentencia SQL para insertar una nueva persona
-                    string query = @"INSERT INTO Persona (Nombre, Telefono, Correo, Direccion, Cedula, OfertaId)
-                 VALUES (@Nombre, @Telefono, @Correo, @Direccion, @Cedula, @OfertaId)";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@Nombre", persona.Nombre);
-                        cmd.Parameters.AddWithValue("@Telefono", persona.Telefono);
-                        cmd.Parameters.AddWithValue("@Correo", persona.Correo);
-                        cmd.Parameters.AddWithValue("@Direccion", persona.Direccion);
-                        cmd.Parameters.AddWithValue("@Cedula", persona.Dni);
-                        cmd.Parameters.AddWithValue("@OfertaId", persona.OfertaId); // 👉 ESTA LÍNEA ES LA QUE AGREGAS
-
-                        cmd.ExecuteNonQuery();
-                    }
-                }
+                const string q = @"
+                    INSERT INTO Persona
+                        (Nombre, Telefono, Correo, Direccion, Dni)
+                    VALUES
+                        (@Nombre, @Telefono, @Correo, @Direccion, @Dni)";
+                using var cmd = new SqlCommand(q, conn);
+                cmd.Parameters.AddWithValue("@Nombre", persona.Nombre);
+                cmd.Parameters.AddWithValue("@Telefono", persona.Telefono);
+                cmd.Parameters.AddWithValue("@Correo", persona.Correo);
+                cmd.Parameters.AddWithValue("@Direccion", persona.Direccion);
+                cmd.Parameters.AddWithValue("@Dni", persona.Dni);
+                cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
-                // Se lanza una excepción más clara en caso de error
                 throw new Exception("Error al registrar la persona en la base de datos.", ex);
             }
         }
@@ -84,25 +76,16 @@ namespace CpNegocio.servicios
         {
             try
             {
-                using (SqlConnection conn = OfertaDatos.ObtenerConexion())
-                {
-                    conn.Open();
+                using var conn = OfertaDatos.ObtenerConexion();
+                conn.Open();
 
-                    // Consulta SQL para eliminar usando la cédula
-                    string query = "DELETE FROM Persona WHERE Cedula = @Cedula";
+                const string q = "DELETE FROM Persona WHERE Dni = @Dni";
+                using var cmd = new SqlCommand(q, conn);
+                cmd.Parameters.AddWithValue("@Dni", persona.Dni);
+                int filas = cmd.ExecuteNonQuery();
 
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@Id", persona.Dni);
-                        int filas = cmd.ExecuteNonQuery();
-
-                        // Si no se afectó ninguna fila, informamos
-                        if (filas == 0)
-                        {
-                            throw new Exception("No se encontró ninguna persona con esa cédula.");
-                        }
-                    }
-                }
+                if (filas == 0)
+                    throw new Exception("No se encontró ninguna persona con ese DNI.");
             }
             catch (Exception ex)
             {
@@ -115,30 +98,23 @@ namespace CpNegocio.servicios
         {
             try
             {
-                using (SqlConnection conn = OfertaDatos.ObtenerConexion())
-                {
-                    conn.Open();
+                using var conn = OfertaDatos.ObtenerConexion();
+                conn.Open();
 
-                    // Consulta con LEFT JOIN para mostrar el nombre del puesto
-                    string query = @"
-                    SELECT 
+                const string q = @"
+                    SELECT
                         p.Id,
                         p.Nombre,
-                        p.Cedula,
+                        p.Dni,
                         p.Telefono,
                         p.Correo,
-                        p.Direccion,
-                        o.Puesto AS NombreOferta
-                    FROM Persona p
-                    LEFT JOIN Oferta o ON p.OfertaId = o.Id";
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        DataTable tabla = new DataTable();
-                        tabla.Load(reader);
-                        return tabla;
-                    }
-                }
+                        p.Direccion
+                    FROM Persona p";
+                using var cmd = new SqlCommand(q, conn);
+                using var reader = cmd.ExecuteReader();
+                var tabla = new DataTable();
+                tabla.Load(reader);
+                return tabla;
             }
             catch (Exception ex)
             {
@@ -146,14 +122,82 @@ namespace CpNegocio.servicios
             }
         }
 
-        // Método auxiliar privado que verifica si una empresa ya está registrada
-        private bool PersonaYaExiste(SqlConnection conn, string cedula)
+        public DataTable BuscarConFiltro(string criterio, string valorBusqueda)
         {
-            string query = "SELECT COUNT(*) FROM Persona WHERE Cedula = @Cedula";
-
-            using (SqlCommand cmd = new SqlCommand(query, conn))
+            try
             {
-                cmd.Parameters.AddWithValue("@Cedula", cedula);
+                using (var conn = OfertaDatos.ObtenerConexion())
+                {
+                    conn.Open();
+
+                    string query = "";
+
+                    // Dependiendo del criterio, ajustamos la consulta
+                    if (criterio == "Id")
+                    {
+                        // Validamos si el valor de búsqueda para Id es un número entero
+                        if (!int.TryParse(valorBusqueda, out int idValor))
+                        {
+                            throw new Exception("El valor para el filtro 'Id' debe ser un número entero.");
+                        }
+
+                        query = "SELECT Id, Nombre, Rnc, Telefono, Direccion, Correo FROM Empresa WHERE Id = @ValorBusqueda";
+                    }
+                    else if (criterio == "Nombre")
+                    {
+                        query = "SELECT Id, Nombre, Rnc, Telefono, Direccion, Correo FROM Empresa WHERE Nombre LIKE @ValorBusqueda";
+                    }
+                    else if (criterio == "Rnc")
+                    {
+                        query = "SELECT Id, Nombre, Rnc, Telefono, Direccion, Correo FROM Empresa WHERE Rnc LIKE @ValorBusqueda";
+                    }
+                    else
+                    {
+                        throw new Exception("Criterio de búsqueda no válido.");
+                    }
+
+                    using (var cmd = new SqlCommand(query, conn))
+                    {
+                        // En el caso de que se filtre por Nombre o Rnc, usamos LIKE para búsqueda parcial
+                        if (criterio == "Id")
+                        {
+                            cmd.Parameters.AddWithValue("@ValorBusqueda", valorBusqueda);  // Pasar el valor como número entero
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@ValorBusqueda", "%" + valorBusqueda + "%");  // Búsqueda parcial para Nombre y Rnc
+                        }
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            var tabla = new DataTable();
+                            tabla.Load(reader);
+                            return tabla;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al aplicar el filtro: " + ex.Message, ex);
+            }
+        }
+
+
+
+
+
+        /// <summary>
+        /// Comprueba en la base de datos, usando la conexión ya abierta,
+        /// si ya existe una persona con ese DNI.
+        /// </summary>
+        private bool PersonaYaExiste(SqlConnection conn, string dni)
+        {
+            const string query = "SELECT COUNT(*) FROM Persona WHERE Dni = @Dni";
+
+            using (var cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@Dni", dni);
                 int count = (int)cmd.ExecuteScalar();
                 return count > 0;
             }

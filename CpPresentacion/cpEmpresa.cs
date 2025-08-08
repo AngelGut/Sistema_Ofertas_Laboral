@@ -1,4 +1,9 @@
-﻿using MaterialSkin.Controls;
+﻿using CpNegocio;
+using CpNegocio.Entidades;
+using CpNegocio.servicios;
+using CpPresentacion.Asistencia;   // contiene IReadOnlyContainer y las extensiones
+using MaterialSkin.Controls;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,88 +11,105 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using CpNegocio.Entidades;
-using System.Text.RegularExpressions;
-using CpNegocio;
-using CpNegocio.servicios;
 
 namespace CpPresentacion
 {
-    public partial class cpEmpresa : MaterialForm // <<== ¡Cambiado a MaterialForm!
+    public partial class cpEmpresa : MaterialForm, IReadOnlyContainer
     {
-        
+        public Control Container => this; // Implementación de la interfaz IReadOnlyContainer
+
         public cpEmpresa()
         {
             InitializeComponent();
-            
+
+            // Cargar países en el ComboBox
+            CargarPaises();
+            // Evento para formatear cuando cambia selección o número
+            cmbPaises.SelectedIndexChanged += (s, e) => FormatearTelefono();
+            TxtTelefono.TextChanged += (s, e) => FormatearTelefono();
+
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 2;
 
-            // Mejora visual: habilitar doble búfer para reducir parpadeos
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
+            /* ---- Pestaña activa de “Empresas” (0-Menú, 1-Ofertas, 2-Empresas …) ---- */
+            materialTabControl1.SelectedIndex = 2;
+
+            /* ---- Mejoras visuales / validaciones originales ---- */
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer |
+                          ControlStyles.AllPaintingInWmPaint |
+                          ControlStyles.UserPaint, true);
             this.UpdateStyles();
 
             // Asociar evento KeyPress para bloquear letras y espacios en los campos numéricos
             TxtTelefono.KeyPress += SoloNumeros_KeyPress;
             TxtRnc.KeyPress += SoloNumeros_KeyPress;
 
-            
+            AsignarEventosDeValidacion();
+            CargarFiltro();
             CargarEmpresas();
+            txtBusqueda.KeyPress += TxtBusqueda_KeyPress;
+
+            // Bloquear todos los controles recursivamente
+            this.SetReadOnly(true);
+
+            // Mostrar mini-form Ver/Editar
+            using (var dlg = new frmModoVisualizacion())
+            {
+                if (dlg.ShowDialog() == DialogResult.OK &&
+                    dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
+                {
+                    // Desbloquear si eligió Editar
+                    this.SetReadOnly(false);
+                }
+            }
         }
 
-
+        //TODO: navegacion
+        /* ══════════════════════  N A V E G A C I Ó N  ═════════════════════ */
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int selectedIndex = materialTabControl1.SelectedIndex;
-
-            if (selectedIndex == 1)  // Si seleccionamos la pestaña 1 (cpOfertas)
-            {
-                // Verificar si el formulario ya está abierto
-                if (Application.OpenForms["cpOfertas"] == null)
-                {
-                    var f = new cpOfertas();  // Crear nueva instancia de cpOfertas sin necesidad de rol
-                    f.Show();
-                    this.Hide();  // Ocultar el formulario actual
-                    await Task.Delay(300);
-                }
-                else
-                {
-                    MessageBox.Show("Ya está abierto el formulario de Ofertas", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-            else if (selectedIndex == 2)  // Si seleccionamos la pestaña 2 (cpEmpresa)
-            {
-                // Verificar si el formulario ya está abierto
-                if (Application.OpenForms["cpEmpresa"] == null)
-                {
-                    var f = new cpEmpresa();  // Crear nueva instancia de cpEmpresa sin necesidad de rol
-                    f.Show();
-                    this.Hide();  // Ocultar el formulario actual
-                    await Task.Delay(300);
-                }
-                else
-                {
-                    MessageBox.Show("Ya está abierto el formulario de Empresas", "Acceso Denegado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-            else if (selectedIndex == 3)  // Si seleccionamos la pestaña 3 (cpPostulante)
-            {
-                // Verificar si el formulario ya está abierto
-                if (Application.OpenForms["cpPostulante"] == null)
-                {
-                    var f = new cpPostulante();  // Crear nueva instancia de cpPostulante sin necesidad de rol
-                    f.Show();
-                    this.Hide();  // Ocultar el formulario actual
-                    await Task.Delay(300);
-                }
-            }
+            await NavegarA(materialTabControl1.SelectedIndex);
         }
 
+        private async Task NavegarA(int idx)
+        {
+            // A) ¿A qué ventana ir?
+            Form destino = idx switch
+            {
+                0 => new Menu(),
+                1 => this is cpOfertas ? this : new cpOfertas(),
+                2 => this is cpEmpresa ? this : new cpEmpresa(),
+                3 => this is cpPostulante ? this : new cpPostulante(),
+                4 => this is cpAsignarEmpleo ? this : new cpAsignarEmpleo(),
+                5 => this is cpHistorialMensajes ? this : new cpHistorialMensajes(),
+                6 => this is Carnet ? this : new Carnet(),
+                7 => this is cpRegistro ? this : new cpRegistro(),
+                8 => this is cpHistorialPostulaciones ? this : new cpHistorialPostulaciones(),
+                _ => null
+            };
 
+            // B) Si ya estamos en el destino, no hacemos nada
+            if (destino == null || destino == this) return;
+
+            // C) Mostrar el nuevo formulario
+            destino.Show();
+
+            // D) Menu nunca se cierra; los demás se liberan
+            if (this is Menu)
+                this.Hide();     // se mantiene en memoria
+            else
+                this.Dispose();  // libera recursos
+
+            // Asegurarnos de que la UI repinte inmediatamente:
+            destino.BringToFront();
+            destino.Activate();
+        }
 
         private void BtnRegistrar_Click(object sender, EventArgs e)
         {
@@ -106,7 +128,33 @@ namespace CpPresentacion
 
                 // 2. Leer datos desde los TextBox
                 string nombre = TxtNombreCompania.Text.Trim();
-                string telefono = TxtTelefono.Text.Trim().Replace(" ", ""); // ❌ quitar espacios
+                // Usar el número formateado with libphonenumber
+                string telefono;
+                var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
+                if (cmbPaises.SelectedItem is CountryItem cp)
+                {
+                    try
+                    {
+                        var parsed = phoneUtil.Parse(TxtTelefono.Text, cp.IsoCode);
+                        if (!phoneUtil.IsValidNumber(parsed))
+                        {
+                            MessageBox.Show("El número de teléfono no es válido para el país seleccionado.", "Teléfono inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        telefono = phoneUtil.Format(parsed, PhoneNumbers.PhoneNumberFormat.INTERNATIONAL);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("No se pudo interpretar el número de teléfono.", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un país para el número telefónico.", "País no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 string correo = TxtCorreo.Text.Trim();
                 string direccion = TxtDireccion.Text.Trim();
                 string rncTexto = TxtRnc.Text.Trim().Replace(" ", ""); // ❌ quitar espacios
@@ -115,14 +163,6 @@ namespace CpPresentacion
                 if (!rncTexto.All(char.IsDigit))
                 {
                     MessageBox.Show("El RNC debe contener solo números, sin espacios ni símbolos.", "Formato inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                // 4. Validar teléfono: solo números
-                if (!telefono.All(char.IsDigit))
-                {
-                    TxtTelefono.BackColor = Color.MistyRose;
-                    MessageBox.Show("El teléfono debe contener solo números, sin espacios ni letras.", "Formato inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -230,6 +270,7 @@ namespace CpPresentacion
                 e.Handled = true;
             }
         }
+
         private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
@@ -237,5 +278,238 @@ namespace CpPresentacion
                 e.Handled = true; // Bloquea la tecla
             }
         }
+
+        // Clase auxiliar para los países
+        private class CountryItem
+        {
+            public string IsoCode { get; set; } // Código ISO, ej: "US", "DO"
+            public string Name { get; set; } // Nombre visible
+            public string DialCode { get; set; } // Código de marcación, ej: "+1"
+            public string Display => $"{Name} ({DialCode})";
+            public override string ToString() => Display;
+        }
+
+        private void CargarPaises()
+        {
+            var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
+
+            // Obtener todas las regiones soportadas y ordenarlas alfabéticamente
+            var regiones = phoneUtil.GetSupportedRegions().OrderBy(iso => iso);
+
+            // Crear lista filtrando los códigos ISO inválidos para RegionInfo
+            var lista = regiones.Select(iso =>
+            {
+                try
+                {
+                    var region = new System.Globalization.RegionInfo(iso);
+                    int code = phoneUtil.GetCountryCodeForRegion(iso);
+
+                    return new CountryItem
+                    {
+                        IsoCode = iso,
+                        Name = region.NativeName,
+                        DialCode = "+" + code.ToString()
+                    };
+                }
+                catch
+                {
+                    // Si el ISO no es válido (como "AC"), lo omitimos
+                    return null;
+                }
+            })
+            .Where(ci => ci != null)
+            .OrderBy(ci => ci.Name)
+            .ToList();
+
+            // Enlazar la lista al ComboBox
+            cmbPaises.DataSource = lista;
+            cmbPaises.DisplayMember = "Display";   // mostrará "República Dominicana (+1)"
+            cmbPaises.ValueMember = "IsoCode";
+        }
+
+        private void CargarFiltro()
+        {
+            cmbFiltro.Items.Clear();
+            cmbFiltro.Items.Add("Id");
+            cmbFiltro.Items.Add("Nombre");
+            cmbFiltro.Items.Add("Rnc");
+            cmbFiltro.SelectedIndex = 0; // Seleccionar el primer criterio por defecto
+        }
+
+        private void FormatearTelefono()
+        {
+            // Verifica que haya un país seleccionado
+            if (cmbPaises.SelectedItem is not CountryItem cp)
+                return;
+
+            var phoneUtil = PhoneNumbers.PhoneNumberUtil.GetInstance();
+
+            try
+            {
+                // Intenta parsear el número con el ISO del país
+                var parsed = phoneUtil.Parse(TxtTelefono.Text, cp.IsoCode);
+
+                if (phoneUtil.IsValidNumber(parsed))
+                {
+                    // Si es válido, lo formatea al estilo internacional
+                    string formateado = phoneUtil.Format(parsed, PhoneNumbers.PhoneNumberFormat.INTERNATIONAL);
+
+                    // Cambia el fondo a blanco (válido)
+                    TxtTelefono.BackColor = Color.White;
+
+                    // Muestra el formato correcto como tooltip
+                    System.Windows.Forms.ToolTip tooltip = new System.Windows.Forms.ToolTip();
+                    tooltip.SetToolTip(TxtTelefono, formateado);
+                }
+                else
+                {
+                    // Número no válido → fondo rosado
+                    TxtTelefono.BackColor = Color.MistyRose;
+                }
+            }
+            catch
+            {
+                // Si falla el parseo → fondo rosado
+                TxtTelefono.BackColor = Color.MistyRose;
+            }
+        }
+
+        private void BtnBuscar_Click(object sender, EventArgs e)
+        {
+            string criterio = cmbFiltro.SelectedItem.ToString();  // Obtener el criterio seleccionado (Id, Nombre, Dni)
+            string valorBusqueda = txtBusqueda.Text.Trim();  // Obtener el valor de búsqueda
+
+            if (string.IsNullOrEmpty(valorBusqueda))
+            {
+                MessageBox.Show(
+                    "Por favor, ingrese un valor para buscar. \n\n" +
+                    "Recuerde que debe proporcionar un valor en el campo de búsqueda para poder filtrar la información.",
+                    "Campo de búsqueda vacío",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                // Llamamos al método BuscarConFiltro con el criterio y el valor de búsqueda
+                var persona = new Persona();
+                var servicio = new CpNegocio.servicios.MetodosPersona(persona);
+
+                // Llamamos al servicio con el filtro
+                DataTable tablaFiltrada = servicio.BuscarConFiltro(criterio, valorBusqueda);
+
+                // Asignamos la tabla filtrada al DataGridView
+                DgvEmpresas.DataSource = tablaFiltrada;
+
+                // Actualizamos los encabezados de las columnas
+                ActualizarEncabezadosColumnas();
+            }
+            catch (FormatException ex)
+            {
+                // Si el valor de búsqueda no es válido para un número
+                MessageBox.Show(
+                    "El valor para la búsqueda del 'Id' debe ser un número entero. \n\n" +
+                    "Por favor, ingrese un valor numérico válido para el campo 'Id'.",
+                    "Error de formato en 'Id'",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            catch (SqlException ex)
+            {
+                // Si ocurre un error con la base de datos
+                MessageBox.Show(
+                    "Hubo un problema al intentar conectar con la base de datos. \n\n" +
+                    "Por favor, verifique la conexión o intente nuevamente más tarde.",
+                    "Error de base de datos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                // Captura cualquier otro error inesperado
+                MessageBox.Show(
+                    "Ocurrió un error inesperado mientras se realizaba la búsqueda: \n\n" +
+                    ex.Message + "\n\n" +
+                    "Por favor, contacte al administrador si el problema persiste.",
+                    "Error al buscar personas",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void ActualizarEncabezadosColumnas()
+        {
+            if (DgvEmpresas.Columns.Contains("Id"))
+                DgvEmpresas.Columns["Id"].HeaderText = "ID Empresa";
+
+            if (DgvEmpresas.Columns.Contains("Nombre"))
+                DgvEmpresas.Columns["Nombre"].HeaderText = "Nombre de la Empresa";
+
+            if (DgvEmpresas.Columns.Contains("Rnc"))
+                DgvEmpresas.Columns["Rnc"].HeaderText = "RNC";
+
+            if (DgvEmpresas.Columns.Contains("Telefono"))
+                DgvEmpresas.Columns["Telefono"].HeaderText = "Teléfono";
+
+            if (DgvEmpresas.Columns.Contains("Direccion"))
+                DgvEmpresas.Columns["Direccion"].HeaderText = "Dirección";
+
+            if (DgvEmpresas.Columns.Contains("Correo"))
+                DgvEmpresas.Columns["Correo"].HeaderText = "Correo";
+        }
+
+        private void AsignarEventosDeValidacion()
+        {
+            
+            
+        }
+
+        private void TxtBusqueda_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Verificamos el filtro seleccionado
+            
+        }
+
+        private void TxtBusqueda_KeyPress_Numeros(object sender, KeyPressEventArgs e)
+        {
+            // Permitir solo números y la tecla Backspace
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;  // Evita que se ingrese un carácter no numérico
+            }
+        }
+
+        private void TxtBusqueda_KeyPress_Letras(object sender, KeyPressEventArgs e)
+        {
+            // Permitir solo letras (sin distinguir mayúsculas/minúsculas) y la tecla Backspace
+            if (!Char.IsLetter(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;  // Evita que se ingrese un carácter no alfabético
+            }
+        }
+
+        private void cmbFiltro_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Limpiar el texto para que no quede ningún valor previo
+            txtBusqueda.Clear();
+
+            // Eliminar cualquier validación previa
+            txtBusqueda.KeyPress -= TxtBusqueda_KeyPress_Numeros;
+            txtBusqueda.KeyPress -= TxtBusqueda_KeyPress_Letras;
+
+            // Asignamos el evento de validación correcto según el filtro seleccionado
+            if (cmbFiltro.SelectedItem.ToString() == "Id" || cmbFiltro.SelectedItem.ToString() == "Rnc")
+            {
+                // Validar solo números
+                txtBusqueda.KeyPress += TxtBusqueda_KeyPress_Numeros; // Asignar validación solo números
+            }
+            else if (cmbFiltro.SelectedItem.ToString() == "Nombre")
+            {
+                // Validar solo letras
+                txtBusqueda.KeyPress += TxtBusqueda_KeyPress_Letras; // Asignar validación solo letras
+            }
+        }
+
     }
 }

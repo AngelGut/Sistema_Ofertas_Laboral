@@ -11,14 +11,14 @@ namespace CpNegocio.Empresas_y_Postulantes
 {
     public class NPostulante
     {
-        // Mostrar todos los postulantes
+        // Mostrar todos los postulantes (Personas)
         public DataTable Mostrar()
         {
             DataTable tabla = new DataTable();
             using (SqlConnection conn = OfertaDatos.ObtenerConexion())
             {
                 conn.Open();
-                string query = "SELECT * FROM Postulante";
+                string query = "SELECT Id, Nombre, Dni, Correo, Telefono, Direccion FROM Persona";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -35,7 +35,7 @@ namespace CpNegocio.Empresas_y_Postulantes
             using (SqlConnection conn = OfertaDatos.ObtenerConexion())
             {
                 conn.Open();
-                string query = "SELECT * FROM Postulante WHERE IdPostulante = @id";
+                string query = "SELECT * FROM Persona WHERE Id = @id";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
@@ -55,7 +55,7 @@ namespace CpNegocio.Empresas_y_Postulantes
             using (SqlConnection conn = OfertaDatos.ObtenerConexion())
             {
                 conn.Open();
-                string query = "SELECT * FROM Postulante WHERE Cedula = @dni";
+                string query = "SELECT * FROM Persona WHERE Dni = @dni";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@dni", dni);
