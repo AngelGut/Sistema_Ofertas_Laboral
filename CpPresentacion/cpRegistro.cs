@@ -7,15 +7,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CpPresentacion.Asistencia;
 
 namespace CpPresentacion
 {
-    public partial class cpRegistro : MaterialForm
+    public partial class cpRegistro : MaterialForm, IReadOnlyContainer
     {
+        public Control Container => this;
+
         public cpRegistro()
         {
             InitializeComponent();
             materialTabControl1.SelectedIndex = 7;
+
+            // Modo "Ver" por defecto
+            this.SetReadOnly(true);
+
+            // Mini-form para elegir Ver/Editar
+            using (var dlg = new frmModoVisualizacion())
+            {
+                if (dlg.ShowDialog() == DialogResult.OK &&
+                    dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
+                {
+                    this.SetReadOnly(false);
+                }
+                // Si cancela o elige Ver, queda bloqueado.
+            }
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)

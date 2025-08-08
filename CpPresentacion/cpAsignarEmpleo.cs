@@ -8,11 +8,15 @@ using MaterialSkin;
 using CpNegocio.servicio;
 using CpNegocio.servicios;
 using CpNegocio.Oferta;
+using CpPresentacion.Asistencia;
 
 namespace CpPresentacion
 {
-    public partial class cpAsignarEmpleo : MaterialForm
+    public partial class cpAsignarEmpleo : MaterialForm, IReadOnlyContainer
     {
+
+        // Implementación requerida por IReadOnlyContainer
+        public Control Container => this;
         private DataTable tablaPostulantes;
         private DataTable tablaEmpresas;
 
@@ -72,6 +76,31 @@ namespace CpPresentacion
             {
                 if (!char.IsControl(ev.KeyChar) && !char.IsDigit(ev.KeyChar)) ev.Handled = true;
             };
+
+            // 1) Bloquear todos los controles por defecto (modo "Ver")
+            //    Usa la extensión SetReadOnly sobre el contenedor (este form)
+            this.SetReadOnly(true);
+
+            // 2) Mostrar el mini-form que pregunta "Ver" o "Editar"
+            using (var dlg = new frmModoVisualizacion())
+            {
+                // Si el usuario confirma...
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    // 3) Si eligió "Editar", desbloqueamos todos los controles
+                    if (dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
+                    {
+                        this.SetReadOnly(false);
+                    }
+                    // Si eligió "Ver", ya está bloqueado por el paso 1, no hay nada extra que hacer.
+                }
+                else
+                {
+                    // Si cancela, dejamos el formulario en modo "Ver" (bloqueado) por seguridad.
+                    // Si prefieres cerrar el form al cancelar, puedes hacer:
+                    // this.Close(); return;
+                }
+            }
         }
 
         private void CargarCombos()
