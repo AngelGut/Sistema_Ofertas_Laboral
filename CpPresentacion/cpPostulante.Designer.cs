@@ -97,7 +97,7 @@
             tabPage1.Margin = new Padding(1, 2, 1, 2);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(1, 2, 1, 2);
-            tabPage1.Size = new Size(1890, 1132);
+            tabPage1.Size = new Size(1890, 894);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Menu";
             tabPage1.UseVisualStyleBackColor = true;
@@ -108,7 +108,7 @@
             tabPage2.Margin = new Padding(1, 2, 1, 2);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(1, 2, 1, 2);
-            tabPage2.Size = new Size(1889, 1132);
+            tabPage2.Size = new Size(1890, 894);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Ofertas Laborales";
             tabPage2.UseVisualStyleBackColor = true;
@@ -118,7 +118,7 @@
             tabPage3.Location = new Point(4, 34);
             tabPage3.Margin = new Padding(1, 2, 1, 2);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1889, 1132);
+            tabPage3.Size = new Size(1890, 894);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Empresas";
             tabPage3.UseVisualStyleBackColor = true;
@@ -629,7 +629,7 @@
             tabPage5.Location = new Point(4, 34);
             tabPage5.Margin = new Padding(1, 2, 1, 2);
             tabPage5.Name = "tabPage5";
-            tabPage5.Size = new Size(1889, 1132);
+            tabPage5.Size = new Size(1890, 894);
             tabPage5.TabIndex = 4;
             tabPage5.Text = "Asignar Oferta";
             tabPage5.UseVisualStyleBackColor = true;
@@ -639,7 +639,7 @@
             tabPage6.Location = new Point(4, 34);
             tabPage6.Margin = new Padding(1, 2, 1, 2);
             tabPage6.Name = "tabPage6";
-            tabPage6.Size = new Size(1889, 1132);
+            tabPage6.Size = new Size(1890, 894);
             tabPage6.TabIndex = 5;
             tabPage6.Text = "Historial Correos";
             tabPage6.UseVisualStyleBackColor = true;
@@ -649,7 +649,7 @@
             tabPage7.Location = new Point(4, 34);
             tabPage7.Margin = new Padding(1, 2, 1, 2);
             tabPage7.Name = "tabPage7";
-            tabPage7.Size = new Size(1889, 1132);
+            tabPage7.Size = new Size(1890, 894);
             tabPage7.TabIndex = 6;
             tabPage7.Text = "Carnet";
             tabPage7.UseVisualStyleBackColor = true;
@@ -659,7 +659,7 @@
             tabPage8.Location = new Point(4, 34);
             tabPage8.Margin = new Padding(1, 2, 1, 2);
             tabPage8.Name = "tabPage8";
-            tabPage8.Size = new Size(1889, 1132);
+            tabPage8.Size = new Size(1890, 894);
             tabPage8.TabIndex = 7;
             tabPage8.Text = "Registro Interno";
             tabPage8.UseVisualStyleBackColor = true;
@@ -669,7 +669,7 @@
             tabPage9.Location = new Point(4, 34);
             tabPage9.Margin = new Padding(1, 2, 1, 2);
             tabPage9.Name = "tabPage9";
-            tabPage9.Size = new Size(1889, 1132);
+            tabPage9.Size = new Size(1890, 894);
             tabPage9.TabIndex = 8;
             tabPage9.Text = "Historial Postulaciones";
             tabPage9.UseVisualStyleBackColor = true;
@@ -686,7 +686,7 @@
             MinimizeBox = false;
             Name = "cpPostulante";
             Padding = new Padding(1, 63, 1, 2);
-            StartPosition = FormStartPosition.CenterParent;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Postulante";
             Load += cpPostulante_Load;
             materialTabControl1.ResumeLayout(false);
