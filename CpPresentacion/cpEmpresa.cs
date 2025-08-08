@@ -55,7 +55,7 @@ namespace CpPresentacion
             AsignarEventosDeValidacion();
             CargarFiltro();
             CargarEmpresas();
-            txtBusqueda.KeyPress += TxtBusqueda_KeyPress;
+            txtBusqueda.KeyPress += TxtBusqueda_KeyPress_Numeros;
 
             // Bloquear todos los controles recursivamente
             // Bloquear de inicio
@@ -183,6 +183,13 @@ namespace CpPresentacion
                     return;
                 }
 
+                // 4. Validar que el RNC tenga exactamente 9 dígitos
+                if (rncTexto.Length != 9)
+                {
+                    MessageBox.Show("El RNC debe tener exactamente 9 dígitos.", "Longitud incorrecta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 // 5. Validar que el correo tenga un formato correcto con expresión regular
                 if (!Regex.IsMatch(correo, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                 {
@@ -218,6 +225,7 @@ namespace CpPresentacion
             }
         }
 
+
         private void BtnValidar_Click(object sender, EventArgs e)
         {
             string rncTexto = TxtRnc.Text.Trim(); // El TextBox del RNC
@@ -229,25 +237,35 @@ namespace CpPresentacion
                 return;
             }
 
+            // Validar que el RNC tenga exactamente 9 dígitos
+            if (rncTexto.Length != 9 || !rncTexto.All(char.IsDigit))
+            {
+                MessageBox.Show("El RNC debe tener exactamente 9 dígitos numéricos.", "RNC inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             try
             {
-                // Llamar al método que recibe string directamente
+                // Llamar al método que verifica si la empresa ya está registrada en la base de datos
                 bool existe = CpNegocio.servicios.CnMetodosEmpresa.EmpresaYaExiste(rncTexto);
 
+                // Mostrar el resultado de la verificación
                 if (existe)
                 {
-                    MessageBox.Show("Este RNC ya está registrado.", "RNC Ocupado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Este RNC ya está registrado en la base de datos.", "RNC Ocupado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 else
                 {
-                    MessageBox.Show("El RNC está disponible.", "RNC Disponible", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("El RNC está disponible para registro.", "RNC Disponible", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al verificar el RNC: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Si ocurre un error al verificar la base de datos
+                MessageBox.Show("Error al verificar el RNC en la base de datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void CargarEmpresas()
         {
@@ -455,6 +473,7 @@ namespace CpPresentacion
             }
         }
 
+
         private void ActualizarEncabezadosColumnas()
         {
             if (DgvEmpresas.Columns.Contains("Id"))
@@ -478,14 +497,8 @@ namespace CpPresentacion
 
         private void AsignarEventosDeValidacion()
         {
-            
-            
-        }
 
-        private void TxtBusqueda_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // Verificamos el filtro seleccionado
-            
+
         }
 
         private void TxtBusqueda_KeyPress_Numeros(object sender, KeyPressEventArgs e)
@@ -506,27 +519,7 @@ namespace CpPresentacion
             }
         }
 
-        private void cmbFiltro_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Limpiar el texto para que no quede ningún valor previo
-            txtBusqueda.Clear();
-
-            // Eliminar cualquier validación previa
-            txtBusqueda.KeyPress -= TxtBusqueda_KeyPress_Numeros;
-            txtBusqueda.KeyPress -= TxtBusqueda_KeyPress_Letras;
-
-            // Asignamos el evento de validación correcto según el filtro seleccionado
-            if (cmbFiltro.SelectedItem.ToString() == "Id" || cmbFiltro.SelectedItem.ToString() == "Rnc")
-            {
-                // Validar solo números
-                txtBusqueda.KeyPress += TxtBusqueda_KeyPress_Numeros; // Asignar validación solo números
-            }
-            else if (cmbFiltro.SelectedItem.ToString() == "Nombre")
-            {
-                // Validar solo letras
-                txtBusqueda.KeyPress += TxtBusqueda_KeyPress_Letras; // Asignar validación solo letras
-            }
-        }
+        
         private void PersonalizarDataGridView()
         {
             // Cambiar el color de fondo general del DataGridView
@@ -554,10 +547,10 @@ namespace CpPresentacion
             // Personalizar las celdas al pasar el ratón (Hover)
             DgvEmpresas.CellMouseEnter += (sender, e) =>
                        {
-                          if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
-                          {
-                            DgvEmpresas.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.FromArgb(173, 216, 230); // Azul claro cuando el mouse pasa
-                          }
+                           if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                           {
+                               DgvEmpresas.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.FromArgb(173, 216, 230); // Azul claro cuando el mouse pasa
+                           }
                        };
 
             DgvEmpresas.CellMouseLeave += (sender, e) =>
@@ -617,5 +610,26 @@ namespace CpPresentacion
             _formBoton.Show(this);
         }
 
+        private void cmbFiltro_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            // Limpiar el texto para que no quede ningún valor previo
+            txtBusqueda.Clear();
+
+            // Eliminar cualquier validación previa
+            txtBusqueda.KeyPress -= TxtBusqueda_KeyPress_Numeros;
+            txtBusqueda.KeyPress -= TxtBusqueda_KeyPress_Letras;
+
+            // Asignamos el evento de validación correcto según el filtro seleccionado
+            if (cmbFiltro.SelectedItem.ToString() == "Id" || cmbFiltro.SelectedItem.ToString() == "Rnc")
+            {
+                // Validar solo números
+                txtBusqueda.KeyPress += TxtBusqueda_KeyPress_Numeros; // Asignar validación solo números
+            }
+            else if (cmbFiltro.SelectedItem.ToString() == "Nombre")
+            {
+                // Validar solo letras
+                txtBusqueda.KeyPress += TxtBusqueda_KeyPress_Letras; // Asignar validación solo letras
+            }
+        }
     }
 }

@@ -37,16 +37,16 @@
             tabPage5 = new TabPage();
             tabPage6 = new TabPage();
             tabPage7 = new TabPage();
-            maskTelefono = new MaterialSkin.Controls.MaterialMaskedTextBox();
+            maskTelefono = new MaskedTextBox();
+            txtPosicion = new TextBox();
+            txtCorreo = new TextBox();
+            txtNombre = new TextBox();
             materialButton1 = new MaterialSkin.Controls.MaterialButton();
-            txtCorreo = new MaterialSkin.Controls.MaterialMaskedTextBox();
             label5 = new Label();
             label4 = new Label();
             panelTarjeta = new Panel();
             picLogo = new PictureBox();
             picFoto = new PictureBox();
-            txtPosicion = new MaterialSkin.Controls.MaterialMaskedTextBox();
-            txtNombre = new MaterialSkin.Controls.MaterialMaskedTextBox();
             btnVistaPrevia = new MaterialSkin.Controls.MaterialButton();
             btnCargarFoto = new MaterialSkin.Controls.MaterialButton();
             btnGuardarTargeta = new MaterialSkin.Controls.MaterialButton();
@@ -149,15 +149,15 @@
             // tabPage7
             // 
             tabPage7.Controls.Add(maskTelefono);
-            tabPage7.Controls.Add(materialButton1);
+            tabPage7.Controls.Add(txtPosicion);
             tabPage7.Controls.Add(txtCorreo);
+            tabPage7.Controls.Add(txtNombre);
+            tabPage7.Controls.Add(materialButton1);
             tabPage7.Controls.Add(label5);
             tabPage7.Controls.Add(label4);
             tabPage7.Controls.Add(panelTarjeta);
             tabPage7.Controls.Add(picLogo);
             tabPage7.Controls.Add(picFoto);
-            tabPage7.Controls.Add(txtPosicion);
-            tabPage7.Controls.Add(txtNombre);
             tabPage7.Controls.Add(btnVistaPrevia);
             tabPage7.Controls.Add(btnCargarFoto);
             tabPage7.Controls.Add(btnGuardarTargeta);
@@ -174,46 +174,38 @@
             // 
             // maskTelefono
             // 
-            maskTelefono.AllowPromptAsInput = true;
-            maskTelefono.AnimateReadOnly = false;
-            maskTelefono.AsciiOnly = false;
-            maskTelefono.BackgroundImageLayout = ImageLayout.None;
-            maskTelefono.BeepOnError = false;
-            maskTelefono.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
-            maskTelefono.Depth = 0;
-            maskTelefono.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            maskTelefono.HidePromptOnLeave = false;
-            maskTelefono.HideSelection = true;
-            maskTelefono.InsertKeyMode = InsertKeyMode.Default;
-            maskTelefono.LeadingIcon = null;
-            maskTelefono.Location = new Point(145, 119);
-            maskTelefono.Mask = "(000) 000-0000";
-            maskTelefono.MaxLength = 32767;
-            maskTelefono.MouseState = MaterialSkin.MouseState.OUT;
+            maskTelefono.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            maskTelefono.Location = new Point(120, 109);
+            maskTelefono.Mask = "(999)000-0000";
             maskTelefono.Name = "maskTelefono";
-            maskTelefono.PasswordChar = '\0';
-            maskTelefono.PrefixSuffixText = null;
-            maskTelefono.PromptChar = '_';
-            maskTelefono.ReadOnly = false;
-            maskTelefono.RejectInputOnFirstFailure = false;
-            maskTelefono.ResetOnPrompt = true;
-            maskTelefono.ResetOnSpace = true;
-            maskTelefono.RightToLeft = RightToLeft.No;
-            maskTelefono.SelectedText = "";
-            maskTelefono.SelectionLength = 0;
-            maskTelefono.SelectionStart = 0;
-            maskTelefono.ShortcutsEnabled = true;
-            maskTelefono.Size = new Size(219, 48);
-            maskTelefono.SkipLiterals = true;
-            maskTelefono.TabIndex = 16;
-            maskTelefono.TabStop = false;
-            maskTelefono.Text = "(   )    -";
-            maskTelefono.TextAlign = HorizontalAlignment.Left;
-            maskTelefono.TextMaskFormat = MaskFormat.IncludeLiterals;
-            maskTelefono.TrailingIcon = null;
-            maskTelefono.UseSystemPasswordChar = false;
-            maskTelefono.ValidatingType = null;
-            maskTelefono.Click += maskTelefono_Click;
+            maskTelefono.Size = new Size(180, 34);
+            maskTelefono.TabIndex = 21;
+            maskTelefono.MaskInputRejected += maskTelefono_MaskInputRejected;
+            maskTelefono.Click += maskTelefono_Click_1;
+            // 
+            // txtPosicion
+            // 
+            txtPosicion.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtPosicion.Location = new Point(120, 185);
+            txtPosicion.Name = "txtPosicion";
+            txtPosicion.Size = new Size(180, 34);
+            txtPosicion.TabIndex = 20;
+            // 
+            // txtCorreo
+            // 
+            txtCorreo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtCorreo.Location = new Point(120, 265);
+            txtCorreo.Name = "txtCorreo";
+            txtCorreo.Size = new Size(180, 34);
+            txtCorreo.TabIndex = 19;
+            // 
+            // txtNombre
+            // 
+            txtNombre.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtNombre.Location = new Point(120, 35);
+            txtNombre.Name = "txtNombre";
+            txtNombre.Size = new Size(180, 34);
+            txtNombre.TabIndex = 17;
             // 
             // materialButton1
             // 
@@ -222,7 +214,7 @@
             materialButton1.Depth = 0;
             materialButton1.HighEmphasis = true;
             materialButton1.Icon = null;
-            materialButton1.Location = new Point(120, 449);
+            materialButton1.Location = new Point(132, 418);
             materialButton1.Margin = new Padding(5, 7, 5, 7);
             materialButton1.MouseState = MaterialSkin.MouseState.HOVER;
             materialButton1.Name = "materialButton1";
@@ -235,52 +227,11 @@
             materialButton1.UseVisualStyleBackColor = true;
             materialButton1.Click += materialButton1_Click;
             // 
-            // txtCorreo
-            // 
-            txtCorreo.AllowPromptAsInput = true;
-            txtCorreo.AnimateReadOnly = false;
-            txtCorreo.AsciiOnly = false;
-            txtCorreo.BackgroundImageLayout = ImageLayout.None;
-            txtCorreo.BeepOnError = false;
-            txtCorreo.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
-            txtCorreo.Depth = 0;
-            txtCorreo.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtCorreo.HidePromptOnLeave = false;
-            txtCorreo.HideSelection = true;
-            txtCorreo.InsertKeyMode = InsertKeyMode.Default;
-            txtCorreo.LeadingIcon = null;
-            txtCorreo.Location = new Point(145, 300);
-            txtCorreo.Mask = "";
-            txtCorreo.MaxLength = 32767;
-            txtCorreo.MouseState = MaterialSkin.MouseState.OUT;
-            txtCorreo.Name = "txtCorreo";
-            txtCorreo.PasswordChar = '\0';
-            txtCorreo.PrefixSuffixText = null;
-            txtCorreo.PromptChar = '_';
-            txtCorreo.ReadOnly = false;
-            txtCorreo.RejectInputOnFirstFailure = false;
-            txtCorreo.ResetOnPrompt = true;
-            txtCorreo.ResetOnSpace = true;
-            txtCorreo.RightToLeft = RightToLeft.No;
-            txtCorreo.SelectedText = "";
-            txtCorreo.SelectionLength = 0;
-            txtCorreo.SelectionStart = 0;
-            txtCorreo.ShortcutsEnabled = true;
-            txtCorreo.Size = new Size(219, 48);
-            txtCorreo.SkipLiterals = true;
-            txtCorreo.TabIndex = 14;
-            txtCorreo.TabStop = false;
-            txtCorreo.TextAlign = HorizontalAlignment.Left;
-            txtCorreo.TextMaskFormat = MaskFormat.IncludeLiterals;
-            txtCorreo.TrailingIcon = null;
-            txtCorreo.UseSystemPasswordChar = false;
-            txtCorreo.ValidatingType = null;
-            // 
             // label5
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label5.Location = new Point(19, 300);
+            label5.Location = new Point(26, 265);
             label5.Name = "label5";
             label5.Size = new Size(72, 28);
             label5.TabIndex = 13;
@@ -296,7 +247,7 @@
             // 
             // panelTarjeta
             // 
-            panelTarjeta.Location = new Point(619, 25);
+            panelTarjeta.Location = new Point(591, 14);
             panelTarjeta.Name = "panelTarjeta";
             panelTarjeta.Size = new Size(267, 440);
             panelTarjeta.TabIndex = 11;
@@ -305,7 +256,7 @@
             // picLogo
             // 
             picLogo.Image = (Image)resources.GetObject("picLogo.Image");
-            picLogo.Location = new Point(439, 233);
+            picLogo.Location = new Point(423, 186);
             picLogo.Name = "picLogo";
             picLogo.Size = new Size(139, 113);
             picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -315,94 +266,12 @@
             // 
             // picFoto
             // 
-            picFoto.Location = new Point(439, 40);
+            picFoto.Location = new Point(423, 14);
             picFoto.Name = "picFoto";
             picFoto.Size = new Size(129, 153);
             picFoto.SizeMode = PictureBoxSizeMode.StretchImage;
             picFoto.TabIndex = 9;
             picFoto.TabStop = false;
-            // 
-            // txtPosicion
-            // 
-            txtPosicion.AllowPromptAsInput = true;
-            txtPosicion.AnimateReadOnly = false;
-            txtPosicion.AsciiOnly = false;
-            txtPosicion.BackgroundImageLayout = ImageLayout.None;
-            txtPosicion.BeepOnError = false;
-            txtPosicion.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
-            txtPosicion.Depth = 0;
-            txtPosicion.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtPosicion.HidePromptOnLeave = false;
-            txtPosicion.HideSelection = true;
-            txtPosicion.InsertKeyMode = InsertKeyMode.Default;
-            txtPosicion.LeadingIcon = null;
-            txtPosicion.Location = new Point(145, 209);
-            txtPosicion.Mask = "";
-            txtPosicion.MaxLength = 32767;
-            txtPosicion.MouseState = MaterialSkin.MouseState.OUT;
-            txtPosicion.Name = "txtPosicion";
-            txtPosicion.PasswordChar = '\0';
-            txtPosicion.PrefixSuffixText = null;
-            txtPosicion.PromptChar = '_';
-            txtPosicion.ReadOnly = false;
-            txtPosicion.RejectInputOnFirstFailure = false;
-            txtPosicion.ResetOnPrompt = true;
-            txtPosicion.ResetOnSpace = true;
-            txtPosicion.RightToLeft = RightToLeft.No;
-            txtPosicion.SelectedText = "";
-            txtPosicion.SelectionLength = 0;
-            txtPosicion.SelectionStart = 0;
-            txtPosicion.ShortcutsEnabled = true;
-            txtPosicion.Size = new Size(219, 48);
-            txtPosicion.SkipLiterals = true;
-            txtPosicion.TabIndex = 8;
-            txtPosicion.TabStop = false;
-            txtPosicion.TextAlign = HorizontalAlignment.Left;
-            txtPosicion.TextMaskFormat = MaskFormat.IncludeLiterals;
-            txtPosicion.TrailingIcon = null;
-            txtPosicion.UseSystemPasswordChar = false;
-            txtPosicion.ValidatingType = null;
-            // 
-            // txtNombre
-            // 
-            txtNombre.AllowPromptAsInput = true;
-            txtNombre.AnimateReadOnly = false;
-            txtNombre.AsciiOnly = false;
-            txtNombre.BackgroundImageLayout = ImageLayout.None;
-            txtNombre.BeepOnError = false;
-            txtNombre.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
-            txtNombre.Depth = 0;
-            txtNombre.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtNombre.HidePromptOnLeave = false;
-            txtNombre.HideSelection = true;
-            txtNombre.InsertKeyMode = InsertKeyMode.Default;
-            txtNombre.LeadingIcon = null;
-            txtNombre.Location = new Point(145, 25);
-            txtNombre.Mask = "";
-            txtNombre.MaxLength = 32767;
-            txtNombre.MouseState = MaterialSkin.MouseState.OUT;
-            txtNombre.Name = "txtNombre";
-            txtNombre.PasswordChar = '\0';
-            txtNombre.PrefixSuffixText = null;
-            txtNombre.PromptChar = '_';
-            txtNombre.ReadOnly = false;
-            txtNombre.RejectInputOnFirstFailure = false;
-            txtNombre.ResetOnPrompt = true;
-            txtNombre.ResetOnSpace = true;
-            txtNombre.RightToLeft = RightToLeft.No;
-            txtNombre.SelectedText = "";
-            txtNombre.SelectionLength = 0;
-            txtNombre.SelectionStart = 0;
-            txtNombre.ShortcutsEnabled = true;
-            txtNombre.Size = new Size(219, 48);
-            txtNombre.SkipLiterals = true;
-            txtNombre.TabIndex = 6;
-            txtNombre.TabStop = false;
-            txtNombre.TextAlign = HorizontalAlignment.Left;
-            txtNombre.TextMaskFormat = MaskFormat.IncludeLiterals;
-            txtNombre.TrailingIcon = null;
-            txtNombre.UseSystemPasswordChar = false;
-            txtNombre.ValidatingType = null;
             // 
             // btnVistaPrevia
             // 
@@ -411,7 +280,7 @@
             btnVistaPrevia.Depth = 0;
             btnVistaPrevia.HighEmphasis = true;
             btnVistaPrevia.Icon = null;
-            btnVistaPrevia.Location = new Point(177, 384);
+            btnVistaPrevia.Location = new Point(174, 341);
             btnVistaPrevia.Margin = new Padding(5, 7, 5, 7);
             btnVistaPrevia.MouseState = MaterialSkin.MouseState.HOVER;
             btnVistaPrevia.Name = "btnVistaPrevia";
@@ -431,7 +300,7 @@
             btnCargarFoto.Depth = 0;
             btnCargarFoto.HighEmphasis = true;
             btnCargarFoto.Icon = null;
-            btnCargarFoto.Location = new Point(17, 384);
+            btnCargarFoto.Location = new Point(13, 341);
             btnCargarFoto.Margin = new Padding(5, 7, 5, 7);
             btnCargarFoto.MouseState = MaterialSkin.MouseState.HOVER;
             btnCargarFoto.Name = "btnCargarFoto";
@@ -451,7 +320,7 @@
             btnGuardarTargeta.Depth = 0;
             btnGuardarTargeta.HighEmphasis = true;
             btnGuardarTargeta.Icon = null;
-            btnGuardarTargeta.Location = new Point(337, 384);
+            btnGuardarTargeta.Location = new Point(334, 341);
             btnGuardarTargeta.Margin = new Padding(5, 7, 5, 7);
             btnGuardarTargeta.MouseState = MaterialSkin.MouseState.HOVER;
             btnGuardarTargeta.Name = "btnGuardarTargeta";
@@ -468,7 +337,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label3.Location = new Point(19, 209);
+            label3.Location = new Point(17, 185);
             label3.Name = "label3";
             label3.Size = new Size(84, 28);
             label3.TabIndex = 2;
@@ -479,7 +348,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2.Location = new Point(17, 119);
+            label2.Location = new Point(13, 109);
             label2.Name = "label2";
             label2.Size = new Size(86, 28);
             label2.TabIndex = 1;
@@ -489,7 +358,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(19, 25);
+            label1.Location = new Point(13, 31);
             label1.Name = "label1";
             label1.Size = new Size(85, 28);
             label1.TabIndex = 0;
@@ -547,8 +416,6 @@
         private TabPage tabPage6;
         private TabPage tabPage7;
         private TabPage tabPage8;
-        private MaterialSkin.Controls.MaterialMaskedTextBox txtPosicion;
-        private MaterialSkin.Controls.MaterialMaskedTextBox txtNombre;
         private MaterialSkin.Controls.MaterialButton btnVistaPrevia;
         private MaterialSkin.Controls.MaterialButton btnCargarFoto;
         private MaterialSkin.Controls.MaterialButton btnGuardarTargeta;
@@ -558,11 +425,13 @@
         private Panel panelTarjeta;
         private PictureBox picLogo;
         private PictureBox picFoto;
-        private MaterialSkin.Controls.MaterialMaskedTextBox txtCorreo;
         private Label label5;
         private Label label4;
         private MaterialSkin.Controls.MaterialButton materialButton1;
         private TabPage tabPage9;
-        private MaterialSkin.Controls.MaterialMaskedTextBox maskTelefono;
+        private MaskedTextBox maskTelefono;
+        private TextBox txtPosicion;
+        private TextBox txtCorreo;
+        private TextBox txtNombre;
     }
 }

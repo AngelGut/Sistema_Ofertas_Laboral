@@ -74,6 +74,11 @@ namespace CpPresentacion
                 _formBoton = null;
             };
 
+            // Llenar el ComboBox con las opciones para filtrar
+            cmbFiltro.Items.Add("Id Empresa");
+            cmbFiltro.Items.Add("Puesto");
+            cmbFiltro.SelectedIndex = 0;
+
         }
 
 
@@ -373,32 +378,28 @@ namespace CpPresentacion
 
         private void TxtPuesto_KeyPress(object sender, KeyPressEventArgs e)
         {
-            e.Handled = true; // Bloquear el carácter
-            MessageBox.Show("No se permiten caracteres especiales en el campo 'Puesto'.",
-                            "Carácter inválido",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
+            if (!EsPermitido(e.KeyChar))
+            {
+                e.Handled = true;
+                // MessageBox opcional (no recomendado en KeyPress)
+            }
         }
 
         private void TxtDescripcion_KeyPress(object sender, KeyPressEventArgs e)
         {
-            e.Handled = true; // Bloquear el carácter
-            MessageBox.Show("No se permiten caracteres especiales en el campo 'Descripcion'.",
-                            "Carácter inválido",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
+            if (!EsPermitido(e.KeyChar))
+            {
+                e.Handled = true;
+                // MessageBox opcional (no recomendado en KeyPress)
+            }
         }
 
         private void TxtRequisitos_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Permitir letras, números, espacio y teclas de control (como backspace)
-            if (!char.IsLetterOrDigit(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != ' ')
+            if (!EsPermitido(e.KeyChar))
             {
-                e.Handled = true; // Bloquear el carácter
-                MessageBox.Show("No se permiten caracteres especiales en el campo 'Requisitos'.",
-                                "Carácter inválido",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
+                e.Handled = true;
+                // MessageBox opcional (no recomendado en KeyPress)
             }
         }
 
@@ -437,6 +438,74 @@ namespace CpPresentacion
 
             // Mostrar como ventana hija/propietaria
             _formBoton.Show(this);
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            FiltrarOfertas();
+        }
+
+        private void FiltrarOfertas()
+        {
+            string filtroSeleccionado = cmbFiltro.SelectedItem.ToString();
+            string busqueda = txtBusqueda.Text.Trim();
+
+            if (string.IsNullOrEmpty(busqueda))
+            {
+                MessageBox.Show("Por favor ingrese un valor para buscar.", "Campo de búsqueda vacío", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Definir la consulta SQL según el tipo de filtro seleccionado
+            string query = "";
+
+            if (filtroSeleccionado == "Id Empresa")
+            {
+                // Verificar si el valor ingresado es un número
+                if (!int.TryParse(busqueda, out int empresaId))
+                {
+                    MessageBox.Show("Por favor ingrese un número válido para el ID de la empresa.", "ID no válido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                query = "SELECT * FROM Oferta WHERE EmpresaId = @Busqueda"; // Filtrar por ID de Empresa
+            }
+            else if (filtroSeleccionado == "Puesto")
+            {
+                query = "SELECT * FROM Oferta WHERE Puesto LIKE @Busqueda"; // Filtrar por el Puesto
+                busqueda = "%" + busqueda + "%"; // Agregar el comodín % para hacer búsqueda parcial
+            }
+
+            // Ejecutar la consulta y llenar el DataGridView
+            using (SqlConnection conn = Capa_Datos.OfertaDatos.ObtenerConexion())
+            {
+                try
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Busqueda", busqueda); // Agregar el parámetro de búsqueda
+                        SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        dataAdapter.Fill(dt);
+                        DGridOferta.DataSource = dt; // Cargar los datos filtrados en el DataGridView
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al filtrar las ofertas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private static bool EsPermitido(char ch)
+        {
+            // Permite control (Backspace, etc.), letra, dígito, espacio y estos signos comunes:
+            if (char.IsControl(ch) || char.IsLetterOrDigit(ch) || ch == ' ')
+                return true;
+
+            char[] permitidos = { '.', ',', '-', '_', '(', ')', '/', '#', '&', '+', ':', ';', '"', '\'', '@' };
+            return permitidos.Contains(ch);
         }
 
 
