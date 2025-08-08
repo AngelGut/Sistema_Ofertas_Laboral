@@ -138,6 +138,8 @@ namespace CpPresentacion
 
             // Hacer visible el "placeholder"
             lblDniPlaceholder.Visible = true;
+            CargarFiltros();
+            btnBuscar.Click += btnBuscar_Click;
 
         }
 
@@ -313,10 +315,6 @@ namespace CpPresentacion
                 DataTable tabla = servicio.Buscar();
 
                 DgvPersonas.DataSource = tabla;
-
-                // Ocultar columnas no necesarias
-                if (DgvPersonas.Columns.Contains("Id"))
-                    DgvPersonas.Columns["Id"].Visible = false;
 
                 if (DgvPersonas.Columns.Contains("Nombre"))
                     DgvPersonas.Columns["Nombre"].HeaderText = "Nombre";
@@ -494,6 +492,16 @@ namespace CpPresentacion
 
         }
 
+        private void CargarFiltros()
+        {
+            cmbFiltro.Items.Clear();
+            cmbFiltro.Items.Add("Id");
+            cmbFiltro.Items.Add("Nombre");
+            cmbFiltro.Items.Add("Cédula");
+            cmbFiltro.SelectedIndex = 0; // Establecer valor predeterminado (Id)
+        }
+
+
         private void TxtDni_Leave(object sender, EventArgs e)
         {
             // Si el TextBox está vacío, mostramos el Label como placeholder
@@ -555,5 +563,73 @@ namespace CpPresentacion
             // Ajustar el tamaño de las columnas automáticamente según el contenido
             DgvPersonas.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            // Obtener el valor de búsqueda y el filtro seleccionado
+            string valorBusqueda = txtBusqueda.Text.Trim();
+            string filtroSeleccionado = cmbFiltro.SelectedItem.ToString();
+
+            // Verificar si el valor de búsqueda está vacío
+            if (string.IsNullOrWhiteSpace(valorBusqueda))
+            {
+                MessageBox.Show("Por favor ingrese un valor de búsqueda.", "Campo vacío", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Aplicar el filtro
+            AplicarFiltro(filtroSeleccionado, valorBusqueda);
+
+        }
+
+        private void AplicarFiltro(string campo, string valor)
+        {
+            try
+            {
+                // Obtener el DataTable del DataGridView
+                DataTable tabla = (DataTable)DgvPersonas.DataSource;
+
+                // Construir la expresión de filtro
+                string filtro = string.Empty;
+
+                switch (campo)
+                {
+                    case "Id":
+                        // Verificamos que el valor sea un número para evitar errores de tipo
+                        if (int.TryParse(valor, out int id))
+                        {
+                            filtro = $"Id = {id}"; // Usamos "=" para el campo Id
+                        }
+                        else
+                        {
+                            MessageBox.Show("Por favor, ingrese un valor válido para el Id.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return; // Si no es un número válido, salimos del método
+                        }
+                        break;
+                    case "Nombre":
+                        filtro = $"Nombre LIKE '%{valor}%'";
+                        break;
+                    case "Cédula":
+                        filtro = $"Dni LIKE '%{valor}%'";
+                        break;
+                }
+
+                // Aplicar el filtro
+                if (!string.IsNullOrEmpty(filtro))
+                {
+                    tabla.DefaultView.RowFilter = filtro;
+                }
+                else
+                {
+                    tabla.DefaultView.RowFilter = string.Empty; // Sin filtro, mostrar todos los registros
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al aplicar el filtro: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
     }
 }
