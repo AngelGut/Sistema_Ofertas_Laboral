@@ -84,8 +84,7 @@ namespace CpPresentacion
         }
 
 
-        // Guardar el nuevo usuario
-        // Guardar el nuevo usuario
+        // TODO: Guardar el nuevo usuario
         private async void btnGuardar_Click(object sender, EventArgs e)
         {
             string usuarioNombre = txtUsuario.Text.Trim();
@@ -140,7 +139,7 @@ namespace CpPresentacion
 
 
 
-        // Limpiar los campos del formulario
+        // TODO: Limpiar los campos del formulario
         private void LimpiarCampos()
         {
             txtUsuario.Clear();
@@ -149,7 +148,7 @@ namespace CpPresentacion
             cmbRol.SelectedIndex = 0;  // Restablecer el ComboBox al primer valor
         }
 
-        // Cancelar el registro y regresar al menú
+        // TODO: Cancelar el registro y regresar al menú
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Hide();  // Oculta el formulario de registro
@@ -176,6 +175,7 @@ namespace CpPresentacion
             txtContraseña.MaxLength = 20;
         }
 
+        // TODO: Evitar caracteres especiales en el campo 'Usuario'
         private void txtUsuario_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = true; // Bloquear el carácter
