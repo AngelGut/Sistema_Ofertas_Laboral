@@ -160,7 +160,7 @@ namespace CpPresentacion
                 // Configura los encabezados de las columnas, si las columnas existen en el DataTable.
                 // Estas líneas son útiles para dar nombres personalizados a las columnas en el DataGridView.
                 if (dgvHistorialPostulaciones.Columns.Contains("IdAsignacion"))
-                    dgvHistorialPostulaciones.Columns["IdAsignacion"].HeaderText = "ID Asignación";
+                    dgvHistorialPostulaciones.Columns["IdAsignacion"].HeaderText = "ID";
                 if (dgvHistorialPostulaciones.Columns.Contains("NombrePostulante"))
                     dgvHistorialPostulaciones.Columns["NombrePostulante"].HeaderText = "Postulante";
                 if (dgvHistorialPostulaciones.Columns.Contains("PuestoOferta"))

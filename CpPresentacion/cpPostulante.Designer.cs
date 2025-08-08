@@ -178,6 +178,7 @@
             cmbFiltro.Name = "cmbFiltro";
             cmbFiltro.Size = new Size(121, 23);
             cmbFiltro.TabIndex = 12;
+            cmbFiltro.KeyPress += cmbFiltro_KeyPress;
             // 
             // DgvPersonas
             // 
