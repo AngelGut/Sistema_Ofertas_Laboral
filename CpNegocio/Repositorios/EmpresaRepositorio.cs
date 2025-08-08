@@ -18,7 +18,7 @@ namespace CpNegocio.Repositorios
             using (SqlConnection connection = OfertaDatos.ObtenerConexion())
             {
                 connection.Open();
-                string query = "SELECT Id, Nombre, Correo, Rnc FROM Empresa WHERE Id = @Id";
+                string query = "SELECT Id, Nombre, Correo, Rnc, Telefono, Direccion FROM Empresa WHERE Id = @Id";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", idEmpresa);
@@ -28,10 +28,12 @@ namespace CpNegocio.Repositorios
                         {
                             return new CnEmpresa
                             {
-                                Id = reader.GetInt32(0),
-                                Nombre = reader.GetString(1),
-                                Correo = reader.GetString(2),
-                                Rnc = reader.GetString(3)
+                                Id = (int)reader["Id"],
+                                Nombre = reader["Nombre"].ToString(),
+                                Correo = reader["Correo"].ToString(),
+                                Rnc = reader["Rnc"].ToString(),
+                                Telefono = reader["Telefono"].ToString(),
+                                Direccion = reader["Direccion"].ToString()
                             };
                         }
                     }
@@ -45,7 +47,7 @@ namespace CpNegocio.Repositorios
             using (SqlConnection connection = OfertaDatos.ObtenerConexion())
             {
                 connection.Open();
-                string query = "SELECT Id, Nombre, Correo, Rnc FROM Empresa WHERE Rnc = @Rnc";
+                string query = "SELECT Id, Nombre, Correo, Rnc, Telefono, Direccion FROM Empresa WHERE Rnc = @Rnc";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Rnc", rnc);
@@ -55,10 +57,12 @@ namespace CpNegocio.Repositorios
                         {
                             return new CnEmpresa
                             {
-                                Id = reader.GetInt32(0),
-                                Nombre = reader.GetString(1),
-                                Correo = reader.GetString(2),
-                                Rnc = reader.GetString(3)
+                                Id = (int)reader["Id"],
+                                Nombre = reader["Nombre"].ToString(),
+                                Correo = reader["Correo"].ToString(),
+                                Rnc = reader["Rnc"].ToString(),
+                                Telefono = reader["Telefono"].ToString(),
+                                Direccion = reader["Direccion"].ToString()
                             };
                         }
                     }
