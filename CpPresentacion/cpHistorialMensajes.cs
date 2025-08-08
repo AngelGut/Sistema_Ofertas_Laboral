@@ -17,6 +17,7 @@ namespace CpPresentacion
 {
     public partial class cpHistorialMensajes : MaterialForm
     {
+        //TODO: Constructor principal del formulario
         public cpHistorialMensajes()
         {
             InitializeComponent(); // Inicializa los componentes gráficos del formulario
@@ -28,6 +29,7 @@ namespace CpPresentacion
             ConfigurarDataGridView();
         }
 
+        //TODO: Evento que se dispara al cargar el formulario. Carga el historial desde la BD.
         private void cpHistorialMensajes_Load(object sender, EventArgs e)
         {
             CargarHistorial(); // Cargar historial al iniciar
@@ -37,7 +39,7 @@ namespace CpPresentacion
         {
             await NavegarA(materialTabControl1.SelectedIndex);
         }
-
+        //TODO: Método que abre el formulario correspondiente al índice de pestaña seleccionado
         private async Task NavegarA(int idx)
         {
 
@@ -73,7 +75,7 @@ namespace CpPresentacion
             destino.Activate();
         }
 
-        // Cargar historial desde base de datos
+        //TODO: Método que obtiene desde la base de datos el historial de asignaciones y lo muestra
         private void CargarHistorial() //Llama al método que trae los datos desde la base de datos
         {
             try
