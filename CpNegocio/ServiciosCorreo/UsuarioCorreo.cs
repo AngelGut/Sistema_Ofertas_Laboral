@@ -10,25 +10,34 @@ namespace CapaNegocio
 {
     public class UsuarioNegocio
     {
-        // Verificar las credenciales de usuario de forma asíncrona
+        // TODO: Esto se asegura de que las validaciones de entrada (correo, contraseña) estén implementadas adecuadamente.
+        // Verificar que las operaciones asíncronas sean eficientes y que se manejen correctamente las excepciones.
+        // Considerar agregar una capa de caché para optimizar la consulta de existencia de usuarios y correos repetidos.
+
+        // Método: LoginAsync
+        // Descripción: Verifica las credenciales de usuario de manera asíncrona.
         public async Task<bool> LoginAsync(string usuario, string clave)
         {
             return await DatosUsuario.VerificarCredencialesAsync(usuario, clave);
         }
 
-        // Cambiar la clave del usuario de forma asíncrona
+
+        // Método: CambiarClaveAsync
+        // Descripción: Permite cambiar la clave de un usuario de manera asíncrona.
         public async Task<bool> CambiarClaveAsync(string correo, string nuevaClave)
         {
             return await DatosUsuario.CambiarClaveAsync(correo, nuevaClave);
         }
 
-        // Verificar si un correo ya está registrado de forma asíncrona
+        // Método: CorreoExisteAsync
+        // Descripción: Verifica si un correo ya está registrado en el sistema de manera asíncrona.
         public async Task<bool> CorreoExisteAsync(string correo)
         {
             return await DatosUsuario.ExisteCorreoAsync(correo);
         }
 
-        // Recuperar la clave del usuario de forma asíncrona
+        // Método: RecuperarClaveAsync
+        // Descripción: Recupera la clave de un usuario y la actualiza en la base de datos, enviando un correo con la nueva clave.
         public async Task<bool> RecuperarClaveAsync(string correo, string nuevaClave)
         {
             // Paso 1: Validar si el correo existe
@@ -70,10 +79,11 @@ namespace CapaNegocio
             return true;
         }
 
-        // Registrar un nuevo usuario de forma asíncrona
+        // Método: RegistrarUsuarioAsync
+        // Descripción: Registra un nuevo usuario de manera asíncrona y envía un correo de bienvenida.
         public async Task<bool> RegistrarUsuarioAsync(Usuario usuario)
         {
-            // Aquí va la lógica para registrar el usuario en la base de datos
+            // Esto se encarga de  registrar el usuario en la base de datos
             bool registrado = await DatosUsuario.InsertarUsuarioAsync(usuario);
             if (!registrado)
             {
@@ -86,13 +96,15 @@ namespace CapaNegocio
             return correoEnviado;
         }
 
+        // Método: ExisteUsuarioAsync
+        // Descripción: Verifica si un nombre de usuario ya está registrado en el sistema de manera asíncrona.
         public async Task<bool> ExisteUsuarioAsync(string usuarioNombre)
         {
-            return await DatosUsuario.ExisteUsuarioAsync(usuarioNombre);  // Llamada asíncrona a DatosUsuario para verificar si el usuario ya existe
+            return await DatosUsuario.ExisteUsuarioAsync(usuarioNombre);  
         }
 
-
-        // Método para enviar correo de bienvenida
+        // Método: EnviarCorreoBienvenidaAsync
+        // Descripción: Envia un correo de bienvenida con la información del nuevo usuario.
         private async Task<bool> EnviarCorreoBienvenidaAsync(string correo, string usuarioNombre, string clave)
         {
             string asunto = "Bienvenido a nuestro sistema de Ofertas Laborales";

@@ -11,7 +11,7 @@ namespace CpNegocio.Empresas_y_Postulantes
 {
     public class NEmpresa
     {
-        // Mostrar todas las empresas
+        //TODO: Metodo que muestra todas las empresas
         public DataTable Mostrar()
         {
             DataTable tabla = new DataTable();
@@ -28,7 +28,7 @@ namespace CpNegocio.Empresas_y_Postulantes
             return tabla;
         }
 
-        // Buscar empresa por RNC
+        //TODO: Metodo para buscar empresa por RNC
         public DataTable BuscarPorRNC(string rnc)
         {
             DataTable tabla = new DataTable();
@@ -48,7 +48,7 @@ namespace CpNegocio.Empresas_y_Postulantes
             return tabla;
         }
 
-        // Buscar empresa por ID
+        //TODO: Metodo para buscar empresa por ID
         public DataTable BuscarPorID(string id)
         {
             DataTable tabla = new DataTable();
@@ -85,7 +85,7 @@ namespace CpNegocio.Empresas_y_Postulantes
 
 
         
-
+        //TODO: Obtiene los datos de las empresas de la base de datos
         public DataTable ObtenerEmpresasConArea()
         {
             DataTable tabla = new DataTable();

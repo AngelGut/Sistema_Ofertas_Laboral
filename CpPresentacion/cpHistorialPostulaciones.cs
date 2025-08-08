@@ -4,6 +4,7 @@ using MaterialSkin;
 using MaterialSkin.Controls;
 using System;
 using System.Data;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,8 +18,8 @@ namespace CpPresentacion
         public cpHistorialPostulaciones()
         {
             InitializeComponent();
-            //Metodo de personalizacion del datagridview
-            PersonalizarDataGridView();
+
+
             materialTabControl1.SelectedIndex = 8;
 
             var materialSkinManager = MaterialSkin.MaterialSkinManager.Instance;
@@ -32,7 +33,7 @@ namespace CpPresentacion
             if (dgvHistorialPostulaciones != null)
             {
                 dgvHistorialPostulaciones.EnableHeadersVisualStyles = false;
-                dgvHistorialPostulaciones.RowsDefaultCellStyle.SelectionBackColor = System.Drawing.Color.LightBlue;
+               dgvHistorialPostulaciones.RowsDefaultCellStyle.SelectionBackColor = System.Drawing.Color.LightBlue;
             }
 
             // Aquí se cargan los combos y el historial al cargar el formulario
@@ -46,10 +47,9 @@ namespace CpPresentacion
 
         private async Task NavegarA(int idx)
         {
-            
+            // TODO: Navegar a la pestaña correspondiente según el índice.
             Form destino = idx switch
             {
-                // Siempre nueva instancia de Menu
                 0 => new Menu(),
                 1 => this is cpOfertas ? this : new cpOfertas(),
                 2 => this is cpEmpresa ? this : new cpEmpresa(),
@@ -62,33 +62,33 @@ namespace CpPresentacion
                 _ => null
             };
 
-            // B) Si ya estamos en el destino, no hacemos nada
+            // TODO: Si ya estamos en el destino, no hacemos nada
             if (destino == null || destino == this) return;
 
-            // C) Mostrar el nuevo formulario
+            // TODO: Mostrar el nuevo formulario
             destino.Show();
 
-            // D) Menu nunca se cierra; los demás se liberan
+            // TODO: Menu nunca se cierra; los demás se liberan
             if (this is Menu)
                 this.Hide();      // se mantiene en memoria
             else
                 this.Dispose();  // libera recursos
 
-            // Asegurarnos de que la UI repinte inmediatamente:
+            // TODO: Asegurarnos de que la UI repinte inmediatamente:
             destino.BringToFront();
             destino.Activate();
         }
 
         private async void cpHistorialPostulaciones_Load(object sender, EventArgs e)
         {
+            // TODO: Cargar los combos y el historial de postulaciones al cargar el formulario
             CargarCombos();
             await CargarHistorialPostulacionesAsync();
-            
         }
 
         private void CargarCombos()
         {
-            // Asegúrate de que el nombre del control sea 'cmbFiltro'
+            // TODO: Asegúrate de que el nombre del control sea 'cmbFiltro' y carga los filtros disponibles
             if (cmbFiltro != null)
             {
                 cmbFiltro.Items.Clear();
@@ -101,7 +101,7 @@ namespace CpPresentacion
 
         private void AplicarFiltro()
         {
-            // Asegúrate de que la variable de clase 'tablaPostulaciones' no sea nula
+            // TODO: Aplicar el filtro de búsqueda según la selección en el ComboBox y el texto en el campo de búsqueda.
             if (tablaPostulaciones == null) return;
 
             string criterio = cmbFiltro.SelectedItem?.ToString();
@@ -128,7 +128,7 @@ namespace CpPresentacion
             vista.RowFilter = filtro;
             dgvHistorialPostulaciones.DataSource = vista;
 
-            // Si no hay resultados, se muestra un mensaje de alerta y se restauran los datos
+            // TODO: Si no hay resultados, se muestra un mensaje de alerta y se restauran los datos
             if (vista.Count == 0 && !string.IsNullOrEmpty(filtro))
             {
                 MessageBox.Show("No se encontraron resultados para la búsqueda.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -160,7 +160,7 @@ namespace CpPresentacion
                 // Configura los encabezados de las columnas, si las columnas existen en el DataTable.
                 // Estas líneas son útiles para dar nombres personalizados a las columnas en el DataGridView.
                 if (dgvHistorialPostulaciones.Columns.Contains("IdAsignacion"))
-                    dgvHistorialPostulaciones.Columns["IdAsignacion"].HeaderText = "ID Asignación";
+                    dgvHistorialPostulaciones.Columns["IdAsignacion"].HeaderText = "ID";
                 if (dgvHistorialPostulaciones.Columns.Contains("NombrePostulante"))
                     dgvHistorialPostulaciones.Columns["NombrePostulante"].HeaderText = "Postulante";
                 if (dgvHistorialPostulaciones.Columns.Contains("PuestoOferta"))
@@ -169,6 +169,10 @@ namespace CpPresentacion
                     dgvHistorialPostulaciones.Columns["NombreEmpresa"].HeaderText = "Empresa";
                 if (dgvHistorialPostulaciones.Columns.Contains("FechaAsignacion"))
                     dgvHistorialPostulaciones.Columns["FechaAsignacion"].HeaderText = "Fecha de Asignación";
+
+
+                //Metodo de personalizacion del datagridview
+                PersonalizarDataGridView();
             }
             catch (Exception ex)
             {
@@ -177,15 +181,13 @@ namespace CpPresentacion
             }
         }
 
-
-
         // Manejador del evento de clic para el botón de búsqueda
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             AplicarFiltro();
         }
 
-        // Manejador del evento de clic para el botón de limpiar
+        // TODO: Manejador del evento de clic para el botón de limpiar
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             txtBusqueda.Text = "";
@@ -193,34 +195,35 @@ namespace CpPresentacion
             if (tablaPostulaciones != null)
             {
                 dgvHistorialPostulaciones.DataSource = tablaPostulaciones;
+
             }
         }
 
         private void PersonalizarDataGridView()
         {
-            // Cambiar el color de fondo general del DataGridView
+            // TODO: Cambiar el color de fondo general del DataGridView
             dgvHistorialPostulaciones.BackgroundColor = Color.FromArgb(240, 248, 255); // Azul muy suave, estilo "Azure"
 
-            // Personalizar el color de los encabezados de las columnas
+            // TODO: Personalizar el color de los encabezados de las columnas
             dgvHistorialPostulaciones.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 122, 204); // Azul oscuro
             dgvHistorialPostulaciones.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             dgvHistorialPostulaciones.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
             dgvHistorialPostulaciones.ColumnHeadersHeight = 40;
 
-            // Cambiar el color de las filas
+            // TODO: Cambiar el color de las filas
             dgvHistorialPostulaciones.RowsDefaultCellStyle.BackColor = Color.White;
             dgvHistorialPostulaciones.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(230, 240, 255); // Azul suave en filas alternas
             dgvHistorialPostulaciones.RowsDefaultCellStyle.ForeColor = Color.Black;
 
-            // Cambiar el color del borde del DataGridView
+            // TODO: Cambiar el color del borde del DataGridView
             dgvHistorialPostulaciones.BorderStyle = BorderStyle.FixedSingle;
             dgvHistorialPostulaciones.GridColor = Color.FromArgb(200, 200, 200); // Gris claro para las líneas de la cuadrícula
 
-            // Personalizar las celdas
+            // TODO: Personalizar las celdas
             dgvHistorialPostulaciones.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 122, 204); // Azul oscuro cuando se selecciona
             dgvHistorialPostulaciones.DefaultCellStyle.SelectionForeColor = Color.White; // Texto blanco cuando se selecciona
 
-            // Personalizar las celdas al pasar el ratón (Hover)
+            // TODO: Personalizar las celdas al pasar el ratón (Hover)
             dgvHistorialPostulaciones.CellMouseEnter += (sender, e) =>
             {
                 if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
@@ -237,14 +240,14 @@ namespace CpPresentacion
                 }
             };
 
-            // Personalizar la fuente de las celdas
+            // TODO: Personalizar la fuente de las celdas
             dgvHistorialPostulaciones.DefaultCellStyle.Font = new Font("Arial", 9);
 
-            // Personalizar las filas de la cabecera al ser seleccionadas
+            // TODO: Personalizar las filas de la cabecera al ser seleccionadas
             dgvHistorialPostulaciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvHistorialPostulaciones.MultiSelect = false;
 
-            // Ajustar el tamaño de las columnas automáticamente según el contenido
+            // TODO: Ajustar el tamaño de las columnas automáticamente según el contenido
             dgvHistorialPostulaciones.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
     }

@@ -17,6 +17,7 @@ using CpPresentacion.Asistencia;   // contiene IReadOnlyContainer y las extensio
 using System.Media;
 using System.Drawing;                  // por Point
 using CpPresentacion.Asistencia;       // por IReadOnlyContainer y SetReadOnly
+using CpNegocio.Empresas_y_Postulantes; // aquí vive OfertaListadoDto
 
 
 
@@ -73,6 +74,13 @@ namespace CpPresentacion
                 if (_formBoton != null && !_formBoton.IsDisposed) _formBoton.Close();
                 _formBoton = null;
             };
+
+            // Llenar el ComboBox con las opciones para filtrar
+            cmbFiltro.Items.Add("Id Oferta");      //  ← ESTA línea (ahora dice "Id")
+            cmbFiltro.Items.Add("Puesto");
+            cmbFiltro.SelectedIndex = 0;
+
+            PersonalizarDataGridView();
 
         }
 
@@ -153,10 +161,64 @@ namespace CpPresentacion
             }
         }
 
+        //TODO: Metodo para el boton registrar
         private void BtnRegistrar_Click(object sender, EventArgs e)
         {
             try
             {
+                // 🔹 Validar campos de texto obligatorios
+                if (string.IsNullOrWhiteSpace(TxtPuesto.Text))
+                {
+                    MessageBox.Show("El campo 'Puesto' no puede estar vacío.", "Campo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    TxtPuesto.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(TxtDescripcion.Text))
+                {
+                    MessageBox.Show("El campo 'Descripción' no puede estar vacío.", "Campo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    TxtDescripcion.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(TxtRequisitos.Text))
+                {
+                    MessageBox.Show("El campo 'Requisitos' no puede estar vacío.", "Campo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    TxtRequisitos.Focus();
+                    return;
+                }
+
+                // 🔹 Si es Empleo Fijo, salario obligatorio
+                if (CboxTipoOferta.SelectedItem?.ToString() == "Empleo Fijo" &&
+                    string.IsNullOrWhiteSpace(TxtSalario.Text))
+                {
+                    MessageBox.Show("Debe ingresar el salario para la oferta de empleo fijo.", "Campo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    TxtSalario.Focus();
+                    return;
+                }
+
+                // 🔹 Si es Pasantía, créditos obligatorios
+                if (CboxTipoOferta.SelectedItem?.ToString() == "Pasantia" &&
+                    string.IsNullOrWhiteSpace(TxtCreditos.Text))
+                {
+                    MessageBox.Show("Debe ingresar los créditos para la pasantía.", "Campo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    TxtCreditos.Focus();
+                    return;
+                }
+
+                // 🔹 Validar ComboBox Empresa
+                if (CboxEmpresas.SelectedItem == null)
+                {
+                    MessageBox.Show("Debe seleccionar una empresa antes de registrar la oferta.", "Empresa requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // 🔹 Validar ComboBox Tipo de Oferta
+                if (CboxTipoOferta.SelectedItem == null)
+                {
+                    MessageBox.Show("Debe seleccionar un tipo de oferta.", "Tipo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 if (CboxEmpresas.SelectedItem == null)
                 {
                     MessageBox.Show("Debe seleccionar una empresa antes de registrar la oferta.", "Empresa requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -221,7 +283,8 @@ namespace CpPresentacion
         }
 
 
-        //clase auxiliar para mostrar nombre pero guardar el ID:
+
+        //TODO: Clase auxiliar para mostrar nombre pero guardar el ID:
         public class EmpresaComboItem
         {
             public int Id { get; set; }
@@ -233,7 +296,7 @@ namespace CpPresentacion
             }
         }
 
-        //Método para cargar empresas desde la base
+        //TODO: Método para cargar empresas desde la base
         private void CargarEmpresas()
         {
             var metodoEmpresa = new MetodosCargarEmpresa();
@@ -248,13 +311,17 @@ namespace CpPresentacion
                 CboxEmpresas.SelectedIndex = 0;
         }
 
-        // Método para cargar ofertas en el DataGridView
+        private List<OfertaListadoDto> _ofertas;
+        private DataTable _ofertasDt;
+
+
+        //TODO: Método para cargar ofertas en el DataGridView
         private void CargarOfertas()
         {
             var metodo = new MetodosOferta();
-            var lista = metodo.ObtenerOfertas();
-
-            DGridOferta.DataSource = lista;
+            _ofertas = metodo.ObtenerOfertas();    // ← List<OfertaListadoDto>
+            DGridOferta.AutoGenerateColumns = true;
+            DGridOferta.DataSource = _ofertas;     // ← siempre mismo esquema
         }
 
         private void BtnMostrar_Click(object sender, EventArgs e)
@@ -262,6 +329,7 @@ namespace CpPresentacion
             CargarOfertas();
         }
 
+        //TODO: Metodo para el boton eliminar
         private void BtnEliminar_Click(object sender, EventArgs e)
         {
             // Validar que haya al menos una fila seleccionada
@@ -305,6 +373,7 @@ namespace CpPresentacion
             }
         }
 
+        //TODO: Metodo bloquear la letras o caracteres
         private void TxtSalario_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
@@ -312,7 +381,7 @@ namespace CpPresentacion
                 e.Handled = true; // Bloquear la tecla si no es número ni tecla de control (como Backspace)
             }
         }
-
+        //TODO: Metodo para bloquear si no es numero
         private void TxtCreditos_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
@@ -321,6 +390,7 @@ namespace CpPresentacion
             }
         }
 
+        //TODO: Metodo para limpiar
         private void LimpiarCampos()
         {
             CboxEmpresas.SelectedIndex = 0; // o -1 si quieres que quede en blanco
@@ -333,6 +403,7 @@ namespace CpPresentacion
             TxtCreditos.Text = string.Empty;
         }
 
+        //TODO: Metodo para marcar cuando este ocupada
         private void BtnOcupada_Click(object sender, EventArgs e)
         {
             // Asegurarse de que hay una fila seleccionada
@@ -364,6 +435,8 @@ namespace CpPresentacion
                 MessageBox.Show("Selecciona una oferta primero.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+        //TODO: Metodo para el combox de las areas
         private void PopulateAreas()
         {
             cmbArea.DataSource = AreaLaboralProvider.GetAll();
@@ -373,35 +446,32 @@ namespace CpPresentacion
 
         private void TxtPuesto_KeyPress(object sender, KeyPressEventArgs e)
         {
-            e.Handled = true; // Bloquear el carácter
-            MessageBox.Show("No se permiten caracteres especiales en el campo 'Puesto'.",
-                            "Carácter inválido",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
+            if (!EsPermitido(e.KeyChar))
+            {
+                e.Handled = true;
+                // MessageBox opcional (no recomendado en KeyPress)
+            }
         }
 
         private void TxtDescripcion_KeyPress(object sender, KeyPressEventArgs e)
         {
-            e.Handled = true; // Bloquear el carácter
-            MessageBox.Show("No se permiten caracteres especiales en el campo 'Descripcion'.",
-                            "Carácter inválido",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
+            if (!EsPermitido(e.KeyChar))
+            {
+                e.Handled = true;
+                // MessageBox opcional (no recomendado en KeyPress)
+            }
         }
 
         private void TxtRequisitos_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Permitir letras, números, espacio y teclas de control (como backspace)
-            if (!char.IsLetterOrDigit(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != ' ')
+            if (!EsPermitido(e.KeyChar))
             {
-                e.Handled = true; // Bloquear el carácter
-                MessageBox.Show("No se permiten caracteres especiales en el campo 'Requisitos'.",
-                                "Carácter inválido",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
+                e.Handled = true;
+                // MessageBox opcional (no recomendado en KeyPress)
             }
         }
 
+        //TODO: Metodo para el margen del form cuando se abra
         private void AbrirFormBoton(bool startInEdit)
         {
             // Evita duplicados
@@ -439,6 +509,115 @@ namespace CpPresentacion
             _formBoton.Show(this);
         }
 
+        //TODO: Metodo para el buscar filtre las ofertas
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            FiltrarOfertas();
+        }
+
+        //TODO: Metodo para el filtrado
+        private void FiltrarOfertas()
+        {
+            if (_ofertas == null) { CargarOfertas(); if (_ofertas == null) return; }
+
+            string filtroSel = cmbFiltro.SelectedItem?.ToString() ?? "";
+            string texto = txtBusqueda.Text.Trim();
+
+            if (string.IsNullOrEmpty(texto))
+            {
+                DGridOferta.DataSource = _ofertas;
+                return;
+            }
+
+            IEnumerable<OfertaListadoDto> q = _ofertas;
+
+            if (filtroSel == "Id Oferta" && int.TryParse(texto, out int idOferta))
+                q = q.Where(o => o.Id == idOferta);
+
+            else if (filtroSel == "Puesto")
+                q = q.Where(o => o.Puesto?.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0);
+
+            else if (filtroSel == "Empresa")
+                q = q.Where(o => o.Empresa?.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0);
+
+            else if (filtroSel == "Área") // ver nota más abajo
+                q = q.Where(o => o.Area?.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0);
+
+            DGridOferta.DataSource = q.ToList();
+        }
+
+        private static string EscapeForRowFilter(string value)
+        {
+            // Escapa caracteres problemáticos para DataColumn.Expression / RowFilter
+            if (value == null) return "";
+            return value.Replace("'", "''").Replace("[", "[[]").Replace("%", "[%]").Replace("*", "[*]");
+        }
+
+
+
+        //TODO: Metodo de caracteres permitidos
+        private static bool EsPermitido(char ch)
+        {
+            // Permite control (Backspace, etc.), letra, dígito, espacio y estos signos comunes:
+            if (char.IsControl(ch) || char.IsLetterOrDigit(ch) || ch == ' ')
+                return true;
+
+            char[] permitidos = { '.', ',', '-', '_', '(', ')', '/', '#', '&', '+', ':', ';', '"', '\'', '@' };
+            return permitidos.Contains(ch);
+        }
+
+        //TODO: Metodo de persobalizacion del datagridview
+        private void PersonalizarDataGridView()
+        {
+            // Cambiar el color de fondo general del DataGridView
+            DGridOferta.BackgroundColor = Color.FromArgb(240, 248, 255); // Azul muy suave, estilo "Azure"
+
+            // Personalizar el color de los encabezados de las columnas
+            DGridOferta.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 122, 204); // Azul oscuro
+            DGridOferta.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            DGridOferta.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
+            DGridOferta.ColumnHeadersHeight = 40;
+
+            // Cambiar el color de las filas
+            DGridOferta.RowsDefaultCellStyle.BackColor = Color.White;
+            DGridOferta.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(230, 240, 255); // Azul suave en filas alternas
+            DGridOferta.RowsDefaultCellStyle.ForeColor = Color.Black;
+
+            // Cambiar el color del borde del DataGridView
+            DGridOferta.BorderStyle = BorderStyle.FixedSingle;
+            DGridOferta.GridColor = Color.FromArgb(200, 200, 200); // Gris claro para las líneas de la cuadrícula
+
+            // Personalizar las celdas
+            DGridOferta.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 122, 204); // Azul oscuro cuando se selecciona
+            DGridOferta.DefaultCellStyle.SelectionForeColor = Color.White; // Texto blanco cuando se selecciona
+
+            // Personalizar las celdas al pasar el ratón (Hover)
+            DGridOferta.CellMouseEnter += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    DGridOferta.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.FromArgb(173, 216, 230); // Azul claro cuando el mouse pasa
+                }
+            };
+
+            DGridOferta.CellMouseLeave += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    DGridOferta.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.White; // Vuelve a blanco
+                }
+            };
+
+            // Personalizar la fuente de las celdas
+            DGridOferta.DefaultCellStyle.Font = new Font("Arial", 9);
+
+            // Personalizar las filas de la cabecera al ser seleccionadas
+            DGridOferta.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            DGridOferta.MultiSelect = false;
+
+            // Ajustar el tamaño de las columnas automáticamente según el contenido
+            DGridOferta.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+        }
 
     }
 

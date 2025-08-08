@@ -110,7 +110,7 @@ namespace CpPresentacion
                 _formBoton = null;
             };
         }
-
+        //TODO: Metodo para cargar la informacion de combobox
         private void CargarCombos()
         {
             // Cargar cmbFiltroArea con todas las áreas laborales
@@ -132,7 +132,7 @@ namespace CpPresentacion
         }
 
         
-        /// Método de carga del formulario. Inicia la carga de datos.
+        //TODO: Método de carga del formulario. Inicia la carga de datos.
         
         private void cpAsignarEmpleo_Load(object sender, EventArgs e)
         {
@@ -141,7 +141,7 @@ namespace CpPresentacion
         }
 
         
-        /// Carga los datos de las ofertas de empleo en el DataGridView de empresas.
+        //TODO: Carga los datos de las ofertas de empleo en el DataGridView de empresas.
       
         private void CargarOfertas()
         {
@@ -176,7 +176,7 @@ namespace CpPresentacion
                 MessageBox.Show("Error al cargar las ofertas: " + ex.Message, "Error de Carga", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //TODO: Metodo que muestra los postulantes del en datagridview  con los datos que se registran en el form cpPostulantes
         private void MostrarPostulantes()
         {
             var negocioPostulante = new NPostulante();
@@ -185,7 +185,7 @@ namespace CpPresentacion
         }
 
         
-        /// Filtra los postulantes según el criterio seleccionado en cmbNuevo.
+        //TODO: Metodo que filtra los postulantes según el criterio seleccionado en el combobox cmbNuevo.
        
         private void FiltrarPostulantes(string texto)
         {
@@ -226,7 +226,7 @@ namespace CpPresentacion
         }
 
         
-        /// Aplica los filtros de Área e ID de Oferta en el DataGridView de empresas.
+        //TODO: Metodo que aplica los filtros de Área e ID de Oferta en el DataGridView de empresas.
         
         private void AplicarFiltrosEmpresas()
         {
@@ -276,7 +276,7 @@ namespace CpPresentacion
         }
 
         
-        /// Maneja el evento KeyPress para permitir solo números en el txtBuscarID.
+        //TODO: Metodo que maneja el evento KeyPress para permitir solo números en el txtBuscarID.
         
         private void txtBuscarID_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -288,7 +288,7 @@ namespace CpPresentacion
             }
         }
 
-        // Maneja el evento KeyPress para permitir solo números en txtBuscarDNI si se elige la opción "ID"
+        //TODO: metodo del evento KeyPress para permitir solo números en txtBuscarDNI si se elige la opción "ID"
         private void txtBuscarDNI_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Obtener la opción seleccionada en el ComboBox
@@ -302,10 +302,11 @@ namespace CpPresentacion
                 {
                     e.Handled = true;
                 }
-            }
+            } 
         }
 
-        // Eventos
+        //TODO: Eventos
+        //TODO: Evento click del boton Asiganr
         private void btnAsignar_Click(object sender, EventArgs e)
         {
             if (_enAsignacion) return;     // evita doble disparo / doble click
@@ -375,7 +376,7 @@ namespace CpPresentacion
                 _enAsignacion = false;
             }
         }
-
+        //TODO: Aplicacion en el evento click del boton para filtrar las ofertas
         private void btnBuscar2_Click(object sender, EventArgs e)
         {
             AplicarFiltrosEmpresas();
@@ -393,9 +394,9 @@ namespace CpPresentacion
             FiltrarPostulantes(txtBuscarDNI.Text.Trim());
         }
 
-       
-        /// Maneja el evento CellClick para dgvPostulantes, confirma la selección y guarda el ID.
-        
+
+        //TODO: Metodo que aneja el evento CellClick para dgvPostulantes, confirma la selección y guarda el ID.
+
         private void dgvPostulantes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -421,9 +422,9 @@ namespace CpPresentacion
                     "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        
-        /// Maneja el evento CellClick para dgvEmpresas, confirma la selección y guarda el ID.
-        
+
+        //TODO: Metodo que maneja el evento CellClick para dgvEmpresas, confirma la selección y guarda el ID.
+
         private void dgvEmpresas_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -450,7 +451,7 @@ namespace CpPresentacion
         private void cmbNuevo_SelectedIndexChanged(object sender, EventArgs e) { }
         private void txtBuscarDNI_TextChanged(object sender, EventArgs e) { }
 
-        // Métodos vacíos
+        // Métodos vacíos para que no explote y no perderme 
         private void dgvEmpresas_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
         private void dgvPostulantes_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
         private void cmbFiltroBusqueda_SelectedIndexChanged(object sender, EventArgs e) { }
@@ -495,6 +496,7 @@ namespace CpPresentacion
 
         private bool _enAsignacion = false;
 
+        //TODO: Metodo de personalizacion del datagridview Postulantes
         private void PersonalizarDataGridView()
         {
             // Cambiar el color de fondo general del DataGridView
@@ -547,6 +549,7 @@ namespace CpPresentacion
             dgvPostulantes.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
 
+        //TODO: Metodo de personalizacion del datagridview de empresa
         private void PersonalizarDataGridView2()
         {
             // Cambiar el color de fondo general del DataGridView
@@ -599,6 +602,8 @@ namespace CpPresentacion
             dgvEmpresas.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
 
+
+        //TODO: Metodo que ajusta los margenes
         private void AbrirFormBoton(bool startInEdit)
         {
             if (_formBoton != null && !_formBoton.IsDisposed) return;

@@ -18,5 +18,9 @@ namespace CpNegocio.Empresas_y_Postulantes
         public int? Salario { get; set; }  // Empleo Fijo
         public int? Creditos { get; set; } // Pasantía
         public string Estado { get; set; }
+        public string Area { get; set; }
+
+        //actualizacion
+
     }
 }

@@ -19,12 +19,20 @@ namespace CpPresentacion
 {
     public partial class Carnet : MaterialForm, IReadOnlyContainer
     {
+        // Tamaño CR80 en pulgadas
+        const float CARD_W_IN = 2.125f;   // 2.125 in
+        const float CARD_H_IN = 3.375f;   // 3.375 in
+        const int EXPORT_DPI = 300;       // DPI fijo para archivo/impresión
+
+        int Px(float inches, int dpi) => (int)Math.Round(inches * dpi);
+
         public Control Container => this;
         private FormBoton _formBoton; // ← switch flotante
 
         public Carnet()
         {
             InitializeComponent();
+            this.Load += Carnet_Load;
             panelTarjeta.Size = new Size(268, 440);
             materialTabControl1.SelectedIndex = 6;
             // Asociar eventos para validar entrada en tiempo real
@@ -124,40 +132,23 @@ namespace CpPresentacion
         //TODO:Se utilisa este metodo porque  no devuelve ningun valor 
         private async void btnVistaPrevia_Click(object sender, EventArgs e)
         {
-            //llmada asincrona 
-            // Mostrar ventana de carga
-            Form ventanaCarga = CrearVentanaCarga("Generando vista previa...");
-            ventanaCarga.Show();
-            ventanaCarga.Refresh();
-
-            await Task.Delay(1200); // Simula procesamiento
+            var ventanaCarga = CrearVentanaCarga("Generando vista previa...");
+            ventanaCarga.Show(); ventanaCarga.Refresh();
+            await Task.Delay(600);
             ventanaCarga.Close();
 
-            // Crear bitmap de la tarjeta
-            panelTarjeta.Refresh();
-            int ancho = panelTarjeta.Width;
-            int alto = panelTarjeta.Height;
-            Bitmap bmp = new Bitmap(ancho, alto);
-            panelTarjeta.DrawToBitmap(bmp, new Rectangle(0, 0, ancho, alto));
-
-            Form vistaPreviaForm = new Form
+            using var bmp = RenderCarnetBitmap(200); // dpi menor para preview
+            var vistaPreviaForm = new Form
             {
                 Text = "Vista previa de la tarjeta",
                 StartPosition = FormStartPosition.CenterParent,
-                ClientSize = new Size(bmp.Width, bmp.Height)
+                ClientSize = new Size((int)(bmp.Width * 0.7), (int)(bmp.Height * 0.7))
             };
-
-            PictureBox pb = new PictureBox
-            {
-                Dock = DockStyle.Fill,
-                Image = bmp,
-                SizeMode = PictureBoxSizeMode.Zoom
-            };
-
+            var pb = new PictureBox { Dock = DockStyle.Fill, Image = (Bitmap)bmp.Clone(), SizeMode = PictureBoxSizeMode.Zoom };
             vistaPreviaForm.Controls.Add(pb);
             vistaPreviaForm.ShowDialog();
         }
-
+       
         private async void btnGuardarTargeta_Click(object sender, EventArgs e)
         {
 
@@ -211,131 +202,163 @@ namespace CpPresentacion
             //guarda la targeta 
             try
             {
-                panelTarjeta.Invalidate();
-                Bitmap bmp = new Bitmap(panelTarjeta.Width, panelTarjeta.Height);
-                panelTarjeta.DrawToBitmap(bmp, new Rectangle(0, 0, panelTarjeta.Width, panelTarjeta.Height));
-                SaveFileDialog sfd = new SaveFileDialog();
-                sfd.Filter = "Imagen PNG|*.png";
-                sfd.FileName = "Tarjeta_ID.png";
-
+                using var bmp = RenderCarnetBitmap(EXPORT_DPI);
+                using var sfd = new SaveFileDialog { Filter = "Imagen PNG|*.png", FileName = "Tarjeta_ID.png" };
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
-                    bmp.Save(sfd.FileName);
+                    bmp.Save(sfd.FileName, ImageFormat.Png);
                     MessageBox.Show("Tarjeta guardada exitosamente.");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al guardar la tarjeta: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al guardar la tarjeta: " + ex.Message, "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void panelTarjeta_Paint(object sender, PaintEventArgs e)
         {
-            // la clase Graphics se usa para dibujar en la pantalla
-            Graphics g = e.Graphics;
+            DrawCarnet(e.Graphics, panelTarjeta.Width, panelTarjeta.Height,
+             picLogo.Image, picFoto.Image,
+             txtNombre.Text, txtPosicion.Text,
+             maskTelefono.Text, txtCorreo.Text);
+        }
+
+        // ======== DIBUJO V2: fuentes y márgenes proporcionales + clamp al borde ========
+
+        //TODO:esto dibuja todo en el panel para guardarlo
+        private void DrawCarnet(Graphics g, int width, int height,
+                                Image logo, Image foto,
+                                string nombre, string posicion, string telefono, string correo)
+        {
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            int width = panelTarjeta.Width;
-            int height = panelTarjeta.Height;
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 
-            // FONDO DIVIDIDO EN DOS
+            // Márgenes/constantes
+            int m = (int)(height * 0.05f);          // 5% de margen inferior/superior
             int mitad = height / 2;
-            g.FillRectangle(new SolidBrush(Color.FromArgb(25, 25, 64)), 0, 0, width, mitad); // parte superior azul oscuro
-            g.FillRectangle(Brushes.Gray, 0, mitad, width, height - mitad); // parte inferior gris
+            int contentLeft = (int)(width * 0.06f);
+            int contentRight = width - contentLeft;
+            int contentWidth = contentRight - contentLeft;
+            float bottomLimit = height - m;
 
-            //  LOGO
-            if (picLogo.Image != null)
+            // Fondos
+            using (var top = new SolidBrush(Color.FromArgb(25, 25, 64)))
+                g.FillRectangle(top, 0, 0, width, mitad);
+            g.FillRectangle(Brushes.Gray, 0, mitad, width, height - mitad);
+
+            // Logo tenue
+            if (logo != null)
             {
-                int logoAncho = 200;
-                int logoAlto = 200;
-                int logoX = (width - logoAncho) / 2;
-                int logoY = 10;
+                int lw = (int)(width * 0.72f);
+                int lh = lw;
+                int lx = (width - lw) / 2;
+                int ly = (int)(height * 0.03f);
 
-                float opacity = 0.2f;
-
-                ColorMatrix matrix = new ColorMatrix();
-                matrix.Matrix33 = opacity;
-
-                ImageAttributes attributes = new ImageAttributes();
-                attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-
-                g.DrawImage(picLogo.Image,
-                    new Rectangle(logoX, logoY, logoAncho, logoAlto),
-                    0, 0, picLogo.Image.Width, picLogo.Image.Height,
-                    GraphicsUnit.Pixel,
-                    attributes);
+                var cm = new System.Drawing.Imaging.ColorMatrix(); cm.Matrix33 = 0.18f;
+                var ia = new System.Drawing.Imaging.ImageAttributes(); ia.SetColorMatrix(cm);
+                g.DrawImage(logo, new Rectangle(lx, ly, lw, lh),
+                    0, 0, logo.Width, logo.Height, GraphicsUnit.Pixel, ia);
             }
 
-            //  FOTO EN CÍRCULO
-            if (picFoto.Image != null)
+            // Foto circular
+            if (foto != null)
             {
-                int fotoSize = 100;
-                int fotoX = (width - fotoSize) / 2;
-                int fotoY = mitad - (fotoSize / 2);
-
-                using (GraphicsPath path = new GraphicsPath())
+                int fs = (int)(Math.Min(width, height) * 0.23f);
+                int fx = (width - fs) / 2;
+                int fy = mitad - fs / 2;
+                using (var gp = new System.Drawing.Drawing2D.GraphicsPath())
                 {
-                    path.AddEllipse(fotoX, fotoY, fotoSize, fotoSize);
-                    g.SetClip(path);
-                    g.DrawImage(picFoto.Image, new Rectangle(fotoX, fotoY, fotoSize, fotoSize));
+                    gp.AddEllipse(fx, fy, fs, fs);
+                    g.SetClip(gp);
+                    g.DrawImage(foto, new Rectangle(fx, fy, fs, fs));
                     g.ResetClip();
                 }
-
-                g.DrawEllipse(new Pen(Color.Gray, 2), fotoX, fotoY, fotoSize, fotoSize);
+                using var pen = new Pen(Color.Gray, Math.Max(2f, width / 220f));
+                g.DrawEllipse(pen, fx, fy, fs, fs);
             }
 
-            //  TEXTO: NOMBRE, POSICIÓN
-            string nombre = txtNombre.Text;
-            string posicion = txtPosicion.Text;
+            // Fuentes base (en px, relativas al alto)
+            float baseNombre = height * 0.07f;   // antes 0.10–0.08 era demasiado
+            float basePos = height * 0.055f;
+            float baseLbl = height * 0.045f;
+            float baseDato = height * 0.045f;
 
-            Font fontNombre = new Font("Arial", 11, FontStyle.Bold);
-            Font fontPosicion = new Font("Arial", 11, FontStyle.Italic);
-            Brush blanco = Brushes.White;
-            Brush morado = new SolidBrush(Color.DarkBlue);
+            // Ajustar DINÁMICAMENTE para que quepan
+            using var fNombre = FitFont(g, nombre, "Arial", FontStyle.Bold, baseNombre, (int)(contentWidth * 0.92f));
+            using var fPos = FitFont(g, posicion, "Arial", FontStyle.Italic, basePos, (int)(contentWidth * 0.92f));
+            using var fLbl = new Font("Arial", baseLbl, FontStyle.Bold, GraphicsUnit.Pixel);
+            using var fDato = new Font("Arial", baseDato, FontStyle.Regular, GraphicsUnit.Pixel);
+            using var azulOsc = new SolidBrush(Color.DarkBlue);
 
-            SizeF nombreSize = g.MeasureString(nombre, fontNombre);
-            SizeF posicionSize = g.MeasureString(posicion, fontPosicion);
+            // Bloque de textos inferior
+            float y = mitad + (height * 0.12f);   // sube un poco el bloque
+            float lineGap = height * 0.012f;
 
-            float textoY = mitad + 60;
+            // Nombre
+            var sNom = g.MeasureString(nombre, fNombre);
+            if (y + sNom.Height <= bottomLimit)
+            {
+                g.DrawString(nombre, fNombre, Brushes.White, (width - sNom.Width) / 2, y);
+                y += sNom.Height + lineGap;
+            }
 
-            g.DrawString(nombre, fontNombre, blanco, (width - nombreSize.Width) / 2, textoY);
-            textoY += nombreSize.Height + 2;
-            g.DrawString(posicion, fontPosicion, morado, (width - posicionSize.Width) / 2, textoY);
+            // Posición
+            var sPos = g.MeasureString(posicion, fPos);
+            if (y + sPos.Height <= bottomLimit)
+            {
+                g.DrawString(posicion, fPos, azulOsc, (width - sPos.Width) / 2, y);
+                y += sPos.Height + lineGap * 1.5f;
+            }
 
-            //  DATOS INFERIORES
+            // Phone label
+            var sPL = g.MeasureString("Phone:", fLbl);
+            if (y + sPL.Height <= bottomLimit)
+            {
+                g.DrawString("Phone:", fLbl, Brushes.White, (width - sPL.Width) / 2, y);
+                y += sPL.Height + lineGap;
+            }
 
-            string telefonoFormateado = maskTelefono.Text;
-            string correo = txtCorreo.Text; // Aquí se toma el correo real
+            // Phone
+            var sP = g.MeasureString(telefono, fDato);
+            if (y + sP.Height <= bottomLimit)
+            {
+                g.DrawString(telefono, fDato, Brushes.White, (width - sP.Width) / 2, y);
+                y += sP.Height + lineGap * 1.5f;
+            }
 
-            Font fontLabel = new Font("Arial", 9, FontStyle.Bold);
-            Font fontDato = new Font("Arial", 9);
-            Brush blancoDatos = Brushes.White;
+            // Email label
+            var sEL = g.MeasureString("E-Mail:", fLbl);
+            if (y + sEL.Height <= bottomLimit)
+            {
+                g.DrawString("E-Mail:", fLbl, Brushes.White, (width - sEL.Width) / 2, y);
+                y += sEL.Height + lineGap;
+            }
 
-            float baseY = textoY + posicionSize.Height + 15;
-            float espacio = 3;
-
-            // Línea 1: "Phone:"
-            SizeF sizePhoneLabel = g.MeasureString("Phone:", fontLabel);
-            float xPhoneLabel = (width - sizePhoneLabel.Width) / 2;
-            g.DrawString("Phone:", fontLabel, blancoDatos, xPhoneLabel, baseY);
-            baseY += sizePhoneLabel.Height + espacio;
-
-            // Línea 2: número de teléfono
-            SizeF sizePhone = g.MeasureString(telefonoFormateado, fontDato);
-            float xPhone = (width - sizePhone.Width) / 2;
-            g.DrawString(telefonoFormateado, fontDato, blancoDatos, xPhone, baseY);
-            baseY += sizePhone.Height + espacio + 5;
-
-            // Línea 3: "E-Mail:"
-            SizeF sizeEmailLabel = g.MeasureString("E-Mail:", fontLabel);
-            float xEmailLabel = (width - sizeEmailLabel.Width) / 2;
-            g.DrawString("E-Mail:", fontLabel, blancoDatos, xEmailLabel, baseY);
-            baseY += sizeEmailLabel.Height + espacio;
-
-            // Línea 4: dirección de correo
-            SizeF sizeEmail = g.MeasureString(correo, fontDato);
-            float xEmail = (width - sizeEmail.Width) / 2;
-            g.DrawString(correo, fontDato, blancoDatos, xEmail, baseY);
+            // Email
+            var sE = g.MeasureString(correo, fDato);
+            if (y + sE.Height <= bottomLimit)
+            {
+                g.DrawString(correo, fDato, Brushes.White, (width - sE.Width) / 2, y);
+            }
+        }
+        //TODO:bitmad esto es para que se guarde con formato
+        private Bitmap RenderCarnetBitmap(int dpi)
+        {
+            int w = Px(CARD_W_IN, dpi);   // 2.125" → 638 px @300dpi
+            int h = Px(CARD_H_IN, dpi);   // 3.375" → 1013 px @300dpi
+            var bmp = new Bitmap(w, h);
+            bmp.SetResolution(dpi, dpi);
+            using (var g = Graphics.FromImage(bmp))
+            {
+                g.Clear(Color.Black); // opcional
+                DrawCarnet(g, w, h,
+                           picLogo.Image, picFoto.Image,
+                           txtNombre.Text, txtPosicion.Text,
+                           maskTelefono.Text, txtCorreo.Text);
+            }
+            return bmp;
         }
 
         // ========================== VALIDACIONES ==========================
@@ -360,7 +383,7 @@ namespace CpPresentacion
 
         // ========================== UTILIDADES ==========================
 
-        
+
 
         private bool EsCorreoValido(string correo)
         {
@@ -410,7 +433,7 @@ namespace CpPresentacion
             // Dibujar el carnet escalado para que se imprima en tamaño real
             g.DrawImage(bmp, rect);
         }
-
+        //TODO:esto es para los eventos asincronos 
         private Form CrearVentanaCarga(string mensaje = "Procesando...")
         {
             Form carga = new Form
@@ -434,10 +457,15 @@ namespace CpPresentacion
             return carga;
         }
 
-        private void maskTelefono_Click(object sender, EventArgs e)
+
+        private void maskTelefono_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
+        }
+
+        private void maskTelefono_Click_1(object sender, EventArgs e)
         {
             maskTelefono.SelectionStart = 0;
-            maskTelefono.SelectionLength = 0;
         }
 
         private void AbrirFormBoton(bool startInEdit)
@@ -475,6 +503,35 @@ namespace CpPresentacion
 
             _formBoton.FormClosed += (s, e) => _formBoton = null;
             _formBoton.Show(this); // owner
+        }
+
+        private void Carnet_Load(object sender, EventArgs e)
+        {
+            float ratio = CARD_W_IN / CARD_H_IN; // ≈ 0.6296
+            int targetH = 440;
+            int targetW = (int)(targetH * ratio); // ≈ 277 px
+
+            panelTarjeta.Size = new Size(targetW, targetH);
+            panelTarjeta.MinimumSize = panelTarjeta.MaximumSize = panelTarjeta.Size;
+            panelTarjeta.Invalidate();
+        }
+
+        // ↓↓↓ helper para ajustar tamaño de fuente hasta que quepa en el ancho dado
+        private Font FitFont(Graphics g, string text, string family, FontStyle style, float startPx, int maxWidth)
+        {
+            float size = startPx;
+            Font f = new Font(family, size, style, GraphicsUnit.Pixel);
+            SizeF s = g.MeasureString(text, f);
+
+            // baja de a poco hasta que quepa (o llegue a un mínimo razonable)
+            while (s.Width > maxWidth && size > 10f)
+            {
+                f.Dispose();
+                size -= 1.0f;
+                f = new Font(family, size, style, GraphicsUnit.Pixel);
+                s = g.MeasureString(text, f);
+            }
+            return f; // caller dispone
         }
     }
 }

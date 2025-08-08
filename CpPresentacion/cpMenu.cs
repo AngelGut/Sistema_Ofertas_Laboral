@@ -93,5 +93,17 @@ namespace CpPresentacion
                 Application.Exit();
             }
         }
+
+        private void mtbtnSoporte_Click(object sender, EventArgs e)
+        {
+            cpSoporte soporteForm = new cpSoporte();
+            soporteForm.ShowDialog();
+        }
+
+        private void horafecha_Tick(object sender, EventArgs e)
+        {
+            lblhora.Text = DateTime.Now.ToString("hh:mm:ss tt");
+            lblfecha.Text = DateTime.Now.ToLongDateString();
+        }
     }
 }

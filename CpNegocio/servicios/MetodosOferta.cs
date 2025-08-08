@@ -1,12 +1,13 @@
 ﻿using Capa_Datos;
 using CpNegocio.Empresas_y_Postulantes;
+using CpNegocio.Oferta;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CpNegocio.Oferta;
 
 namespace CpNegocio.servicios
 {
@@ -21,11 +22,11 @@ namespace CpNegocio.servicios
             {
                 conn.Open();
                 string query = @"
-            SELECT o.Id, e.Nombre AS Empresa, o.Puesto, o.Tipo, o.Descripcion,
-                o.Requisitos, o.Salario, o.Creditos,
-                CASE WHEN o.Ocupada = 1 THEN 'Ocupada' ELSE 'Disponible' END AS Estado
-                FROM Oferta o
-                INNER JOIN Empresa e ON o.EmpresaId = e.Id";
+                                SELECT o.Id, e.Nombre AS Empresa, o.Puesto, o.Tipo, o.Descripcion,
+                           o.Requisitos, o.Salario, o.Creditos, o.Area,
+                           CASE WHEN o.Ocupada = 1 THEN 'Ocupada' ELSE 'Disponible' END AS Estado
+                    FROM Oferta o
+                    INNER JOIN Empresa e ON o.EmpresaId = e.Id";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 using (SqlDataReader reader = cmd.ExecuteReader())
@@ -40,9 +41,10 @@ namespace CpNegocio.servicios
                             Tipo = reader.GetString(3),
                             Descripcion = reader.GetString(4),
                             Requisitos = reader.GetString(5),
-                            Salario = reader.IsDBNull(6) ? null : reader.GetInt32(6),
-                            Creditos = reader.IsDBNull(7) ? null : reader.GetInt32(7),
-                            Estado = reader.GetString(8)
+                            Salario = reader.IsDBNull(6) ? (int?)null : reader.GetInt32(6),
+                            Creditos = reader.IsDBNull(7) ? (int?)null : reader.GetInt32(7),
+                            Area = reader.IsDBNull(8) ? null : reader.GetString(8), // <-- nuevo campo
+                            Estado = reader.GetString(9) // índice desplazado +1
                         });
                     }
                 }
@@ -109,6 +111,64 @@ namespace CpNegocio.servicios
             catch (Exception ex)
             {
                 throw new Exception("No se pudo registrar la oferta: " + ex.Message);
+            }
+        }
+
+        public DataTable FiltrarOfertas(string filtro, string busqueda)
+        {
+            try
+            {
+                string query = string.Empty;
+
+                // Filtrar por ID o Puesto
+                if (filtro == "Id")
+                {
+                    query = "SELECT Id, Puesto FROM Oferta WHERE Id = @busqueda";
+                }
+                else if (filtro == "Puesto")
+                {
+                    query = "SELECT Id, Puesto FROM Oferta WHERE Puesto LIKE @busqueda";
+                    busqueda = "%" + busqueda + "%"; // Para búsqueda parcial
+                }
+
+                using (SqlConnection conn = Capa_Datos.OfertaDatos.ObtenerConexion())
+                {
+                    SqlDataAdapter da = new SqlDataAdapter(query, conn);
+                    da.SelectCommand.Parameters.AddWithValue("@busqueda", busqueda);
+
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al filtrar las ofertas: " + ex.Message);
+            }
+        }
+
+
+        private DataTable ObtenerOfertasFiltradas(string query, string busqueda)
+        {
+            using (SqlConnection conn = Capa_Datos.OfertaDatos.ObtenerConexion())
+            {
+                try
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Busqueda", busqueda);
+                        SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        dataAdapter.Fill(dt);
+                        return dt;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Lanzamos la excepción para que la capa de presentación la maneje
+                    throw new Exception("Error al ejecutar la consulta para filtrar las ofertas.", ex);
+                }
             }
         }
 
