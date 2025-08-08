@@ -1,12 +1,13 @@
 ﻿using Capa_Datos;
 using CpNegocio.Empresas_y_Postulantes;
+using CpNegocio.Oferta;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CpNegocio.Oferta;
 
 namespace CpNegocio.servicios
 {
@@ -109,6 +110,55 @@ namespace CpNegocio.servicios
             catch (Exception ex)
             {
                 throw new Exception("No se pudo registrar la oferta: " + ex.Message);
+            }
+        }
+
+        // Método para filtrar ofertas según el filtro seleccionado
+        public DataTable FiltrarOfertas(string filtroSeleccionado, string busqueda)
+        {
+            string query = "";
+
+            // Si el filtro es por "Id Empresa", se espera un número, si no es así, devolveremos null
+            if (filtroSeleccionado == "Id Empresa" && int.TryParse(busqueda, out int empresaId))
+            {
+                query = "SELECT * FROM Oferta WHERE EmpresaId = @Busqueda"; // Filtrar por ID de empresa
+            }
+            else if (filtroSeleccionado == "Puesto")
+            {
+                query = "SELECT * FROM Oferta WHERE Puesto LIKE @Busqueda"; // Filtrar por Puesto
+                busqueda = "%" + busqueda + "%"; // Agregar el comodín para búsqueda parcial
+            }
+            else
+            {
+                return null; // Si no se seleccionó un filtro válido, retornamos null
+            }
+
+            // Llamar al método de la capa de datos para ejecutar la consulta y obtener los resultados
+            return ObtenerOfertasFiltradas(query, busqueda);
+        }
+
+        // Método que maneja la ejecución de la consulta en la base de datos
+        private DataTable ObtenerOfertasFiltradas(string query, string busqueda)
+        {
+            using (SqlConnection conn = Capa_Datos.OfertaDatos.ObtenerConexion())
+            {
+                try
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Busqueda", busqueda);
+                        SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        dataAdapter.Fill(dt);
+                        return dt;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Lanzamos la excepción para que la capa de presentación la maneje
+                    throw new Exception("Error al ejecutar la consulta para filtrar las ofertas.", ex);
+                }
             }
         }
 
