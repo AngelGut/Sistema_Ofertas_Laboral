@@ -53,10 +53,7 @@ namespace CpNegocio.servicio
             if (empresa == null)
                 throw new Exception($"Empresa no encontrada para la oferta (EmpresaId={oferta.EmpresaId}).");
 
-            // 4) Insertar
-            _asignacionRepositorio.AsignarPersonaAOferta(idPersona, idOferta);
-
-            //TODO: Persistir la asignación en la base de datos
+            // 4) Insertar (una sola vez)
             _asignacionRepositorio.AsignarPersonaAOferta(idPersona, idOferta);
 
             //TODO: enviar las notificaciones por correo
@@ -92,13 +89,11 @@ namespace CpNegocio.servicio
                     $"Atentamente,\n" +
                     $"El equipo de EmpleaTech";
 
-                //TODO: Usamos el repositorio de mensajería para enviar el correo
                 _mensajeriaRepositorio.EnviarMensaje(
                     persona.Correo,
                     "Asignación a Oferta Laboral - EmpleaTech",
                     cuerpoPersona
                 );
-
 
                 //TODO: Cuerpo del mensaje para la empresa
                 string cuerpoEmpresa =
@@ -115,7 +110,6 @@ namespace CpNegocio.servicio
                     $"Atentamente,\n" +
                     $"El equipo de EmpleaTech";
 
-                //TODO: Usamos el repositorio de mensajería para enviar el correo
                 _mensajeriaRepositorio.EnviarMensaje(
                     empresa.Correo,
                     "Nueva Asignación en tu Oferta Laboral - EmpleaTech",
