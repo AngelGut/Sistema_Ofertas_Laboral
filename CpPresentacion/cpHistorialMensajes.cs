@@ -76,7 +76,7 @@ namespace CpPresentacion
                     string query = @"
                     SELECT a.Id AS [ID],
                            p.Nombre AS [Nombre],
-                           p.DNI,
+                           p.Dni,
                            p.Correo,
                            o.Puesto,
                            e.Nombre AS [Empresa],
@@ -85,7 +85,7 @@ namespace CpPresentacion
                     JOIN Persona p ON a.PersonaId = p.Id
                     JOIN Oferta o ON a.OfertaId = o.Id
                     JOIN Empresa e ON o.EmpresaId = e.Id
-                    WHERE p.Nombre LIKE @filtro OR p.Cedula LIKE @filtro OR p.Correo LIKE @filtro OR o.Puesto LIKE @filtro
+                    WHERE p.Nombre LIKE @filtro OR p.Dni LIKE @filtro OR p.Correo LIKE @filtro OR o.Puesto LIKE @filtro
                     ORDER BY a.FechaAsignacion DESC";
 
                     SqlCommand cmd = new SqlCommand(query, conn);
