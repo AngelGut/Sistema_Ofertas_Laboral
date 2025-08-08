@@ -18,11 +18,11 @@ namespace CpPresentacion
 {
     public partial class cpOfertas : MaterialForm // <<== ¡Cambiado a MaterialForm!
     {
-      
+
         public cpOfertas()
         {
             InitializeComponent();
-            
+
             // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 1;
 
@@ -50,7 +50,7 @@ namespace CpPresentacion
             CargarEmpresas(); // Cargar empresas aquí
 
             PopulateAreas(); //Cargamos las areas laborales
-
+            CargarFiltro();
 
         }
 
@@ -93,7 +93,7 @@ namespace CpPresentacion
             destino.BringToFront();
             destino.Activate();
 
-          
+
         }
 
 
@@ -133,60 +133,62 @@ namespace CpPresentacion
         {
             try
             {
+                // Validar que se haya seleccionado una empresa
                 if (CboxEmpresas.SelectedItem == null)
                 {
                     MessageBox.Show("Debe seleccionar una empresa antes de registrar la oferta.", "Empresa requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
+                // Validar que se haya seleccionado un tipo de oferta
                 if (CboxTipoOferta.SelectedItem == null)
                 {
                     MessageBox.Show("Debe seleccionar un tipo de oferta.", "Tipo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
+                // Obtener valores seleccionados
                 string tipo = CboxTipoOferta.SelectedItem.ToString();
                 int empresaId = ((CpNegocio.Entidades.EmpresaComboItem)CboxEmpresas.SelectedItem).Id;
-                string puesto = TxtPuesto.Text;
-                string descripcion = TxtDescripcion.Text;
-                string requisitos = TxtRequisitos.Text;
-                string area = cmbArea.SelectedItem?.ToString() ?? "";
-
-                int salario = 0;
-                int creditos = 0;
+                string areaSeleccionada = cmbArea.SelectedItem?.ToString() ?? string.Empty;
 
                 if (tipo == "Empleo Fijo")
                 {
-                    if (!int.TryParse(TxtSalario.Text, out salario))
+                    var empleo = new EmpleoFijo
                     {
-                        MessageBox.Show("Salario inválido.");
-                        return;
-                    }
+                        EmpresaId = empresaId,
+                        Puesto = TxtPuesto.Text,
+                        Descripcion = TxtDescripcion.Text,
+                        Requisitos = TxtRequisitos.Text,
+                        Salario = int.TryParse(TxtSalario.Text, out int salario) ? salario : null,
+                        Area = areaSeleccionada
+                    };
+
+                    new MetodosEmpleoFijo().Registrar(empleo);
+                    MessageBox.Show("Oferta de Empleo registrada con éxito.");
                 }
                 else if (tipo == "Pasantia")
                 {
-                    if (!int.TryParse(TxtCreditos.Text, out creditos))
+                    var pasantia = new Pasantia
                     {
-                        MessageBox.Show("Créditos inválidos.");
-                        return;
-                    }
+                        EmpresaId = empresaId,
+                        Puesto = TxtPuesto.Text,
+                        Descripcion = TxtDescripcion.Text,
+                        Requisitos = TxtRequisitos.Text,
+                        Creditos = int.TryParse(TxtCreditos.Text, out int creditos) ? creditos : 0,
+                        Area = areaSeleccionada
+                    };
+
+                    new MetodosPasantia().Registrar(pasantia);
+                    MessageBox.Show("Pasantía registrada con éxito.");
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un tipo de oferta válido.", "Tipo inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
 
-                // Registrar usando el método unificado
-                var metodosOferta = new MetodosOferta();
-                metodosOferta.RegistrarOferta(
-                    empresaId,
-                    puesto,
-                    tipo,
-                    descripcion,
-                    requisitos,
-                    salario,
-                    creditos,
-                    area,
-                    false
-                );
-
-                MessageBox.Show("Oferta registrada con éxito.");
+                // Recargar tabla y limpiar
                 CargarOfertas();
                 LimpiarCampos();
             }
@@ -195,7 +197,6 @@ namespace CpPresentacion
                 MessageBox.Show("Ocurrió un error al registrar la oferta:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         //clase auxiliar para mostrar nombre pero guardar el ID:
         public class EmpresaComboItem
@@ -345,7 +346,127 @@ namespace CpPresentacion
             cmbArea.DataSource = AreaLaboralProvider.GetAll();
             cmbArea.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbArea.SelectedIndex = 0;
-        } 
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            // Obtener los valores seleccionados
+            string filtroSeleccionado = cmbFiltro.SelectedItem?.ToString();
+            string textoFiltro = txtFiltro.Text.Trim();
+
+            if (string.IsNullOrEmpty(filtroSeleccionado))
+            {
+                MessageBox.Show("Debe seleccionar un criterio para filtrar.", "Criterio de filtrado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Filtrar las ofertas según el ComboBox y el TextBox
+            FiltrarOfertas(filtroSeleccionado, textoFiltro);
+        }
+
+        private void FiltrarOfertas(string criterio, string valor)
+        {
+            try
+            {
+                // Obtener todas las ofertas
+                var metodo = new MetodosOferta();
+                var lista = metodo.ObtenerOfertas();  // Esto obtiene todas las ofertas desde la base de datos
+
+                // Comprobar si la lista está vacía
+                if (lista == null || lista.Count == 0)
+                {
+                    MessageBox.Show("No se encontraron ofertas disponibles en la base de datos. " +
+                                    "Por favor, asegúrese de que haya ofertas registradas.",
+                                    "Sin Resultados",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                    return;
+                }
+
+                // Convertir el valor de búsqueda a minúsculas para hacer la comparación insensible a mayúsculas/minúsculas
+                valor = valor.ToLower();
+
+                // Filtrar las ofertas según el criterio seleccionado
+                var ofertasFiltradas = lista.AsEnumerable();
+
+                // Filtrar según el criterio
+                if (criterio == "Id")
+                {
+                    // Filtrar por el ID de la oferta
+                    if (int.TryParse(valor, out int id))
+                    {
+                        ofertasFiltradas = ofertasFiltradas.Where(o => o.Id == id);
+                    }
+                    else
+                    {
+                        MessageBox.Show("El ID ingresado no es válido. Por favor ingrese un número entero.",
+                                        "ID inválido", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                else if (criterio == "Empresa")
+                {
+                    // Filtrar por empresa
+                    ofertasFiltradas = ofertasFiltradas.Where(o => o.Empresa != null &&
+                                                                 o.Empresa.ToLower().Contains(valor));
+                }
+                else if (criterio == "Puesto")
+                {
+                    // Filtrar por puesto
+                    ofertasFiltradas = ofertasFiltradas.Where(o => o.Puesto != null &&
+                                                                 o.Puesto.ToLower().Contains(valor));
+                }
+                else
+                {
+                    MessageBox.Show("El criterio seleccionado no es válido. " +
+                                    "Por favor, elija 'Id', 'Empresa' o 'Puesto' como criterios de búsqueda.",
+                                    "Criterio de Búsqueda Inválido",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Asignamos las ofertas filtradas al DataGridView
+                DGridOferta.DataSource = ofertasFiltradas.ToList(); // Asignar los resultados filtrados
+
+                // Si no se encuentra ninguna oferta después de filtrar
+                if (ofertasFiltradas.Count() == 0)
+                {
+                    MessageBox.Show("No se encontraron ofertas que coincidan con el valor de búsqueda. " +
+                                    "Por favor, asegúrese de que el valor ingresado sea correcto.",
+                                    "Sin Resultados",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                }
+
+            }
+            catch (SqlException sqlEx)
+            {
+                // Captura errores relacionados con la base de datos
+                MessageBox.Show("Error al consultar la base de datos: " + sqlEx.Message + "\n" +
+                                "Por favor, verifique la conexión a la base de datos y intente nuevamente.",
+                                "Error de Conexión",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                // Captura cualquier otro error general
+                MessageBox.Show("Ocurrió un error inesperado: " + ex.Message + "\n" +
+                                "Por favor, contacte con el soporte técnico si el problema persiste.",
+                                "Error General",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+        }
+
+        private void CargarFiltro()
+        {
+            cmbFiltro.Items.Clear();
+            cmbFiltro.Items.Add("Id");
+            cmbFiltro.Items.Add("Empresa");
+            cmbFiltro.Items.Add("Puesto");
+            cmbFiltro.SelectedIndex = 0; // Seleccionar el primer criterio por defecto
+        }
     }
-   
 }

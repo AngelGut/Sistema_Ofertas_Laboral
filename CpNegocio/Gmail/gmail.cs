@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Mail;
 using System.Net;
-using CpNegocio;
 
 namespace CpNegocio.Gmail
 {
-    public class GmailService : Mensaje
+    public class Gmail : Mensaje
     {
         //TODO: Esta clase representa un mensaje de correo electrónico que se enviará a través de Gmail.
         private static string _senderEmail;

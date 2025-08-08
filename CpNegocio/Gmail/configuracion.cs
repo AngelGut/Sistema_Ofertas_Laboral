@@ -23,7 +23,7 @@ namespace CpNegocio.Gmail
             if (File.Exists(filePath))
             {
                 string json = File.ReadAllText(filePath);
-                return JsonConvert.DeserializeObject<Configuracion>(json); //TODO: Deserializar el JSON a un objeto Configuracion
+                return JsonConvert.DeserializeObject<Configuracion>(json);
             }
             //TODO: Si el archivo no existe, lanzar una excepción indicando que el archivo de credenciales no fue encontrado.
             throw new FileNotFoundException("El archivo de credenciales 'credentials.json' no fue encontrado.");

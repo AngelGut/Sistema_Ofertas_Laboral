@@ -15,7 +15,7 @@ namespace CpNegocio.Oferta
 
         public EmpleoFijo()
         {
-            Tipo = "EmpleoFijo"; // Debe coincidir con el valor del ComboBox
+            Tipo = "Empleo Fijo"; // Debe coincidir con el valor del ComboBox
         }
     }
 }
