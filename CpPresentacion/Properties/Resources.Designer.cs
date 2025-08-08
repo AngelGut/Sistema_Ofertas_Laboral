@@ -93,6 +93,26 @@ namespace CpPresentacion.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap angel {
+            get {
+                object obj = ResourceManager.GetObject("angel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap braylin {
+            get {
+                object obj = ResourceManager.GetObject("braylin", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ChatGPT_Image_6_jul_2025__19_27_04 {
             get {
                 object obj = ResourceManager.GetObject("ChatGPT Image 6 jul 2025, 19_27_04", resourceCulture);
@@ -106,6 +126,16 @@ namespace CpPresentacion.Properties {
         internal static System.Drawing.Bitmap ChatGPT_Image_6_jul_2025__19_27_041 {
             get {
                 object obj = ResourceManager.GetObject("ChatGPT Image 6 jul 2025, 19_27_041", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap elian {
+            get {
+                object obj = ResourceManager.GetObject("elian", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,9 +173,29 @@ namespace CpPresentacion.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap jeifferson {
+            get {
+                object obj = ResourceManager.GetObject("jeifferson", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Logo {
             get {
                 object obj = ResourceManager.GetObject("Logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap luis {
+            get {
+                object obj = ResourceManager.GetObject("luis", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -176,6 +226,26 @@ namespace CpPresentacion.Properties {
         internal static System.Drawing.Bitmap OjoCerrado {
             get {
                 object obj = ResourceManager.GetObject("OjoCerrado", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ronald {
+            get {
+                object obj = ResourceManager.GetObject("ronald", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap usuario_grande {
+            get {
+                object obj = ResourceManager.GetObject("usuario grande", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
