@@ -9,14 +9,17 @@ using CpNegocio.Repositorios;
 using CpNegocio.Oferta;
 using CpNegocio.Entidades;
 
-//Creamos la clase AsignacionServicio, que actúa como el "cerebro" de la aplicación...
-//Su función es centralizar el proceso de asignar a una persona a una oferta y enviar las notificaciones
+/// <summary>
+/// Creamos la clase AsignacionServicio, que actúa como el "cerebro" de la aplicación...
+/// Su función es centralizar el proceso de asignar a una persona a una oferta y enviar las notificaciones
+/// </summary>
+
 namespace CpNegocio.servicio
 {
     //TODO: Clase que se encarga de asignar una oferta a una persona y enviar correos electrónicos de notificación
     public class AsignacionServicio
     {
-        //TODO: Declaración de los repositorios necesarios para acceder a los datos
+        //Declaración de los repositorios necesarios para acceder a los datos
         private readonly IPersonaRepositorio _personaRepositorio;
         private readonly IOfertaRepositorio _ofertaRepositorio;
         private readonly IAsignacionRepositorio _asignacionRepositorio;
@@ -37,36 +40,36 @@ namespace CpNegocio.servicio
         public void AsignarOfertaAPersona(int idPersona, int idOferta)
         {
 
-            // 1) Obtener
+            //Validaciones Iniciales
             var persona = _personaRepositorio.ObtenerPersonaPorId(idPersona);
             var oferta = _ofertaRepositorio.ObtenerOfertaPorId(idOferta);
 
-            // 2) Validaciones con mensajes específicos
+            //Validaciones con mensajes específicos
             if (persona == null)
                 throw new Exception($"Persona no encontrada (Id={idPersona}).");
 
             if (oferta == null)
                 throw new Exception($"Oferta no encontrada (Id={idOferta}).");
 
-            // 3) Empresa
+            
             var empresa = _empresaRepositorio.ObtenerEmpresaPorId(oferta.EmpresaId);
             if (empresa == null)
                 throw new Exception($"Empresa no encontrada para la oferta (EmpresaId={oferta.EmpresaId}).");
 
-            // 4) Insertar (una sola vez)
+            
             _asignacionRepositorio.AsignarPersonaAOferta(idPersona, idOferta);
 
-            //TODO: enviar las notificaciones por correo
-            // Enviar correos en HTML
+            //Enviar correos electrónicos de notificación a la persona y a la empresa
             try
             {
+                // Determinar el detalle de la oferta según su tipo
                 string detalleOferta = string.Empty;
                 if (oferta is EmpleoFijo empleoFijo)
                     detalleOferta = $"<li><strong>Salario:</strong> ${empleoFijo.Salario}</li>";
                 else if (oferta is Pasantia pasantia)
                     detalleOferta = $"<li><strong>Créditos:</strong> {pasantia.Creditos}</li>";
 
-                // ====== CORREO A LA PERSONA (HTML) ======
+                // ====== CORREO QUE SE LE ENVIA A LA PERSONA AL SER ASIGNADA A UNA OFERTA (FORMATO HTML PARA QUE SE VEA LINDO) ======
                 var subjectPersona = $"Asignación confirmada: {oferta.Puesto} en {empresa.Nombre}";
                 var cuerpoPersonaHtml = $@"
 <html>
@@ -124,7 +127,7 @@ namespace CpNegocio.servicio
                     cuerpoPersonaHtml
                 );
 
-                // ====== CORREO A LA EMPRESA (HTML) ======
+                // ====== CORREO QUE LE LLEGUA A LA EMPRESA CUANDO SE LE ASIGNA UNA PERSONA A UNA DE LAS OFERTAS QUE TENGA PUBLICADA ======
                 var subjectEmpresa = $"Nuevo candidato asignado: {persona.Nombre} para {oferta.Puesto}";
                 var cuerpoEmpresaHtml = $@"
 <html>
@@ -164,7 +167,7 @@ namespace CpNegocio.servicio
     </div>
   </body>
 </html>";
-
+                
                 _mensajeriaRepositorio.EnviarMensaje(
                     empresa.Correo,
                     subjectEmpresa,

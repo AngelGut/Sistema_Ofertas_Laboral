@@ -11,8 +11,10 @@ using Microsoft.Data.SqlClient;
 
 namespace CpNegocio.Repositorios
 {
+    //TODO: Clase que implementa la interfaz IEmpresaRepositorio para interactuar con la base de datos
     public class EmpresaRepositorio : IEmpresaRepositorio
     {
+        //TODO: Método que obtiene una empresa por su ID
         public CnEmpresa ObtenerEmpresaPorId(int idEmpresa)
         {
             using (SqlConnection connection = OfertaDatos.ObtenerConexion())
@@ -42,6 +44,7 @@ namespace CpNegocio.Repositorios
             return null;
         }
 
+        //TODO: Método que obtiene una empresa por su RNC
         public CnEmpresa ObtenerEmpresaPorRnc(string rnc)
         {
             using (SqlConnection connection = OfertaDatos.ObtenerConexion())
