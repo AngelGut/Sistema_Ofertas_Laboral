@@ -9,7 +9,7 @@ using CpNegocio.Repositorios;
 
 namespace CpNegocio.servicios
 {
-    //TODO: Clase de servicio para manejar la lógica de negocio relacionada con ofertas
+    //METODO MODULAR PARA ESCALABILIDAD FUTURA
     public class OfertaServicio
     {
         //TODO: Repositorio para acceder a los datos de ofertas
