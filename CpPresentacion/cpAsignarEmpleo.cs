@@ -8,11 +8,16 @@ using MaterialSkin;
 using CpNegocio.servicio;
 using CpNegocio.servicios;
 using CpNegocio.Oferta;
+using CpPresentacion.Asistencia;
 
 namespace CpPresentacion
 {
-    public partial class cpAsignarEmpleo : MaterialForm
+    public partial class cpAsignarEmpleo : MaterialForm, IReadOnlyContainer
     {
+        private FormBoton _formBoton;  // switch flotante
+
+        // Implementación requerida por IReadOnlyContainer
+        public Control Container => this;
         private DataTable tablaPostulantes;
         private DataTable tablaEmpresas;
 
@@ -23,6 +28,9 @@ namespace CpPresentacion
         public cpAsignarEmpleo()
         {
             InitializeComponent();
+            //Metodo de personalizacion del datagridview
+            PersonalizarDataGridView();
+            PersonalizarDataGridView2();
             materialTabControl1.SelectedIndex = 4;
 
             // Configuración inicial de MaterialSkin
@@ -68,6 +76,38 @@ namespace CpPresentacion
             texboxIdOferta.KeyPress += (s, ev) =>
             {
                 if (!char.IsControl(ev.KeyChar) && !char.IsDigit(ev.KeyChar)) ev.Handled = true;
+            };
+
+            // 1) Bloquear todos los controles por defecto (modo "Ver")
+            // 1) Arrancar bloqueado (modo Ver)
+            this.SetReadOnly(true);
+
+            // 2) Mini-form para decidir estado inicial
+            bool startInEdit = false;
+            using (var dlg = new frmModoVisualizacion())
+            {
+                if (dlg.ShowDialog() == DialogResult.OK &&
+                    dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
+                {
+                    startInEdit = true;
+                }
+            }
+
+            // 3) Aplicar estado inicial
+            this.SetReadOnly(!startInEdit);
+
+            // (opcional) permitir selección en grillas aunque esté en "Ver"
+            // dgvPostulantes.Enabled = true;
+            // dgvEmpresas.Enabled = true;
+
+            // 4) Abrir switch flotante (siempre activo)
+            AbrirFormBoton(startInEdit);
+
+            // 5) Cerrar el flotante cuando se cierre este form
+            this.FormClosed += (s, e) =>
+            {
+                if (_formBoton != null && !_formBoton.IsDisposed) _formBoton.Close();
+                _formBoton = null;
             };
         }
 
@@ -455,6 +495,146 @@ namespace CpPresentacion
 
         private bool _enAsignacion = false;
 
+        private void PersonalizarDataGridView()
+        {
+            // Cambiar el color de fondo general del DataGridView
+            dgvPostulantes.BackgroundColor = Color.FromArgb(240, 248, 255); // Azul muy suave, estilo "Azure"
+
+            // Personalizar el color de los encabezados de las columnas
+            dgvPostulantes.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 122, 204); // Azul oscuro
+            dgvPostulantes.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvPostulantes.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
+            dgvPostulantes.ColumnHeadersHeight = 40;
+
+            // Cambiar el color de las filas
+            dgvPostulantes.RowsDefaultCellStyle.BackColor = Color.White;
+            dgvPostulantes.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(230, 240, 255); // Azul suave en filas alternas
+            dgvPostulantes.RowsDefaultCellStyle.ForeColor = Color.Black;
+
+            // Cambiar el color del borde del DataGridView
+            dgvPostulantes.BorderStyle = BorderStyle.FixedSingle;
+            dgvPostulantes.GridColor = Color.FromArgb(200, 200, 200); // Gris claro para las líneas de la cuadrícula
+
+            // Personalizar las celdas
+            dgvPostulantes.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 122, 204); // Azul oscuro cuando se selecciona
+            dgvPostulantes.DefaultCellStyle.SelectionForeColor = Color.White; // Texto blanco cuando se selecciona
+
+            // Personalizar las celdas al pasar el ratón (Hover)
+            dgvPostulantes.CellMouseEnter += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    dgvPostulantes.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.FromArgb(173, 216, 230); // Azul claro cuando el mouse pasa
+                }
+            };
+
+            dgvPostulantes.CellMouseLeave += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    dgvPostulantes.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.White; // Vuelve a blanco
+                }
+            };
+
+            // Personalizar la fuente de las celdas
+            dgvPostulantes.DefaultCellStyle.Font = new Font("Arial", 9);
+
+            // Personalizar las filas de la cabecera al ser seleccionadas
+            dgvPostulantes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvPostulantes.MultiSelect = false;
+
+            // Ajustar el tamaño de las columnas automáticamente según el contenido
+            dgvPostulantes.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+        }
+
+        private void PersonalizarDataGridView2()
+        {
+            // Cambiar el color de fondo general del DataGridView
+            dgvEmpresas.BackgroundColor = Color.FromArgb(240, 248, 255); // Azul muy suave, estilo "Azure"
+
+            // Personalizar el color de los encabezados de las columnas
+            dgvEmpresas.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 122, 204); // Azul oscuro
+            dgvEmpresas.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvEmpresas.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
+            dgvEmpresas.ColumnHeadersHeight = 40;
+
+            // Cambiar el color de las filas
+            dgvEmpresas.RowsDefaultCellStyle.BackColor = Color.White;
+            dgvEmpresas.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(230, 240, 255); // Azul suave en filas alternas
+            dgvEmpresas.RowsDefaultCellStyle.ForeColor = Color.Black;
+
+            // Cambiar el color del borde del DataGridView
+            dgvEmpresas.BorderStyle = BorderStyle.FixedSingle;
+            dgvEmpresas.GridColor = Color.FromArgb(200, 200, 200); // Gris claro para las líneas de la cuadrícula
+
+            // Personalizar las celdas
+            dgvEmpresas.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 122, 204); // Azul oscuro cuando se selecciona
+            dgvEmpresas.DefaultCellStyle.SelectionForeColor = Color.White; // Texto blanco cuando se selecciona
+
+            // Personalizar las celdas al pasar el ratón (Hover)
+            dgvEmpresas.CellMouseEnter += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    dgvEmpresas.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.FromArgb(173, 216, 230); // Azul claro cuando el mouse pasa
+                }
+            };
+
+            dgvEmpresas.CellMouseLeave += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    dgvEmpresas.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.White; // Vuelve a blanco
+                }
+            };
+
+            // Personalizar la fuente de las celdas
+            dgvEmpresas.DefaultCellStyle.Font = new Font("Arial", 9);
+
+            // Personalizar las filas de la cabecera al ser seleccionadas
+            dgvEmpresas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvEmpresas.MultiSelect = false;
+
+            // Ajustar el tamaño de las columnas automáticamente según el contenido
+            dgvEmpresas.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+        }
+
+        private void AbrirFormBoton(bool startInEdit)
+        {
+            if (_formBoton != null && !_formBoton.IsDisposed) return;
+
+            _formBoton = new FormBoton(this, startInEdit)
+            {
+                StartPosition = FormStartPosition.Manual,
+                TopMost = true
+            };
+
+            void Reposicionar()
+            {
+                if (_formBoton == null || _formBoton.IsDisposed) return;
+
+                // Posición del form en pantalla
+                var p = this.PointToScreen(Point.Empty);
+
+                // AFUERA, pegado al borde derecho y centrado vertical
+                int x = p.X + this.Width;
+                int y = p.Y + (this.Height - _formBoton.Height) / 2;
+
+                // Mantener visible en el mismo monitor (evita que se “corte”)
+                var wa = Screen.FromControl(this).WorkingArea;
+                x = Math.Min(Math.Max(x, wa.Left), wa.Right - _formBoton.Width);
+                y = Math.Min(Math.Max(y, wa.Top), wa.Bottom - _formBoton.Height);
+
+                _formBoton.Location = new Point(x, y);
+            }
+
+            Reposicionar();
+            this.Move += (s, e) => Reposicionar();
+            this.Resize += (s, e) => Reposicionar();
+
+            _formBoton.FormClosed += (s, e) => _formBoton = null;
+            _formBoton.Show(this); // owner
+        }
 
     }
 }

@@ -18,6 +18,8 @@ namespace CpPresentacion
         public cpHistorialMensajes()
         {
             InitializeComponent();
+            //Metodo de personalizacion del datagridview
+            PersonalizarDataGridView();
             materialTabControl1.SelectedIndex = 5;
 
             // Configurar el DataGridView para que sea solo lectura
@@ -36,9 +38,11 @@ namespace CpPresentacion
 
         private async Task NavegarA(int idx)
         {
+
             Form destino = idx switch
             {
-                0 => Application.OpenForms.OfType<Menu>().FirstOrDefault() ?? new Menu(),
+                // Siempre nueva instancia de Menu
+                0 => new Menu(),
                 1 => this is cpOfertas ? this : new cpOfertas(),
                 2 => this is cpEmpresa ? this : new cpEmpresa(),
                 3 => this is cpPostulante ? this : new cpPostulante(),
@@ -50,16 +54,21 @@ namespace CpPresentacion
                 _ => null
             };
 
+            // B) Si ya estamos en el destino, no hacemos nada
             if (destino == null || destino == this) return;
 
+            // C) Mostrar el nuevo formulario
             destino.Show();
 
+            // D) Menu nunca se cierra; los demás se liberan
             if (this is Menu)
-                this.Hide();
+                this.Hide();      // se mantiene en memoria
             else
-                this.Dispose();
+                this.Dispose();  // libera recursos
 
-            await Task.Delay(180);
+            // Asegurarnos de que la UI repinte inmediatamente:
+            destino.BringToFront();
+            destino.Activate();
         }
 
         // 🔹 Cargar historial desde base de datos
@@ -125,6 +134,58 @@ namespace CpPresentacion
         {
             txtBuscar.Text = "";            // Limpia el TextBox
             CargarHistorial();              // Vuelve a cargar todo el historial sin filtro
+        }
+
+        private void PersonalizarDataGridView()
+        {
+            // Cambiar el color de fondo general del DataGridView
+            dgvHistorial.BackgroundColor = Color.FromArgb(240, 248, 255); // Azul muy suave, estilo "Azure"
+
+            // Personalizar el color de los encabezados de las columnas
+            dgvHistorial.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 122, 204); // Azul oscuro
+            dgvHistorial.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvHistorial.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
+            dgvHistorial.ColumnHeadersHeight = 40;
+
+            // Cambiar el color de las filas
+            dgvHistorial.RowsDefaultCellStyle.BackColor = Color.White;
+            dgvHistorial.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(230, 240, 255); // Azul suave en filas alternas
+            dgvHistorial.RowsDefaultCellStyle.ForeColor = Color.Black;
+
+            // Cambiar el color del borde del DataGridView
+            dgvHistorial.BorderStyle = BorderStyle.FixedSingle;
+            dgvHistorial.GridColor = Color.FromArgb(200, 200, 200); // Gris claro para las líneas de la cuadrícula
+
+            // Personalizar las celdas
+            dgvHistorial.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 122, 204); // Azul oscuro cuando se selecciona
+            dgvHistorial.DefaultCellStyle.SelectionForeColor = Color.White; // Texto blanco cuando se selecciona
+
+            // Personalizar las celdas al pasar el ratón (Hover)
+            dgvHistorial.CellMouseEnter += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    dgvHistorial.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.FromArgb(173, 216, 230); // Azul claro cuando el mouse pasa
+                }
+            };
+
+            dgvHistorial.CellMouseLeave += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    dgvHistorial.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.White; // Vuelve a blanco
+                }
+            };
+
+            // Personalizar la fuente de las celdas
+            dgvHistorial.DefaultCellStyle.Font = new Font("Arial", 9);
+
+            // Personalizar las filas de la cabecera al ser seleccionadas
+            dgvHistorial.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvHistorial.MultiSelect = false;
+
+            // Ajustar el tamaño de las columnas automáticamente según el contenido
+            dgvHistorial.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
     }
 }

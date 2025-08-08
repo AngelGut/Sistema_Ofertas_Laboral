@@ -21,10 +21,13 @@ namespace CpPresentacion
     public partial class cpEmpresa : MaterialForm, IReadOnlyContainer
     {
         public Control Container => this; // Implementación de la interfaz IReadOnlyContainer
+        private FormBoton _formBoton; // ← switch flotante
 
         public cpEmpresa()
         {
             InitializeComponent();
+            //Metodo de personalizacion del datagridview
+            PersonalizarDataGridView();
 
             // Cargar países en el ComboBox
             CargarPaises();
@@ -55,18 +58,32 @@ namespace CpPresentacion
             txtBusqueda.KeyPress += TxtBusqueda_KeyPress;
 
             // Bloquear todos los controles recursivamente
+            // Bloquear de inicio
             this.SetReadOnly(true);
 
-            // Mostrar mini-form Ver/Editar
+            // Mostrar mini-form y decidir estado inicial
+            bool startInEdit = false;
             using (var dlg = new frmModoVisualizacion())
             {
                 if (dlg.ShowDialog() == DialogResult.OK &&
                     dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
                 {
-                    // Desbloquear si eligió Editar
-                    this.SetReadOnly(false);
+                    startInEdit = true;
                 }
             }
+
+            // Aplicar estado inicial
+            this.SetReadOnly(!startInEdit);
+
+            // Abrir el switch flotante (siempre activo)
+            AbrirFormBoton(startInEdit);
+
+            // Si este form se cierra, cierra también el flotante
+            this.FormClosed += (s, e) =>
+            {
+                if (_formBoton != null && !_formBoton.IsDisposed) _formBoton.Close();
+                _formBoton = null;
+            };
         }
 
         //TODO: navegacion
@@ -509,6 +526,95 @@ namespace CpPresentacion
                 // Validar solo letras
                 txtBusqueda.KeyPress += TxtBusqueda_KeyPress_Letras; // Asignar validación solo letras
             }
+        }
+        private void PersonalizarDataGridView()
+        {
+            // Cambiar el color de fondo general del DataGridView
+            DgvEmpresas.BackgroundColor = Color.FromArgb(240, 248, 255); // Azul muy suave, estilo "Azure"
+
+            // Personalizar el color de los encabezados de las columnas
+            DgvEmpresas.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 122, 204); // Azul oscuro
+            DgvEmpresas.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            DgvEmpresas.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
+            DgvEmpresas.ColumnHeadersHeight = 40;
+
+            // Cambiar el color de las filas
+            DgvEmpresas.RowsDefaultCellStyle.BackColor = Color.White;
+            DgvEmpresas.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(230, 240, 255); // Azul suave en filas alternas
+            DgvEmpresas.RowsDefaultCellStyle.ForeColor = Color.Black;
+
+            // Cambiar el color del borde del DataGridView
+            DgvEmpresas.BorderStyle = BorderStyle.FixedSingle;
+            DgvEmpresas.GridColor = Color.FromArgb(200, 200, 200); // Gris claro para las líneas de la cuadrícula
+
+            // Personalizar las celdas
+            DgvEmpresas.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 122, 204); // Azul oscuro cuando se selecciona
+            DgvEmpresas.DefaultCellStyle.SelectionForeColor = Color.White; // Texto blanco cuando se selecciona
+
+            // Personalizar las celdas al pasar el ratón (Hover)
+            DgvEmpresas.CellMouseEnter += (sender, e) =>
+                       {
+                          if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                          {
+                            DgvEmpresas.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.FromArgb(173, 216, 230); // Azul claro cuando el mouse pasa
+                          }
+                       };
+
+            DgvEmpresas.CellMouseLeave += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    DgvEmpresas.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.White; // Vuelve a blanco
+                }
+            };
+
+            // Personalizar la fuente de las celdas
+            DgvEmpresas.DefaultCellStyle.Font = new Font("Arial", 9);
+
+            // Personalizar las filas de la cabecera al ser seleccionadas
+            DgvEmpresas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            DgvEmpresas.MultiSelect = false;
+
+            // Ajustar el tamaño de las columnas automáticamente según el contenido
+            DgvEmpresas.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+        }
+
+        private void AbrirFormBoton(bool startInEdit)
+        {
+            if (_formBoton != null && !_formBoton.IsDisposed) return;
+
+            _formBoton = new FormBoton(this, startInEdit)
+            {
+                StartPosition = FormStartPosition.Manual,
+                TopMost = true
+            };
+
+            void Reposicionar()
+            {
+                if (_formBoton == null || _formBoton.IsDisposed) return;
+
+                // Origen del form en pantalla
+                var p = this.PointToScreen(Point.Empty);
+
+                // Ubicar AFUERA, pegado al borde derecho y centrado verticalmente
+                int x = p.X + this.Width;                               // fuera, al lado derecho
+                int y = p.Y + (this.Height - _formBoton.Height) / 2;    // centrado vertical
+
+                // Clamp al monitor del formulario para que no se “corte”
+                var screen = Screen.FromControl(this).WorkingArea;
+                // Si te interesa permitir que se salga un poco a la derecha, comenta el clamp en X:
+                x = Math.Min(Math.Max(x, screen.Left), screen.Right - _formBoton.Width);
+                y = Math.Min(Math.Max(y, screen.Top), screen.Bottom - _formBoton.Height);
+
+                _formBoton.Location = new Point(x, y);
+            }
+
+            Reposicionar();
+            this.Move += (s, e) => Reposicionar();
+            this.Resize += (s, e) => Reposicionar();
+
+            _formBoton.FormClosed += (s, e) => _formBoton = null;
+            _formBoton.Show(this);
         }
 
     }
