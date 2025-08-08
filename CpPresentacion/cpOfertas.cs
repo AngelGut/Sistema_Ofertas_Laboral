@@ -75,7 +75,7 @@ namespace CpPresentacion
             };
 
             // Llenar el ComboBox con las opciones para filtrar
-            cmbFiltro.Items.Add("Id Empresa");
+            cmbFiltro.Items.Add("Id");
             cmbFiltro.Items.Add("Puesto");
             cmbFiltro.SelectedIndex = 0;
 
@@ -456,47 +456,41 @@ namespace CpPresentacion
                 return;
             }
 
-            // Definir la consulta SQL según el tipo de filtro seleccionado
-            string query = "";
-
-            if (filtroSeleccionado == "Id Empresa")
+            try
             {
-                // Verificar si el valor ingresado es un número
-                if (!int.TryParse(busqueda, out int empresaId))
+                var metodosOferta = new MetodosOferta();
+                DataTable dt = metodosOferta.FiltrarOfertas(filtroSeleccionado, busqueda);
+
+                // Verificar si se obtuvieron datos
+                if (dt != null && dt.Rows.Count > 0)
                 {
-                    MessageBox.Show("Por favor ingrese un número válido para el ID de la empresa.", "ID no válido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+                    DGridOferta.DataSource = dt;
 
-                query = "SELECT * FROM Oferta WHERE EmpresaId = @Busqueda"; // Filtrar por ID de Empresa
-            }
-            else if (filtroSeleccionado == "Puesto")
-            {
-                query = "SELECT * FROM Oferta WHERE Puesto LIKE @Busqueda"; // Filtrar por el Puesto
-                busqueda = "%" + busqueda + "%"; // Agregar el comodín % para hacer búsqueda parcial
-            }
+                    // Ocultar las demás columnas que no deseas mostrar
+                    DGridOferta.Columns["Id"].Visible = true;  // Asegurarte de que la columna Id sea visible
+                    DGridOferta.Columns["Puesto"].Visible = true; // Asegurarte de que la columna Puesto sea visible
 
-            // Ejecutar la consulta y llenar el DataGridView
-            using (SqlConnection conn = Capa_Datos.OfertaDatos.ObtenerConexion())
-            {
-                try
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    // Si tienes otras columnas que no deseas mostrar, puedes ocultarlas
+                    foreach (DataGridViewColumn column in DGridOferta.Columns)
                     {
-                        cmd.Parameters.AddWithValue("@Busqueda", busqueda); // Agregar el parámetro de búsqueda
-                        SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
-                        DataTable dt = new DataTable();
-                        dataAdapter.Fill(dt);
-                        DGridOferta.DataSource = dt; // Cargar los datos filtrados en el DataGridView
+                        if (column.Name != "Id" && column.Name != "Puesto")
+                        {
+                            column.Visible = false;  // Ocultar las demás columnas
+                        }
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show("Error al filtrar las ofertas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("No se encontraron ofertas con los criterios proporcionados.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al filtrar las ofertas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
+
 
         private static bool EsPermitido(char ch)
         {
@@ -508,7 +502,7 @@ namespace CpPresentacion
             return permitidos.Contains(ch);
         }
 
-
+        
     }
 
 }
