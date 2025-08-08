@@ -41,7 +41,7 @@ namespace CpPresentacion
             CargarFiltros();  // Llamada a cargar los filtros
             CargarPersonas();
             AsignarEventosDeValidacion();
-
+            PersonalizarDataGridView();
 
         }
 
@@ -90,7 +90,23 @@ namespace CpPresentacion
 
         private void cpPostulante_Load(object sender, EventArgs e)
         {
+            // Establecer valores predeterminados para el control chkExtranjero
+            if (chkExtranjero.Checked)
+            {
+                // Si el checkbox está marcado, configurar como pasaporte
+                TxtDni.MaxLength = 50; // Para pasaporte
+                TxtDni.Clear();  // Limpiar el campo
+                lblDniPlaceholder.Text = "Pasaporte Extranjero"; // Texto del placeholder
+            }
+            else
+            {
+                // Si el checkbox no está marcado, configurar como cédula
+                TxtDni.MaxLength = 9;  // Limitar a 9 caracteres para la cédula
+                lblDniPlaceholder.Text = "Cédula nacional";  // Texto del placeholder
+            }
 
+            // Hacer visible el "placeholder"
+            lblDniPlaceholder.Visible = true;
         }
 
         private void BtnRegistrar_Click(object sender, EventArgs e)
@@ -458,6 +474,61 @@ namespace CpPresentacion
                     MessageBoxIcon.Error);
             }
         }
+
+        private void PersonalizarDataGridView()
+        {
+            // Cambiar el color de fondo general del DataGridView
+            DgvPersonas.BackgroundColor = Color.FromArgb(240, 248, 255); // Azul muy suave, estilo "Azure"
+
+            // Personalizar el color de los encabezados de las columnas
+            DgvPersonas.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 122, 204); // Azul oscuro
+            DgvPersonas.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            DgvPersonas.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
+            DgvPersonas.ColumnHeadersHeight = 40;
+
+            // Cambiar el color de las filas
+            DgvPersonas.RowsDefaultCellStyle.BackColor = Color.White;
+            DgvPersonas.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(230, 240, 255); // Azul suave en filas alternas
+            DgvPersonas.RowsDefaultCellStyle.ForeColor = Color.Black;
+
+            // Cambiar el color del borde del DataGridView
+            DgvPersonas.BorderStyle = BorderStyle.FixedSingle;
+            DgvPersonas.GridColor = Color.FromArgb(200, 200, 200); // Gris claro para las líneas de la cuadrícula
+
+            // Personalizar las celdas
+            DgvPersonas.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 122, 204); // Azul oscuro cuando se selecciona
+            DgvPersonas.DefaultCellStyle.SelectionForeColor = Color.White; // Texto blanco cuando se selecciona
+
+            // Personalizar las celdas al pasar el ratón (Hover)
+            DgvPersonas.CellMouseEnter += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    DgvPersonas.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.FromArgb(173, 216, 230); // Azul claro cuando el mouse pasa
+                }
+            };
+
+            DgvPersonas.CellMouseLeave += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    DgvPersonas.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.White; // Vuelve a blanco
+                }
+            };
+
+            // Personalizar la fuente de las celdas
+            DgvPersonas.DefaultCellStyle.Font = new Font("Arial", 9);
+
+            // Personalizar las filas de la cabecera al ser seleccionadas
+            DgvPersonas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            DgvPersonas.MultiSelect = false;
+
+            // Ajustar el tamaño de las columnas automáticamente según el contenido
+            DgvPersonas.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+        }
+
+
+
 
         private void ActualizarEncabezadosColumnas()
         {

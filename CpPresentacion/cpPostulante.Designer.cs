@@ -274,9 +274,9 @@
             chkExtranjero.AutoSize = true;
             chkExtranjero.Location = new Point(13, 622);
             chkExtranjero.Name = "chkExtranjero";
-            chkExtranjero.Size = new Size(128, 19);
+            chkExtranjero.Size = new Size(173, 19);
             chkExtranjero.TabIndex = 19;
-            chkExtranjero.Text = "Cedula o Pasaporte";
+            chkExtranjero.Text = "Cambio Cedula o Pasaporte";
             chkExtranjero.UseVisualStyleBackColor = true;
             chkExtranjero.CheckedChanged += chkExtranjero_CheckedChanged;
             // 
