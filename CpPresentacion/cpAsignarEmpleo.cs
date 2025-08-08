@@ -23,6 +23,9 @@ namespace CpPresentacion
         public cpAsignarEmpleo()
         {
             InitializeComponent();
+            //Metodo de personalizacion del datagridview
+            PersonalizarDataGridView();
+            PersonalizarDataGridView2();
             materialTabControl1.SelectedIndex = 4;
 
             // Configuración inicial de MaterialSkin
@@ -437,6 +440,7 @@ namespace CpPresentacion
                 5 => this is cpHistorialMensajes ? this : new cpHistorialMensajes(),
                 6 => this is Carnet ? this : new Carnet(),
                 7 => this is cpRegistro ? this : new cpRegistro(),
+                8 => this is cpHistorialPostulaciones ? this : new cpHistorialPostulaciones(),
                 _ => null
             };
 
@@ -454,6 +458,109 @@ namespace CpPresentacion
 
         private bool _enAsignacion = false;
 
+        private void PersonalizarDataGridView()
+        {
+            // Cambiar el color de fondo general del DataGridView
+            dgvPostulantes.BackgroundColor = Color.FromArgb(240, 248, 255); // Azul muy suave, estilo "Azure"
+
+            // Personalizar el color de los encabezados de las columnas
+            dgvPostulantes.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 122, 204); // Azul oscuro
+            dgvPostulantes.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvPostulantes.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
+            dgvPostulantes.ColumnHeadersHeight = 40;
+
+            // Cambiar el color de las filas
+            dgvPostulantes.RowsDefaultCellStyle.BackColor = Color.White;
+            dgvPostulantes.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(230, 240, 255); // Azul suave en filas alternas
+            dgvPostulantes.RowsDefaultCellStyle.ForeColor = Color.Black;
+
+            // Cambiar el color del borde del DataGridView
+            dgvPostulantes.BorderStyle = BorderStyle.FixedSingle;
+            dgvPostulantes.GridColor = Color.FromArgb(200, 200, 200); // Gris claro para las líneas de la cuadrícula
+
+            // Personalizar las celdas
+            dgvPostulantes.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 122, 204); // Azul oscuro cuando se selecciona
+            dgvPostulantes.DefaultCellStyle.SelectionForeColor = Color.White; // Texto blanco cuando se selecciona
+
+            // Personalizar las celdas al pasar el ratón (Hover)
+            dgvPostulantes.CellMouseEnter += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    dgvPostulantes.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.FromArgb(173, 216, 230); // Azul claro cuando el mouse pasa
+                }
+            };
+
+            dgvPostulantes.CellMouseLeave += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    dgvPostulantes.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.White; // Vuelve a blanco
+                }
+            };
+
+            // Personalizar la fuente de las celdas
+            dgvPostulantes.DefaultCellStyle.Font = new Font("Arial", 9);
+
+            // Personalizar las filas de la cabecera al ser seleccionadas
+            dgvPostulantes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvPostulantes.MultiSelect = false;
+
+            // Ajustar el tamaño de las columnas automáticamente según el contenido
+            dgvPostulantes.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+        }
+
+        private void PersonalizarDataGridView2()
+        {
+            // Cambiar el color de fondo general del DataGridView
+            dgvEmpresas.BackgroundColor = Color.FromArgb(240, 248, 255); // Azul muy suave, estilo "Azure"
+
+            // Personalizar el color de los encabezados de las columnas
+            dgvEmpresas.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 122, 204); // Azul oscuro
+            dgvEmpresas.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvEmpresas.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
+            dgvEmpresas.ColumnHeadersHeight = 40;
+
+            // Cambiar el color de las filas
+            dgvEmpresas.RowsDefaultCellStyle.BackColor = Color.White;
+            dgvEmpresas.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(230, 240, 255); // Azul suave en filas alternas
+            dgvEmpresas.RowsDefaultCellStyle.ForeColor = Color.Black;
+
+            // Cambiar el color del borde del DataGridView
+            dgvEmpresas.BorderStyle = BorderStyle.FixedSingle;
+            dgvEmpresas.GridColor = Color.FromArgb(200, 200, 200); // Gris claro para las líneas de la cuadrícula
+
+            // Personalizar las celdas
+            dgvEmpresas.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 122, 204); // Azul oscuro cuando se selecciona
+            dgvEmpresas.DefaultCellStyle.SelectionForeColor = Color.White; // Texto blanco cuando se selecciona
+
+            // Personalizar las celdas al pasar el ratón (Hover)
+            dgvEmpresas.CellMouseEnter += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    dgvEmpresas.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.FromArgb(173, 216, 230); // Azul claro cuando el mouse pasa
+                }
+            };
+
+            dgvEmpresas.CellMouseLeave += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    dgvEmpresas.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.White; // Vuelve a blanco
+                }
+            };
+
+            // Personalizar la fuente de las celdas
+            dgvEmpresas.DefaultCellStyle.Font = new Font("Arial", 9);
+
+            // Personalizar las filas de la cabecera al ser seleccionadas
+            dgvEmpresas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvEmpresas.MultiSelect = false;
+
+            // Ajustar el tamaño de las columnas automáticamente según el contenido
+            dgvEmpresas.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+        }
 
     }
 }

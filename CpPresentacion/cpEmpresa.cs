@@ -25,6 +25,8 @@ namespace CpPresentacion
         public cpEmpresa()
         {
             InitializeComponent();
+            //Metodo de personalizacion del datagridview
+            PersonalizarDataGridView();
 
             // Cargar países en el ComboBox
             CargarPaises();
@@ -461,31 +463,14 @@ namespace CpPresentacion
 
         private void AsignarEventosDeValidacion()
         {
-            // Asegúrate de que el TextBox está bien referenciado
-            txtBusqueda.KeyPress += TxtBusqueda_KeyPress;
+            
+            
         }
 
         private void TxtBusqueda_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Verificamos el filtro seleccionado
-            string filtro = cmbFiltro.SelectedItem.ToString();
-
-            // Si el filtro es "Id" o "Rnc", solo permitimos números
-            if (filtro == "Id" || filtro == "Rnc")
-            {
-                if (!Char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
-                {
-                    e.Handled = true;  // Bloquea la entrada de caracteres no numéricos
-                }
-            }
-            // Si el filtro es "Nombre", solo permitimos letras
-            else if (filtro == "Nombre")
-            {
-                if (!Char.IsLetter(e.KeyChar) && e.KeyChar != (char)Keys.Back)
-                {
-                    e.Handled = true;  // Bloquea la entrada de caracteres no alfabéticos
-                }
-            }
+            
         }
 
         private void TxtBusqueda_KeyPress_Numeros(object sender, KeyPressEventArgs e)
@@ -511,19 +496,72 @@ namespace CpPresentacion
             // Limpiar el texto para que no quede ningún valor previo
             txtBusqueda.Clear();
 
+            // Eliminar cualquier validación previa
+            txtBusqueda.KeyPress -= TxtBusqueda_KeyPress_Numeros;
+            txtBusqueda.KeyPress -= TxtBusqueda_KeyPress_Letras;
+
             // Asignamos el evento de validación correcto según el filtro seleccionado
             if (cmbFiltro.SelectedItem.ToString() == "Id" || cmbFiltro.SelectedItem.ToString() == "Rnc")
             {
                 // Validar solo números
-                txtBusqueda.KeyPress -= TxtBusqueda_KeyPress_Letras; // Eliminar validación de letras
                 txtBusqueda.KeyPress += TxtBusqueda_KeyPress_Numeros; // Asignar validación solo números
             }
             else if (cmbFiltro.SelectedItem.ToString() == "Nombre")
             {
                 // Validar solo letras
-                txtBusqueda.KeyPress -= TxtBusqueda_KeyPress_Numeros; // Eliminar validación de números
                 txtBusqueda.KeyPress += TxtBusqueda_KeyPress_Letras; // Asignar validación solo letras
             }
+        }
+        private void PersonalizarDataGridView()
+        {
+            // Cambiar el color de fondo general del DataGridView
+            DgvEmpresas.BackgroundColor = Color.FromArgb(240, 248, 255); // Azul muy suave, estilo "Azure"
+
+            // Personalizar el color de los encabezados de las columnas
+            DgvEmpresas.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 122, 204); // Azul oscuro
+            DgvEmpresas.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            DgvEmpresas.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
+            DgvEmpresas.ColumnHeadersHeight = 40;
+
+            // Cambiar el color de las filas
+            DgvEmpresas.RowsDefaultCellStyle.BackColor = Color.White;
+            DgvEmpresas.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(230, 240, 255); // Azul suave en filas alternas
+            DgvEmpresas.RowsDefaultCellStyle.ForeColor = Color.Black;
+
+            // Cambiar el color del borde del DataGridView
+            DgvEmpresas.BorderStyle = BorderStyle.FixedSingle;
+            DgvEmpresas.GridColor = Color.FromArgb(200, 200, 200); // Gris claro para las líneas de la cuadrícula
+
+            // Personalizar las celdas
+            DgvEmpresas.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 122, 204); // Azul oscuro cuando se selecciona
+            DgvEmpresas.DefaultCellStyle.SelectionForeColor = Color.White; // Texto blanco cuando se selecciona
+
+            // Personalizar las celdas al pasar el ratón (Hover)
+            DgvEmpresas.CellMouseEnter += (sender, e) =>
+                       {
+                          if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                          {
+                            DgvEmpresas.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.FromArgb(173, 216, 230); // Azul claro cuando el mouse pasa
+                          }
+                       };
+
+            DgvEmpresas.CellMouseLeave += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    DgvEmpresas.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.White; // Vuelve a blanco
+                }
+            };
+
+            // Personalizar la fuente de las celdas
+            DgvEmpresas.DefaultCellStyle.Font = new Font("Arial", 9);
+
+            // Personalizar las filas de la cabecera al ser seleccionadas
+            DgvEmpresas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            DgvEmpresas.MultiSelect = false;
+
+            // Ajustar el tamaño de las columnas automáticamente según el contenido
+            DgvEmpresas.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
 
     }
