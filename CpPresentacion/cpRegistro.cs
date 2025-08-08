@@ -27,43 +27,30 @@ namespace CpPresentacion
 
             materialTabControl1.SelectedIndex = 7;
 
-            // 1) Mostrar modal Ver / Editar
-            bool editarModo = false;
+            // ── 1) Mostrar modal Ver / Editar ───────────────────────────────
+            bool editarModo = false;                           // valor por defecto
             using (var dlg = new frmModoVisualizacion())
             {
                 if (dlg.ShowDialog() == DialogResult.OK &&
                     dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
                 {
-                    editarModo = true;
+                    editarModo = true;                         // eligió Editar
                 }
             }
 
-            // 2) NO bloquear aquí. Lo hará la paleta según el estado del switch
-            // this.SetReadOnly(!editarModo);  // <- quitar
+            // ── 2) Aplicar estado inicial al formulario ─────────────────────
+            this.SetReadOnly(!editarModo);                    // true = bloquear
 
             // ── 3) Crear paleta flotante y sincronizar switch ───────────────
-            paleta = new FormBoton(this, editarModo)
+            paleta = new FormBoton(this, editarModo)          // ← pasa estado
             {
                 FormBorderStyle = FormBorderStyle.FixedToolWindow,
                 StartPosition = FormStartPosition.Manual,
                 TopMost = true,
                 ShowInTaskbar = false
             };
-
-            paleta.Show(this);
-
-            Resize += (s, e) =>
-            {
-                if (WindowState == FormWindowState.Minimized) paleta.Hide();
-                else
-                {
-                    paleta.Show();
-                    PositionPaleta();
-                }
-            };
-
-            // Forzar que se coloque al lado del formulario ya visible
             PositionPaleta();
+            paleta.Show(this);
 
             // Reposicionar si mueves / redimensionas
             LocationChanged += (s, e) => PositionPaleta();
@@ -236,21 +223,7 @@ namespace CpPresentacion
         }
 
         private void PositionPaleta()
-        {
-            if (paleta == null || paleta.IsDisposed) return;
-
-            // Pegado al borde derecho y centrado vertical
-            int x = Right;
-            int y = Top + (Height / 2) - (paleta.Height / 2);
-
-            // Asegurar que no quede fuera de la pantalla activa
-            var screen = Screen.FromControl(this).WorkingArea;
-            if (x + paleta.Width > screen.Right) x = screen.Right - paleta.Width;
-            if (y < screen.Top) y = screen.Top;
-            if (y + paleta.Height > screen.Bottom) y = screen.Bottom - paleta.Height;
-
-            paleta.Location = new Point(x, y);
-        }
+            => paleta.Location = new Point(Right + 10, Top);
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             paleta?.Close();
