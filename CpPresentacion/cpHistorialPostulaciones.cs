@@ -17,6 +17,8 @@ namespace CpPresentacion
         public cpHistorialPostulaciones()
         {
             InitializeComponent();
+            materialTabControl1.SelectedIndex = 8;
+
             var materialSkinManager = MaterialSkin.MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
