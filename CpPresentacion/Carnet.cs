@@ -346,28 +346,7 @@ namespace CpPresentacion
 
         // ========================== UTILIDADES ==========================
 
-        private string FormatearTelefono(string telefono)
-        {
-            var soloDigitos = new string(telefono.Where(char.IsDigit).ToArray());
-
-            if (soloDigitos.Length == 10)
-            {
-                return string.Format("({0}) {1}-{2}",
-                    soloDigitos.Substring(0, 3),
-                    soloDigitos.Substring(3, 3),
-                    soloDigitos.Substring(6, 4));
-            }
-            else if (soloDigitos.Length == 7)
-            {
-                return string.Format("{0}-{1}",
-                    soloDigitos.Substring(0, 3),
-                    soloDigitos.Substring(3, 4));
-            }
-            else
-            {
-                return telefono;
-            }
-        }
+        
 
         private bool EsCorreoValido(string correo)
         {
