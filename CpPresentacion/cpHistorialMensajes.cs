@@ -20,7 +20,7 @@ namespace CpPresentacion
             InitializeComponent();
             materialTabControl1.SelectedIndex = 5;
 
-            // 🔹 Configurar el DataGridView para que no permita edición y tenga formato adecuado
+            // 🔹Configurar el DataGridView para que no permita edición y tenga formato adecuado
             ConfigurarDataGridView();
 
             // 🔹 Asociar el evento de clic en fila al método que muestra los detalles del mensaje
@@ -119,7 +119,34 @@ namespace CpPresentacion
             dgvHistorial.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvHistorial.MultiSelect = false;
             dgvHistorial.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            // 🎨 Colores modernos con armonía
+            dgvHistorial.BackgroundColor = Color.White;
+            dgvHistorial.GridColor = Color.FromArgb(200, 200, 200); // líneas sutiles
+
+            // 🎨 Colores de filas alternas
+            dgvHistorial.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 245, 255);
+
+            // 🎨 Encabezado azul oscuro con texto blanco
+            dgvHistorial.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(33, 53, 73);
+            dgvHistorial.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvHistorial.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            dgvHistorial.EnableHeadersVisualStyles = false;
+
+            // 🎨 Filas normales
+            dgvHistorial.DefaultCellStyle.BackColor = Color.White;
+            dgvHistorial.DefaultCellStyle.ForeColor = Color.Black;
+            dgvHistorial.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+
+            // 🎨 Selección
+            dgvHistorial.DefaultCellStyle.SelectionBackColor = Color.FromArgb(72, 133, 237);
+            dgvHistorial.DefaultCellStyle.SelectionForeColor = Color.White;
+
+            // 🎨 Bordes
+            dgvHistorial.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvHistorial.RowHeadersVisible = false; // Oculta la columna de los encabezados laterales
         }
+
 
         // 🔹 Botón de búsqueda con filtro
         private void mbtnBuscar_Click(object sender, EventArgs e)
