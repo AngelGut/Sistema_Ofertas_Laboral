@@ -140,6 +140,7 @@ namespace CpPresentacion
             lblDniPlaceholder.Visible = true;
             CargarFiltros();
             btnBuscar.Click += btnBuscar_Click;
+            cmbFiltro.SelectedIndexChanged += cmbFiltro_SelectedIndexChanged;
 
         }
 
@@ -627,6 +628,46 @@ namespace CpPresentacion
             catch (Exception ex)
             {
                 MessageBox.Show("Error al aplicar el filtro: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void cmbFiltro_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Verificar la opción seleccionada y restringir el tipo de entrada en el TextBox
+            if (cmbFiltro.SelectedItem.ToString() == "Id" || cmbFiltro.SelectedItem.ToString() == "Cédula")
+            {
+                // Permitir solo números
+                txtBusqueda.KeyPress -= txtBusqueda_KeyPress_Letras;
+                txtBusqueda.KeyPress += txtBusqueda_KeyPress_Numeros;
+            }
+            else if (cmbFiltro.SelectedItem.ToString() == "Nombre")
+            {
+                // Permitir solo letras
+                txtBusqueda.KeyPress -= txtBusqueda_KeyPress_Numeros;
+                txtBusqueda.KeyPress += txtBusqueda_KeyPress_Letras;
+            }
+        }
+
+        private void cmbFiltro_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
+
+        private void txtBusqueda_KeyPress_Letras(object sender, KeyPressEventArgs e)
+        {
+            // Permitir solo letras y teclas de control (como backspace)
+            if (!char.IsLetter(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true; // Bloquear cualquier tecla que no sea una letra
+            }
+        }
+
+        private void txtBusqueda_KeyPress_Numeros(object sender, KeyPressEventArgs e)
+        {
+            // Permitir solo números y teclas de control (como backspace)
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true; // Bloquear cualquier tecla que no sea un número
             }
         }
 
