@@ -64,21 +64,22 @@
             materialCard1.Controls.Add(label1);
             materialCard1.Depth = 0;
             materialCard1.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard1.Location = new Point(224, 85);
-            materialCard1.Margin = new Padding(12, 10, 12, 10);
+            materialCard1.Location = new Point(320, 142);
+            materialCard1.Margin = new Padding(17);
             materialCard1.MouseState = MaterialSkin.MouseState.HOVER;
             materialCard1.Name = "materialCard1";
-            materialCard1.Padding = new Padding(12, 10, 12, 10);
-            materialCard1.Size = new Size(324, 44);
+            materialCard1.Padding = new Padding(17);
+            materialCard1.Size = new Size(463, 73);
             materialCard1.TabIndex = 0;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(49, 10);
+            label1.Location = new Point(70, 17);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(224, 25);
+            label1.Size = new Size(330, 38);
             label1.TabIndex = 1;
             label1.Text = "ACERCA DEL PROYECTO";
             // 
@@ -86,9 +87,10 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(15, 10);
+            label2.Location = new Point(21, 17);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(171, 21);
+            label2.Size = new Size(257, 32);
             label2.TabIndex = 2;
             label2.Text = "Nombre del sistema: ";
             // 
@@ -103,21 +105,22 @@
             materialCard2.Controls.Add(label2);
             materialCard2.Depth = 0;
             materialCard2.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard2.Location = new Point(15, 149);
-            materialCard2.Margin = new Padding(12, 10, 12, 10);
+            materialCard2.Location = new Point(21, 248);
+            materialCard2.Margin = new Padding(17);
             materialCard2.MouseState = MaterialSkin.MouseState.HOVER;
             materialCard2.Name = "materialCard2";
-            materialCard2.Padding = new Padding(12, 10, 12, 10);
-            materialCard2.Size = new Size(729, 109);
+            materialCard2.Padding = new Padding(17);
+            materialCard2.Size = new Size(1108, 182);
             materialCard2.TabIndex = 2;
             // 
             // label13
             // 
             label13.AutoSize = true;
             label13.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label13.Location = new Point(83, 74);
+            label13.Location = new Point(119, 123);
+            label13.Margin = new Padding(4, 0, 4, 0);
             label13.Name = "label13";
-            label13.Size = new Size(39, 20);
+            label13.Size = new Size(59, 30);
             label13.TabIndex = 7;
             label13.Text = "1.0.0";
             // 
@@ -125,9 +128,10 @@
             // 
             label12.AutoSize = true;
             label12.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label12.Location = new Point(15, 72);
+            label12.Location = new Point(21, 120);
+            label12.Margin = new Padding(4, 0, 4, 0);
             label12.Name = "label12";
-            label12.Size = new Size(71, 21);
+            label12.Size = new Size(106, 32);
             label12.TabIndex = 6;
             label12.Text = "Version:";
             // 
@@ -135,9 +139,10 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label5.Location = new Point(116, 39);
+            label5.Location = new Point(166, 65);
+            label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
-            label5.Size = new Size(467, 20);
+            label5.Size = new Size(679, 30);
             label5.TabIndex = 5;
             label5.Text = "Sistema para gestión de ofertas laborales, postulantes y seguimiento.";
             // 
@@ -145,9 +150,10 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.Location = new Point(15, 38);
+            label4.Location = new Point(21, 63);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(104, 21);
+            label4.Size = new Size(156, 32);
             label4.TabIndex = 4;
             label4.Text = "Descripcion:";
             // 
@@ -155,9 +161,10 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label3.Location = new Point(181, 12);
+            label3.Location = new Point(259, 20);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(69, 20);
+            label3.Size = new Size(100, 30);
             label3.TabIndex = 3;
             label3.Text = "Postulate";
             // 
@@ -168,12 +175,12 @@
             materialCard3.Controls.Add(label6);
             materialCard3.Depth = 0;
             materialCard3.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard3.Location = new Point(15, 258);
-            materialCard3.Margin = new Padding(12, 10, 12, 10);
+            materialCard3.Location = new Point(21, 430);
+            materialCard3.Margin = new Padding(17);
             materialCard3.MouseState = MaterialSkin.MouseState.HOVER;
             materialCard3.Name = "materialCard3";
-            materialCard3.Padding = new Padding(12, 10, 12, 10);
-            materialCard3.Size = new Size(729, 462);
+            materialCard3.Padding = new Padding(17);
+            materialCard3.Size = new Size(1108, 770);
             materialCard3.TabIndex = 3;
             // 
             // S
@@ -184,12 +191,12 @@
             S.Controls.Add(picPerfil);
             S.Depth = 0;
             S.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            S.Location = new Point(397, 58);
-            S.Margin = new Padding(12, 10, 12, 10);
+            S.Location = new Point(567, 97);
+            S.Margin = new Padding(17);
             S.MouseState = MaterialSkin.MouseState.HOVER;
             S.Name = "S";
-            S.Padding = new Padding(12, 10, 12, 10);
-            S.Size = new Size(316, 388);
+            S.Padding = new Padding(17);
+            S.Size = new Size(520, 647);
             S.TabIndex = 9;
             S.Paint += S_Paint;
             // 
@@ -197,9 +204,10 @@
             // 
             lblRedSocial.AutoSize = true;
             lblRedSocial.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblRedSocial.Location = new Point(13, 254);
+            lblRedSocial.Location = new Point(19, 423);
+            lblRedSocial.Margin = new Padding(4, 0, 4, 0);
             lblRedSocial.Name = "lblRedSocial";
-            lblRedSocial.Size = new Size(82, 20);
+            lblRedSocial.Size = new Size(117, 30);
             lblRedSocial.TabIndex = 9;
             lblRedSocial.Text = "Red Social:";
             // 
@@ -207,19 +215,20 @@
             // 
             lblNombre.AutoSize = true;
             lblNombre.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblNombre.Location = new Point(14, 214);
+            lblNombre.Location = new Point(20, 357);
+            lblNombre.Margin = new Padding(4, 0, 4, 0);
             lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(67, 20);
+            lblNombre.Size = new Size(99, 30);
             lblNombre.TabIndex = 8;
             lblNombre.Text = "Nombre:";
             lblNombre.Click += lblNombre_Click;
             // 
             // picPerfil
             // 
-            picPerfil.Location = new Point(65, 13);
-            picPerfil.Margin = new Padding(3, 2, 3, 2);
+            picPerfil.Location = new Point(93, 22);
+            picPerfil.Margin = new Padding(4, 3, 4, 3);
             picPerfil.Name = "picPerfil";
-            picPerfil.Size = new Size(189, 169);
+            picPerfil.Size = new Size(270, 282);
             picPerfil.SizeMode = PictureBoxSizeMode.Zoom;
             picPerfil.TabIndex = 0;
             picPerfil.TabStop = false;
@@ -228,9 +237,10 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label6.Location = new Point(27, 15);
+            label6.Location = new Point(143, 42);
+            label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
-            label6.Size = new Size(192, 25);
+            label6.Size = new Size(286, 38);
             label6.TabIndex = 1;
             label6.Text = "DESARROLLADORES";
             // 
@@ -244,12 +254,12 @@
             mtbtnAngel.Font = new Font("Segoe UI", 9F);
             mtbtnAngel.HighEmphasis = true;
             mtbtnAngel.Icon = null;
-            mtbtnAngel.Location = new Point(28, 39);
-            mtbtnAngel.Margin = new Padding(4, 6, 4, 6);
+            mtbtnAngel.Location = new Point(40, 65);
+            mtbtnAngel.Margin = new Padding(6, 10, 6, 10);
             mtbtnAngel.MouseState = MaterialSkin.MouseState.HOVER;
             mtbtnAngel.Name = "mtbtnAngel";
             mtbtnAngel.NoAccentTextColor = Color.Empty;
-            mtbtnAngel.Size = new Size(300, 36);
+            mtbtnAngel.Size = new Size(429, 60);
             mtbtnAngel.TabIndex = 10;
             mtbtnAngel.Text = "Angel D. Gutiérrez C.";
             mtbtnAngel.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -268,12 +278,12 @@
             materialCard4.Controls.Add(mtbtnJeiferson);
             materialCard4.Depth = 0;
             materialCard4.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard4.Location = new Point(42, 316);
-            materialCard4.Margin = new Padding(12, 10, 12, 10);
+            materialCard4.Location = new Point(60, 527);
+            materialCard4.Margin = new Padding(17);
             materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
             materialCard4.Name = "materialCard4";
-            materialCard4.Padding = new Padding(12, 10, 12, 10);
-            materialCard4.Size = new Size(355, 388);
+            materialCard4.Padding = new Padding(17);
+            materialCard4.Size = new Size(507, 647);
             materialCard4.TabIndex = 8;
             // 
             // mtbtnRonald
@@ -286,12 +296,12 @@
             mtbtnRonald.Font = new Font("Segoe UI", 9F);
             mtbtnRonald.HighEmphasis = true;
             mtbtnRonald.Icon = null;
-            mtbtnRonald.Location = new Point(28, 315);
-            mtbtnRonald.Margin = new Padding(4, 6, 4, 6);
+            mtbtnRonald.Location = new Point(40, 525);
+            mtbtnRonald.Margin = new Padding(6, 10, 6, 10);
             mtbtnRonald.MouseState = MaterialSkin.MouseState.HOVER;
             mtbtnRonald.Name = "mtbtnRonald";
             mtbtnRonald.NoAccentTextColor = Color.Empty;
-            mtbtnRonald.Size = new Size(300, 36);
+            mtbtnRonald.Size = new Size(429, 60);
             mtbtnRonald.TabIndex = 14;
             mtbtnRonald.Text = "Ronald A. Reyes";
             mtbtnRonald.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -309,12 +319,12 @@
             mtbtnBrailyn.Font = new Font("Segoe UI", 9F);
             mtbtnBrailyn.HighEmphasis = true;
             mtbtnBrailyn.Icon = null;
-            mtbtnBrailyn.Location = new Point(28, 258);
-            mtbtnBrailyn.Margin = new Padding(4, 6, 4, 6);
+            mtbtnBrailyn.Location = new Point(40, 430);
+            mtbtnBrailyn.Margin = new Padding(6, 10, 6, 10);
             mtbtnBrailyn.MouseState = MaterialSkin.MouseState.HOVER;
             mtbtnBrailyn.Name = "mtbtnBrailyn";
             mtbtnBrailyn.NoAccentTextColor = Color.Empty;
-            mtbtnBrailyn.Size = new Size(300, 36);
+            mtbtnBrailyn.Size = new Size(429, 60);
             mtbtnBrailyn.TabIndex = 13;
             mtbtnBrailyn.Text = "Brailyn Jaquez";
             mtbtnBrailyn.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -332,12 +342,12 @@
             mtbtnLuis.Font = new Font("Segoe UI", 9F);
             mtbtnLuis.HighEmphasis = true;
             mtbtnLuis.Icon = null;
-            mtbtnLuis.Location = new Point(28, 146);
-            mtbtnLuis.Margin = new Padding(4, 6, 4, 6);
+            mtbtnLuis.Location = new Point(40, 243);
+            mtbtnLuis.Margin = new Padding(6, 10, 6, 10);
             mtbtnLuis.MouseState = MaterialSkin.MouseState.HOVER;
             mtbtnLuis.Name = "mtbtnLuis";
             mtbtnLuis.NoAccentTextColor = Color.Empty;
-            mtbtnLuis.Size = new Size(300, 36);
+            mtbtnLuis.Size = new Size(429, 60);
             mtbtnLuis.TabIndex = 12;
             mtbtnLuis.Text = "Luis Bravo";
             mtbtnLuis.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -355,12 +365,12 @@
             mtbtnElian.Font = new Font("Segoe UI", 9F);
             mtbtnElian.HighEmphasis = true;
             mtbtnElian.Icon = null;
-            mtbtnElian.Location = new Point(28, 93);
-            mtbtnElian.Margin = new Padding(4, 6, 4, 6);
+            mtbtnElian.Location = new Point(40, 155);
+            mtbtnElian.Margin = new Padding(6, 10, 6, 10);
             mtbtnElian.MouseState = MaterialSkin.MouseState.HOVER;
             mtbtnElian.Name = "mtbtnElian";
             mtbtnElian.NoAccentTextColor = Color.Empty;
-            mtbtnElian.Size = new Size(300, 36);
+            mtbtnElian.Size = new Size(429, 60);
             mtbtnElian.TabIndex = 11;
             mtbtnElian.Text = "Elian Nicolas";
             mtbtnElian.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -378,12 +388,12 @@
             mtbtnJeiferson.Font = new Font("Segoe UI", 9F);
             mtbtnJeiferson.HighEmphasis = true;
             mtbtnJeiferson.Icon = null;
-            mtbtnJeiferson.Location = new Point(28, 202);
-            mtbtnJeiferson.Margin = new Padding(4, 6, 4, 6);
+            mtbtnJeiferson.Location = new Point(40, 337);
+            mtbtnJeiferson.Margin = new Padding(6, 10, 6, 10);
             mtbtnJeiferson.MouseState = MaterialSkin.MouseState.HOVER;
             mtbtnJeiferson.Name = "mtbtnJeiferson";
             mtbtnJeiferson.NoAccentTextColor = Color.Empty;
-            mtbtnJeiferson.Size = new Size(300, 36);
+            mtbtnJeiferson.Size = new Size(429, 60);
             mtbtnJeiferson.TabIndex = 11;
             mtbtnJeiferson.Text = "Jeiferson David";
             mtbtnJeiferson.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -393,18 +403,18 @@
             // 
             // cpSoporte
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(772, 732);
+            ClientSize = new Size(1153, 1220);
             Controls.Add(materialCard4);
             Controls.Add(materialCard3);
             Controls.Add(materialCard2);
             Controls.Add(materialCard1);
-            Margin = new Padding(3, 2, 3, 2);
+            Margin = new Padding(4, 3, 4, 3);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "cpSoporte";
-            Padding = new Padding(3, 48, 3, 2);
+            Padding = new Padding(4, 80, 4, 3);
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Soporte";
             Load += cpSoporte_Load;
