@@ -13,12 +13,14 @@ using CpNegocio.servicios;
 using MaterialSkin.Controls;
 using Microsoft.Data.SqlClient;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using CpPresentacion.Asistencia;   // contiene IReadOnlyContainer y las extensiones
 
 namespace CpPresentacion
 {
-    public partial class cpOfertas : MaterialForm // <<== ¡Cambiado a MaterialForm!
+    public partial class cpOfertas : MaterialForm, IReadOnlyContainer
     {
-      
+        public Control Container => this;
+
         public cpOfertas()
         {
             InitializeComponent();
@@ -51,6 +53,19 @@ namespace CpPresentacion
 
             PopulateAreas(); //Cargamos las areas laborales
 
+            // Bloquear todos los controles recursivamente
+            this.SetReadOnly(true);
+
+            // Mostrar mini-form Ver/Editar
+            using (var dlg = new frmModoVisualizacion())
+            {
+                if (dlg.ShowDialog() == DialogResult.OK &&
+                    dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
+                {
+                    // Desbloquear si eligió Editar
+                    this.SetReadOnly(false);
+                }
+            }
 
         }
 
