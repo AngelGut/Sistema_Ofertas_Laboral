@@ -437,6 +437,7 @@ namespace CpPresentacion
                 5 => this is cpHistorialMensajes ? this : new cpHistorialMensajes(),
                 6 => this is Carnet ? this : new Carnet(),
                 7 => this is cpRegistro ? this : new cpRegistro(),
+                8 => this is cpHistorialPostulaciones ? this : new cpHistorialPostulaciones(),
                 _ => null
             };
 
