@@ -22,10 +22,17 @@ namespace CpPresentacion
             InitializeComponent();
             {
                 _target = target;
-                InitializeComponent();
-                swthHabilitar.Checked = startInEdit;                 // sincr. inicial
 
-                // Conecta el evento del switch
+                // Estado inicial del switch (según lo elegido en frmModoVisualizacion)
+                swthHabilitar.Checked = startInEdit;
+
+                // 🔸 siempre habilitado para que el usuario pueda cambiarlo
+                swthHabilitar.Enabled = true;
+
+                // Aplica el estado inicial al formulario (editable = ON)
+                _target.SetReadOnly(!startInEdit);
+
+                // Cambios posteriores del usuario
                 swthHabilitar.CheckedChanged += swthHabilitar_CheckedChanged;
             }
         }

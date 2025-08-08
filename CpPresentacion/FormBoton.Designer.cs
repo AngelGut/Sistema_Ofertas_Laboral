@@ -35,7 +35,7 @@
             // 
             swthHabilitar.AutoSize = true;
             swthHabilitar.Depth = 0;
-            swthHabilitar.Location = new Point(22, 137);
+            swthHabilitar.Location = new Point(27, 108);
             swthHabilitar.Margin = new Padding(0);
             swthHabilitar.MouseLocation = new Point(-1, -1);
             swthHabilitar.MouseState = MaterialSkin.MouseState.HOVER;
@@ -51,7 +51,10 @@
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(226, 245);
+            ControlBox = false;
             Controls.Add(swthHabilitar);
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FormBoton";
             ResumeLayout(false);
             PerformLayout();
