@@ -81,7 +81,7 @@ namespace CpPresentacion
         {
             CargarCombos();
             await CargarHistorialPostulacionesAsync();
-            MessageBox.Show("Formulario cargado", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
         }
 
         private void CargarCombos()
