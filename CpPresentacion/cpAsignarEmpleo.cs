@@ -14,6 +14,7 @@ namespace CpPresentacion
 {
     public partial class cpAsignarEmpleo : MaterialForm, IReadOnlyContainer
     {
+        private FormBoton _formBoton;  // switch flotante
 
         // Implementación requerida por IReadOnlyContainer
         public Control Container => this;
@@ -78,29 +79,36 @@ namespace CpPresentacion
             };
 
             // 1) Bloquear todos los controles por defecto (modo "Ver")
-            //    Usa la extensión SetReadOnly sobre el contenedor (este form)
+            // 1) Arrancar bloqueado (modo Ver)
             this.SetReadOnly(true);
 
-            // 2) Mostrar el mini-form que pregunta "Ver" o "Editar"
+            // 2) Mini-form para decidir estado inicial
+            bool startInEdit = false;
             using (var dlg = new frmModoVisualizacion())
             {
-                // Si el usuario confirma...
-                if (dlg.ShowDialog() == DialogResult.OK)
+                if (dlg.ShowDialog() == DialogResult.OK &&
+                    dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
                 {
-                    // 3) Si eligió "Editar", desbloqueamos todos los controles
-                    if (dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
-                    {
-                        this.SetReadOnly(false);
-                    }
-                    // Si eligió "Ver", ya está bloqueado por el paso 1, no hay nada extra que hacer.
-                }
-                else
-                {
-                    // Si cancela, dejamos el formulario en modo "Ver" (bloqueado) por seguridad.
-                    // Si prefieres cerrar el form al cancelar, puedes hacer:
-                    // this.Close(); return;
+                    startInEdit = true;
                 }
             }
+
+            // 3) Aplicar estado inicial
+            this.SetReadOnly(!startInEdit);
+
+            // (opcional) permitir selección en grillas aunque esté en "Ver"
+            // dgvPostulantes.Enabled = true;
+            // dgvEmpresas.Enabled = true;
+
+            // 4) Abrir switch flotante (siempre activo)
+            AbrirFormBoton(startInEdit);
+
+            // 5) Cerrar el flotante cuando se cierre este form
+            this.FormClosed += (s, e) =>
+            {
+                if (_formBoton != null && !_formBoton.IsDisposed) _formBoton.Close();
+                _formBoton = null;
+            };
         }
 
         private void CargarCombos()
@@ -589,6 +597,43 @@ namespace CpPresentacion
 
             // Ajustar el tamaño de las columnas automáticamente según el contenido
             dgvEmpresas.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+        }
+
+        private void AbrirFormBoton(bool startInEdit)
+        {
+            if (_formBoton != null && !_formBoton.IsDisposed) return;
+
+            _formBoton = new FormBoton(this, startInEdit)
+            {
+                StartPosition = FormStartPosition.Manual,
+                TopMost = true
+            };
+
+            void Reposicionar()
+            {
+                if (_formBoton == null || _formBoton.IsDisposed) return;
+
+                // Posición del form en pantalla
+                var p = this.PointToScreen(Point.Empty);
+
+                // AFUERA, pegado al borde derecho y centrado vertical
+                int x = p.X + this.Width;
+                int y = p.Y + (this.Height - _formBoton.Height) / 2;
+
+                // Mantener visible en el mismo monitor (evita que se “corte”)
+                var wa = Screen.FromControl(this).WorkingArea;
+                x = Math.Min(Math.Max(x, wa.Left), wa.Right - _formBoton.Width);
+                y = Math.Min(Math.Max(y, wa.Top), wa.Bottom - _formBoton.Height);
+
+                _formBoton.Location = new Point(x, y);
+            }
+
+            Reposicionar();
+            this.Move += (s, e) => Reposicionar();
+            this.Resize += (s, e) => Reposicionar();
+
+            _formBoton.FormClosed += (s, e) => _formBoton = null;
+            _formBoton.Show(this); // owner
         }
 
     }
