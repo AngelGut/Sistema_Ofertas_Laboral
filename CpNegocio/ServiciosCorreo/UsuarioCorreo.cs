@@ -29,82 +29,61 @@ namespace CapaNegocio
         }
 
         // Recuperar la clave del usuario de forma asíncrona
-        public async Task<bool> RecuperarClaveAsync(string correo)
+        public async Task<bool> RecuperarClaveAsync(string correo, string nuevaClave)
         {
-            if (!await DatosUsuario.ExisteCorreoAsync(correo))  // Verifica si el correo existe de forma asíncrona
-                return false; // Si el correo no existe, retornamos false
+            // Paso 1: Validar si el correo existe
+            if (string.IsNullOrWhiteSpace(correo))
+            {
+                throw new ArgumentException("Debe ingresar un correo válido.");
+            }
 
-            // Genera una nueva clave de forma segura
-            string nuevaClave = GenerarNuevaClave(); // Usar un generador más seguro si es necesario
-            bool actualizada = await DatosUsuario.CambiarClaveAsync(correo, nuevaClave);
+            if (!await DatosUsuario.ExisteCorreoAsync(correo))
+            {
+                throw new ArgumentException("El correo no está registrado en el sistema.");
+            }
 
-            if (!actualizada)
-                return false; // Si no se pudo actualizar la clave, retornamos false
+            // Paso 2: Actualizar la contraseña
+            bool actualizado = await DatosUsuario.CambiarClaveAsync(correo, nuevaClave);
+            if (!actualizado)
+            {
+                throw new Exception("No se pudo actualizar la contraseña.");
+            }
 
-            // Enviar correo con la nueva clave de forma asíncrona
+            // Paso 3: Enviar correo con la nueva contraseña
             var correoServicio = new ServiciosCorreo(
-                "ofertaslaboralesuce@gmail.com",         // Remitente
-                "xskfnxncewwumili",                    // Clave del remitente
-                "smtp.gmail.com",                       // Servidor SMTP
-                587,                                    // Puerto SMTP
-                true                                    // SSL
+                "ofertaslaboralesuce@gmail.com",    // Remitente
+                "xskfnxncewwumili",                 // Contraseña del remitente
+                "smtp.gmail.com",                   // Servidor SMTP
+                587,                                // Puerto SMTP
+                true                                // SSL
             );
 
-            string asunto = "Recuperación de contraseña";
-            string cuerpo = $"<b>Tu nueva contraseña es:</b> {nuevaClave}";
-            return await correoServicio.EnviarCorreoAsync(asunto, cuerpo, new List<string> { correo });  // Enviar correo de forma asíncrona
+            string asunto = "Confirmación de cambio de contraseña";
+            string cuerpo = $"Hola,<br>Tu contraseña ha sido cambiada exitosamente.<br><b>Nueva contraseña:</b> {nuevaClave}";
+            bool enviado = await correoServicio.EnviarCorreoAsync(asunto, cuerpo, new List<string> { correo });
+
+            if (!enviado)
+            {
+                throw new Exception("Contraseña actualizada, pero no se pudo enviar el correo.");
+            }
+
+            return true;
         }
 
         // Registrar un nuevo usuario de forma asíncrona
         public async Task<bool> RegistrarUsuarioAsync(Usuario usuario)
         {
-            try
+            // Aquí va la lógica para registrar el usuario en la base de datos
+            bool registrado = await DatosUsuario.InsertarUsuarioAsync(usuario);
+            if (!registrado)
             {
-                // Verificar si el correo ya está registrado
-                if (await DatosUsuario.ExisteCorreoAsync(usuario.Correo))  // Comprobar de forma asíncrona
-                {
-                    Console.WriteLine("Error: El correo '{0}' ya está registrado. Por favor, ingrese otro correo.", usuario.Correo);
-                    return false; // Si el correo ya existe, retorna falso
-                }
-
-                // Verificar si el nombre de usuario ya está registrado de forma asíncrona
-                if (await DatosUsuario.ExisteUsuarioAsync(usuario.UsuarioNombre))
-                {
-                    Console.WriteLine("Error: El nombre de usuario '{0}' ya está registrado. Por favor, elija otro nombre de usuario.", usuario.UsuarioNombre);
-                    return false; // Si el nombre de usuario ya existe, retorna falso
-                }
-
-                bool registrado = await DatosUsuario.InsertarUsuarioAsync(usuario);  // Llamada asíncrona a InsertarUsuario
-
-                if (!registrado)
-                {
-                    Console.WriteLine("Error: No se pudo registrar al usuario.");
-                }
-                else
-                {
-                    Console.WriteLine("Usuario registrado exitosamente con correo: {0}", usuario.Correo);
-                }
-
-                return registrado; // Retorna el resultado del registro
-            }
-            catch (SqlException sqlEx)
-            {
-                // Captura excepciones relacionadas con SQL
-                Console.WriteLine("Error de base de datos: " + sqlEx.Message);
                 return false;
             }
-            catch (InvalidOperationException invOpEx)
-            {
-                // Captura excepciones relacionadas con la operación inválida
-                Console.WriteLine("Operación inválida: " + invOpEx.Message);
-                return false;
-            }
-            catch (Exception ex)
-            {
-                // Captura cualquier otro tipo de excepción
-                Console.WriteLine("Error inesperado al registrar el usuario: " + ex.Message);
-                return false;
-            }
+
+            // Enviar el correo de bienvenida
+            bool correoEnviado = await EnviarCorreoBienvenidaAsync(usuario.Correo, usuario.UsuarioNombre, usuario.Clave);
+
+            return correoEnviado;
         }
 
         public async Task<bool> ExisteUsuarioAsync(string usuarioNombre)
@@ -112,10 +91,30 @@ namespace CapaNegocio
             return await DatosUsuario.ExisteUsuarioAsync(usuarioNombre);  // Llamada asíncrona a DatosUsuario para verificar si el usuario ya existe
         }
 
-        // Función para generar una nueva clave (puedes mejorar la seguridad aquí si lo deseas)
-        private string GenerarNuevaClave()
+
+        // Método para enviar correo de bienvenida
+        private async Task<bool> EnviarCorreoBienvenidaAsync(string correo, string usuarioNombre, string clave)
         {
-            return Guid.NewGuid().ToString().Substring(0, 6); // Puedes cambiar esta lógica si quieres una clave más segura
+            string asunto = "Bienvenido a nuestro sistema de Ofertas Laborales";
+            string cuerpo = $"Hola {usuarioNombre},<br><br>" +
+                            $"Gracias por registrarte en nuestro sistema. A continuación te proporcionamos tu información de acceso:<br>" +
+                            $"<b>Usuario:</b> {usuarioNombre}<br>" +
+                            $"<b>Contraseña:</b> {clave}<br><br>" +
+                            $"¡Disfruta de los servicios!";
+
+            var correoServicio = new ServiciosCorreo(
+                "ofertaslaboralesuce@gmail.com",    // Remitente
+                "xskfnxncewwumili",                 // Contraseña del remitente
+                "smtp.gmail.com",                   // Servidor SMTP
+                587,                                // Puerto SMTP
+                true                                // SSL
+            );
+
+            bool enviado = await correoServicio.EnviarCorreoAsync(asunto, cuerpo, new List<string> { correo });
+
+            return enviado;
         }
+        
+        
     }
 }

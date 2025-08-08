@@ -1,12 +1,8 @@
 ﻿using CapaNegocio;
 using CpNegocio.Empresas_y_Postulantes;
-using CpNegocio.ServiciosCorreo;
 using MaterialSkin.Controls;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,6 +52,8 @@ namespace CpPresentacion
             destino.Activate();
         }
 
+
+        // Guardar el nuevo usuario
         // Guardar el nuevo usuario
         private async void btnGuardar_Click(object sender, EventArgs e)
         {
@@ -91,7 +89,7 @@ namespace CpPresentacion
             {
                 UsuarioNombre = usuarioNombre,
                 Correo = correo,
-                Clave = clave, // La contraseña no está encriptada aún
+                Clave = clave, // La clave es la que el usuario escribe
                 Rol = rol
             };
 
@@ -101,11 +99,6 @@ namespace CpPresentacion
             if (registrado)
             {
                 MessageBox.Show("Usuario registrado exitosamente.");
-
-                // Enviar el correo con la nueva cuenta
-                await EnviarCorreoBienvenidaAsync(correo, usuarioNombre, clave);
-
-                // Limpiar los campos de texto
                 LimpiarCampos();
             }
             else
@@ -114,6 +107,8 @@ namespace CpPresentacion
             }
         }
 
+
+
         // Limpiar los campos del formulario
         private void LimpiarCampos()
         {
@@ -121,39 +116,6 @@ namespace CpPresentacion
             txtCorreo.Clear();
             txtContraseña.Clear();
             cmbRol.SelectedIndex = 0;  // Restablecer el ComboBox al primer valor
-        }
-
-        // Enviar correo de bienvenida de manera asíncrona
-        private async Task EnviarCorreoBienvenidaAsync(string correo, string usuarioNombre, string clave)
-        {
-            // Crear el mensaje de correo
-            string asunto = "Bienvenido a nuestro sistema de Ofertas Laborales";
-            string cuerpo = $"Hola {usuarioNombre},<br><br>" +
-                            $"Gracias por registrarte en nuestro sistema. A continuación te proporcionamos tu información de acceso:<br>" +
-                            $"<b>Usuario:</b> {usuarioNombre}<br>" +
-                            $"<b>Contraseña:</b> {clave}<br><br>" +
-                            $"¡Disfruta de los servicios!";
-
-            // Usar la clase ServiciosCorreo para enviar el mensaje
-            var correoServicio = new ServiciosCorreo(
-                "ofertaslaboralesuce@gmail.com",    // Remitente
-                "xskfnxncewwumili",                 // Contraseña del remitente
-                "smtp.gmail.com",                   // Servidor SMTP
-                587,                                // Puerto SMTP
-                true                                // SSL
-            );
-
-            // Enviar el correo asíncronamente
-            bool enviado = await correoServicio.EnviarCorreoAsync(asunto, cuerpo, new List<string> { correo });
-
-            if (enviado)
-            {
-                MessageBox.Show("Correo de bienvenida enviado al usuario.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("Hubo un error al enviar el correo de bienvenida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         // Cancelar el registro y regresar al menú

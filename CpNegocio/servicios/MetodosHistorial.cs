@@ -28,12 +28,12 @@ namespace CpNegocio.servicios
                     o.Puesto,
                     e.Nombre AS [Empresa],
                     a.FechaAsignacion
-                FROM Asignacion a
-                JOIN Persona p ON a.PersonaId = p.Id
-                JOIN Oferta o ON a.OfertaId = o.Id
-                JOIN Empresa e ON o.EmpresaId = e.Id
-                WHERE p.Nombre LIKE @filtro OR p.Cedula LIKE @filtro OR p.Correo LIKE @filtro OR o.Puesto LIKE @filtro
-                ORDER BY a.FechaAsignacion DESC";
+                 FROM Asignacion a
+                 JOIN Persona p ON a.PersonaId = p.Id
+                 JOIN Oferta o ON a.OfertaId = o.Id
+                 JOIN Empresa e ON o.EmpresaId = e.Id
+                 WHERE p.Nombre LIKE @filtro OR p.Cedula LIKE @filtro OR p.Correo LIKE @filtro OR o.Puesto LIKE @filtro
+                 ORDER BY a.FechaAsignacion DESC";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@filtro", "%" + filtro + "%");

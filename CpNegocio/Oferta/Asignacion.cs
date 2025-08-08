@@ -12,5 +12,7 @@ namespace CpNegocio.Oferta
         public int Id { get; set; }
         public int OfertaId { get; set; }
         public int PersonaId { get; set; }
+
+
     }
 }

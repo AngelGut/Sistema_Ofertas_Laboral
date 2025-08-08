@@ -39,67 +39,47 @@ namespace CpPresentacion
 
         private async void btnRecuperarClave_Click(object sender, EventArgs e)
         {
-            // Paso 1: Obtener el correo del usuario
-            string correo = Microsoft.VisualBasic.Interaction.InputBox("Ingrese su correo electrónico:", "Recuperar contraseña");
-
-            // Paso 2: Validar si el correo no está vacío
-            if (string.IsNullOrWhiteSpace(correo))
+            try
             {
-                MessageBox.Show("Debe ingresar un correo válido.");
-                return;
-            }
+                // Paso 1: Obtener el correo y la nueva contraseña del usuario
+                string correo = Microsoft.VisualBasic.Interaction.InputBox("Ingrese su correo electrónico:", "Recuperar contraseña");
 
-            // Paso 3: Verificar si el correo existe en la base de datos de manera asíncrona
-            if (!await DatosUsuario.ExisteCorreoAsync(correo)) // Usamos el método asíncrono
-            {
-                MessageBox.Show("El correo no está registrado en el sistema.");
-                return;
-            }
-
-            // Paso 4: Pedir la nueva contraseña al usuario
-            string nuevaClave = Microsoft.VisualBasic.Interaction.InputBox("Ingrese la nueva contraseña:", "Nueva contraseña");
-
-            // Paso 5: Validar si la nueva contraseña no está vacía
-            if (string.IsNullOrWhiteSpace(nuevaClave))
-            {
-                MessageBox.Show("Debe ingresar una contraseña válida.");
-                return;
-            }
-
-            // Paso 6: Actualizar la contraseña en la base de datos de manera asíncrona
-            bool actualizado = await DatosUsuario.CambiarClaveAsync(correo, nuevaClave); // Usamos el método asíncrono
-
-            if (actualizado)
-            {
-                // Paso 7: Enviar un correo con la nueva contraseña de manera asíncrona
-                var correoServicio = new ServiciosCorreo(
-                    "ofertaslaboralesuce@gmail.com",    // Remitente
-                    "xskfnxncewwumili",                 // Contraseña del remitente
-                    "smtp.gmail.com",                   // Servidor SMTP
-                    587,                                // Puerto SMTP
-                    true                                // SSL
-                );
-
-                string asunto = "Confirmación de cambio de contraseña";
-                string cuerpo = $"Hola,<br>Tu contraseña ha sido cambiada exitosamente.<br><b>Nueva contraseña:</b> {nuevaClave}";
-
-                // Paso 8: Enviar el correo y verificar el resultado
-                bool enviado = await correoServicio.EnviarCorreoAsync(asunto, cuerpo, new List<string> { correo }); // Asíncrono
-
-                if (enviado)
+                // Paso 2: Validar si el correo no está vacío
+                if (string.IsNullOrWhiteSpace(correo))
                 {
-                    MessageBox.Show("Contraseña actualizada y enviada al correo.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Debe ingresar un correo válido.");
+                    return;
                 }
-                else
+
+                // Paso 3: Pedir la nueva contraseña al usuario
+                string nuevaClave = Microsoft.VisualBasic.Interaction.InputBox("Ingrese la nueva contraseña:", "Nueva contraseña");
+
+                // Paso 4: Validar si la nueva contraseña no está vacía
+                if (string.IsNullOrWhiteSpace(nuevaClave))
                 {
-                    MessageBox.Show("Contraseña actualizada, pero no se pudo enviar el correo.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Debe ingresar una contraseña válida.");
+                    return;
                 }
+
+                // Paso 5: Llamar a la capa de negocios para procesar la recuperación
+                var negocio = new UsuarioNegocio();
+                bool resultado = await negocio.RecuperarClaveAsync(correo, nuevaClave);
+
+                // Mostrar mensaje de éxito
+                MessageBox.Show("Contraseña actualizada y enviada al correo.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            else
+            catch (ArgumentException ex)
             {
-                MessageBox.Show("No se pudo actualizar la contraseña.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Mensajes de validación o errores específicos
+                MessageBox.Show(ex.Message, "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                // Mensajes de error general
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
 
         private async void btnIngresar_Click(object sender, EventArgs e)

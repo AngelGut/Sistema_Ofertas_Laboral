@@ -15,28 +15,38 @@ namespace CapaDatos
 
         public static async Task<bool> VerificarCredencialesAsync(string usuario, string clave)
         {
-            using var conn = ObtenerConexion();
-            await conn.OpenAsync();  // Usar la versión asíncrona de Open()
-
-            string query = "SELECT Usuario, Clave FROM Usuarios WHERE Usuario = @usuario";
-            using var cmd = new SqlCommand(query, conn);
-            cmd.Parameters.AddWithValue("@usuario", usuario);
-
-            using var reader = await cmd.ExecuteReaderAsync();  // Usar la versión asíncrona de ExecuteReader()
-
-            if (reader.Read())
+            try
             {
-                string usuarioDB = reader["Usuario"].ToString();
-                string claveDB = reader["Clave"].ToString();
+                using var conn = ObtenerConexion();
+                await conn.OpenAsync();  // Usar la versión asíncrona de Open()
 
-                bool usuarioValido = string.Compare(usuario, usuarioDB, StringComparison.Ordinal) == 0;
-                bool claveValida = string.Compare(clave, claveDB, StringComparison.Ordinal) == 0;
+                string query = "SELECT Usuario, Clave FROM Usuarios WHERE Usuario = @usuario";
+                using var cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@usuario", usuario);
 
-                return usuarioValido && claveValida;
+                using var reader = await cmd.ExecuteReaderAsync();  // Usar la versión asíncrona de ExecuteReader()
+
+                if (reader.Read())
+                {
+                    string usuarioDB = reader["Usuario"].ToString();
+                    string claveDB = reader["Clave"].ToString();
+
+                    bool usuarioValido = string.Compare(usuario, usuarioDB, StringComparison.Ordinal) == 0;
+                    bool claveValida = string.Compare(clave, claveDB, StringComparison.Ordinal) == 0;
+
+                    return usuarioValido && claveValida;
+                }
+
+                return false;
             }
-
-            return false;
+            catch (Exception ex)
+            {
+                // Aquí puedes registrar o manejar el error
+                Console.WriteLine("Error al verificar las credenciales: " + ex.Message);
+                return false;
+            }
         }
+
 
 
         public static async Task<bool> ExisteCorreoAsync(string correo)
@@ -126,6 +136,32 @@ namespace CapaDatos
                 return false;  // En caso de error
             }
         }
+
+        public static async Task<bool> RegistrarUsuarioAsync(Usuario usuario)
+        {
+            try
+            {
+                using var conn = ObtenerConexion();
+                await conn.OpenAsync();  // Usar la versión asíncrona de Open()
+
+                string query = "INSERT INTO Usuarios (Usuario, Clave, Correo, Rol) VALUES (@Usuario, @Clave, @Correo, @Rol)";
+                using var cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Usuario", usuario.UsuarioNombre);
+                cmd.Parameters.AddWithValue("@Clave", usuario.Clave);  // Usar la contraseña tal como está
+                cmd.Parameters.AddWithValue("@Correo", usuario.Correo);
+                cmd.Parameters.AddWithValue("@Rol", usuario.Rol);
+
+                int rowsAffected = await cmd.ExecuteNonQueryAsync();  // Usar ExecuteNonQueryAsync
+                return rowsAffected > 0;
+            }
+            catch (Exception ex)
+            {
+                // Log de error detallado
+                Console.WriteLine("Error al insertar usuario: " + ex.Message);
+                return false;
+            }
+        }
+
 
 
         public static async Task<bool> CambiarClaveAsync(string correo, string nuevaClave)
