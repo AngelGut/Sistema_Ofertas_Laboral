@@ -378,32 +378,28 @@ namespace CpPresentacion
 
         private void TxtPuesto_KeyPress(object sender, KeyPressEventArgs e)
         {
-            e.Handled = true; // Bloquear el carácter
-            MessageBox.Show("No se permiten caracteres especiales en el campo 'Puesto'.",
-                            "Carácter inválido",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
+            if (!EsPermitido(e.KeyChar))
+            {
+                e.Handled = true;
+                // MessageBox opcional (no recomendado en KeyPress)
+            }
         }
 
         private void TxtDescripcion_KeyPress(object sender, KeyPressEventArgs e)
         {
-            e.Handled = true; // Bloquear el carácter
-            MessageBox.Show("No se permiten caracteres especiales en el campo 'Descripcion'.",
-                            "Carácter inválido",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
+            if (!EsPermitido(e.KeyChar))
+            {
+                e.Handled = true;
+                // MessageBox opcional (no recomendado en KeyPress)
+            }
         }
 
         private void TxtRequisitos_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Permitir letras, números, espacio y teclas de control (como backspace)
-            if (!char.IsLetterOrDigit(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != ' ')
+            if (!EsPermitido(e.KeyChar))
             {
-                e.Handled = true; // Bloquear el carácter
-                MessageBox.Show("No se permiten caracteres especiales en el campo 'Requisitos'.",
-                                "Carácter inválido",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
+                e.Handled = true;
+                // MessageBox opcional (no recomendado en KeyPress)
             }
         }
 
@@ -500,6 +496,16 @@ namespace CpPresentacion
                     MessageBox.Show("Error al filtrar las ofertas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private static bool EsPermitido(char ch)
+        {
+            // Permite control (Backspace, etc.), letra, dígito, espacio y estos signos comunes:
+            if (char.IsControl(ch) || char.IsLetterOrDigit(ch) || ch == ' ')
+                return true;
+
+            char[] permitidos = { '.', ',', '-', '_', '(', ')', '/', '#', '&', '+', ':', ';', '"', '\'', '@' };
+            return permitidos.Contains(ch);
         }
 
 
