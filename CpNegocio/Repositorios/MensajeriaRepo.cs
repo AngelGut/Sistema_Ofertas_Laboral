@@ -24,7 +24,9 @@ namespace CpNegocio.Repositorios
                 mensaje.To.Add(destinatario);
                 mensaje.Subject = asunto;
                 mensaje.Body = cuerpo;
-                mensaje.IsBodyHtml = false;
+
+                // 🔹 Esto permite que el contenido sea interpretado como HTML
+                mensaje.IsBodyHtml = true;
 
                 using (var smtp = new SmtpClient("smtp.gmail.com", 587))
                 {
