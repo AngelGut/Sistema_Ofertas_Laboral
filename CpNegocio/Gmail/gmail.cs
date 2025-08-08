@@ -42,7 +42,7 @@ namespace CpNegocio.Gmail
             set => Contenido = value;
         }
 
-        //Configuramos un Constructor por defecto
+        //TODO: Constructor que inicializa el destinatario del mensaje
         public override bool Validar()
         {
             //Validamos que el destinatario, asunto y cuerpo del mensaje no estén vacíos o nulos
@@ -53,7 +53,7 @@ namespace CpNegocio.Gmail
 
             try
             {
-                //TValidar el formato del correo electrónico del destinatario
+                //Validar el formato del correo electrónico del destinatario
                 new MailAddress(Destinatario.Trim());
             }
             catch
@@ -101,7 +101,7 @@ namespace CpNegocio.Gmail
                 client.UseDefaultCredentials = false;
                 client.Credentials = new NetworkCredential(_senderEmail, _applicationPassword); //Credenciales de la cuenta de Gmail
 
-                await client.SendMailAsync(message);
+                await client.SendMailAsync(message); //Enviar el mensaje de forma asíncrona
             }
             catch (SmtpException ex)
             {
