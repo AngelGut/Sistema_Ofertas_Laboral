@@ -31,6 +31,7 @@
             materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             tabPage1 = new TabPage();
             tabPage2 = new TabPage();
+            txtBusqueda = new TextBox();
             btnBuscar = new Button();
             label1 = new Label();
             cmbFiltro = new ComboBox();
@@ -64,7 +65,6 @@
             tabPage7 = new TabPage();
             tabPage8 = new TabPage();
             tabPage9 = new TabPage();
-            txtBusqueda = new TextBox();
             materialTabControl1.SuspendLayout();
             tabPage2.SuspendLayout();
             materialCard3.SuspendLayout();
@@ -125,6 +125,13 @@
             tabPage2.UseVisualStyleBackColor = true;
             tabPage2.Click += tabPage2_Click;
             // 
+            // txtBusqueda
+            // 
+            txtBusqueda.Location = new Point(610, 514);
+            txtBusqueda.Name = "txtBusqueda";
+            txtBusqueda.Size = new Size(100, 23);
+            txtBusqueda.TabIndex = 10;
+            // 
             // btnBuscar
             // 
             btnBuscar.BackColor = SystemColors.MenuHighlight;
@@ -149,6 +156,7 @@
             // 
             // cmbFiltro
             // 
+            cmbFiltro.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbFiltro.FormattingEnabled = true;
             cmbFiltro.Location = new Point(471, 512);
             cmbFiltro.Name = "cmbFiltro";
@@ -733,13 +741,6 @@
             tabPage9.TabIndex = 8;
             tabPage9.Text = "Historial Postulaciones";
             tabPage9.UseVisualStyleBackColor = true;
-            // 
-            // txtBusqueda
-            // 
-            txtBusqueda.Location = new Point(610, 514);
-            txtBusqueda.Name = "txtBusqueda";
-            txtBusqueda.Size = new Size(100, 23);
-            txtBusqueda.TabIndex = 10;
             // 
             // cpOfertas
             // 

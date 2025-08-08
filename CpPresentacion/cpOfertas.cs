@@ -17,6 +17,7 @@ using CpPresentacion.Asistencia;   // contiene IReadOnlyContainer y las extensio
 using System.Media;
 using System.Drawing;                  // por Point
 using CpPresentacion.Asistencia;       // por IReadOnlyContainer y SetReadOnly
+using CpNegocio.Empresas_y_Postulantes; // aquí vive OfertaListadoDto
 
 
 
@@ -75,7 +76,7 @@ namespace CpPresentacion
             };
 
             // Llenar el ComboBox con las opciones para filtrar
-            cmbFiltro.Items.Add("Id Empresa");
+            cmbFiltro.Items.Add("Id Oferta");      //  ← ESTA línea (ahora dice "Id")
             cmbFiltro.Items.Add("Puesto");
             cmbFiltro.SelectedIndex = 0;
 
@@ -253,13 +254,16 @@ namespace CpPresentacion
                 CboxEmpresas.SelectedIndex = 0;
         }
 
+        private List<OfertaListadoDto> _ofertas;
+        private DataTable _ofertasDt;
+
         // Método para cargar ofertas en el DataGridView
         private void CargarOfertas()
         {
             var metodo = new MetodosOferta();
-            var lista = metodo.ObtenerOfertas();
-
-            DGridOferta.DataSource = lista;
+            _ofertas = metodo.ObtenerOfertas();    // ← List<OfertaListadoDto>
+            DGridOferta.AutoGenerateColumns = true;
+            DGridOferta.DataSource = _ofertas;     // ← siempre mismo esquema
         }
 
         private void BtnMostrar_Click(object sender, EventArgs e)
@@ -447,56 +451,42 @@ namespace CpPresentacion
 
         private void FiltrarOfertas()
         {
-            string filtroSeleccionado = cmbFiltro.SelectedItem.ToString();
-            string busqueda = txtBusqueda.Text.Trim();
+            if (_ofertas == null) { CargarOfertas(); if (_ofertas == null) return; }
 
-            if (string.IsNullOrEmpty(busqueda))
+            string filtroSel = cmbFiltro.SelectedItem?.ToString() ?? "";
+            string texto = txtBusqueda.Text.Trim();
+
+            if (string.IsNullOrEmpty(texto))
             {
-                MessageBox.Show("Por favor ingrese un valor para buscar.", "Campo de búsqueda vacío", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                DGridOferta.DataSource = _ofertas;
                 return;
             }
 
-            // Definir la consulta SQL según el tipo de filtro seleccionado
-            string query = "";
+            IEnumerable<OfertaListadoDto> q = _ofertas;
 
-            if (filtroSeleccionado == "Id Empresa")
-            {
-                // Verificar si el valor ingresado es un número
-                if (!int.TryParse(busqueda, out int empresaId))
-                {
-                    MessageBox.Show("Por favor ingrese un número válido para el ID de la empresa.", "ID no válido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+            if (filtroSel == "Id Oferta" && int.TryParse(texto, out int idOferta))
+                q = q.Where(o => o.Id == idOferta);
 
-                query = "SELECT * FROM Oferta WHERE EmpresaId = @Busqueda"; // Filtrar por ID de Empresa
-            }
-            else if (filtroSeleccionado == "Puesto")
-            {
-                query = "SELECT * FROM Oferta WHERE Puesto LIKE @Busqueda"; // Filtrar por el Puesto
-                busqueda = "%" + busqueda + "%"; // Agregar el comodín % para hacer búsqueda parcial
-            }
+            else if (filtroSel == "Puesto")
+                q = q.Where(o => o.Puesto?.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0);
 
-            // Ejecutar la consulta y llenar el DataGridView
-            using (SqlConnection conn = Capa_Datos.OfertaDatos.ObtenerConexion())
-            {
-                try
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@Busqueda", busqueda); // Agregar el parámetro de búsqueda
-                        SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
-                        DataTable dt = new DataTable();
-                        dataAdapter.Fill(dt);
-                        DGridOferta.DataSource = dt; // Cargar los datos filtrados en el DataGridView
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al filtrar las ofertas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            else if (filtroSel == "Empresa")
+                q = q.Where(o => o.Empresa?.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0);
+
+            else if (filtroSel == "Área") // ver nota más abajo
+                q = q.Where(o => o.Area?.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0);
+
+            DGridOferta.DataSource = q.ToList();
         }
+
+        private static string EscapeForRowFilter(string value)
+        {
+            // Escapa caracteres problemáticos para DataColumn.Expression / RowFilter
+            if (value == null) return "";
+            return value.Replace("'", "''").Replace("[", "[[]").Replace("%", "[%]").Replace("*", "[*]");
+        }
+
+
 
         private static bool EsPermitido(char ch)
         {
@@ -508,7 +498,7 @@ namespace CpPresentacion
             return permitidos.Contains(ch);
         }
 
-
+        
     }
 
 }

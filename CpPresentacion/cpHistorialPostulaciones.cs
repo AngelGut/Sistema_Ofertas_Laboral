@@ -17,8 +17,8 @@ namespace CpPresentacion
         public cpHistorialPostulaciones()
         {
             InitializeComponent();
-            //Metodo de personalizacion del datagridview
-            PersonalizarDataGridView();
+
+
             materialTabControl1.SelectedIndex = 8;
 
             var materialSkinManager = MaterialSkin.MaterialSkinManager.Instance;
@@ -32,7 +32,7 @@ namespace CpPresentacion
             if (dgvHistorialPostulaciones != null)
             {
                 dgvHistorialPostulaciones.EnableHeadersVisualStyles = false;
-                dgvHistorialPostulaciones.RowsDefaultCellStyle.SelectionBackColor = System.Drawing.Color.LightBlue;
+               dgvHistorialPostulaciones.RowsDefaultCellStyle.SelectionBackColor = System.Drawing.Color.LightBlue;
             }
 
             // Aquí se cargan los combos y el historial al cargar el formulario
@@ -169,6 +169,10 @@ namespace CpPresentacion
                     dgvHistorialPostulaciones.Columns["NombreEmpresa"].HeaderText = "Empresa";
                 if (dgvHistorialPostulaciones.Columns.Contains("FechaAsignacion"))
                     dgvHistorialPostulaciones.Columns["FechaAsignacion"].HeaderText = "Fecha de Asignación";
+
+
+                //Metodo de personalizacion del datagridview
+                PersonalizarDataGridView();
             }
             catch (Exception ex)
             {
