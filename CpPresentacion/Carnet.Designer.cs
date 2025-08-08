@@ -213,6 +213,7 @@
             maskTelefono.TrailingIcon = null;
             maskTelefono.UseSystemPasswordChar = false;
             maskTelefono.ValidatingType = null;
+            maskTelefono.Click += maskTelefono_Click;
             // 
             // materialButton1
             // 

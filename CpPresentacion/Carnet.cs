@@ -96,7 +96,7 @@ namespace CpPresentacion
 
         }
         //aqui empieza lo mio 
-        
+
         private void btnCargarFoto_Click(object sender, EventArgs e)
         {
             //OpenFileDialog es lo que permite que el usuario pueda seleccionar un archivo desde su computadora 
@@ -441,6 +441,11 @@ namespace CpPresentacion
             return carga;
         }
 
+        private void maskTelefono_Click(object sender, EventArgs e)
+        {
+            maskTelefono.SelectionStart = 0;
+            maskTelefono.SelectionLength = 0;
+        }
     }
 
 
