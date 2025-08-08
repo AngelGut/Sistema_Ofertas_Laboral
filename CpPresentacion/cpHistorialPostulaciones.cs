@@ -181,8 +181,6 @@ namespace CpPresentacion
             }
         }
 
-
-
         // Manejador del evento de clic para el botón de búsqueda
         private void btnBuscar_Click(object sender, EventArgs e)
         {
@@ -197,6 +195,7 @@ namespace CpPresentacion
             if (tablaPostulaciones != null)
             {
                 dgvHistorialPostulaciones.DataSource = tablaPostulaciones;
+
             }
         }
 
