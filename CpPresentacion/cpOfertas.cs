@@ -420,9 +420,9 @@ namespace CpPresentacion
                 // Coordenadas del formulario principal en pantalla
                 var p = this.PointToScreen(Point.Empty);
 
-                // Posición pegada al borde derecho y centrada verticalmente
-                int x = p.X + this.Width - _formBoton.Width; // 0px de margen
-                int y = p.Y + (this.Height - _formBoton.Height) / 2;
+                // Lo posicionamos afuera, al lado derecho
+                int x = p.X + this.Width; // comienza justo al borde derecho
+                int y = p.Y + (this.Height - _formBoton.Height) / 2; // centrado verticalmente
 
                 _formBoton.Location = new Point(x, y);
             }

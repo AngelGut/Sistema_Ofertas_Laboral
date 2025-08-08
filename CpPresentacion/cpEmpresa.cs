@@ -21,6 +21,7 @@ namespace CpPresentacion
     public partial class cpEmpresa : MaterialForm, IReadOnlyContainer
     {
         public Control Container => this; // Implementación de la interfaz IReadOnlyContainer
+        private FormBoton _formBoton; // ← switch flotante
 
         public cpEmpresa()
         {
@@ -57,18 +58,32 @@ namespace CpPresentacion
             txtBusqueda.KeyPress += TxtBusqueda_KeyPress;
 
             // Bloquear todos los controles recursivamente
+            // Bloquear de inicio
             this.SetReadOnly(true);
 
-            // Mostrar mini-form Ver/Editar
+            // Mostrar mini-form y decidir estado inicial
+            bool startInEdit = false;
             using (var dlg = new frmModoVisualizacion())
             {
                 if (dlg.ShowDialog() == DialogResult.OK &&
                     dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
                 {
-                    // Desbloquear si eligió Editar
-                    this.SetReadOnly(false);
+                    startInEdit = true;
                 }
             }
+
+            // Aplicar estado inicial
+            this.SetReadOnly(!startInEdit);
+
+            // Abrir el switch flotante (siempre activo)
+            AbrirFormBoton(startInEdit);
+
+            // Si este form se cierra, cierra también el flotante
+            this.FormClosed += (s, e) =>
+            {
+                if (_formBoton != null && !_formBoton.IsDisposed) _formBoton.Close();
+                _formBoton = null;
+            };
         }
 
         //TODO: navegacion
@@ -562,6 +577,44 @@ namespace CpPresentacion
 
             // Ajustar el tamaño de las columnas automáticamente según el contenido
             DgvEmpresas.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+        }
+
+        private void AbrirFormBoton(bool startInEdit)
+        {
+            if (_formBoton != null && !_formBoton.IsDisposed) return;
+
+            _formBoton = new FormBoton(this, startInEdit)
+            {
+                StartPosition = FormStartPosition.Manual,
+                TopMost = true
+            };
+
+            void Reposicionar()
+            {
+                if (_formBoton == null || _formBoton.IsDisposed) return;
+
+                // Origen del form en pantalla
+                var p = this.PointToScreen(Point.Empty);
+
+                // Ubicar AFUERA, pegado al borde derecho y centrado verticalmente
+                int x = p.X + this.Width;                               // fuera, al lado derecho
+                int y = p.Y + (this.Height - _formBoton.Height) / 2;    // centrado vertical
+
+                // Clamp al monitor del formulario para que no se “corte”
+                var screen = Screen.FromControl(this).WorkingArea;
+                // Si te interesa permitir que se salga un poco a la derecha, comenta el clamp en X:
+                x = Math.Min(Math.Max(x, screen.Left), screen.Right - _formBoton.Width);
+                y = Math.Min(Math.Max(y, screen.Top), screen.Bottom - _formBoton.Height);
+
+                _formBoton.Location = new Point(x, y);
+            }
+
+            Reposicionar();
+            this.Move += (s, e) => Reposicionar();
+            this.Resize += (s, e) => Reposicionar();
+
+            _formBoton.FormClosed += (s, e) => _formBoton = null;
+            _formBoton.Show(this);
         }
 
     }
