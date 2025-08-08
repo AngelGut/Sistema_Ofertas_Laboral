@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
-using System.Configuration;
+using System.Threading.Tasks;
 
 namespace CpNegocio.ServiciosCorreo
 {
@@ -15,7 +15,7 @@ namespace CpNegocio.ServiciosCorreo
         private int port;
         private bool ssl;
 
-        // Utilizamos un constructor que recibe las configuraciones del correo
+        // Constructor que recibe las configuraciones del correo
         public ServiciosCorreo(string correo, string clave, string servidor, int puerto, bool usarSSL)
         {
             senderMail = correo;
@@ -39,8 +39,8 @@ namespace CpNegocio.ServiciosCorreo
             };
         }
 
-        // Método para enviar el correo
-        public bool EnviarCorreo(string asunto, string cuerpo, List<string> destinatarios)
+        // Método asíncrono para enviar el correo
+        public async Task<bool> EnviarCorreoAsync(string asunto, string cuerpo, List<string> destinatarios)
         {
             try
             {
@@ -57,17 +57,25 @@ namespace CpNegocio.ServiciosCorreo
                         mensaje.To.Add(correoDestino);
                     }
 
-                    // Enviar el mensaje
-                    smtpClient.Send(mensaje);
+                    // Enviar el mensaje de manera asíncrona
+                    await smtpClient.SendMailAsync(mensaje);  // Asíncrono
                     return true;
                 }
             }
+            catch (SmtpException smtpEx)
+            {
+                // Error relacionado con el cliente SMTP
+                Console.WriteLine("Error de SMTP: " + smtpEx.Message);
+            }
             catch (Exception ex)
             {
-                // Registra el error usando un sistema de logging
+                // Error general
                 Console.WriteLine("Error al enviar correo: " + ex.Message);
-                return false;
             }
+
+            return false; // Retorna false en caso de error
         }
+
+        
     }
 }

@@ -37,6 +37,7 @@
             pbCerrar = new PictureBox();
             pbMinimizar = new PictureBox();
             pbPassword = new PictureBox();
+            lblCargando = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbCerrar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbMinimizar).BeginInit();
@@ -45,11 +46,12 @@
             // 
             // pictureBox1
             // 
+            pictureBox1.BackColor = Color.White;
             pictureBox1.Dock = DockStyle.Left;
             pictureBox1.Image = Properties.Resources.Logo;
             pictureBox1.Location = new Point(0, 0);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(236, 250);
+            pictureBox1.Size = new Size(263, 250);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -60,7 +62,7 @@
             label1.AutoSize = true;
             label1.Font = new Font("Century Gothic", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.White;
-            label1.Location = new Point(429, 31);
+            label1.Location = new Point(429, 21);
             label1.Name = "label1";
             label1.Size = new Size(90, 30);
             label1.TabIndex = 1;
@@ -69,7 +71,7 @@
             // txtUsuario
             // 
             txtUsuario.Font = new Font("Century Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtUsuario.Location = new Point(367, 89);
+            txtUsuario.Location = new Point(367, 79);
             txtUsuario.Name = "txtUsuario";
             txtUsuario.Size = new Size(205, 23);
             txtUsuario.TabIndex = 1;
@@ -80,7 +82,7 @@
             // txtClave
             // 
             txtClave.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtClave.Location = new Point(367, 127);
+            txtClave.Location = new Point(367, 117);
             txtClave.Name = "txtClave";
             txtClave.PasswordChar = '*';
             txtClave.Size = new Size(205, 25);
@@ -91,8 +93,8 @@
             btnIngresar.Cursor = Cursors.Hand;
             btnIngresar.FlatAppearance.BorderSize = 0;
             btnIngresar.FlatStyle = FlatStyle.Flat;
-            btnIngresar.ForeColor = Color.White;
-            btnIngresar.Location = new Point(429, 174);
+            btnIngresar.ForeColor = Color.Black;
+            btnIngresar.Location = new Point(429, 177);
             btnIngresar.Name = "btnIngresar";
             btnIngresar.Size = new Size(75, 23);
             btnIngresar.TabIndex = 3;
@@ -105,9 +107,11 @@
             btnRecuperarClave.Cursor = Cursors.Hand;
             btnRecuperarClave.FlatAppearance.BorderSize = 0;
             btnRecuperarClave.FlatStyle = FlatStyle.Flat;
-            btnRecuperarClave.Location = new Point(380, 215);
+            btnRecuperarClave.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnRecuperarClave.ForeColor = Color.Black;
+            btnRecuperarClave.Location = new Point(354, 215);
             btnRecuperarClave.Name = "btnRecuperarClave";
-            btnRecuperarClave.Size = new Size(177, 23);
+            btnRecuperarClave.Size = new Size(235, 23);
             btnRecuperarClave.TabIndex = 4;
             btnRecuperarClave.Text = "¿Has olvidado tu contraseña?";
             btnRecuperarClave.UseVisualStyleBackColor = true;
@@ -138,7 +142,7 @@
             // pbPassword
             // 
             pbPassword.Image = Properties.Resources.OjoCerrado;
-            pbPassword.Location = new Point(580, 127);
+            pbPassword.Location = new Point(580, 117);
             pbPassword.Name = "pbPassword";
             pbPassword.Size = new Size(32, 25);
             pbPassword.SizeMode = PictureBoxSizeMode.Zoom;
@@ -146,12 +150,21 @@
             pbPassword.TabStop = false;
             pbPassword.Click += pbPassword_Click;
             // 
+            // lblCargando
+            // 
+            lblCargando.AutoSize = true;
+            lblCargando.Location = new Point(380, 163);
+            lblCargando.Name = "lblCargando";
+            lblCargando.Size = new Size(0, 15);
+            lblCargando.TabIndex = 8;
+            // 
             // cpLogin
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.HotTrack;
+            BackColor = Color.LightSeaGreen;
             ClientSize = new Size(680, 250);
+            Controls.Add(lblCargando);
             Controls.Add(pbPassword);
             Controls.Add(pbMinimizar);
             Controls.Add(pbCerrar);
@@ -161,6 +174,7 @@
             Controls.Add(txtUsuario);
             Controls.Add(label1);
             Controls.Add(pictureBox1);
+            ForeColor = Color.White;
             FormBorderStyle = FormBorderStyle.None;
             Name = "cpLogin";
             Opacity = 0.9D;
@@ -188,5 +202,6 @@
         private PictureBox pbCerrar;
         private PictureBox pbMinimizar;
         private PictureBox pbPassword;
+        private Label lblCargando;
     }
 }

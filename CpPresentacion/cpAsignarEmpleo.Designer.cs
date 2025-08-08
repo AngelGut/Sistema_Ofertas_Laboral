@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             tabPage1 = new TabPage();
             tabPage2 = new TabPage();
@@ -53,7 +53,10 @@
             tabPage6 = new TabPage();
             tabPage7 = new TabPage();
             tabPage8 = new TabPage();
-            tabPage9 = new TabPage();
+            lbIngresaridpersona = new Label();
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
             materialTabControl1.SuspendLayout();
             tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvEmpresas).BeginInit();
@@ -70,7 +73,6 @@
             materialTabControl1.Controls.Add(tabPage6);
             materialTabControl1.Controls.Add(tabPage7);
             materialTabControl1.Controls.Add(tabPage8);
-            materialTabControl1.Controls.Add(tabPage9);
             materialTabControl1.Depth = 0;
             materialTabControl1.Dock = DockStyle.Fill;
             materialTabControl1.Location = new Point(2, 64);
@@ -128,6 +130,10 @@
             // 
             // tabPage5
             // 
+            tabPage5.Controls.Add(label3);
+            tabPage5.Controls.Add(label2);
+            tabPage5.Controls.Add(label1);
+            tabPage5.Controls.Add(lbIngresaridpersona);
             tabPage5.Controls.Add(texboxIdOferta);
             tabPage5.Controls.Add(txboxIdPersona);
             tabPage5.Controls.Add(materialLabel2);
@@ -260,12 +266,13 @@
             // 
             // btnAsignar
             // 
+            btnAsignar.AutoSize = false;
             btnAsignar.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             btnAsignar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             btnAsignar.Depth = 0;
             btnAsignar.HighEmphasis = true;
             btnAsignar.Icon = null;
-            btnAsignar.Location = new Point(750, 615);
+            btnAsignar.Location = new Point(771, 684);
             btnAsignar.Margin = new Padding(5, 8, 5, 8);
             btnAsignar.MouseState = MaterialSkin.MouseState.HOVER;
             btnAsignar.Name = "btnAsignar";
@@ -331,7 +338,7 @@
             btnBuscar2.Depth = 0;
             btnBuscar2.HighEmphasis = true;
             btnBuscar2.Icon = null;
-            btnBuscar2.Location = new Point(1525, 684);
+            btnBuscar2.Location = new Point(1524, 684);
             btnBuscar2.Margin = new Padding(5, 8, 5, 8);
             btnBuscar2.MouseState = MaterialSkin.MouseState.HOVER;
             btnBuscar2.Name = "btnBuscar2";
@@ -475,14 +482,14 @@
             dgvEmpresas.AllowUserToAddRows = false;
             dgvEmpresas.AllowUserToDeleteRows = false;
             dgvEmpresas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Window;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle1.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(192, 0, 192);
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
-            dgvEmpresas.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(192, 0, 192);
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dgvEmpresas.DefaultCellStyle = dataGridViewCellStyle3;
             dgvEmpresas.Location = new Point(979, 78);
             dgvEmpresas.Margin = new Padding(4);
             dgvEmpresas.Name = "dgvEmpresas";
@@ -499,14 +506,14 @@
             dgvPostulantes.AllowUserToAddRows = false;
             dgvPostulantes.AllowUserToDeleteRows = false;
             dgvPostulantes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(192, 0, 192);
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dgvPostulantes.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Window;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle4.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(192, 0, 192);
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
+            dgvPostulantes.DefaultCellStyle = dataGridViewCellStyle4;
             dgvPostulantes.Location = new Point(59, 81);
             dgvPostulantes.Margin = new Padding(4);
             dgvPostulantes.Name = "dgvPostulantes";
@@ -548,14 +555,41 @@
             tabPage8.Text = "Registro Interno";
             tabPage8.UseVisualStyleBackColor = true;
             // 
-            // tabPage9
+            // lbIngresaridpersona
             // 
-            tabPage9.Location = new Point(4, 34);
-            tabPage9.Name = "tabPage9";
-            tabPage9.Size = new Size(1930, 998);
-            tabPage9.TabIndex = 8;
-            tabPage9.Text = "Historial Postulaciones";
-            tabPage9.UseVisualStyleBackColor = true;
+            lbIngresaridpersona.AutoSize = true;
+            lbIngresaridpersona.Location = new Point(79, 784);
+            lbIngresaridpersona.Name = "lbIngresaridpersona";
+            lbIngresaridpersona.Size = new Size(204, 25);
+            lbIngresaridpersona.TabIndex = 15;
+            lbIngresaridpersona.Text = "Ingresa id de postulante";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(1075, 784);
+            label1.Name = "label1";
+            label1.Size = new Size(151, 25);
+            label1.TabIndex = 16;
+            label1.Text = "Ingresar id Oferta";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(79, 655);
+            label2.Name = "label2";
+            label2.Size = new Size(115, 25);
+            label2.TabIndex = 17;
+            label2.Text = "Id Postulante";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(1075, 655);
+            label3.Name = "label3";
+            label3.Size = new Size(83, 25);
+            label3.TabIndex = 18;
+            label3.Text = "Id Oferta";
             // 
             // cpAsignarEmpleo
             // 
@@ -603,6 +637,9 @@
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
         private MaterialSkin.Controls.MaterialMaskedTextBox texboxIdOferta;
         private MaterialSkin.Controls.MaterialMaskedTextBox txboxIdPersona;
-        private TabPage tabPage9;
+        private Label label3;
+        private Label label2;
+        private Label label1;
+        private Label lbIngresaridpersona;
     }
 }

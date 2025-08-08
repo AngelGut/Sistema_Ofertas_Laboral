@@ -37,74 +37,62 @@ namespace CpPresentacion
             txtClave.MaxLength = 20;
         }
 
-        private void btnRecuperarClave_Click(object sender, EventArgs e)
-        {
-            // Paso 1: Obtener el correo del usuario
-            string correo = Microsoft.VisualBasic.Interaction.InputBox("Ingrese su correo electrónico:", "Recuperar contraseña");
-
-            // Paso 2: Validar si el correo no está vacío
-            if (string.IsNullOrWhiteSpace(correo))
-            {
-                MessageBox.Show("Debe ingresar un correo válido.");
-                return;
-            }
-
-            // Paso 3: Verificar si el correo existe en la base de datos
-            if (!DatosUsuario.ExisteCorreo(correo))
-            {
-                MessageBox.Show("El correo no está registrado en el sistema.");
-                return;
-            }
-
-            // Paso 4: Pedir la nueva contraseña al usuario
-            string nuevaClave = Microsoft.VisualBasic.Interaction.InputBox("Ingrese la nueva contraseña:", "Nueva contraseña");
-
-            // Paso 5: Validar si la nueva contraseña no está vacía
-            if (string.IsNullOrWhiteSpace(nuevaClave))
-            {
-                MessageBox.Show("Debe ingresar una contraseña válida.");
-                return;
-            }
-
-            // Paso 6: Actualizar la contraseña en la base de datos
-            bool actualizado = DatosUsuario.CambiarClave(correo, nuevaClave);
-
-            if (actualizado)
-            {
-                // Paso 7: Enviar un correo con la nueva contraseña
-                var correoServicio = new ServiciosCorreo(
-                    "ofertaslaboralesuce@gmail.com",    // Remitente
-                    "xskfnxncewwumili",                 // Contraseña del remitente
-                    "smtp.gmail.com",                   // Servidor SMTP
-                    587,                                // Puerto SMTP
-                    true                                // SSL
-                );
-
-                string asunto = "Confirmación de cambio de contraseña";
-                string cuerpo = $"Hola,<br>Tu contraseña ha sido cambiada exitosamente.<br><b>Nueva contraseña:</b> {nuevaClave}";
-
-                // Paso 8: Enviar el correo y verificar el resultado
-                bool enviado = correoServicio.EnviarCorreo(asunto, cuerpo, new List<string> { correo });
-
-                if (enviado)
-                {
-                    MessageBox.Show("Contraseña actualizada y enviada al correo.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Contraseña actualizada, pero no se pudo enviar el correo.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-            else
-            {
-                MessageBox.Show("No se pudo actualizar la contraseña.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnIngresar_Click(object sender, EventArgs e)
+        private async void btnRecuperarClave_Click(object sender, EventArgs e)
         {
             try
             {
+                // Paso 1: Obtener el correo y la nueva contraseña del usuario
+                string correo = Microsoft.VisualBasic.Interaction.InputBox("Ingrese su correo electrónico:", "Recuperar contraseña");
+
+                // Paso 2: Validar si el correo no está vacío
+                if (string.IsNullOrWhiteSpace(correo))
+                {
+                    MessageBox.Show("Debe ingresar un correo válido.");
+                    return;
+                }
+
+                // Paso 3: Pedir la nueva contraseña al usuario
+                string nuevaClave = Microsoft.VisualBasic.Interaction.InputBox("Ingrese la nueva contraseña:", "Nueva contraseña");
+
+                // Paso 4: Validar si la nueva contraseña no está vacía
+                if (string.IsNullOrWhiteSpace(nuevaClave))
+                {
+                    MessageBox.Show("Debe ingresar una contraseña válida.");
+                    return;
+                }
+
+                // Paso 5: Llamar a la capa de negocios para procesar la recuperación
+                var negocio = new UsuarioNegocio();
+                bool resultado = await negocio.RecuperarClaveAsync(correo, nuevaClave);
+
+                // Mostrar mensaje de éxito
+                MessageBox.Show("Contraseña actualizada y enviada al correo.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (ArgumentException ex)
+            {
+                // Mensajes de validación o errores específicos
+                MessageBox.Show(ex.Message, "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                // Mensajes de error general
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
+        private async void btnIngresar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Aseguramos que el Label de Cargando sea visible
+                lblCargando.Visible = true;  // Asegúrate de que el Label de "Cargando..." sea visible
+                this.Cursor = Cursors.WaitCursor;  // Cambiar el cursor para indicar espera
+
+                // Forzar la actualización de la interfaz de usuario antes de continuar
+                Application.DoEvents();  // Actualiza la UI para mostrar el indicador de carga
+
                 // Validar que los campos no estén vacíos
                 if (string.IsNullOrWhiteSpace(txtUsuario.Text) || string.IsNullOrWhiteSpace(txtClave.Text))
                 {
@@ -112,10 +100,12 @@ namespace CpPresentacion
                     return;
                 }
 
-                // Llamar al método de login
-                if (negocio.Login(txtUsuario.Text.Trim(), txtClave.Text.Trim()))
+                // Llamar al método de login asíncrono
+                bool loginExitoso = await negocio.LoginAsync(txtUsuario.Text.Trim(), txtClave.Text.Trim());
+
+                if (loginExitoso)
                 {
-                    MessageBox.Show("Bienvenido al sistema");
+                    MessageBox.Show("¡Bienvenido al sistema!", "Acceso Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     // Crear una nueva instancia del formulario Menu sin pasar el rol
                     Menu menuForm = new Menu();
@@ -132,7 +122,15 @@ namespace CpPresentacion
                 // Manejo de errores en caso de excepciones durante el login
                 MessageBox.Show("Error al realizar login: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                // Ocultar el indicador de espera
+                lblCargando.Visible = false;  // Ocultar el Label de "Cargando..." después de la operación
+                this.Cursor = Cursors.Default;  // Restaurar el cursor original
+            }
         }
+
+
 
         private void pbCerrar_Click(object sender, EventArgs e)
         {
