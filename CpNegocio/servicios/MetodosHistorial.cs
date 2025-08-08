@@ -11,13 +11,16 @@ namespace CpNegocio.servicios
 {
     public class MetodosHistorial
     {
+        // Cadena de conexión a la base de datos
         private string conexion = "Server=.;Database=Ofertalaboral; Integrated Security=true; TrustServerCertificate=True;";
 
+
+        //Obtiene el historial de asignaciones filtrado por nombre, DNI, correo o puesto.
         public DataTable ObtenerHistorialAsignaciones(string filtro)
         {
             using (SqlConnection conn = new SqlConnection(conexion))
             {
-                conn.Open();
+                conn.Open();// Abrir conexión a la base de datos
 
                 string query = @"
                 SELECT 
@@ -38,10 +41,13 @@ namespace CpNegocio.servicios
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@filtro", "%" + filtro + "%");
 
+                // Adaptador para llenar el DataTable con los datos obtenidos
+                //TODO: Manejar posibles excepciones en la consulta SQL con try-catch.
                 SqlDataAdapter adaptador = new SqlDataAdapter(cmd);
                 DataTable tabla = new DataTable();
                 adaptador.Fill(tabla);
 
+                // Retornar la tabla con los resultados
                 return tabla;
             }
         }
