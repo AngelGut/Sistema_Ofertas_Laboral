@@ -15,6 +15,9 @@ using Microsoft.Data.SqlClient;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using CpPresentacion.Asistencia;   // contiene IReadOnlyContainer y las extensiones
 using System.Media;
+using System.Drawing;                  // por Point
+using CpPresentacion.Asistencia;       // por IReadOnlyContainer y SetReadOnly
+
 
 
 namespace CpPresentacion
@@ -22,54 +25,58 @@ namespace CpPresentacion
     public partial class cpOfertas : MaterialForm, IReadOnlyContainer
     {
         public Control Container => this;
+        private FormBoton _formBoton; // switch flotante
 
         public cpOfertas()
         {
             InitializeComponent();
 
-            // Establece el tab activo que corresponde a este formulario
             materialTabControl1.SelectedIndex = 1;
-
-            // Mejora visual: habilitar doble búfer para reducir parpadeos
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
 
-            //Esto hará que se muestren los nombres de las empresas en el ComboBox
+            // Config inicial
             var empresas = new MetodosCargarEmpresa().ObtenerEmpresas();
             CboxEmpresas.DataSource = empresas;
-
-            // Lógica para ocultar los campos de Salario y Créditos al inicio
-            TxtSalario.Visible = false; // Ocultar TextBox de Salario
-            TxtCreditos.Visible = false; // Ocultar TextBox de Créditos
-
-            // Si el ComboBox de tipo de oferta tiene al menos un elemento,
-            // seleccionamos el primero por defecto para que no quede en blanco
+            TxtSalario.Visible = false;
+            TxtCreditos.Visible = false;
             if (CboxTipoOferta.Items.Count > 0)
-            {
-                CboxTipoOferta.SelectedIndex = 0; // Seleccionar el primer elemento por defecto
-            }
+                CboxTipoOferta.SelectedIndex = 0;
 
-            CargarOfertas(); // Cargar ofertas al iniciar el formulario
+            CargarOfertas();
+            CargarEmpresas();
+            PopulateAreas();
 
-            CargarEmpresas(); // Cargar empresas aquí
-
-            PopulateAreas(); //Cargamos las areas laborales
-
-            // Bloquear todos los controles recursivamente
+            // 🔹 Bloquear de inicio
             this.SetReadOnly(true);
 
-            // Mostrar mini-form Ver/Editar
+            // 🔹 Mostrar mini-form y decidir estado inicial
+            bool startInEdit = false;
             using (var dlg = new frmModoVisualizacion())
             {
                 if (dlg.ShowDialog() == DialogResult.OK &&
                     dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
                 {
-                    // Desbloquear si eligió Editar
-                    this.SetReadOnly(false);
+                    startInEdit = true;
                 }
             }
 
+            // 🔹 Aplicar estado inicial
+            this.SetReadOnly(!startInEdit);
+
+            // 🔹 Abrir el switch flotante (siempre activo)
+            AbrirFormBoton(startInEdit);
+
+            // 🔹 Asegurar que si el form se cierra, se cierre también el flotante
+            this.FormClosed += (s, e) =>
+            {
+                if (_formBoton != null && !_formBoton.IsDisposed) _formBoton.Close();
+                _formBoton = null;
+            };
+
         }
+
+
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -394,6 +401,45 @@ namespace CpPresentacion
                                 MessageBoxIcon.Warning);
             }
         }
+
+        private void AbrirFormBoton(bool startInEdit)
+        {
+            // Evita duplicados
+            if (_formBoton != null && !_formBoton.IsDisposed) return;
+
+            _formBoton = new FormBoton(this, startInEdit)
+            {
+                StartPosition = FormStartPosition.Manual,
+                TopMost = true
+            };
+
+            void Reposicionar()
+            {
+                if (_formBoton == null || _formBoton.IsDisposed) return;
+
+                // Coordenadas del formulario principal en pantalla
+                var p = this.PointToScreen(Point.Empty);
+
+                // Posición pegada al borde derecho y centrada verticalmente
+                int x = p.X + this.Width - _formBoton.Width; // 0px de margen
+                int y = p.Y + (this.Height - _formBoton.Height) / 2;
+
+                _formBoton.Location = new Point(x, y);
+            }
+
+            // Posicionar ahora y re-posicionar al mover o redimensionar
+            Reposicionar();
+            this.Move += (s, e) => Reposicionar();
+            this.Resize += (s, e) => Reposicionar();
+
+            // Limpiar referencia al cerrarse
+            _formBoton.FormClosed += (s, e) => _formBoton = null;
+
+            // Mostrar como ventana hija/propietaria
+            _formBoton.Show(this);
+        }
+
+
     }
 
 }
