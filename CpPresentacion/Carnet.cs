@@ -28,7 +28,7 @@ namespace CpPresentacion
             materialTabControl1.SelectedIndex = 6;
             // Asociar eventos para validar entrada en tiempo real
             txtNombre.KeyPress += TxtSoloLetras_KeyPress;
-            txtTelefono.KeyPress += TxtSoloNumeros_KeyPress;
+            maskTelefono.KeyPress += TxtSoloNumeros_KeyPress;
             txtPosicion.KeyPress += TxtSoloLetras_KeyPress;
 
             // Bloquear todos los controles recursivamente
@@ -107,9 +107,10 @@ namespace CpPresentacion
                 picFoto.Image = Image.FromFile(ofd.FileName);
             }
         }
-
+        //TODO:Se utilisa este metodo porque  no devuelve ningun valor 
         private async void btnVistaPrevia_Click(object sender, EventArgs e)
         {
+            //llmada asincrona 
             // Mostrar ventana de carga
             Form ventanaCarga = CrearVentanaCarga("Generando vista previa...");
             ventanaCarga.Show();
@@ -177,10 +178,10 @@ namespace CpPresentacion
                 txtCorreo.Focus();
                 return;
             }
-            if (string.IsNullOrWhiteSpace(txtTelefono.Text))
+            if (string.IsNullOrWhiteSpace(maskTelefono.Text))
             {
                 MessageBox.Show("El campo Teléfono no puede estar vacío.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtTelefono.Focus();
+                maskTelefono.Focus();
                 return;
             }
 
@@ -289,7 +290,7 @@ namespace CpPresentacion
 
             //  DATOS INFERIORES
 
-            string telefonoFormateado = FormatearTelefono(txtTelefono.Text);
+            string telefonoFormateado = maskTelefono.Text;
             string correo = txtCorreo.Text; // Aquí se toma el correo real
 
             Font fontLabel = new Font("Arial", 9, FontStyle.Bold);
@@ -439,6 +440,7 @@ namespace CpPresentacion
             carga.Controls.Add(lbl);
             return carga;
         }
+
     }
 
 
