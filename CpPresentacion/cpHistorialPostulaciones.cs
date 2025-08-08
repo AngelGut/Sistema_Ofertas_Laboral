@@ -189,7 +189,7 @@ namespace CpPresentacion
             AplicarFiltro();
         }
 
-       // TODO: Manejador del evento de clic para el botón de limpiar
+        // TODO: Manejador del evento de clic para el botón de limpiar
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             txtBusqueda.Text = "";
@@ -197,8 +197,8 @@ namespace CpPresentacion
             if (tablaPostulaciones != null)
             {
                 dgvHistorialPostulaciones.DataSource = tablaPostulaciones;
-
-
+            }
+        }
 
         private void PersonalizarDataGridView()
         {
