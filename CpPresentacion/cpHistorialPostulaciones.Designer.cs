@@ -55,18 +55,16 @@
             label1 = new Label();
             tabPage8 = new TabPage();
             tabPage9 = new TabPage();
-            btnLimpiar = new MaterialSkin.Controls.MaterialButton();
+            btnLimpiarFiltros = new MaterialSkin.Controls.MaterialButton();
             panel1 = new Panel();
+            cmbFiltro = new ComboBox();
             label6 = new Label();
-            cmbPuesto = new ComboBox();
-            cmbTipoOferta = new ComboBox();
-            txtPersonaId = new TextBox();
+            txtBusqueda = new TextBox();
             label8 = new Label();
             label7 = new Label();
             lblPersonaId = new Label();
             pictureBox1 = new PictureBox();
             dgvHistorialPostulaciones = new DataGridView();
-            btnCargarDatos = new MaterialSkin.Controls.MaterialButton();
             btnBuscar = new MaterialSkin.Controls.MaterialButton();
             materialTabControl1.SuspendLayout();
             tabPage7.SuspendLayout();
@@ -523,10 +521,9 @@
             // 
             // tabPage9
             // 
-            tabPage9.Controls.Add(btnLimpiar);
+            tabPage9.Controls.Add(btnLimpiarFiltros);
             tabPage9.Controls.Add(panel1);
             tabPage9.Controls.Add(dgvHistorialPostulaciones);
-            tabPage9.Controls.Add(btnCargarDatos);
             tabPage9.Controls.Add(btnBuscar);
             tabPage9.Location = new Point(4, 24);
             tabPage9.Margin = new Padding(2);
@@ -536,33 +533,32 @@
             tabPage9.Text = "Historial Postulaciones";
             tabPage9.UseVisualStyleBackColor = true;
             // 
-            // btnLimpiar
+            // btnLimpiarFiltros
             // 
-            btnLimpiar.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btnLimpiar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btnLimpiar.Depth = 0;
-            btnLimpiar.HighEmphasis = true;
-            btnLimpiar.Icon = null;
-            btnLimpiar.Location = new Point(579, 443);
-            btnLimpiar.Margin = new Padding(4, 6, 4, 6);
-            btnLimpiar.MouseState = MaterialSkin.MouseState.HOVER;
-            btnLimpiar.Name = "btnLimpiar";
-            btnLimpiar.NoAccentTextColor = Color.Empty;
-            btnLimpiar.Size = new Size(79, 36);
-            btnLimpiar.TabIndex = 4;
-            btnLimpiar.Text = "Limpiar";
-            btnLimpiar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btnLimpiar.UseAccentColor = false;
-            btnLimpiar.UseVisualStyleBackColor = true;
-            btnLimpiar.Click += btnLimpiar_Click;
+            btnLimpiarFiltros.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnLimpiarFiltros.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            btnLimpiarFiltros.Depth = 0;
+            btnLimpiarFiltros.HighEmphasis = true;
+            btnLimpiarFiltros.Icon = null;
+            btnLimpiarFiltros.Location = new Point(409, 329);
+            btnLimpiarFiltros.Margin = new Padding(4, 6, 4, 6);
+            btnLimpiarFiltros.MouseState = MaterialSkin.MouseState.HOVER;
+            btnLimpiarFiltros.Name = "btnLimpiarFiltros";
+            btnLimpiarFiltros.NoAccentTextColor = Color.Empty;
+            btnLimpiarFiltros.Size = new Size(79, 36);
+            btnLimpiarFiltros.TabIndex = 4;
+            btnLimpiarFiltros.Text = "Limpiar";
+            btnLimpiarFiltros.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            btnLimpiarFiltros.UseAccentColor = false;
+            btnLimpiarFiltros.UseVisualStyleBackColor = true;
+            btnLimpiarFiltros.Click += btnLimpiar_Click;
             // 
             // panel1
             // 
             panel1.BackColor = SystemColors.HotTrack;
+            panel1.Controls.Add(cmbFiltro);
             panel1.Controls.Add(label6);
-            panel1.Controls.Add(cmbPuesto);
-            panel1.Controls.Add(cmbTipoOferta);
-            panel1.Controls.Add(txtPersonaId);
+            panel1.Controls.Add(txtBusqueda);
             panel1.Controls.Add(label8);
             panel1.Controls.Add(label7);
             panel1.Controls.Add(lblPersonaId);
@@ -573,6 +569,15 @@
             panel1.Size = new Size(287, 507);
             panel1.TabIndex = 3;
             // 
+            // cmbFiltro
+            // 
+            cmbFiltro.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbFiltro.FormattingEnabled = true;
+            cmbFiltro.Location = new Point(95, 302);
+            cmbFiltro.Name = "cmbFiltro";
+            cmbFiltro.Size = new Size(172, 23);
+            cmbFiltro.TabIndex = 10;
+            // 
             // label6
             // 
             label6.AutoSize = true;
@@ -582,33 +587,12 @@
             label6.TabIndex = 11;
             label6.Text = "label6";
             // 
-            // cmbPuesto
+            // txtBusqueda
             // 
-            cmbPuesto.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbPuesto.FormattingEnabled = true;
-            cmbPuesto.Location = new Point(95, 302);
-            cmbPuesto.Name = "cmbPuesto";
-            cmbPuesto.Size = new Size(172, 23);
-            cmbPuesto.TabIndex = 10;
-            cmbPuesto.SelectedIndexChanged += cmbPuesto_SelectedIndexChanged;
-            // 
-            // cmbTipoOferta
-            // 
-            cmbTipoOferta.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbTipoOferta.FormattingEnabled = true;
-            cmbTipoOferta.Location = new Point(95, 257);
-            cmbTipoOferta.Name = "cmbTipoOferta";
-            cmbTipoOferta.Size = new Size(172, 23);
-            cmbTipoOferta.TabIndex = 9;
-            cmbTipoOferta.SelectedIndexChanged += cmbTipoOferta_SelectedIndexChanged;
-            // 
-            // txtPersonaId
-            // 
-            txtPersonaId.BorderStyle = BorderStyle.FixedSingle;
-            txtPersonaId.Location = new Point(95, 214);
-            txtPersonaId.Name = "txtPersonaId";
-            txtPersonaId.Size = new Size(172, 23);
-            txtPersonaId.TabIndex = 7;
+            txtBusqueda.Location = new Point(95, 257);
+            txtBusqueda.Name = "txtBusqueda";
+            txtBusqueda.Size = new Size(172, 23);
+            txtBusqueda.TabIndex = 12;
             // 
             // label8
             // 
@@ -655,29 +639,10 @@
             // dgvHistorialPostulaciones
             // 
             dgvHistorialPostulaciones.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvHistorialPostulaciones.Location = new Point(314, 18);
+            dgvHistorialPostulaciones.Location = new Point(314, 14);
             dgvHistorialPostulaciones.Name = "dgvHistorialPostulaciones";
-            dgvHistorialPostulaciones.Size = new Size(836, 362);
+            dgvHistorialPostulaciones.Size = new Size(836, 280);
             dgvHistorialPostulaciones.TabIndex = 0;
-            // 
-            // btnCargarDatos
-            // 
-            btnCargarDatos.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            btnCargarDatos.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            btnCargarDatos.Depth = 0;
-            btnCargarDatos.HighEmphasis = true;
-            btnCargarDatos.Icon = null;
-            btnCargarDatos.Location = new Point(314, 443);
-            btnCargarDatos.Margin = new Padding(4, 6, 4, 6);
-            btnCargarDatos.MouseState = MaterialSkin.MouseState.HOVER;
-            btnCargarDatos.Name = "btnCargarDatos";
-            btnCargarDatos.NoAccentTextColor = Color.Empty;
-            btnCargarDatos.Size = new Size(130, 36);
-            btnCargarDatos.TabIndex = 2;
-            btnCargarDatos.Text = "Cargar Datos";
-            btnCargarDatos.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            btnCargarDatos.UseAccentColor = false;
-            btnCargarDatos.UseVisualStyleBackColor = true;
             // 
             // btnBuscar
             // 
@@ -686,7 +651,7 @@
             btnBuscar.Depth = 0;
             btnBuscar.HighEmphasis = true;
             btnBuscar.Icon = null;
-            btnBuscar.Location = new Point(471, 443);
+            btnBuscar.Location = new Point(314, 329);
             btnBuscar.Margin = new Padding(4, 6, 4, 6);
             btnBuscar.MouseState = MaterialSkin.MouseState.HOVER;
             btnBuscar.Name = "btnBuscar";
@@ -755,16 +720,14 @@
         private TabPage tabPage9;
         private DataGridView dgvHistorialPostulaciones;
         private Panel panel1;
-        private MaterialSkin.Controls.MaterialButton btnCargarDatos;
         private MaterialSkin.Controls.MaterialButton btnBuscar;
-        private TextBox txtPersonaId;
-        private Label label8;
         private Label label7;
         private Label lblPersonaId;
         private PictureBox pictureBox1;
-        private ComboBox cmbTipoOferta;
-        private ComboBox cmbPuesto;
-        private MaterialSkin.Controls.MaterialButton btnLimpiar;
+        private ComboBox cmbFiltro;
+        private MaterialSkin.Controls.MaterialButton btnLimpiarFiltros;
         private Label label6;
+        private TextBox txtBusqueda;
+        private Label label8;
     }
 }
