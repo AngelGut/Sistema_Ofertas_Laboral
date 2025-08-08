@@ -102,7 +102,7 @@
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1212, 689);
+            materialTabControl1.Size = new Size(934, 775);
             materialTabControl1.TabIndex = 1;
             materialTabControl1.SelectedIndexChanged += materialTabControl1_SelectedIndexChanged;
             // 
@@ -112,7 +112,7 @@
             tabPage1.Margin = new Padding(2);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(2);
-            tabPage1.Size = new Size(1204, 656);
+            tabPage1.Size = new Size(937, 759);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Menu";
             tabPage1.UseVisualStyleBackColor = true;
@@ -123,7 +123,7 @@
             tabPage2.Margin = new Padding(2);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(2);
-            tabPage2.Size = new Size(1204, 656);
+            tabPage2.Size = new Size(937, 759);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Ofertas Laborales";
             tabPage2.UseVisualStyleBackColor = true;
@@ -133,7 +133,7 @@
             tabPage3.Location = new Point(4, 29);
             tabPage3.Margin = new Padding(2);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1204, 656);
+            tabPage3.Size = new Size(937, 759);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Empresas";
             tabPage3.UseVisualStyleBackColor = true;
@@ -146,7 +146,7 @@
             tabPage4.Location = new Point(4, 29);
             tabPage4.Margin = new Padding(2);
             tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(1204, 656);
+            tabPage4.Size = new Size(937, 759);
             tabPage4.TabIndex = 3;
             tabPage4.Text = "Postulantes";
             tabPage4.UseVisualStyleBackColor = true;
@@ -569,7 +569,7 @@
             tabPage5.Controls.Add(materialCard3);
             tabPage5.Location = new Point(4, 29);
             tabPage5.Name = "tabPage5";
-            tabPage5.Size = new Size(1204, 656);
+            tabPage5.Size = new Size(937, 759);
             tabPage5.TabIndex = 4;
             tabPage5.Text = "Asignar Oferta";
             tabPage5.UseVisualStyleBackColor = true;
@@ -684,7 +684,7 @@
             tabPage6.Location = new Point(4, 29);
             tabPage6.Margin = new Padding(2);
             tabPage6.Name = "tabPage6";
-            tabPage6.Size = new Size(1204, 656);
+            tabPage6.Size = new Size(926, 742);
             tabPage6.TabIndex = 5;
             tabPage6.Text = "Historial Correos";
             tabPage6.UseVisualStyleBackColor = true;
@@ -693,7 +693,7 @@
             // 
             lblDetalles.AutoSize = true;
             lblDetalles.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblDetalles.Location = new Point(306, 402);
+            lblDetalles.Location = new Point(26, 481);
             lblDetalles.Name = "lblDetalles";
             lblDetalles.Size = new Size(278, 23);
             lblDetalles.TabIndex = 8;
@@ -701,22 +701,22 @@
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(306, 429);
+            textBox2.Location = new Point(20, 511);
             textBox2.Margin = new Padding(3, 4, 3, 4);
             textBox2.Multiline = true;
             textBox2.Name = "textBox2";
             textBox2.ReadOnly = true;
             textBox2.ScrollBars = ScrollBars.Vertical;
-            textBox2.Size = new Size(886, 185);
+            textBox2.Size = new Size(893, 205);
             textBox2.TabIndex = 7;
             // 
             // dgvHistorial
             // 
             dgvHistorial.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvHistorial.Location = new Point(301, 14);
+            dgvHistorial.Location = new Point(17, 158);
             dgvHistorial.Name = "dgvHistorial";
             dgvHistorial.RowHeadersWidth = 51;
-            dgvHistorial.Size = new Size(891, 357);
+            dgvHistorial.Size = new Size(896, 294);
             dgvHistorial.TabIndex = 1;
             // 
             // materialCard4
@@ -728,19 +728,19 @@
             materialCard4.Controls.Add(label2);
             materialCard4.Depth = 0;
             materialCard4.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard4.Location = new Point(0, 0);
+            materialCard4.Location = new Point(180, 14);
             materialCard4.Margin = new Padding(14);
             materialCard4.MouseState = MaterialSkin.MouseState.HOVER;
             materialCard4.Name = "materialCard4";
             materialCard4.Padding = new Padding(14);
-            materialCard4.Size = new Size(289, 656);
+            materialCard4.Size = new Size(541, 127);
             materialCard4.TabIndex = 0;
             // 
             // txtBuscar
             // 
-            txtBuscar.Location = new Point(25, 56);
+            txtBuscar.Location = new Point(111, 47);
             txtBuscar.Name = "txtBuscar";
-            txtBuscar.Size = new Size(224, 27);
+            txtBuscar.Size = new Size(311, 27);
             txtBuscar.TabIndex = 3;
             // 
             // mbtnLimpiar
@@ -750,7 +750,7 @@
             mbtnLimpiar.Depth = 0;
             mbtnLimpiar.HighEmphasis = true;
             mbtnLimpiar.Icon = null;
-            mbtnLimpiar.Location = new Point(170, 103);
+            mbtnLimpiar.Location = new Point(429, 43);
             mbtnLimpiar.Margin = new Padding(4, 6, 4, 6);
             mbtnLimpiar.MouseState = MaterialSkin.MouseState.HOVER;
             mbtnLimpiar.Name = "mbtnLimpiar";
@@ -770,7 +770,7 @@
             mbtnBuscar.Depth = 0;
             mbtnBuscar.HighEmphasis = true;
             mbtnBuscar.Icon = null;
-            mbtnBuscar.Location = new Point(18, 103);
+            mbtnBuscar.Location = new Point(27, 42);
             mbtnBuscar.Margin = new Padding(4, 6, 4, 6);
             mbtnBuscar.MouseState = MaterialSkin.MouseState.HOVER;
             mbtnBuscar.Name = "mbtnBuscar";
@@ -787,7 +787,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(25, 21);
+            label2.Location = new Point(168, 14);
             label2.Name = "label2";
             label2.Size = new Size(224, 20);
             label2.TabIndex = 1;
@@ -798,7 +798,7 @@
             tabPage7.Location = new Point(4, 29);
             tabPage7.Margin = new Padding(2);
             tabPage7.Name = "tabPage7";
-            tabPage7.Size = new Size(1204, 656);
+            tabPage7.Size = new Size(937, 759);
             tabPage7.TabIndex = 6;
             tabPage7.Text = "Carnet";
             tabPage7.UseVisualStyleBackColor = true;
@@ -808,7 +808,7 @@
             tabPage8.Location = new Point(4, 29);
             tabPage8.Margin = new Padding(2);
             tabPage8.Name = "tabPage8";
-            tabPage8.Size = new Size(1204, 656);
+            tabPage8.Size = new Size(937, 759);
             tabPage8.TabIndex = 7;
             tabPage8.Text = "Registro Interno";
             tabPage8.UseVisualStyleBackColor = true;
@@ -817,7 +817,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1218, 756);
+            ClientSize = new Size(940, 842);
             Controls.Add(materialTabControl1);
             DrawerTabControl = materialTabControl1;
             Name = "cpHistorialMensajes";

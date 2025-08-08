@@ -24,7 +24,7 @@ namespace CpNegocio.servicios
                     a.Id AS [ID Asignación],
                     p.Nombre AS [Nombre Persona],
                     p.Cedula,
-                    p.Correo,
+                    p.Dni,
                     o.Puesto,
                     e.Nombre AS [Empresa],
                     a.FechaAsignacion
@@ -32,7 +32,7 @@ namespace CpNegocio.servicios
                 JOIN Persona p ON a.PersonaId = p.Id
                 JOIN Oferta o ON a.OfertaId = o.Id
                 JOIN Empresa e ON o.EmpresaId = e.Id
-                WHERE p.Nombre LIKE @filtro OR p.Cedula LIKE @filtro OR p.Correo LIKE @filtro OR o.Puesto LIKE @filtro
+                WHERE p.Nombre LIKE @filtro OR p.Dni LIKE @filtro OR p.Correo LIKE @filtro OR o.Puesto LIKE @filtro
                 ORDER BY a.FechaAsignacion DESC";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
