@@ -1,4 +1,9 @@
-﻿using MaterialSkin.Controls;
+﻿using CpNegocio;
+using CpNegocio.Entidades;
+using CpNegocio.servicios;
+using CpPresentacion.Asistencia;   // contiene IReadOnlyContainer y las extensiones
+using MaterialSkin.Controls;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,14 +11,10 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using CpNegocio.Entidades;
-using System.Text.RegularExpressions;
-using CpNegocio;
-using CpNegocio.servicios;
-using CpPresentacion.Asistencia;   // contiene IReadOnlyContainer y las extensiones
 
 namespace CpPresentacion
 {
@@ -48,8 +49,10 @@ namespace CpPresentacion
             TxtTelefono.KeyPress += SoloNumeros_KeyPress;
             TxtRnc.KeyPress += SoloNumeros_KeyPress;
 
-            
+            AsignarEventosDeValidacion();
+            CargarFiltro();
             CargarEmpresas();
+            txtBusqueda.KeyPress += TxtBusqueda_KeyPress;
 
             // Bloquear todos los controles recursivamente
             this.SetReadOnly(true);
@@ -66,7 +69,6 @@ namespace CpPresentacion
             }
         }
 
-
         //TODO: navegacion
         /* ══════════════════════  N A V E G A C I Ó N  ═════════════════════ */
 
@@ -80,7 +82,6 @@ namespace CpPresentacion
             // A) ¿A qué ventana ir?
             Form destino = idx switch
             {
-                // Siempre nueva instancia de Menu
                 0 => new Menu(),
                 1 => this is cpOfertas ? this : new cpOfertas(),
                 2 => this is cpEmpresa ? this : new cpEmpresa(),
@@ -109,9 +110,6 @@ namespace CpPresentacion
             destino.BringToFront();
             destino.Activate();
         }
-
-
-
 
         private void BtnRegistrar_Click(object sender, EventArgs e)
         {
@@ -272,6 +270,7 @@ namespace CpPresentacion
                 e.Handled = true;
             }
         }
+
         private void SoloNumeros_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
@@ -328,6 +327,15 @@ namespace CpPresentacion
             cmbPaises.ValueMember = "IsoCode";
         }
 
+        private void CargarFiltro()
+        {
+            cmbFiltro.Items.Clear();
+            cmbFiltro.Items.Add("Id");
+            cmbFiltro.Items.Add("Nombre");
+            cmbFiltro.Items.Add("Rnc");
+            cmbFiltro.SelectedIndex = 0; // Seleccionar el primer criterio por defecto
+        }
+
         private void FormatearTelefono()
         {
             // Verifica que haya un país seleccionado
@@ -363,6 +371,158 @@ namespace CpPresentacion
             {
                 // Si falla el parseo → fondo rosado
                 TxtTelefono.BackColor = Color.MistyRose;
+            }
+        }
+
+        private void BtnBuscar_Click(object sender, EventArgs e)
+        {
+            string criterio = cmbFiltro.SelectedItem.ToString();  // Obtener el criterio seleccionado (Id, Nombre, Dni)
+            string valorBusqueda = txtBusqueda.Text.Trim();  // Obtener el valor de búsqueda
+
+            if (string.IsNullOrEmpty(valorBusqueda))
+            {
+                MessageBox.Show(
+                    "Por favor, ingrese un valor para buscar. \n\n" +
+                    "Recuerde que debe proporcionar un valor en el campo de búsqueda para poder filtrar la información.",
+                    "Campo de búsqueda vacío",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                // Llamamos al método BuscarConFiltro con el criterio y el valor de búsqueda
+                var persona = new Persona();
+                var servicio = new CpNegocio.servicios.MetodosPersona(persona);
+
+                // Llamamos al servicio con el filtro
+                DataTable tablaFiltrada = servicio.BuscarConFiltro(criterio, valorBusqueda);
+
+                // Asignamos la tabla filtrada al DataGridView
+                DgvEmpresas.DataSource = tablaFiltrada;
+
+                // Actualizamos los encabezados de las columnas
+                ActualizarEncabezadosColumnas();
+            }
+            catch (FormatException ex)
+            {
+                // Si el valor de búsqueda no es válido para un número
+                MessageBox.Show(
+                    "El valor para la búsqueda del 'Id' debe ser un número entero. \n\n" +
+                    "Por favor, ingrese un valor numérico válido para el campo 'Id'.",
+                    "Error de formato en 'Id'",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            catch (SqlException ex)
+            {
+                // Si ocurre un error con la base de datos
+                MessageBox.Show(
+                    "Hubo un problema al intentar conectar con la base de datos. \n\n" +
+                    "Por favor, verifique la conexión o intente nuevamente más tarde.",
+                    "Error de base de datos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                // Captura cualquier otro error inesperado
+                MessageBox.Show(
+                    "Ocurrió un error inesperado mientras se realizaba la búsqueda: \n\n" +
+                    ex.Message + "\n\n" +
+                    "Por favor, contacte al administrador si el problema persiste.",
+                    "Error al buscar personas",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void ActualizarEncabezadosColumnas()
+        {
+            if (DgvEmpresas.Columns.Contains("Id"))
+                DgvEmpresas.Columns["Id"].HeaderText = "ID Empresa";
+
+            if (DgvEmpresas.Columns.Contains("Nombre"))
+                DgvEmpresas.Columns["Nombre"].HeaderText = "Nombre de la Empresa";
+
+            if (DgvEmpresas.Columns.Contains("Rnc"))
+                DgvEmpresas.Columns["Rnc"].HeaderText = "RNC";
+
+            if (DgvEmpresas.Columns.Contains("Telefono"))
+                DgvEmpresas.Columns["Telefono"].HeaderText = "Teléfono";
+
+            if (DgvEmpresas.Columns.Contains("Direccion"))
+                DgvEmpresas.Columns["Direccion"].HeaderText = "Dirección";
+
+            if (DgvEmpresas.Columns.Contains("Correo"))
+                DgvEmpresas.Columns["Correo"].HeaderText = "Correo";
+        }
+
+        private void AsignarEventosDeValidacion()
+        {
+            // Asegúrate de que el TextBox está bien referenciado
+            txtBusqueda.KeyPress += TxtBusqueda_KeyPress;
+        }
+
+        private void TxtBusqueda_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Verificamos el filtro seleccionado
+            string filtro = cmbFiltro.SelectedItem.ToString();
+
+            // Si el filtro es "Id" o "Rnc", solo permitimos números
+            if (filtro == "Id" || filtro == "Rnc")
+            {
+                if (!Char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+                {
+                    e.Handled = true;  // Bloquea la entrada de caracteres no numéricos
+                }
+            }
+            // Si el filtro es "Nombre", solo permitimos letras
+            else if (filtro == "Nombre")
+            {
+                if (!Char.IsLetter(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+                {
+                    e.Handled = true;  // Bloquea la entrada de caracteres no alfabéticos
+                }
+            }
+        }
+
+        private void TxtBusqueda_KeyPress_Numeros(object sender, KeyPressEventArgs e)
+        {
+            // Permitir solo números y la tecla Backspace
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;  // Evita que se ingrese un carácter no numérico
+            }
+        }
+
+        private void TxtBusqueda_KeyPress_Letras(object sender, KeyPressEventArgs e)
+        {
+            // Permitir solo letras (sin distinguir mayúsculas/minúsculas) y la tecla Backspace
+            if (!Char.IsLetter(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;  // Evita que se ingrese un carácter no alfabético
+            }
+        }
+
+        private void cmbFiltro_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Limpiar el texto para que no quede ningún valor previo
+            txtBusqueda.Clear();
+
+            // Asignamos el evento de validación correcto según el filtro seleccionado
+            if (cmbFiltro.SelectedItem.ToString() == "Id" || cmbFiltro.SelectedItem.ToString() == "Rnc")
+            {
+                // Validar solo números
+                txtBusqueda.KeyPress -= TxtBusqueda_KeyPress_Letras; // Eliminar validación de letras
+                txtBusqueda.KeyPress += TxtBusqueda_KeyPress_Numeros; // Asignar validación solo números
+            }
+            else if (cmbFiltro.SelectedItem.ToString() == "Nombre")
+            {
+                // Validar solo letras
+                txtBusqueda.KeyPress -= TxtBusqueda_KeyPress_Numeros; // Eliminar validación de números
+                txtBusqueda.KeyPress += TxtBusqueda_KeyPress_Letras; // Asignar validación solo letras
             }
         }
 

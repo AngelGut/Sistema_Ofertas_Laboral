@@ -122,6 +122,71 @@ namespace CpNegocio.servicios
             }
         }
 
+        public DataTable BuscarConFiltro(string criterio, string valorBusqueda)
+        {
+            try
+            {
+                using (var conn = OfertaDatos.ObtenerConexion())
+                {
+                    conn.Open();
+
+                    string query = "";
+
+                    // Dependiendo del criterio, ajustamos la consulta
+                    if (criterio == "Id")
+                    {
+                        // Validamos si el valor de búsqueda para Id es un número entero
+                        if (!int.TryParse(valorBusqueda, out int idValor))
+                        {
+                            throw new Exception("El valor para el filtro 'Id' debe ser un número entero.");
+                        }
+
+                        query = "SELECT Id, Nombre, Rnc, Telefono, Direccion, Correo FROM Empresa WHERE Id = @ValorBusqueda";
+                    }
+                    else if (criterio == "Nombre")
+                    {
+                        query = "SELECT Id, Nombre, Rnc, Telefono, Direccion, Correo FROM Empresa WHERE Nombre LIKE @ValorBusqueda";
+                    }
+                    else if (criterio == "Rnc")
+                    {
+                        query = "SELECT Id, Nombre, Rnc, Telefono, Direccion, Correo FROM Empresa WHERE Rnc LIKE @ValorBusqueda";
+                    }
+                    else
+                    {
+                        throw new Exception("Criterio de búsqueda no válido.");
+                    }
+
+                    using (var cmd = new SqlCommand(query, conn))
+                    {
+                        // En el caso de que se filtre por Nombre o Rnc, usamos LIKE para búsqueda parcial
+                        if (criterio == "Id")
+                        {
+                            cmd.Parameters.AddWithValue("@ValorBusqueda", valorBusqueda);  // Pasar el valor como número entero
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@ValorBusqueda", "%" + valorBusqueda + "%");  // Búsqueda parcial para Nombre y Rnc
+                        }
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            var tabla = new DataTable();
+                            tabla.Load(reader);
+                            return tabla;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al aplicar el filtro: " + ex.Message, ex);
+            }
+        }
+
+
+
+
+
         /// <summary>
         /// Comprueba en la base de datos, usando la conexión ya abierta,
         /// si ya existe una persona con ese DNI.
