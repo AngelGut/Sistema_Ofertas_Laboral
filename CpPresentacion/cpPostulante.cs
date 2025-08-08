@@ -14,10 +14,12 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using CpNegocio.servicios;
 using CpPresentacion.Asistencia;   // contiene IReadOnlyContainer y las extensiones
 
+
 namespace CpPresentacion
 {
     public partial class cpPostulante : MaterialForm, IReadOnlyContainer
     {
+        private FormBoton _formBoton;   // switch flotante
         public Control Container => this; // Implementación de la interfaz
 
         public cpPostulante()
@@ -41,19 +43,32 @@ namespace CpPresentacion
 
             CargarPersonas(); // <-- aquí lo puedes invocar también
 
-            // Bloquear todos los controles recursivamente
+            // 1) Arrancar bloqueado
             this.SetReadOnly(true);
 
-            // Mostrar mini-form Ver/Editar
+            // 2) Mini-form para decidir estado inicial
+            bool startInEdit = false;
             using (var dlg = new frmModoVisualizacion())
             {
                 if (dlg.ShowDialog() == DialogResult.OK &&
                     dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
                 {
-                    // Desbloquear si eligió Editar
-                    this.SetReadOnly(false);
+                    startInEdit = true;
                 }
             }
+
+            // 3) Aplicar estado inicial
+            this.SetReadOnly(!startInEdit);
+
+            // 4) Abrir switch flotante (siempre activo)
+            AbrirFormBoton(startInEdit);
+
+            // 5) Cerrar flotante cuando cierre este form
+            this.FormClosed += (s, e) =>
+            {
+                if (_formBoton != null && !_formBoton.IsDisposed) _formBoton.Close();
+                _formBoton = null;
+            };
 
         }
 
@@ -374,6 +389,42 @@ namespace CpPresentacion
             }
         }
 
+        private void AbrirFormBoton(bool startInEdit)
+        {
+            if (_formBoton != null && !_formBoton.IsDisposed) return;
+
+            _formBoton = new FormBoton(this, startInEdit)
+            {
+                StartPosition = FormStartPosition.Manual,
+                TopMost = true
+            };
+
+            void Reposicionar()
+            {
+                if (_formBoton == null || _formBoton.IsDisposed) return;
+
+                // Origen del form en pantalla
+                var p = this.PointToScreen(Point.Empty);
+
+                // AFUERA al lado derecho, centrado vertical
+                int x = p.X + this.Width;
+                int y = p.Y + (this.Height - _formBoton.Height) / 2;
+
+                // Mantener visible en el monitor del form (evita que se “corte”)
+                var wa = Screen.FromControl(this).WorkingArea;
+                x = Math.Min(Math.Max(x, wa.Left), wa.Right - _formBoton.Width);
+                y = Math.Min(Math.Max(y, wa.Top), wa.Bottom - _formBoton.Height);
+
+                _formBoton.Location = new Point(x, y);
+            }
+
+            Reposicionar();
+            this.Move += (s, e) => Reposicionar();
+            this.Resize += (s, e) => Reposicionar();
+
+            _formBoton.FormClosed += (s, e) => _formBoton = null;
+            _formBoton.Show(this);
+        }
 
     }
 }

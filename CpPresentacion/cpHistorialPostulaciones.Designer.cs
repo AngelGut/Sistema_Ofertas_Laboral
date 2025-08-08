@@ -324,6 +324,7 @@
             DrawerTabControl = materialTabControl1;
             Name = "cpHistorialPostulaciones";
             Padding = new Padding(3, 63, 3, 3);
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Historial Postulaciones";
             Load += cpHistorialPostulaciones_Load;
             materialTabControl1.ResumeLayout(false);
