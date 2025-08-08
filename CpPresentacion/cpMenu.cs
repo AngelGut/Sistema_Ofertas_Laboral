@@ -93,5 +93,11 @@ namespace CpPresentacion
                 Application.Exit();
             }
         }
+
+        private void mtbtnSoporte_Click(object sender, EventArgs e)
+        {
+            cpSoporte soporteForm = new cpSoporte();
+            soporteForm.ShowDialog();
+        }
     }
 }
