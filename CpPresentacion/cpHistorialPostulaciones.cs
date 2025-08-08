@@ -17,6 +17,8 @@ namespace CpPresentacion
         public cpHistorialPostulaciones()
         {
             InitializeComponent();
+            //Metodo de personalizacion del datagridview
+            PersonalizarDataGridView();
             materialTabControl1.SelectedIndex = 8;
 
             var materialSkinManager = MaterialSkin.MaterialSkinManager.Instance;
@@ -192,6 +194,58 @@ namespace CpPresentacion
             {
                 dgvHistorialPostulaciones.DataSource = tablaPostulaciones;
             }
+        }
+
+        private void PersonalizarDataGridView()
+        {
+            // Cambiar el color de fondo general del DataGridView
+            dgvHistorialPostulaciones.BackgroundColor = Color.FromArgb(240, 248, 255); // Azul muy suave, estilo "Azure"
+
+            // Personalizar el color de los encabezados de las columnas
+            dgvHistorialPostulaciones.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 122, 204); // Azul oscuro
+            dgvHistorialPostulaciones.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvHistorialPostulaciones.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
+            dgvHistorialPostulaciones.ColumnHeadersHeight = 40;
+
+            // Cambiar el color de las filas
+            dgvHistorialPostulaciones.RowsDefaultCellStyle.BackColor = Color.White;
+            dgvHistorialPostulaciones.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(230, 240, 255); // Azul suave en filas alternas
+            dgvHistorialPostulaciones.RowsDefaultCellStyle.ForeColor = Color.Black;
+
+            // Cambiar el color del borde del DataGridView
+            dgvHistorialPostulaciones.BorderStyle = BorderStyle.FixedSingle;
+            dgvHistorialPostulaciones.GridColor = Color.FromArgb(200, 200, 200); // Gris claro para las líneas de la cuadrícula
+
+            // Personalizar las celdas
+            dgvHistorialPostulaciones.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 122, 204); // Azul oscuro cuando se selecciona
+            dgvHistorialPostulaciones.DefaultCellStyle.SelectionForeColor = Color.White; // Texto blanco cuando se selecciona
+
+            // Personalizar las celdas al pasar el ratón (Hover)
+            dgvHistorialPostulaciones.CellMouseEnter += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    dgvHistorialPostulaciones.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.FromArgb(173, 216, 230); // Azul claro cuando el mouse pasa
+                }
+            };
+
+            dgvHistorialPostulaciones.CellMouseLeave += (sender, e) =>
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    dgvHistorialPostulaciones.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.White; // Vuelve a blanco
+                }
+            };
+
+            // Personalizar la fuente de las celdas
+            dgvHistorialPostulaciones.DefaultCellStyle.Font = new Font("Arial", 9);
+
+            // Personalizar las filas de la cabecera al ser seleccionadas
+            dgvHistorialPostulaciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvHistorialPostulaciones.MultiSelect = false;
+
+            // Ajustar el tamaño de las columnas automáticamente según el contenido
+            dgvHistorialPostulaciones.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
     }
 }
