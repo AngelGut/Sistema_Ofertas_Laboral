@@ -127,13 +127,82 @@ namespace CpPresentacion
         // 🔹 Evento del botón de búsqueda
         private void mbtnBuscar_Click(object sender, EventArgs e)
         {
-            CargarHistorial();
-        }
+            string filtro = txtBuscar.Text.Trim();
+            CargarHistorial(); // Recarga el historial con el filtro
 
+            if (int.TryParse(filtro, out int idBuscado))
+            {
+                foreach (DataGridViewRow fila in dgvHistorial.Rows)
+                {
+                    if (Convert.ToInt32(fila.Cells["ID"].Value) == idBuscado)
+                    {
+                        fila.Selected = true;
+                        dgvHistorial.CurrentCell = fila.Cells[0];
+
+                        try
+                        {
+                            using (SqlConnection conn = OfertaDatos.ObtenerConexion())
+                            {
+                                conn.Open();
+                                string query = @"
+                            SELECT p.Nombre, o.Puesto, o.Area, o.Descripcion, o.Requisitos, o.Salario
+                            FROM Asignacion a
+                            INNER JOIN Persona p ON a.PersonaId = p.Id
+                            INNER JOIN Oferta o ON a.OfertaId = o.Id
+                            WHERE a.Id = @IdAsignacion";
+
+                                SqlCommand cmd = new SqlCommand(query, conn);
+                                cmd.Parameters.AddWithValue("@IdAsignacion", idBuscado);
+
+                                SqlDataReader reader = cmd.ExecuteReader();
+                                if (reader.Read())
+                                {
+                                    string mensaje = $@"
+                                        Hola {reader["Nombre"]},
+                                        ¡Enhorabuena! Has sido asignado/a a la oferta: {reader["Puesto"]}.
+
+                                        Resumen de la oferta:
+                                        • Puesto: {reader["Puesto"]}
+                                        • Área: {reader["Area"]}
+                                        • Salario: ${reader["Salario"]}
+
+                                        Descripción:
+                                        {reader["Descripcion"]}
+
+                                        Requisitos:
+                                        {reader["Requisitos"]}
+
+                                        — Equipo EmpleaTech";
+
+                                    txtResumenCorreo.Text = mensaje;
+                                }
+
+                                reader.Close();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error al mostrar detalles: " + ex.Message);
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
         private void mbtnLimpiar_Click(object sender, EventArgs e)
-        {
-            txtBuscar.Text = "";            // Limpia el TextBox
-            CargarHistorial();              // Vuelve a cargar todo el historial sin filtro
+        { 
+            // Limpiar el campo de búsqueda
+            txtBuscar.Text = string.Empty;
+
+            // Limpiar el contenido del resumen del correo
+            txtResumenCorreo.Clear();
+
+            // Limpiar la selección en el DataGridView
+            dgvHistorial.ClearSelection();
+
+            // Recargar el historial completo sin filtros
+            CargarHistorial();
         }
 
         private void PersonalizarDataGridView()
