@@ -84,7 +84,7 @@ namespace CpNegocio.Empresas_y_Postulantes
         }
 
 
-        // (El resto del código de NEmpresa.cs permanece igual)
+        
 
         public DataTable ObtenerEmpresasConArea()
         {

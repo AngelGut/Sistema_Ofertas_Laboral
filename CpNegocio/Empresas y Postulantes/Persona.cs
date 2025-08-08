@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Capa_Datos;
 
-
 namespace CpNegocio.Entidades
 {
     //TODO: Herencia de BaseUser para la clase Persona
@@ -18,19 +17,20 @@ namespace CpNegocio.Entidades
         private string _correo;
         private string _direccion;
         private string _dni;
+        
 
-        public override string Nombre 
+        public override string Nombre
         {
             get { return _nombre; }
-            set { _nombre = value; } 
+            set { _nombre = value; }
         }
-        public override string Telefono 
+        public override string Telefono
         {
-            get { return _telefono; } 
-            set { _telefono = value; } 
+            get { return _telefono; }
+            set { _telefono = value; }
         }
-        public override string Correo 
-        { 
+        public override string Correo
+        {
             get { return _correo; }
             set { _correo = value; }
         }
@@ -42,14 +42,15 @@ namespace CpNegocio.Entidades
         public int Id { get; set; }          // ID único generado por la BD
         public string Dni { get; set; }
 
-
+        // Nueva propiedad para Tipo de Persona
+        
 
         public void ValidarDisponibilidad()
         {
             // Implementación específica para validar si la persona no ha sido creada previamente
         }
 
-        //constructor
+        // Constructor con todos los parámetros incluyendo el tipo de persona (Nacional/Extranjero)
         public Persona(string nombre, string telefono, string correo, string direccion, string dni)
         {
             Nombre = nombre;
@@ -57,19 +58,18 @@ namespace CpNegocio.Entidades
             Correo = correo;
             Direccion = direccion;
             Dni = dni;
+             
         }
 
         /// <summary>
-
         // C# permite sobrecarga de constructores (varios constructores con distinta firma).
         //Esto no rompe nada en otras partes, porque donde necesitas pasar parámetros puedes seguir usando el constructor original.
         //El nuevo constructor vacío te sirve solo para métodos como Buscar(), que no necesitan una empresa específica.
-
         /// </summary>
+
         // Constructor vacío
         public Persona()
         {
         }
-
     }
 }

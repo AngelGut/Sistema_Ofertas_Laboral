@@ -36,6 +36,10 @@
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
             tabPage5 = new TabPage();
+            texboxIdOferta = new MaterialSkin.Controls.MaterialMaskedTextBox();
+            txboxIdPersona = new MaterialSkin.Controls.MaterialMaskedTextBox();
+            materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
+            materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             btnAsignar = new MaterialSkin.Controls.MaterialButton();
             cmbNuevo = new MaterialSkin.Controls.MaterialComboBox();
             cmbFiltroArea = new MaterialSkin.Controls.MaterialComboBox();
@@ -122,6 +126,10 @@
             // 
             // tabPage5
             // 
+            tabPage5.Controls.Add(texboxIdOferta);
+            tabPage5.Controls.Add(txboxIdPersona);
+            tabPage5.Controls.Add(materialLabel2);
+            tabPage5.Controls.Add(materialLabel1);
             tabPage5.Controls.Add(btnAsignar);
             tabPage5.Controls.Add(cmbNuevo);
             tabPage5.Controls.Add(cmbFiltroArea);
@@ -139,6 +147,114 @@
             tabPage5.TabIndex = 4;
             tabPage5.Text = "Asignar Oferta";
             tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // texboxIdOferta
+            // 
+            texboxIdOferta.AllowPromptAsInput = true;
+            texboxIdOferta.AnimateReadOnly = false;
+            texboxIdOferta.AsciiOnly = false;
+            texboxIdOferta.BackgroundImageLayout = ImageLayout.None;
+            texboxIdOferta.BeepOnError = false;
+            texboxIdOferta.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
+            texboxIdOferta.Depth = 0;
+            texboxIdOferta.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            texboxIdOferta.HidePromptOnLeave = false;
+            texboxIdOferta.HideSelection = true;
+            texboxIdOferta.InsertKeyMode = InsertKeyMode.Default;
+            texboxIdOferta.LeadingIcon = null;
+            texboxIdOferta.Location = new Point(1075, 816);
+            texboxIdOferta.Mask = "";
+            texboxIdOferta.MaxLength = 32767;
+            texboxIdOferta.MouseState = MaterialSkin.MouseState.OUT;
+            texboxIdOferta.Name = "texboxIdOferta";
+            texboxIdOferta.PasswordChar = '\0';
+            texboxIdOferta.PrefixSuffixText = null;
+            texboxIdOferta.PromptChar = '_';
+            texboxIdOferta.ReadOnly = false;
+            texboxIdOferta.RejectInputOnFirstFailure = false;
+            texboxIdOferta.ResetOnPrompt = true;
+            texboxIdOferta.ResetOnSpace = true;
+            texboxIdOferta.RightToLeft = RightToLeft.No;
+            texboxIdOferta.SelectedText = "";
+            texboxIdOferta.SelectionLength = 0;
+            texboxIdOferta.SelectionStart = 0;
+            texboxIdOferta.ShortcutsEnabled = true;
+            texboxIdOferta.Size = new Size(375, 48);
+            texboxIdOferta.SkipLiterals = true;
+            texboxIdOferta.TabIndex = 14;
+            texboxIdOferta.TabStop = false;
+            texboxIdOferta.TextAlign = HorizontalAlignment.Left;
+            texboxIdOferta.TextMaskFormat = MaskFormat.IncludeLiterals;
+            texboxIdOferta.TrailingIcon = null;
+            texboxIdOferta.UseSystemPasswordChar = false;
+            texboxIdOferta.ValidatingType = null;
+            // 
+            // txboxIdPersona
+            // 
+            txboxIdPersona.AllowPromptAsInput = true;
+            txboxIdPersona.AnimateReadOnly = false;
+            txboxIdPersona.AsciiOnly = false;
+            txboxIdPersona.BackgroundImageLayout = ImageLayout.None;
+            txboxIdPersona.BeepOnError = false;
+            txboxIdPersona.CutCopyMaskFormat = MaskFormat.IncludeLiterals;
+            txboxIdPersona.Depth = 0;
+            txboxIdPersona.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            txboxIdPersona.HidePromptOnLeave = false;
+            txboxIdPersona.HideSelection = true;
+            txboxIdPersona.InsertKeyMode = InsertKeyMode.Default;
+            txboxIdPersona.LeadingIcon = null;
+            txboxIdPersona.Location = new Point(79, 816);
+            txboxIdPersona.Mask = "";
+            txboxIdPersona.MaxLength = 32767;
+            txboxIdPersona.MouseState = MaterialSkin.MouseState.OUT;
+            txboxIdPersona.Name = "txboxIdPersona";
+            txboxIdPersona.PasswordChar = '\0';
+            txboxIdPersona.PrefixSuffixText = null;
+            txboxIdPersona.PromptChar = '_';
+            txboxIdPersona.ReadOnly = false;
+            txboxIdPersona.RejectInputOnFirstFailure = false;
+            txboxIdPersona.ResetOnPrompt = true;
+            txboxIdPersona.ResetOnSpace = true;
+            txboxIdPersona.RightToLeft = RightToLeft.No;
+            txboxIdPersona.SelectedText = "";
+            txboxIdPersona.SelectionLength = 0;
+            txboxIdPersona.SelectionStart = 0;
+            txboxIdPersona.ShortcutsEnabled = true;
+            txboxIdPersona.Size = new Size(375, 48);
+            txboxIdPersona.SkipLiterals = true;
+            txboxIdPersona.TabIndex = 13;
+            txboxIdPersona.TabStop = false;
+            txboxIdPersona.TextAlign = HorizontalAlignment.Left;
+            txboxIdPersona.TextMaskFormat = MaskFormat.IncludeLiterals;
+            txboxIdPersona.TrailingIcon = null;
+            txboxIdPersona.UseSystemPasswordChar = false;
+            txboxIdPersona.ValidatingType = null;
+            // 
+            // materialLabel2
+            // 
+            materialLabel2.AutoSize = true;
+            materialLabel2.Depth = 0;
+            materialLabel2.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialLabel2.Location = new Point(1260, 29);
+            materialLabel2.Margin = new Padding(4, 0, 4, 0);
+            materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
+            materialLabel2.Name = "materialLabel2";
+            materialLabel2.Size = new Size(228, 19);
+            materialLabel2.TabIndex = 12;
+            materialLabel2.Text = "Ofertas Disponibles Registradas";
+            // 
+            // materialLabel1
+            // 
+            materialLabel1.AutoSize = true;
+            materialLabel1.Depth = 0;
+            materialLabel1.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialLabel1.Location = new Point(295, 29);
+            materialLabel1.Margin = new Padding(4, 0, 4, 0);
+            materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
+            materialLabel1.Name = "materialLabel1";
+            materialLabel1.Size = new Size(173, 19);
+            materialLabel1.TabIndex = 11;
+            materialLabel1.Text = "Postulantes Registrados";
             // 
             // btnAsignar
             // 
@@ -174,7 +290,7 @@
             cmbNuevo.FormattingEnabled = true;
             cmbNuevo.IntegralHeight = false;
             cmbNuevo.ItemHeight = 43;
-            cmbNuevo.Location = new Point(79, 475);
+            cmbNuevo.Location = new Point(95, 548);
             cmbNuevo.Margin = new Padding(4);
             cmbNuevo.MaxDropDownItems = 4;
             cmbNuevo.MouseState = MaterialSkin.MouseState.OUT;
@@ -197,7 +313,7 @@
             cmbFiltroArea.FormattingEnabled = true;
             cmbFiltroArea.IntegralHeight = false;
             cmbFiltroArea.ItemHeight = 43;
-            cmbFiltroArea.Location = new Point(1448, 498);
+            cmbFiltroArea.Location = new Point(1446, 548);
             cmbFiltroArea.Margin = new Padding(4);
             cmbFiltroArea.MaxDropDownItems = 4;
             cmbFiltroArea.MouseState = MaterialSkin.MouseState.OUT;
@@ -213,7 +329,7 @@
             btnBuscar2.Depth = 0;
             btnBuscar2.HighEmphasis = true;
             btnBuscar2.Icon = null;
-            btnBuscar2.Location = new Point(1416, 630);
+            btnBuscar2.Location = new Point(1525, 684);
             btnBuscar2.Margin = new Padding(5, 8, 5, 8);
             btnBuscar2.MouseState = MaterialSkin.MouseState.HOVER;
             btnBuscar2.Name = "btnBuscar2";
@@ -239,7 +355,7 @@
             cmbFiltroEmpresa.FormattingEnabled = true;
             cmbFiltroEmpresa.IntegralHeight = false;
             cmbFiltroEmpresa.ItemHeight = 43;
-            cmbFiltroEmpresa.Location = new Point(979, 498);
+            cmbFiltroEmpresa.Location = new Point(979, 548);
             cmbFiltroEmpresa.Margin = new Padding(4);
             cmbFiltroEmpresa.MaxDropDownItems = 4;
             cmbFiltroEmpresa.MouseState = MaterialSkin.MouseState.OUT;
@@ -255,7 +371,7 @@
             btnBuscarID.Depth = 0;
             btnBuscarID.HighEmphasis = true;
             btnBuscarID.Icon = null;
-            btnBuscarID.Location = new Point(478, 615);
+            btnBuscarID.Location = new Point(471, 684);
             btnBuscarID.Margin = new Padding(5, 8, 5, 8);
             btnBuscarID.MouseState = MaterialSkin.MouseState.HOVER;
             btnBuscarID.Name = "btnBuscarID";
@@ -282,7 +398,7 @@
             txtBuscarID.HideSelection = true;
             txtBuscarID.InsertKeyMode = InsertKeyMode.Default;
             txtBuscarID.LeadingIcon = null;
-            txtBuscarID.Location = new Point(990, 615);
+            txtBuscarID.Location = new Point(1075, 684);
             txtBuscarID.Margin = new Padding(4);
             txtBuscarID.Mask = "";
             txtBuscarID.MaxLength = 32767;
@@ -324,7 +440,7 @@
             txtBuscarDNI.HideSelection = true;
             txtBuscarDNI.InsertKeyMode = InsertKeyMode.Default;
             txtBuscarDNI.LeadingIcon = null;
-            txtBuscarDNI.Location = new Point(79, 600);
+            txtBuscarDNI.Location = new Point(79, 684);
             txtBuscarDNI.Margin = new Padding(4);
             txtBuscarDNI.Mask = "";
             txtBuscarDNI.MaxLength = 32767;
@@ -365,13 +481,13 @@
             dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
             dgvEmpresas.DefaultCellStyle = dataGridViewCellStyle1;
-            dgvEmpresas.Location = new Point(979, 25);
+            dgvEmpresas.Location = new Point(979, 78);
             dgvEmpresas.Margin = new Padding(4);
             dgvEmpresas.Name = "dgvEmpresas";
             dgvEmpresas.ReadOnly = true;
             dgvEmpresas.RowHeadersWidth = 51;
             dgvEmpresas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvEmpresas.Size = new Size(788, 442);
+            dgvEmpresas.Size = new Size(886, 442);
             dgvEmpresas.TabIndex = 1;
             dgvEmpresas.CellClick += dgvEmpresas_CellClick;
             dgvEmpresas.CellContentClick += dgvEmpresas_CellContentClick;
@@ -389,7 +505,7 @@
             dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
             dgvPostulantes.DefaultCellStyle = dataGridViewCellStyle2;
-            dgvPostulantes.Location = new Point(59, 29);
+            dgvPostulantes.Location = new Point(59, 81);
             dgvPostulantes.Margin = new Padding(4);
             dgvPostulantes.Name = "dgvPostulantes";
             dgvPostulantes.ReadOnly = true;
@@ -472,5 +588,9 @@
         private MaterialSkin.Controls.MaterialComboBox cmbFiltroArea;
         private MaterialSkin.Controls.MaterialButton btnAsignar;
         private MaterialSkin.Controls.MaterialComboBox cmbNuevo;
+        private MaterialSkin.Controls.MaterialLabel materialLabel2;
+        private MaterialSkin.Controls.MaterialLabel materialLabel1;
+        private MaterialSkin.Controls.MaterialMaskedTextBox texboxIdOferta;
+        private MaterialSkin.Controls.MaterialMaskedTextBox txboxIdPersona;
     }
 }

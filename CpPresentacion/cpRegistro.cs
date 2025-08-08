@@ -19,6 +19,7 @@ namespace CpPresentacion
     public partial class cpRegistro : MaterialForm, IReadOnlyContainer
     {
         public Control Container => this;
+        private FormBoton paleta;
 
         public cpRegistro()
         {
@@ -26,19 +27,47 @@ namespace CpPresentacion
 
             materialTabControl1.SelectedIndex = 7;
 
-            // Bloquear todos los controles recursivamente
-            this.SetReadOnly(true);
-
-            // Mostrar mini-form Ver/Editar
+            // 1) Mostrar modal Ver / Editar
+            bool editarModo = false;
             using (var dlg = new frmModoVisualizacion())
             {
                 if (dlg.ShowDialog() == DialogResult.OK &&
                     dlg.Resultado == frmModoVisualizacion.ResultadoSeleccion.Editar)
                 {
-                    // Desbloquear si eligió Editar
-                    this.SetReadOnly(false);
+                    editarModo = true;
                 }
             }
+
+            // 2) NO bloquear aquí. Lo hará la paleta según el estado del switch
+            // this.SetReadOnly(!editarModo);  // <- quitar
+
+            // ── 3) Crear paleta flotante y sincronizar switch ───────────────
+            paleta = new FormBoton(this, editarModo)
+            {
+                FormBorderStyle = FormBorderStyle.FixedToolWindow,
+                StartPosition = FormStartPosition.Manual,
+                TopMost = true,
+                ShowInTaskbar = false
+            };
+
+            paleta.Show(this);
+
+            Resize += (s, e) =>
+            {
+                if (WindowState == FormWindowState.Minimized) paleta.Hide();
+                else
+                {
+                    paleta.Show();
+                    PositionPaleta();
+                }
+            };
+
+            // Forzar que se coloque al lado del formulario ya visible
+            PositionPaleta();
+
+            // Reposicionar si mueves / redimensionas
+            LocationChanged += (s, e) => PositionPaleta();
+            SizeChanged += (s, e) => PositionPaleta();
         }
 
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -204,6 +233,28 @@ namespace CpPresentacion
             // Establecer la longitud máxima para los campos de texto
             txtUsuario.MaxLength = 20;
             txtContraseña.MaxLength = 20;
+        }
+
+        private void PositionPaleta()
+        {
+            if (paleta == null || paleta.IsDisposed) return;
+
+            // Pegado al borde derecho y centrado vertical
+            int x = Right;
+            int y = Top + (Height / 2) - (paleta.Height / 2);
+
+            // Asegurar que no quede fuera de la pantalla activa
+            var screen = Screen.FromControl(this).WorkingArea;
+            if (x + paleta.Width > screen.Right) x = screen.Right - paleta.Width;
+            if (y < screen.Top) y = screen.Top;
+            if (y + paleta.Height > screen.Bottom) y = screen.Bottom - paleta.Height;
+
+            paleta.Location = new Point(x, y);
+        }
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            paleta?.Close();
+            base.OnFormClosing(e);
         }
     }
 }

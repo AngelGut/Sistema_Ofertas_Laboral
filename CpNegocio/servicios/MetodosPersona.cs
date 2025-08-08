@@ -98,43 +98,99 @@ namespace CpNegocio.servicios
         {
             try
             {
+                // Conexión con la base de datos
                 using var conn = OfertaDatos.ObtenerConexion();
                 conn.Open();
 
+                // Consulta SQL para obtener los datos de las personas, incluyendo la columna 'Id'
                 const string q = @"
-                    SELECT
-                        p.Id,
-                        p.Nombre,
-                        p.Dni,
-                        p.Telefono,
-                        p.Correo,
-                        p.Direccion
-                    FROM Persona p";
+                 SELECT
+                 p.Id,           -- Selección de la columna 'Id'
+                 p.Nombre,       -- Selección de la columna 'Nombre'
+                 p.Dni,          -- Selección de la columna 'Dni'
+                 p.Telefono,     -- Selección de la columna 'Telefono'
+                 p.Correo,       -- Selección de la columna 'Correo'
+                 p.Direccion     -- Selección de la columna 'Direccion'
+                 FROM Persona p";   // Tabla de personas
+
+                // Ejecutar la consulta
                 using var cmd = new SqlCommand(q, conn);
                 using var reader = cmd.ExecuteReader();
+
+                // Crear un DataTable y cargar los datos de la consulta
                 var tabla = new DataTable();
-                tabla.Load(reader);
-                return tabla;
+                tabla.Load(reader);  // Carga los resultados en el DataTable
+
+                return tabla;  // Devuelve el DataTable con los resultados
             }
             catch (Exception ex)
             {
+                // Si ocurre un error, lo lanzamos como una excepción personalizada
                 throw new Exception("Error al mostrar los datos de personas.", ex);
             }
         }
 
-        /// <summary>
-        /// Comprueba en la base de datos, usando la conexión ya abierta,
-        /// si ya existe una persona con ese DNI.
-        /// </summary>
-        private bool PersonaYaExiste(SqlConnection conn, string dni)
+        public DataTable BuscarConFiltro(string criterio, string valorBusqueda)
         {
-            const string query = "SELECT COUNT(*) FROM Persona WHERE Dni = @Dni";
-
-            using (var cmd = new SqlCommand(query, conn))
+            try
             {
-                cmd.Parameters.AddWithValue("@Dni", dni);
-                int count = (int)cmd.ExecuteScalar();
-                return count > 0;
+                using (var conn = OfertaDatos.ObtenerConexion())
+                {
+                    conn.Open();
+
+                    string query = "";
+
+                    // Dependiendo del criterio, ajustamos la consulta
+                    if (criterio == "Id")
+                    {
+                        // Validamos si el valor de búsqueda para Id es un número entero
+                        if (!int.TryParse(valorBusqueda, out int idValor))
+                        {
+                            throw new Exception("El valor para el filtro 'Id' debe ser un número entero.");
+                        }
+
+                        query = "SELECT Id, Nombre, Dni, Telefono, Correo, Direccion FROM Persona WHERE Id = @ValorBusqueda";
+                    }
+                    else if (criterio == "Nombre")
+                    {
+                        query = "SELECT Id, Nombre, Dni, Telefono, Correo, Direccion FROM Persona WHERE Nombre LIKE @ValorBusqueda";
+                    }
+                    else if (criterio == "Dni")
+                    {
+                        query = "SELECT Id, Nombre, Dni, Telefono, Correo, Direccion FROM Persona WHERE Dni LIKE @ValorBusqueda";
+                    }
+                    else
+                    {
+                        throw new Exception("Criterio de búsqueda no válido.");
+                    }
+
+                    using (var cmd = new SqlCommand(query, conn))
+                    {
+                        // Agregar el parámetro de búsqueda
+                        if (criterio == "Id")
+                        {
+                            // Para 'Id', pasamos el valor como entero (int)
+                            cmd.Parameters.AddWithValue("@ValorBusqueda", int.Parse(valorBusqueda));
+                        }
+                        else
+                        {
+                            // Para 'Nombre' y 'Dni', utilizamos LIKE con búsqueda parcial
+                            cmd.Parameters.AddWithValue("@ValorBusqueda", "%" + valorBusqueda + "%");
+                        }
+
+                        // Ejecutar la consulta
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            var tabla = new DataTable();
+                            tabla.Load(reader);
+                            return tabla;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al aplicar el filtro: " + ex.Message, ex);
             }
         }
     }

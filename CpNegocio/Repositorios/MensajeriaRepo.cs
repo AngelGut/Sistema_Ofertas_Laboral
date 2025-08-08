@@ -1,34 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using CpNegocio.Gmail;
 using CpNegocio.Interfaces;
 
-namespace CpNegocio
+using System.Net;
+using System.Net.Mail;
+using CpNegocio.Interfaces;
+
+namespace CpNegocio.Repositorios
 {
     public class MensajeriaRepo : IMensajeriaRepositorio
     {
-        //TODO: Implementa la lógica para enviar mensajes utilizando GmailService
         public void EnviarMensaje(string destinatario, string asunto, string cuerpo)
         {
-            try
+            using (var mensaje = new MailMessage())
             {
-                //TODO: Validar los parámetros de entrada
-                var gmail = new GmailService(); //TODO: Instancia del servicio de Gmail
-                gmail.Destinatario = destinatario;
-                gmail.Asunto = asunto;
-                gmail.CuerpoMensaje = cuerpo;
+                mensaje.From = new MailAddress("opempleatech@gmail.com", "EmpleaTech");
+                mensaje.To.Add(destinatario);
+                mensaje.Subject = asunto;
+                mensaje.Body = cuerpo;
 
-                if (gmail.Validar())
+                // 🔹 Esto permite que el contenido sea interpretado como HTML
+                mensaje.IsBodyHtml = true;
+
+                using (var smtp = new SmtpClient("smtp.gmail.com", 587))
                 {
-                    Task.Run(() => gmail.Enviar());
+                    smtp.Credentials = new NetworkCredential(
+                        "opempleatech@gmail.com",
+                        "vkwmsjwquzzduzys" // sin espacios
+                    );
+                    smtp.EnableSsl = true;
+                    smtp.Send(mensaje);
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error al enviar correo: {ex.Message}");
             }
         }
     }
