@@ -11,8 +11,10 @@ using Microsoft.Data.SqlClient;
 
 namespace CpNegocio.Repositorios
 {
+    //TODO: Clase que implementa la interfaz IPersonaRepositorio para interactuar con la base de datos
     public class PersonaRepositorio : IPersonaRepositorio
     {
+        //TODO: Método que obtiene una persona por su cédula
         public Persona ObtenerPersonaPorCedula(string cedula)
         {
             using (SqlConnection connection = OfertaDatos.ObtenerConexion())
@@ -42,6 +44,7 @@ namespace CpNegocio.Repositorios
             return null;
         }
 
+        //TODO: Método que obtiene una persona por su ID
         public Persona ObtenerPersonaPorId(int id)
         {
             using (SqlConnection connection = OfertaDatos.ObtenerConexion())
@@ -71,6 +74,7 @@ namespace CpNegocio.Repositorios
             return null;
         }
 
+        //TODO: Método que obtiene una lista de personas por área
         public List<Persona> ObtenerPersonasPorArea(string area)
         {
             List<Persona> personas = new List<Persona>();
