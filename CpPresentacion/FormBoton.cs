@@ -44,5 +44,7 @@ namespace CpPresentacion
             bool editar = swthHabilitar.Checked;
             _target.SetReadOnly(!editar);
         }
+
+        //listo
     }
 }
