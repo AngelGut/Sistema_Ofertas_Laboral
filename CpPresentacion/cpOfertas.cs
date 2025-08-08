@@ -468,5 +468,7 @@ namespace CpPresentacion
             cmbFiltro.Items.Add("Puesto");
             cmbFiltro.SelectedIndex = 0; // Seleccionar el primer criterio por defecto
         }
+
+        //comentando
     }
 }
