@@ -22,7 +22,8 @@ namespace CpNegocio.servicios
             persona = p;
         }
 
-        // Verifica existencia usando la columna Dni
+        // Método: PersonaYaExiste(overload)
+       // Descripción: Verifica si ya existe una persona en la base de datos usando su DNI y conexión abierta
         public static bool PersonaYaExiste(string dni)
         {
             try
@@ -122,6 +123,8 @@ namespace CpNegocio.servicios
             }
         }
 
+        // Método: BuscarConFiltro
+        // Descripción: Busca personas según un criterio de filtro (Id, Nombre, Rnc, etc.) y devuelve los resultados.
         public DataTable BuscarConFiltro(string criterio, string valorBusqueda)
         {
             try
@@ -183,24 +186,5 @@ namespace CpNegocio.servicios
             }
         }
 
-
-
-
-
-        /// <summary>
-        /// Comprueba en la base de datos, usando la conexión ya abierta,
-        /// si ya existe una persona con ese DNI.
-        /// </summary>
-        private bool PersonaYaExiste(SqlConnection conn, string dni)
-        {
-            const string query = "SELECT COUNT(*) FROM Persona WHERE Dni = @Dni";
-
-            using (var cmd = new SqlCommand(query, conn))
-            {
-                cmd.Parameters.AddWithValue("@Dni", dni);
-                int count = (int)cmd.ExecuteScalar();
-                return count > 0;
-            }
-        }
     }
 }

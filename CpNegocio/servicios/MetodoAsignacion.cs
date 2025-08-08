@@ -10,10 +10,7 @@ namespace CpDatos
         // Cadena de conexión a la base de datos.
         private string connectionString = "Server=.;Database=Ofertalaboral; Integrated Security=true; trustServerCertificate=True;";
 
-        /// <summary>
-        /// Obtiene un DataTable con el historial de asignaciones de manera asíncrona.
-        /// </summary>
-        /// <returns>Un DataTable con el historial de asignaciones.</returns>
+      
         public async Task<DataTable> ObtenerHistorialConDetalleAsync()
         {
             DataTable dataTable = new DataTable();

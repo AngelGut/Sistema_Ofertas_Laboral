@@ -27,6 +27,7 @@ namespace CpNegocio.ServiciosCorreo
             InicializarSmtpClient();
         }
 
+        // TODO: Asegurarse de que la configuración de SSL, puerto y host sean compatibles con los servidores de correo utilizados.
         // Configuración del cliente SMTP
         private void InicializarSmtpClient()
         {
@@ -39,7 +40,9 @@ namespace CpNegocio.ServiciosCorreo
             };
         }
 
-        // Método asíncrono para enviar el correo
+        // Método: EnviarCorreoAsync
+        // Descripción: Envía un correo de manera asíncrona a una lista de destinatarios.
+        
         public async Task<bool> EnviarCorreoAsync(string asunto, string cuerpo, List<string> destinatarios)
         {
             try
@@ -64,16 +67,16 @@ namespace CpNegocio.ServiciosCorreo
             }
             catch (SmtpException smtpEx)
             {
-                // Error relacionado con el cliente SMTP
+                
                 Console.WriteLine("Error de SMTP: " + smtpEx.Message);
             }
             catch (Exception ex)
             {
-                // Error general
+                
                 Console.WriteLine("Error al enviar correo: " + ex.Message);
             }
 
-            return false; // Retorna false en caso de error
+            return false; 
         }
 
         

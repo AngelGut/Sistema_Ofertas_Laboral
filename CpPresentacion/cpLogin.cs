@@ -31,12 +31,15 @@ namespace CpPresentacion
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
         private static extern void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
 
+        // TODO: Asegurarse de que los controles como los TextBox y los Labels estén correctamente en el formulario y que sus eventos estén conectados.
         private void cpLogin_Load(object sender, EventArgs e)
         {
             txtUsuario.MaxLength = 20;
             txtClave.MaxLength = 20;
         }
 
+        // Método: btnRecuperarClave_Click
+        // Descripción: Permite recuperar la contraseña del usuario y actualizarla en la base de datos.
         private async void btnRecuperarClave_Click(object sender, EventArgs e)
         {
             try
@@ -81,7 +84,8 @@ namespace CpPresentacion
         }
 
 
-
+        // Método: btnIngresar_Click
+        // Descripción: Verifica las credenciales del usuario y, si son correctas, muestra el menú principal.
         private async void btnIngresar_Click(object sender, EventArgs e)
         {
             try
@@ -131,15 +135,18 @@ namespace CpPresentacion
         }
 
 
-
+        // Método: pbCerrar_Click
+        // Descripción: Cierra la aplicación cuando se hace clic en el botón de cerrar.
         private void pbCerrar_Click(object sender, EventArgs e)
         {
-            Application.Exit(); // Cierra la aplicación al hacer clic en el botón de cerrar
+            Application.Exit(); 
         }
 
+        // Método: pbMinimizar_Click
+        // Descripción: Minimiza la ventana de la aplicación cuando se hace clic en el botón de minimizar.
         private void pbMinimizar_Click(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Minimized; // Minimiza la ventana al hacer clic en el botón de minimizar
+            this.WindowState = FormWindowState.Minimized; 
         }
 
         private void txtUsuario_Enter(object sender, EventArgs e)
@@ -172,6 +179,8 @@ namespace CpPresentacion
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
 
+        // Método: pbPassword_Click
+        // Descripción: Permite mostrar u ocultar la contraseña en el campo `txtClave` al hacer clic en el ícono del ojo.
         private void pbPassword_Click(object sender, EventArgs e)
         {
             showPassword = !showPassword;  // Cambia el estado de visibilidad de la contraseña
@@ -187,6 +196,8 @@ namespace CpPresentacion
             }
         }
 
+        // Método: cpLogin_KeyDown
+        // Descripción: Detecta cuando se presiona la tecla Enter para ejecutar el login sin necesidad de hacer clic en el botón.
         private void cpLogin_KeyDown(object sender, KeyEventArgs e)
         {
             // Verifica si se presionó la tecla Enter
