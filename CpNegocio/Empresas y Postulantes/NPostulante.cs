@@ -11,7 +11,7 @@ namespace CpNegocio.Empresas_y_Postulantes
 {
     public class NPostulante
     {
-        // Mostrar todos los postulantes (Personas)
+        //TODO: Metodo para mostrar todos los postulantes (Personas)
         public DataTable Mostrar()
         {
             DataTable tabla = new DataTable();
@@ -28,7 +28,7 @@ namespace CpNegocio.Empresas_y_Postulantes
             return tabla;
         }
 
-        // Buscar por ID
+        //TODO: Metodo para Buscar por ID
         public DataTable BuscarPorID(string id)
         {
             DataTable tabla = new DataTable();
@@ -48,7 +48,8 @@ namespace CpNegocio.Empresas_y_Postulantes
             return tabla;
         }
 
-        // Buscar por DNI o Cédula
+
+        //TODO: Metodo para buscar por DNI o Cédula
         public DataTable BuscarPorDNI(string dni)
         {
             DataTable tabla = new DataTable();
