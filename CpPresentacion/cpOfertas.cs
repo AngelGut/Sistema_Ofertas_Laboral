@@ -161,6 +161,7 @@ namespace CpPresentacion
             }
         }
 
+        //TODO: Metodo para el boton registrar
         private void BtnRegistrar_Click(object sender, EventArgs e)
         {
             try
@@ -229,7 +230,8 @@ namespace CpPresentacion
         }
 
 
-        //clase auxiliar para mostrar nombre pero guardar el ID:
+
+        //TODO: Clase auxiliar para mostrar nombre pero guardar el ID:
         public class EmpresaComboItem
         {
             public int Id { get; set; }
@@ -241,7 +243,7 @@ namespace CpPresentacion
             }
         }
 
-        //Método para cargar empresas desde la base
+        //TODO: Método para cargar empresas desde la base
         private void CargarEmpresas()
         {
             var metodoEmpresa = new MetodosCargarEmpresa();
@@ -259,7 +261,8 @@ namespace CpPresentacion
         private List<OfertaListadoDto> _ofertas;
         private DataTable _ofertasDt;
 
-        // Método para cargar ofertas en el DataGridView
+
+        //TODO: Método para cargar ofertas en el DataGridView
         private void CargarOfertas()
         {
             var metodo = new MetodosOferta();
@@ -273,6 +276,7 @@ namespace CpPresentacion
             CargarOfertas();
         }
 
+        //TODO: Metodo para el boton eliminar
         private void BtnEliminar_Click(object sender, EventArgs e)
         {
             // Validar que haya al menos una fila seleccionada
@@ -316,6 +320,7 @@ namespace CpPresentacion
             }
         }
 
+        //TODO: Metodo bloquear la letras o caracteres
         private void TxtSalario_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
@@ -323,7 +328,7 @@ namespace CpPresentacion
                 e.Handled = true; // Bloquear la tecla si no es número ni tecla de control (como Backspace)
             }
         }
-
+        //TODO: Metodo para bloquear si no es numero
         private void TxtCreditos_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
@@ -332,6 +337,7 @@ namespace CpPresentacion
             }
         }
 
+        //TODO: Metodo para limpiar
         private void LimpiarCampos()
         {
             CboxEmpresas.SelectedIndex = 0; // o -1 si quieres que quede en blanco
@@ -344,6 +350,7 @@ namespace CpPresentacion
             TxtCreditos.Text = string.Empty;
         }
 
+        //TODO: Metodo para marcar cuando este ocupada
         private void BtnOcupada_Click(object sender, EventArgs e)
         {
             // Asegurarse de que hay una fila seleccionada
@@ -375,6 +382,8 @@ namespace CpPresentacion
                 MessageBox.Show("Selecciona una oferta primero.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+        //TODO: Metodo para el combox de las areas
         private void PopulateAreas()
         {
             cmbArea.DataSource = AreaLaboralProvider.GetAll();
@@ -409,6 +418,7 @@ namespace CpPresentacion
             }
         }
 
+        //TODO: Metodo para el margen del form cuando se abra
         private void AbrirFormBoton(bool startInEdit)
         {
             // Evita duplicados
@@ -446,11 +456,13 @@ namespace CpPresentacion
             _formBoton.Show(this);
         }
 
+        //TODO: Metodo para el buscar filtre las ofertas
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             FiltrarOfertas();
         }
 
+        //TODO: Metodo para el filtrado
         private void FiltrarOfertas()
         {
             if (_ofertas == null) { CargarOfertas(); if (_ofertas == null) return; }
@@ -490,6 +502,7 @@ namespace CpPresentacion
 
 
 
+        //TODO: Metodo de caracteres permitidos
         private static bool EsPermitido(char ch)
         {
             // Permite control (Backspace, etc.), letra, dígito, espacio y estos signos comunes:
@@ -500,6 +513,7 @@ namespace CpPresentacion
             return permitidos.Contains(ch);
         }
 
+        //TODO: Metodo de persobalizacion del datagridview
         private void PersonalizarDataGridView()
         {
             // Cambiar el color de fondo general del DataGridView
