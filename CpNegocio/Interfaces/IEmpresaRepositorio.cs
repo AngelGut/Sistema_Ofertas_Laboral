@@ -7,6 +7,7 @@ using CpNegocio.Entidades;
 
 namespace CpNegocio.Interfaces
 {
+    //TODO: Interfaz que define los métodos para interactuar con el repositorio de empresas
     public interface IEmpresaRepositorio
     {
         //TODO: Método para obtener una empresa por su RNC

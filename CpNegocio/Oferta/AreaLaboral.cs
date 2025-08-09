@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CpNegocio.Oferta
 {
+    //TODO:listado de areas laborales  
     public static class AreaLaboralProvider
     {
         /// <summary>
@@ -13,6 +14,7 @@ namespace CpNegocio.Oferta
         /// </summary>
         public static IReadOnlyList<string> GetAll()
         {
+            //IReadOnlyList<string> esto lo que hace es que devuelve una lista de solo lectura de cadenas (string)
             return new[]
             {
                 "Limpieza",

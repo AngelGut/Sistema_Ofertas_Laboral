@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CpNegocio
 {
+    //TODO: Clase abstracta Mensaje que define la estructura básica de un mensaje
     public abstract class Mensaje
     {
         public int Id { get; set; }
@@ -13,8 +14,9 @@ namespace CpNegocio
         public string Destinatario { get; set; } = string.Empty;
         public DateTime FechaEnvio { get; set; } = DateTime.Now;
 
-        //TODO: Métodos abstractos que deben ser implementados por las clases que hereden de esta
+        //TODO: Metodo que valida el mensaje, debe ser implementado por las clases derivadas (en este caso solo en GmailService)
         public abstract bool Validar();
+        //TODO: Método que envía el mensaje, debe ser implementado por las clases derivadas (en este caso solo en GmailService)
         public abstract Task Enviar();
     }
 }
