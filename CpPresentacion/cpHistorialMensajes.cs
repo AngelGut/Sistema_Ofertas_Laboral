@@ -7,9 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MaterialSkin.Controls;
+using MaterialSkin.Controls; // Librería para los controles de Material Design
 using Microsoft.Data.SqlClient;
 using Capa_Datos;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Diagnostics;
 
 namespace CpPresentacion
 {
@@ -17,7 +19,7 @@ namespace CpPresentacion
     {
         public cpHistorialMensajes()
         {
-            InitializeComponent();
+            InitializeComponent(); // Inicializa los componentes gráficos del formulario
             //Metodo de personalizacion del datagridview
             PersonalizarDataGridView();
             materialTabControl1.SelectedIndex = 5;
@@ -30,7 +32,7 @@ namespace CpPresentacion
         {
             CargarHistorial(); // Cargar historial al iniciar
         }
-
+        // Método que decide a qué formulario ir dependiendo del índice de la pestaña
         private async void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             await NavegarA(materialTabControl1.SelectedIndex);
@@ -54,25 +56,25 @@ namespace CpPresentacion
                 _ => null
             };
 
-            // B) Si ya estamos en el destino, no hacemos nada
+            // Si ya estamos en el formulario deseado, no hace nada
             if (destino == null || destino == this) return;
 
-            // C) Mostrar el nuevo formulario
+            // Muestra el nuevo formulario
             destino.Show();
 
-            // D) Menu nunca se cierra; los demás se liberan
+            // El menú principal no se cierra, pero los demás sí para liberar memoria
             if (this is Menu)
                 this.Hide();      // se mantiene en memoria
             else
                 this.Dispose();  // libera recursos
 
-            // Asegurarnos de que la UI repinte inmediatamente:
+            // Trae el nuevo formulario al frente y lo activa
             destino.BringToFront();
             destino.Activate();
         }
 
-        // 🔹 Cargar historial desde base de datos
-        private void CargarHistorial()
+        // Cargar historial desde base de datos
+        private void CargarHistorial() //Llama al método que trae los datos desde la base de datos
         {
             try
             {
@@ -97,45 +99,47 @@ namespace CpPresentacion
                     WHERE p.Nombre LIKE @filtro OR p.Dni LIKE @filtro OR p.Correo LIKE @filtro OR o.Puesto LIKE @filtro
                     ORDER BY a.FechaAsignacion DESC";
 
+                    // Asigna el valor del parámetro @filtro
                     SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@filtro", "%" + filtro + "%");
-
+                    // Llena un DataTable con los datos obtenidos
                     SqlDataAdapter adaptador = new SqlDataAdapter(cmd);
                     DataTable tabla = new DataTable();
                     adaptador.Fill(tabla);
-
+                    // Muestra los datos en el DataGridView
                     dgvHistorial.DataSource = tabla;
                 }
             }
             catch (Exception ex)
             {
+                // Muestra mensaje de error si falla la carga de datos
                 MessageBox.Show("Error al cargar el historial: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        // 🔹 Configuración del DataGridView
+        // Configura opciones básicas del DataGridView
         private void ConfigurarDataGridView()
         {
-            dgvHistorial.ReadOnly = true;
-            dgvHistorial.AllowUserToAddRows = false;
-            dgvHistorial.AllowUserToDeleteRows = false;
-            dgvHistorial.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvHistorial.MultiSelect = false;
-            dgvHistorial.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvHistorial.ReadOnly = true;// Solo lectura
+            dgvHistorial.AllowUserToAddRows = false;// No permitir agregar filas
+            dgvHistorial.AllowUserToDeleteRows = false;// No permitir borrar filas
+            dgvHistorial.SelectionMode = DataGridViewSelectionMode.FullRowSelect;// Seleccionar fila completa
+            dgvHistorial.MultiSelect = false;// Solo una fila a la vez
+            dgvHistorial.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;// Columnas ajustadas al ancho
         }
 
-        // 🔹 Evento del botón de búsqueda
+        // Evento del botón de búsqueda
         private void mbtnBuscar_Click(object sender, EventArgs e)
         {
             CargarHistorial();
         }
-
+        // Evento del botón limpiar
         private void mbtnLimpiar_Click(object sender, EventArgs e)
         {
             txtBuscar.Text = "";            // Limpia el TextBox
             CargarHistorial();              // Vuelve a cargar todo el historial sin filtro
         }
-
+        //metodo para que se encarga de la personalizacion del DataGridviw
         private void PersonalizarDataGridView()
         {
             // Cambiar el color de fondo general del DataGridView

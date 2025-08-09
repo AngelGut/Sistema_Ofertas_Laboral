@@ -11,8 +11,14 @@ namespace CapaDatos
     {
         private static string cadena = "Server=. ;Database=Ofertalaboral;Integrated Security=True;TrustServerCertificate=True;";
 
+        // Método: ObtenerConexion
+        // Descripción: Retorna una nueva conexión SQL utilizando la cadena de conexión configurada. Es usado por otros métodos para interactuar con la base de datos
         public static SqlConnection ObtenerConexion() => new SqlConnection(cadena);
 
+        
+        // TODO: Agregar validación de entrada para evitar inyecciones SQL o ataques de fuerza bruta.
+        // Método: VerificarCredencialesAsync
+        // Descripción: Verifica si el usuario y la clave coinciden en la base de datos de manera asíncrona
         public static async Task<bool> VerificarCredencialesAsync(string usuario, string clave)
         {
             try
@@ -49,6 +55,8 @@ namespace CapaDatos
 
 
 
+        // Método: ExisteCorreoAsync
+        // Descripción: Verifica si el correo proporcionado ya existe en la base de datos. Se usa para evitar registros duplicados.
         public static async Task<bool> ExisteCorreoAsync(string correo)
         {
             using var conn = ObtenerConexion();
@@ -62,7 +70,9 @@ namespace CapaDatos
             return count > 0;
         }
 
-
+        // TODO: Considerar la implementación de un sistema para bloquear múltiples intentos de registro fallidos.
+        // Método: ExisteUsuarioAsync
+        // Descripción: Verifica si el nombre de usuario proporcionado ya existe en la base de datos.
         public static async Task<bool> ExisteUsuarioAsync(string usuarioNombre)
         {
             try
@@ -89,8 +99,9 @@ namespace CapaDatos
             }
         }
 
-
-
+        // TODO: Implementar un proceso de validación de datos
+        // Método: InsertarUsuarioAsync
+        // Descripción: Inserta un nuevo usuario en la base de datos de manera asíncrona.
         public static async Task<bool> InsertarUsuarioAsync(Usuario usuario)
         {
             try
@@ -116,7 +127,8 @@ namespace CapaDatos
             }
         }
 
-
+        //Método: ComprobarCorreoAsync
+        // Descripción: Verifica si el correo proporcionado ya está registrado en la base de datos.
         public static async Task<bool> ComprobarCorreoAsync(string correo)
         {
             try
@@ -137,6 +149,8 @@ namespace CapaDatos
             }
         }
 
+        // Método: RegistrarUsuarioAsync
+        // Descripción: Inserta un nuevo usuario en la base de datos de manera asíncrona. 
         public static async Task<bool> RegistrarUsuarioAsync(Usuario usuario)
         {
             try
@@ -162,7 +176,9 @@ namespace CapaDatos
             }
         }
 
-
+        // TODO: Asegurarse de que la nueva clave sea validada
+        // Método: CambiarClaveAsync
+        // Descripción: Permite cambiar la clave de un usuario dado su correo electrónico.
 
         public static async Task<bool> CambiarClaveAsync(string correo, string nuevaClave)
         {
@@ -177,6 +193,10 @@ namespace CapaDatos
             int rowsAffected = await cmd.ExecuteNonQueryAsync();  // Usar ExecuteNonQueryAsync
             return rowsAffected > 0;
         }
+        
+        // TODO: Asegurarse de que este método no permita manipulación de datos o inyecciones SQL.
+        // Método: CorreoYaRegistradoAsync
+        // Descripción: Verifica si el correo proporcionado ya está registrado en la base de datos.
 
         public static async Task<bool> CorreoYaRegistradoAsync(string correo)
         {
