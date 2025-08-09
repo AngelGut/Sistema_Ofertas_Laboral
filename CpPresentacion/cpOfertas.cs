@@ -165,6 +165,59 @@ namespace CpPresentacion
         {
             try
             {
+                // 🔹 Validar campos de texto obligatorios
+                if (string.IsNullOrWhiteSpace(TxtPuesto.Text))
+                {
+                    MessageBox.Show("El campo 'Puesto' no puede estar vacío.", "Campo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    TxtPuesto.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(TxtDescripcion.Text))
+                {
+                    MessageBox.Show("El campo 'Descripción' no puede estar vacío.", "Campo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    TxtDescripcion.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(TxtRequisitos.Text))
+                {
+                    MessageBox.Show("El campo 'Requisitos' no puede estar vacío.", "Campo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    TxtRequisitos.Focus();
+                    return;
+                }
+
+                // 🔹 Si es Empleo Fijo, salario obligatorio
+                if (CboxTipoOferta.SelectedItem?.ToString() == "Empleo Fijo" &&
+                    string.IsNullOrWhiteSpace(TxtSalario.Text))
+                {
+                    MessageBox.Show("Debe ingresar el salario para la oferta de empleo fijo.", "Campo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    TxtSalario.Focus();
+                    return;
+                }
+
+                // 🔹 Si es Pasantía, créditos obligatorios
+                if (CboxTipoOferta.SelectedItem?.ToString() == "Pasantia" &&
+                    string.IsNullOrWhiteSpace(TxtCreditos.Text))
+                {
+                    MessageBox.Show("Debe ingresar los créditos para la pasantía.", "Campo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    TxtCreditos.Focus();
+                    return;
+                }
+
+                // 🔹 Validar ComboBox Empresa
+                if (CboxEmpresas.SelectedItem == null)
+                {
+                    MessageBox.Show("Debe seleccionar una empresa antes de registrar la oferta.", "Empresa requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // 🔹 Validar ComboBox Tipo de Oferta
+                if (CboxTipoOferta.SelectedItem == null)
+                {
+                    MessageBox.Show("Debe seleccionar un tipo de oferta.", "Tipo requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 if (CboxEmpresas.SelectedItem == null)
                 {
                     MessageBox.Show("Debe seleccionar una empresa antes de registrar la oferta.", "Empresa requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
