@@ -7,7 +7,7 @@ namespace CpNegocio.Empresas_y_Postulantes
 {
     public class NOferta
     {
-        // Método para obtener todas las ofertas sin filtros
+        //TODO: Método para obtener todas las ofertas sin filtros
         public DataTable ObtenerOfertas()
         {
             DataTable tabla = new DataTable();
@@ -38,7 +38,7 @@ namespace CpNegocio.Empresas_y_Postulantes
             return tabla;
         }
 
-        // Método para obtener ofertas filtradas por Área y ID
+        //TODO: Método para obtener ofertas filtradas por Área y ID
         public DataTable ObtenerOfertasFiltradas(string area, string idOferta)
         {
             DataTable tabla = new DataTable();
